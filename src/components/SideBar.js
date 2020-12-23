@@ -1,8 +1,8 @@
 const SideBar = () => {
-    return(
-    <div style={{height:"100vh",width:"30vh", backgroundColor:"red"}}>
-       
-    </div>
-    ) 
+    return (
+        <div style={{ width: "30vh", backgroundColor: "gray" }}>
+
+        </div>
+    )
 }
 export default SideBar

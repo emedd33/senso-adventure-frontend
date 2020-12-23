@@ -12,10 +12,10 @@ import SideBar from "./components/SideBar";
 function App() {
   return (
     <Router>
-      <GlobalStyle/>
-      <div style={{display:"flex", flexDirection:"row"}}>
-        <SideBar/>
-        <div style={{width:"100%"}}>
+      <GlobalStyle />
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "stretch", alignItems: "stretch" }}>
+        <SideBar />
+        <div style={{ flex: 1, width: "100%" }}>
           <Switch>
             <Route path="/">
               <Home />
