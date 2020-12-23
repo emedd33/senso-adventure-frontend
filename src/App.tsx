@@ -1,14 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import GlobalStyle from './assets/themes/globalStyles';
+import Home from "./pages/home/home";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>In progress</p>
-      </header>
-    </div>
+    <Router>
+      <GlobalStyle/>
+        <Switch>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+    </Router>
   );
 }
 
