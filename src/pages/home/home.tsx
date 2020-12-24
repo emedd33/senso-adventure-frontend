@@ -1,12 +1,12 @@
 import React from "react";
 import { Parallax, Background } from "react-parallax";
 import dnd_background from "../../assets/backgroundImage/dnd_background.jpg";
-
-const styles = {
+import StoryContainer from "../../components/StoryContainer"
+const styles: any = {
     fontFamily: "sans-serif",
     textAlign: "center"
 };
-const insideStyles1 = {
+const insideStyles1: any = {
     background: "white",
     padding: 20,
     position: "absolute",
@@ -14,7 +14,7 @@ const insideStyles1 = {
     left: "50%",
     transform: "translate(-50%,50%)"
 };
-const insideStyles = {
+const insideStyles: any = {
     background: "white",
     padding: 20,
     position: "absolute",
@@ -24,16 +24,18 @@ const insideStyles = {
 };
 function Home() {
     return (
-        <div style={styles}>
-            <p>Hello</p>
-            <Parallax bgImage={dnd_background} strength={200}>
+        <div>
+            <p>Hello </p>
+            <Parallax bgImage={dnd_background} strength={200} >
                 <div style={{ height: "200vh", width: "100vh" }}>
-                    <div style={insideStyles}>HTML inside the parallax</div>
-                    <div style={insideStyles1}>HTML inside the parallax</div>
+                    <StoryContainer index={1} />
+
+                    <div style={insideStyles1}> HTML inside the parallax </div>
                 </div>
             </Parallax>
-
         </div>
     )
+
+
 }
 export default Home
