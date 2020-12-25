@@ -5,14 +5,15 @@ type ContainerProps = {
 }
 
 const StoryContainer: FC<ContainerProps> = ({ index }) => {
+    const top = String(index * 10) + "%"
     const insideStyles: any = {
         background: "white",
         padding: 20,
         position: "absolute",
-        top: "30%",
+        top: top,
         left: "50%",
         transform: "translate(-50%, 50%)",
-        height: "20rem",
+        height: "10rem",
         width: "40rem",
         opacity: 0.9
     };
@@ -20,6 +21,7 @@ const StoryContainer: FC<ContainerProps> = ({ index }) => {
         <div style={insideStyles} >
             HTML inside the parallax
         </div>
+
     )
 }
 

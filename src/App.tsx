@@ -13,16 +13,11 @@ function App() {
   return (
     <Router>
       <GlobalStyle />
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "stretch", alignItems: "stretch" }}>
-        <SideBar />
-        <div style={{ flex: 1, width: "100%" }}>
-          <Switch>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </div>
-      </div>
+      <Switch>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
     </Router>
   );
 }
