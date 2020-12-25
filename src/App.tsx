@@ -13,6 +13,7 @@ function App() {
   return (
     <Router>
       <GlobalStyle />
+      <SideBar />
       <Switch>
         <Route path="/">
           <Home />

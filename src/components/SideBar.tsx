@@ -1,36 +1,34 @@
 import styled from "styled-components"
-
+import * as FaIcons from "react-icons/fa";
+import * as AiIcons from 'react-icons/ai';
+import React, { useState } from "react";
+import './SideBar.css';
+import { IconContext } from 'react-icons';
+import { Link } from "react-router-dom";
 const SideBar = () => {
-    const insideStyles: any = {
-        background: "white",
-        padding: 20,
-        position: "absolute",
-        left: "50%",
-        transform: "translate(-50%, 50%)",
-        height: "10rem",
-        width: "40rem",
-        opacity: 0.9
-    };
+    const [sidebar, setSidebar] = useState(false);
+
+    const showSidebar = () => setSidebar(!sidebar);
     return (
-        <Conatiner>
-            <h2>hei</h2>
-            <h2>hei</h2>
-            <h2>hei</h2>
-            <h2>hei</h2>
-            <h2>hei</h2>
-            <h2>hei</h2>
-        </Conatiner>
+        <IconContext.Provider value={{ color: '#fff' }}>
+            <div className='navbar'>
+                <Link to='#' className='menu-bars'>
+                    <FaIcons.FaBars onClick={showSidebar} />
+                </Link>
+            </div>
+            <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
+                <ul className='nav-menu-items' onClick={showSidebar}>
+                    <li className='navbar-toggle'>
+                        <Link to='#' className='menu-bars'>
+                            <AiIcons.AiOutlineClose />
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
+        </IconContext.Provider>
     )
 }
-const Conatiner = styled.div`
-    width:30vh;
-    flex:1;
-    height:300vh;
-    background-color: #AB9696;
-    opacity:0.5;
-    transform: transalte(50%,-50%);
-    position:absolute;
-    left: 0%;
-    top: 0%;
+const NavBar = styled.div`
+    
 `
 export default SideBar
