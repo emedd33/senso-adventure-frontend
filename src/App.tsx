@@ -6,7 +6,7 @@ import {
   Link,
 } from "react-router-dom";
 import GlobalStyle from "./assets/themes/globalStyles";
-import SideBar from "./components/SideBar";
+import Navbar from "./components/Navbar/Navbar";
 import Adventure from "./pages/Adventure";
 import Home from "./pages/Home";
 
@@ -14,7 +14,7 @@ export default function App() {
   return (
     <Router>
       <GlobalStyle />
-      <SideBar />
+      <Navbar />
       <Switch>
         <Route path="/adventure">
           <Adventure />

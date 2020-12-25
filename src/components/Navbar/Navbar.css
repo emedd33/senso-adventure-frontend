@@ -1,0 +1,17 @@
+
+.nav-menu {
+  background-color: #AB9696;
+  width: 40vh;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  transition: 850ms;
+}
+
+.nav-menu.active {
+  left: 0;
+  transition: 350ms;
+}
