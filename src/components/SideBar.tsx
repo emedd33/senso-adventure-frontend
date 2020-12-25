@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import * as FaIcons from "react-icons/fa";
-import * as AiIcons from 'react-icons/ai';
+import * as BsIcons from "react-icons/bs";
 import React, { useState } from "react";
 import './SideBar.css';
 import { IconContext } from 'react-icons';
@@ -20,7 +20,17 @@ const SideBar = () => {
                 <ul className='nav-menu-items' onClick={showSidebar}>
                     <li className='navbar-toggle'>
                         <Link to='#' className='menu-bars'>
-                            <AiIcons.AiOutlineClose />
+                            <BsIcons.BsArrowBarLeft />
+                        </Link>
+                    </li>
+                    <li className='navbar-toggle'>
+                        <Link to="adventure" style={{ textDecoration: 'none' }}>
+                            <SensoAdventureTitle>Senso Adventure</SensoAdventureTitle>
+                        </Link>
+                    </li>
+                    <li className='navbar-toggle'>
+                        <Link to="adventure" style={{ textDecoration: 'none' }}>
+                            <h2 style={{ paddingLeft: 13, color: "black" }}>Curse of Strahd</h2>
                         </Link>
                     </li>
                 </ul>
@@ -28,7 +38,10 @@ const SideBar = () => {
         </IconContext.Provider>
     )
 }
-const NavBar = styled.div`
-    
+
+const SensoAdventureTitle = styled.h1`
+    paddingLeft: 13;
+    color: black;
+    font-familty
 `
 export default SideBar

@@ -1,10 +1,11 @@
 .navbar {
-    background-color: #060b26;
+    background-color: #AB9696;
     height: 80px;
     display: flex;
     justify-content: start;
     align-items: center;
   }
+ 
   
   .menu-bars {
     margin-left: 2rem;
@@ -13,9 +14,10 @@
   }
   
   .nav-menu {
-    background-color: #060b26;
+    background-color: #AB9696;
     width: 250px;
     height: 100vh;
+    opacity: 0.95;
     display: flex;
     justify-content: center;
     position: fixed;
@@ -59,7 +61,7 @@
   }
   
   .navbar-toggle {
-    background-color: #060b26;
+    background-color: #AB9696;
     width: 100%;
     height: 80px;
     display: flex;

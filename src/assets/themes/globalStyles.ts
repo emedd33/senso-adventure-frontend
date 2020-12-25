@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     marginTop:0;
-    font-family: Open-Sans, Helvetica, Sans-Serif;
+    font-family: 'Reenie Beanie', cursive;
   }
 `;
 export default GlobalStyle

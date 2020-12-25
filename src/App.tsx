@@ -1,20 +1,24 @@
 import React from "react";
-
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Link,
 } from "react-router-dom";
-import GlobalStyle from './assets/themes/globalStyles';
-import Home from "./pages/home/home";
+import GlobalStyle from "./assets/themes/globalStyles";
 import SideBar from "./components/SideBar";
+import Adventure from "./pages/Adventure";
+import Home from "./pages/Home";
 
-function App() {
+export default function App() {
   return (
     <Router>
       <GlobalStyle />
       <SideBar />
       <Switch>
+        <Route path="/adventure">
+          <Adventure />
+        </Route>
         <Route path="/">
           <Home />
         </Route>
@@ -22,5 +26,3 @@ function App() {
     </Router>
   );
 }
-
-export default App;
