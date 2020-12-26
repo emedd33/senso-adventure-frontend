@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { SidebarData } from './SidebarData';
 import './Navbar.css';
 import { IconContext } from 'react-icons';
 import styled from 'styled-components';
 
 function Navbar() {
     const [sidebar, setSidebar] = useState(false);
-
+    const [cosHover, setCosHover] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
-
+    const toggleCosHover = () => setCosHover(!cosHover)
+    console.log(cosHover)
     return (
         <>
             <IconContext.Provider value={{ color: 'black' }}>
@@ -28,29 +28,39 @@ function Navbar() {
                         </NavBarBackIcon>
 
                         <Link to="/" style={{ textDecoration: 'none', color: "black" }}>
-                            <span><h2>Senso Adventure</h2></span>
+                            <span>
+                                <Title>Senso Adventure</Title>
+                            </span>
                         </Link>
-                        {SidebarData.map((item, index) => {
-                            return (
-                                <NavBarItem key={index}>
-                                    <Link to={item.path} style={{ textDecoration: 'none', color: "black" }}>
-                                        <span>{item.title}</span>
-                                    </Link>
-                                </NavBarItem>
-                            );
-                        })}
+                        <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
+
+                            <NavBarItem >
+                                <Link to="/curse_of_strahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
+                                    <span><h3>Curse of Strahd</h3></span>
+                                </Link>
+                            </NavBarItem>
+                        </div>
+
                     </ul>
                 </nav>
             </IconContext.Provider>
         </>
     );
 }
+const Title = styled.h2`
+text-shadow: 0px 1px;
+`
 const NavBarHeader = styled.div`
     background-color: #AB9696;
   height: 80px;
+  width:100%;
+  box-shadow
+  padding:10rem;
   display: flex;
+  position: fixed;
   justify-content: start;
   align-items: center;
+box-shadow: 5px 0px 15px 2px #000000;
 `
 const NavBarBackIcon = styled(Link)`
     margin-left: 0rem;

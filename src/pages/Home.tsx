@@ -4,7 +4,7 @@ function Home() {
     return (
         <Container>
 
-            <h1>aya</h1>
+            <h1>Home</h1>
         </Container>
     )
 

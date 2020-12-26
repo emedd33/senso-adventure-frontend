@@ -3,11 +3,10 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
 } from "react-router-dom";
 import GlobalStyle from "./assets/themes/globalStyles";
 import Navbar from "./components/Navbar/Navbar";
-import Adventure from "./pages/Adventure";
+import CurseOfStrahd from "./pages/CurseOfStrahd";
 import Home from "./pages/Home";
 
 export default function App() {
@@ -16,8 +15,8 @@ export default function App() {
       <GlobalStyle />
       <Navbar />
       <Switch>
-        <Route path="/adventure">
-          <Adventure />
+        <Route path="/Curse_of_strahd">
+          <CurseOfStrahd />
         </Route>
         <Route path="/">
           <Home />
