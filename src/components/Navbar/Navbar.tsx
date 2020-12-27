@@ -19,7 +19,7 @@ function Navbar() {
                     <NavBarOpenIcon to='#'>
                         <FaIcons.FaBars onClick={showSidebar} />
                     </NavBarOpenIcon>
-                    <Link to="/" style={{ textDecoration: 'none', color: "black" }}>
+                    <Link to="/" onClick={() => setSidebar(false)} style={{ textDecoration: 'none', color: "black" }}>
                         <span>
                             <Title>Senso Adventure</Title>
                         </span>

@@ -23,6 +23,7 @@ box-shadow: 5px 0px 15px 2px #000000;
 .opacity-container.active{
 background-color:black;
 opacity:0.8;
+transition: 350ms;
 }
 .opacity-container{
   position: -webkit-sticky;
