@@ -61,6 +61,7 @@ const NavBarHeader = styled.div`
   justify-content: start;
   align-items: center;
 box-shadow: 5px 0px 15px 2px #000000;
+z-index:300;
 `
 const NavBarBackIcon = styled(Link)`
     margin-left: 0rem;

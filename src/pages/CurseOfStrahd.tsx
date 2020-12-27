@@ -1,35 +1,56 @@
 import React from "react";
 import styled from "styled-components";
+import Background from "../assets/backgroundImage/dnd_background.jpg"
 function CurseOfStrahd() {
     return (
         <Container>
+            <Image src={Background} alt="logo" />
+            <StoryContainer>
+                <p>
+                    asdasd
+                </p>
+            </StoryContainer>
+            <StoryContainer>
+                <p>
+                    asdasd
+                </p>
+            </StoryContainer>
+            <StoryContainer>
+                <p>
+                    asdasd
+                </p>
+            </StoryContainer>
+            <StoryContainer>
+                <p>
+                    asdasd
+                </p>
+            </StoryContainer>
 
-            <h1>CurseOfStrahd</h1>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod consequat mi, ac ultrices metus efficitur a. Nullam lacinia est vitae diam elementum fermentum. Nulla luctus dui in tellus condimentum auctor. Ut ut maximus dolor. Donec congue ligula mattis dolor dictum, nec commodo purus molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer placerat volutpat sagittis. Mauris mattis a urna ut rhoncus. Nunc sed neque maximus, porttitor neque nec, laoreet risus. Ut sodales lorem id euismod euismod. Nullam volutpat dignissim massa non ullamcorper. Nullam quis enim nec sem sollicitudin varius in id nulla. Nunc sit amet risus sit amet tortor efficitur varius.
-            </p>
         </Container>
     )
 
 
 }
+const Image = styled.img`
+position: -webkit-sticky;
+position: sticky;
+top: 5rem;
+z-index:10;
+`
+const StoryContainer = styled.div`
+z-index:100;
+width:80rem;
+height: 20rem;
+background-color:white;
+margin:10rem;
+`
+
 const Container = styled.div`
     display:flex;
     justify-content:center;
     align-items: center;
     flex-direction: column;
-    padding:5%;
     padding-top:5rem;
+    z-index:20;
 `
 export default CurseOfStrahd
