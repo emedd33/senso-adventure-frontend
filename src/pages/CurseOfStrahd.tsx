@@ -51,6 +51,5 @@ const Container = styled.div`
     align-items: center;
     flex-direction: column;
     padding-top:5rem;
-    z-index:20;
 `
 export default CurseOfStrahd
