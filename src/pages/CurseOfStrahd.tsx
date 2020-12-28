@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
+import OldPaperBackground from "../assets/backgroundImage/old_paper.jpg"
 function CurseOfStrahd() {
     return (
         <Container>
@@ -41,8 +42,8 @@ const StoryContainer = styled.div`
 z-index:100;
 width:80rem;
 height: 20rem;
-background-color:white;
 margin:10rem;
+background-image: url(${OldPaperBackground})
 `
 
 const Container = styled.div`
