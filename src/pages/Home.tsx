@@ -65,12 +65,12 @@ function Home() {
 const ScrollParentContainer = styled.div`
 display:flex;
 flex-direction:column;
+width:100%;
 `
 const StoryContainer = styled.div`
 z-index:20;
 background-color:red;
 margin-top:5rem;
-margin-left:100vw;
 min-width:80rem;
 background-image: url(${OldPaperBackground});
 background-repeat: no-repeat;
