@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     marginTop:0;
     font-family: 'Italianno', cursive;
+    background-color:black;
   }
 `;
 export default GlobalStyle

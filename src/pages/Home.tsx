@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import OldPaperBackground from "../assets/backgroundImage/scroll.png"
+import Background from "../assets/backgroundImage/dnd_background.jpg"
 
 function Home() {
     return (
         <Container>
-            <h1>Home</h1>
+            <Image src={Background} alt="logo" />
+
             <ScrollParentContainer>
                 
             <StoryContainer>
@@ -67,9 +69,15 @@ display:flex;
 flex-direction:column;
 width:100%;
 `
+const Image = styled.img`
+position: -webkit-sticky;
+position: sticky;
+top: 5rem;
+width:250vh;
+z-index:10;
+`
 const StoryContainer = styled.div`
 z-index:20;
-background-color:red;
 margin-top:5rem;
 min-width:80rem;
 background-image: url(${OldPaperBackground});
@@ -87,6 +95,11 @@ padding-left:15%;
 const Container = styled.div`
     display:flex;
     justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    padding-top:5rem;
+    background-color:black;
+    
 `
 
 export default Home

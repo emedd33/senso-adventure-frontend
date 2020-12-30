@@ -26,26 +26,26 @@ function Navbar() {
                     </Link>
 
                 </NavBarHeader>
-                {/* <div className={sidebar ? 'opacity-container active' : "opacity-container"} onClick={() => sidebar ? setSidebar(false) : null}> */}
-                <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-                    <ul style={{ width: "80%" }} onClick={showSidebar}>
-                        <NavBarBackIcon to='#'>
-                            <AiIcons.AiOutlineClose />
-                        </NavBarBackIcon>
+                <div className={sidebar ? 'opacity-container active' : "opacity-container"} onClick={() => sidebar ? setSidebar(false) : null}>
+                    <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
+                        <ul style={{ width: "80%" }} onClick={showSidebar}>
+                            <NavBarBackIcon to='#'>
+                                <AiIcons.AiOutlineClose />
+                            </NavBarBackIcon>
 
 
-                        <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
+                            <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
 
-                            <NavBarItem >
-                                <Link to="/curse_of_strahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
-                                    <span><h3>Curse of Strahd</h3></span>
-                                </Link>
-                            </NavBarItem>
-                        </div>
+                                <NavBarItem >
+                                    <Link to="/curse_of_strahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
+                                        <span><h3>Curse of Strahd</h3></span>
+                                    </Link>
+                                </NavBarItem>
+                            </div>
 
-                    </ul>
-                </nav>
-                {/* </div> */}
+                        </ul>
+                    </nav>
+                </div>
             </IconContext.Provider>
         </>
     );
