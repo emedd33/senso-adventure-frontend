@@ -1,6 +1,6 @@
 
 const initialState: AdminState = {
-    isLoading: true
+    isLoading: false
 }
 const adminReducer = (state: AdminState = initialState, action: AdminAction): AdminState => {
 
