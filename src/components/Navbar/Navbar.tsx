@@ -28,17 +28,12 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 </NavBarHeader>
                 <div className={sidebar ? 'opacity-container active' : "opacity-container"} onClick={() => sidebar ? setSidebar(false) : null}>
                     <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-                        <ul style={{ width: "80%" }} onClick={showSidebar}>
-                            <NavBarBackIcon to='#'>
-                                <AiIcons.AiOutlineClose />
-                            </NavBarBackIcon>
-
-
+                        <ul style={{ width: "80%", paddingTop: "20vh" }} onClick={showSidebar}>
                             <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
 
                                 <NavBarItem >
                                     <Link to="/curse_of_strahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
-                                        <span><h3>Curse of Strahd</h3></span>
+                                        <span><CosTitle>Curse of Strahd</CosTitle></span>
                                     </Link>
                                 </NavBarItem>
                             </div>
@@ -50,8 +45,16 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         </>
     );
 }
-const Title = styled.h2`
+const Title = styled.h1`
 text-shadow: 0px 1px;
+margin-left:2vh
+`
+const CosTitle = styled.h2`
+font-size: 2rem;
+:hover {
+    color: #ed1212;
+    cursor: pointer;
+}
 `
 const NavBarHeader = styled.div`
     background-color: #AB9696;
@@ -66,11 +69,6 @@ const NavBarHeader = styled.div`
 box-shadow: 5px 0px 15px 2px #000000;
 z-index:250;
 `
-const NavBarBackIcon = styled(Link)`
-    margin-left: 0rem;
-    font-size: 2rem;
-    background: none;`
-
 const NavBarOpenIcon = styled(Link)`
     margin-left: 2rem;
     marin-ritgh: 2rem;
@@ -85,5 +83,6 @@ const NavBarItem = styled.ul`
   justify-content: start;
   align-items: center;
   padding:0;
+
 `
 export default Navbar;
