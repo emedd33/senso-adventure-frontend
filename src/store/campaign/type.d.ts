@@ -5,7 +5,7 @@ interface IAdventure {
     //date: string
     //story: string
 }
-type AdventureState = {
+type CampaignState = {
     adventures: IAdventure[]
 }
 
@@ -15,4 +15,4 @@ type AdventureAction = {
 }
 
 
-type DispatchType = (args: AdventureAction) => AdventureAction
+type AdventureDispatchType = (args: any) => AdventureAction

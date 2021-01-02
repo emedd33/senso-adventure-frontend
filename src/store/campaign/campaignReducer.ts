@@ -1,6 +1,6 @@
-import * as actionTypes from "./ActionTypes"
+import * as actionTypes from "./campaignActions"
 
-const initialState: AdventureState = {
+const initialCampaignState: CampaignState = {
     adventures: [
         {
             id: 1,
@@ -17,10 +17,10 @@ const initialState: AdventureState = {
     ],
 }
 
-const reducer = (
-    state: AdventureState = initialState,
+const adventureReducer = (
+    state: CampaignState = initialCampaignState,
     action: AdventureAction
-): AdventureState => {
+): CampaignState => {
     switch (action.type) {
         case actionTypes.ADD_ADVENTURE:
             const newAdventure: IAdventure = {
@@ -44,4 +44,4 @@ const reducer = (
     return state
 }
 
-export default reducer
+export default adventureReducer

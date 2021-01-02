@@ -1,4 +1,4 @@
-import * as actionTypes from "./ActionTypes"
+import * as actionTypes from "./campaignActions"
 
 export function addAdventure(adventure: IAdventure) {
     const action: AdventureAction = {
@@ -19,7 +19,7 @@ export function removeAdventure(adventure: IAdventure) {
 
 // TODO:  
 export function simulateHttpRequest(action: AdventureAction) {
-    return (dispatch: DispatchType) => {
+    return (dispatch: AdventureDispatchType) => {
         setTimeout(() => {
             dispatch(action)
         }, 500)

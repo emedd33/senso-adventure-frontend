@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { IconContext } from 'react-icons';
 import styled from 'styled-components';
-
-function Navbar() {
+type NavbarProps = {}
+const Navbar: FunctionComponent<NavbarProps> = () => {
     const [sidebar, setSidebar] = useState(false);
     const [cosHover, setCosHover] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
