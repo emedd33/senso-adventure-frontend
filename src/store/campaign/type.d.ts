@@ -2,8 +2,8 @@ interface IAdventure {
     id: number
     title: string
     body: string
+    story: string
     //date: string
-    //story: string
 }
 type CampaignState = {
     adventures: IAdventure[]

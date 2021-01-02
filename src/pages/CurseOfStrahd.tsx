@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/cos_background.jpg"
 import Scroll from "../components/Scroll";
@@ -8,18 +9,19 @@ type CurseOfStrahdProps = {
 }
 
 const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
+    const adventures = useSelector((state: RootReducerProp) => state.campaign.adventures.filter(adv => adv.story === "Curse of Strahd"))
+    console.log(adventures)
+    const renderScrolls = () => {
+        return adventures.map(adv => {
+            return <Scroll title={adv.title} content={adv.body} />
+        })
+    }
     return (
         <Container>
             <Image src={Background} alt="logo" />
 
             <ScrollParentContainer>
-
-                <Scroll title="Title" content="content" />
-                <Scroll title="Title" content="content" />
-                <Scroll title="Title" content=" asdasdaasdfasdfasdfasdf asdfa sdf asdf asd fas dfasdf asd as d as da sd as da s da sd as d asd a sd a sd a sd as da sd
-                    asdasdaasdfasdfasdfasdf asdfa sdf asdf asd fas dfasdf asd as d as da sd as da s da sd as d asd a sd a sd a sd as da sd
-                    asdasdaasdfasdfasdfasdf asdfa sdf asdf asd fas dfasdf asd as d as da sd as da s da sd as d asd a sd a sd a sd as da sd
-                   "/>
+                {renderScrolls()}
             </ScrollParentContainer>
 
         </Container >
