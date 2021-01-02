@@ -1,10 +1,13 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import OldPaperBackground from "../assets/backgroundImage/scroll.png"
 import Background from "../assets/backgroundImage/cos_background.jpg"
 import Scroll from "../components/Scroll";
 
-function CurseOfStrahd() {
+type CurseOfStrahdProps = {
+
+}
+
+const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     return (
         <Container>
             <Image src={Background} alt="logo" />

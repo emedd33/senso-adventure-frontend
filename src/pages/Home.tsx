@@ -1,10 +1,10 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import OldPaperBackground from "../assets/backgroundImage/scroll.png"
 import Background from "../assets/backgroundImage/dnd_background.jpg"
 import Scroll from "../components/Scroll";
 
-function Home() {
+type HomeProps = {}
+const Home: FunctionComponent<HomeProps> = () => {
     return (
         <Container>
             <Image src={Background} alt="logo" />
@@ -33,22 +33,6 @@ top: 5rem;
 width:250vh;
 z-index:10;
 `
-const StoryContainer = styled.div`
-z-index:20;
-margin-top:5rem;
-min-width:80rem;
-background-image: url(${OldPaperBackground});
-background-repeat: no-repeat;
-background-size: 100% 100%;
-`
-const StoryContent = styled.p`
-font-size: 2rem;
-padding-top:25%;
-padding-bottom: 25%;
-padding-right:10%;
-padding-left:15%;
-`
-
 const Container = styled.div`
     display:flex;
     justify-content:center;
