@@ -34,13 +34,13 @@ const Image = styled.img`
 position: -webkit-sticky;
 position: sticky;
 top: 5rem;
-width:250vh;
+width:100%;
+min-width:50rem;
 z-index:10;
 `
 const Container = styled.div`
     display:flex;
     justify-content:center;
-    align-items: center;
     flex-direction: column;
     padding-top:5rem;
     background-color:black;

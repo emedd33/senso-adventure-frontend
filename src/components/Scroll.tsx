@@ -26,7 +26,7 @@ text-align:center;
 const ScrollContainer = styled.div`
 z-index:20;
 margin-top:5rem;
-min-width:80rem;
+min-width:50rem;
 background-image: url(${ScrollImage});
 background-repeat: no-repeat;
 background-size: 100% 100%;

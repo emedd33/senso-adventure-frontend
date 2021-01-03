@@ -32,25 +32,23 @@ const ScrollParentContainer = styled.div`
 display:flex;
 flex-direction:column;
 width:100%;
-margin-top:-150vh;
+margin-top:-100vh;
 jusify-content: center;
 `
 const Image = styled.img`
 position: -webkit-sticky;
 position: sticky;
 top: 5rem;
-margin: auto;
-width:250vh;
+width:100%;
+min-width:50rem;
 z-index:10;
 `
 const Container = styled.div`
     display:flex;
     justify-content:center;
-    align-items: center;
     flex-direction: column;
     padding-top:5rem;
     background-color:black;
     
 `
-
 export default CurseOfStrahd
