@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,8 +10,11 @@ import CurseOfStrahd from "./pages/CurseOfStrahd";
 import Home from "./pages/Home";
 import { Spin } from 'antd';
 import "./App.css"
+import { fetchCampaigns } from "./store/campaign/campaignReducer";
 export default function App() {
   const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
+  const dispatch = useDispatch()
+  useEffect(() => { dispatch(fetchCampaigns) }, [])
   return (
     <Router>
       <Navbar />

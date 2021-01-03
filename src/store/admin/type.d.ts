@@ -5,7 +5,7 @@ type AdminState = {
 
 type AdminAction = {
     type: string
-    isLoading: boolean
+    payload?: any
 }
 
 

@@ -1,5 +1,6 @@
 import * as actionTypes from "./campaignActions"
-
+import { SET_IS_LOADING } from "../admin/adminActions"
+import { GET_ADVENTURES } from "./campaignActions"
 const initialCampaignState: CampaignState = {
     adventures: [
         {
@@ -31,27 +32,20 @@ const adventureReducer = (
     action: AdventureAction
 ): CampaignState => {
     switch (action.type) {
-        case actionTypes.ADD_ADVENTURE:
-            const newAdventure: IAdventure = {
-                id: Math.random(), // not really unique
-                title: action.adventure.title,
-                body: action.adventure.body,
-                story: action.adventure.story
-            }
-            return {
-                ...state,
-                adventures: state.adventures.concat(newAdventure),
-            }
-        case actionTypes.REMOVE_ADVENTURE:
-            const updatedAdventures: IAdventure[] = state.adventures.filter(
-                adventure => adventure.id !== action.adventure.id
-            )
-            return {
-                ...state,
-                adventures: updatedAdventures,
-            }
+        case actionTypes.GET_ADVENTURES:
+            fetch('https://jsonplaceholder.typicode.com/todos/1')
+                .then(response => response.json())
+                .then(json => console.log(json))
+            return state
     }
     return state
 }
 
+// Thunk function
+export async function fetchCampaigns(dispatch: any) {
+    dispatch({ type: SET_IS_LOADING, payload: true })
+    fetch('https://jsonplaceholder.typicode.com/todos/1')
+        .then(response => dispatch({ type: GET_ADVENTURES, payload: response }))
+        .finally(() => dispatch({ type: SET_IS_LOADING, payload: false }))
+}
 export default adventureReducer

@@ -10,10 +10,9 @@ type CurseOfStrahdProps = {
 
 const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     const adventures = useSelector((state: RootReducerProp) => state.campaign.adventures.filter(adv => adv.story === "Curse of Strahd"))
-    console.log(adventures)
     const renderScrolls = () => {
-        return adventures.map(adv => {
-            return <Scroll title={adv.title} content={adv.body} />
+        return adventures.map((adv: IAdventure, index: number) => {
+            return <Scroll key={index} title={adv.title} content={adv.body} />
         })
     }
     return (
