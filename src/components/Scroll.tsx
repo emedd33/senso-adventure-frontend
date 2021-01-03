@@ -4,13 +4,17 @@ import ScrollImage from "../assets/backgroundImage/scroll.png"
 
 type ScrollProps = {
     title: string,
-    content: string
+    content: string,
+    date: string
 }
 
-const Scroll: FunctionComponent<ScrollProps> = ({ title, content }) => {
+const Scroll: FunctionComponent<ScrollProps> = ({ title, content, date }) => {
     return (
         <ScrollContainer>
             <ScrollContent>
+                <ScrollDate >
+                    {date}
+                </ScrollDate>
                 <ScrollTitle>
                     {title}
                 </ScrollTitle>
@@ -19,6 +23,10 @@ const Scroll: FunctionComponent<ScrollProps> = ({ title, content }) => {
         </ScrollContainer>
     )
 }
+const ScrollDate = styled.h2`
+margin-top: -10rem;
+text-align: center;
+`
 const ScrollTitle = styled.h1`
 text-align:center;
 `

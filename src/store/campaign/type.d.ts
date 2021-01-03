@@ -3,7 +3,7 @@ interface IAdventure {
     title: string
     body: string
     story: string
-    //date: string
+    date: string
 }
 type CampaignState = {
     adventures: IAdventure[]

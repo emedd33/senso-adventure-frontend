@@ -9,7 +9,7 @@ const Home: FunctionComponent<HomeProps> = () => {
     const adventures = useSelector((state: RootReducerProp) => state.campaign.adventures)
     const renderScrolls = () => {
         return adventures.map((adv: IAdventure, index: number) => {
-            return <Scroll key={index} title={adv.title} content={adv.body} />
+            return <Scroll key={index} title={adv.title} content={adv.body} date={adv.date} />
         })
     }
     return (
@@ -29,11 +29,14 @@ const ScrollParentContainer = styled.div`
 display:flex;
 flex-direction:column;
 width:100%;
+margin-top:-150vh;
+jusify-content: center;
 `
 const Image = styled.img`
 position: -webkit-sticky;
 position: sticky;
 top: 5rem;
+margin: auto;
 width:250vh;
 z-index:10;
 `
