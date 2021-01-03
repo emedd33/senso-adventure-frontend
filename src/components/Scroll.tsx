@@ -1,20 +1,25 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import ScrollImage from "../assets/backgroundImage/scroll.png"
-
 type ScrollProps = {
     title: string,
     content: string,
-    date: string
+    date: string,
+    storyImage: string,
+
 }
 
-const Scroll: FunctionComponent<ScrollProps> = ({ title, content, date }) => {
+const Scroll: FunctionComponent<ScrollProps> = ({ title, content, date, storyImage }) => {
     return (
         <ScrollContainer>
             <ScrollContent>
                 <ScrollDate >
                     {date}
                 </ScrollDate>
+                <div style={{ justifyContent: "center", display: "flex" }}>
+
+                    <StoryImage src={storyImage} alt="" />
+                </div>
                 <ScrollTitle>
                     {title}
                 </ScrollTitle>
@@ -23,9 +28,15 @@ const Scroll: FunctionComponent<ScrollProps> = ({ title, content, date }) => {
         </ScrollContainer>
     )
 }
+const StoryImage = styled.img`
+max-width: 30rem; 
+height: 10rem; 
+justify-content: flex-start;
+marginTop: -1rem;
+`
+
 const ScrollDate = styled.h2`
 margin-top: -10rem;
-text-align: center;
 `
 const ScrollTitle = styled.h1`
 text-align:center;

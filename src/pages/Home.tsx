@@ -3,13 +3,19 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
 import Scroll from "../components/Scroll";
+import CosTitle from "../assets/backgroundImage/CosTitle.png"
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
     const adventures = useSelector((state: RootReducerProp) => state.campaign.adventures)
     const renderScrolls = () => {
         return adventures.map((adv: IAdventure, index: number) => {
-            return <Scroll key={index} title={adv.title} content={adv.body} date={adv.date} />
+            let storyImage = ""
+            switch (adv.story) {
+                case "Curse of Strahd":
+                    storyImage = CosTitle
+            }
+            return <Scroll key={index} title={adv.title} content={adv.body} date={adv.date} storyImage={storyImage} />
         })
     }
     return (
