@@ -10,7 +10,7 @@ import CurseOfStrahd from "./pages/CurseOfStrahd";
 import Home from "./pages/Home";
 import { Spin } from 'antd';
 import "./App.css"
-import { fetchCampaigns } from "./store/campaign/campaignReducer";
+import { fetchCampaigns } from "./store/campaign/campaignCreators";
 export default function App() {
   const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
   const dispatch = useDispatch()
