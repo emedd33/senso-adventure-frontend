@@ -10,7 +10,8 @@ type CampaignState = {
 }
 
 type AdventureAction = {
-    type: string
+    type: string,
+    payload: any
 }
 
 
