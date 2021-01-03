@@ -14,7 +14,9 @@ import { fetchCampaigns } from "./store/campaign/campaignReducer";
 export default function App() {
   const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
   const dispatch = useDispatch()
-  useEffect(() => { dispatch(fetchCampaigns) }, [])
+  useEffect(() => {
+    dispatch(fetchCampaigns)
+  }, [dispatch])
   return (
     <Router>
       <Navbar />
