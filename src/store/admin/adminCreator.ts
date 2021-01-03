@@ -3,7 +3,7 @@ import * as actionTypes from "./adminActions"
 export function setIsLoading(isLoading: boolean) {
     const action: AdminAction = {
         type: actionTypes.SET_IS_LOADING,
-        isLoading,
+        payload: isLoading,
     }
 
     return simulateHttpRequest(action)

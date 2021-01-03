@@ -1,19 +1,23 @@
 import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
 import Scroll from "../components/Scroll";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
+    const adventures = useSelector((state: RootReducerProp) => state.campaign.adventures)
+    const renderScrolls = () => {
+        return adventures.map((adv: IAdventure, index: number) => {
+            return <Scroll key={index} title={adv.title} content={adv.body} />
+        })
+    }
     return (
         <Container>
             <Image src={Background} alt="logo" />
 
             <ScrollParentContainer>
-
-                <Scroll title="Title" content="content" />
-                <Scroll title="Title" content="content" />
-                <Scroll title="Title" content="content" />
+                {renderScrolls()}
             </ScrollParentContainer>
 
         </Container >

@@ -11,8 +11,7 @@ type CampaignState = {
 
 type AdventureAction = {
     type: string
-    adventure: IAdventure
 }
 
 
-type AdventureDispatchType = (args: any) => AdventureAction
+type AdventureDispatchType = (args: AdventureAction) => AdventureAction 
