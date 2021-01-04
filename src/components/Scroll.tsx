@@ -6,23 +6,61 @@ type ScrollProps = {
     content: string,
     date: string,
     storyImage: string,
-
+    isFirstScroll: boolean
 }
 
-const Scroll: FunctionComponent<ScrollProps> = ({ title, content, date, storyImage }) => {
+function Scroll({ title, content, date, storyImage, isFirstScroll }: ScrollProps): any {
+
+    function recursiveSplitString(content: string): any {
+        // Recursive split string into substrings smaller than 2000 characters
+        if (content.length <= 2000) {
+            return content
+        }
+
+        let middle = Math.floor(content.length / 2);
+        let before = content.lastIndexOf(' ', middle);
+        let after = content.indexOf(' ', middle + 1);
+
+        if (middle - before < after - middle) {
+            middle = before;
+        } else {
+            middle = after;
+        }
+        const firstHalf = content.substr(0, middle)
+        const secondHalf = content.substr(middle + 1)
+        return [recursiveSplitString(firstHalf), recursiveSplitString(secondHalf)]
+    }
+
+    if (content.length > 2000) {
+        const splitContent = recursiveSplitString(content).flat()
+        const firstContent = splitContent.shift()
+        const ScrollElements = splitContent.map((content: string, index: any) => <Scroll title={title} content={
+            index + 1 === splitContent.length ? "......".concat(content) : "......".concat(content).concat("......")
+        } date={date} storyImage={storyImage} isFirstScroll={false} />)
+
+        ScrollElements.unshift(<Scroll title={title} content={firstContent.concat("......")} date={date} storyImage={storyImage} isFirstScroll={true} />)
+        return ScrollElements
+    }
     return (
         <ScrollContainer>
             <ScrollContent>
                 <ScrollDate >
                     {date}
                 </ScrollDate>
-                <div style={{ justifyContent: "center", display: "flex" }}>
+                {isFirstScroll ?
+                    <div>
 
-                    <StoryImage src={storyImage} alt="" />
-                </div>
-                <ScrollTitle>
-                    {title}
-                </ScrollTitle>
+                        <div style={{ justifyContent: "center", display: "flex" }}>
+
+                            <StoryImage src={storyImage} alt="" />
+                        </div>
+                        <ScrollTitle>
+                            {title}
+                        </ScrollTitle>
+                    </div>
+                    :
+                    null
+                }
                 {content}
             </ScrollContent>
         </ScrollContainer>
@@ -36,7 +74,7 @@ marginTop: -1rem;
 `
 
 const ScrollDate = styled.h2`
-margin-top: -10rem;
+margin-top: -8rem;
 `
 const ScrollTitle = styled.h1`
 text-align:center;

@@ -14,7 +14,7 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     const adventures = useSelector((state: RootReducerProp) => state.campaign.adventures.filter(adv => adv.story === "Curse of Strahd"))
     const renderScrolls = () => {
         return adventures.map((adv: IAdventure, index: number) => {
-            return <Scroll key={index} title={adv.title} content={adv.body} date={adv.date} storyImage={CosTitle} />
+            return <Scroll key={index} title={adv.title} content={adv.body} date={adv.date} storyImage={CosTitle} isFirstScroll={false} />
         })
     }
     return (

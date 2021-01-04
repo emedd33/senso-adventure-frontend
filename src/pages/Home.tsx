@@ -15,7 +15,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                 case "Curse of Strahd":
                     storyImage = CosTitle
             }
-            return <Scroll key={index} title={adv.title} content={adv.body} date={adv.date} storyImage={storyImage} />
+            return <Scroll key={index} title={adv.title} content={adv.body} date={adv.date} storyImage={storyImage} isFirstScroll={false} />
         })
     }
     return (
