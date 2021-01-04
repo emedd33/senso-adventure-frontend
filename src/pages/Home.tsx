@@ -2,8 +2,8 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
-import Scroll from "../components/Scroll";
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
+import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
@@ -15,7 +15,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                 case "Curse of Strahd":
                     storyImage = CosTitle
             }
-            return <Scroll key={index} title={adv.title} content={adv.body} date={adv.date} storyImage={storyImage} isFirstScroll={false} />
+            return renderSplitScrolls(adv, storyImage)
         })
     }
     return (
