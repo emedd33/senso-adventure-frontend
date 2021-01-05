@@ -7,10 +7,10 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import CurseOfStrahd from "./pages/CurseOfStrahd";
-import Home from "./pages/Home";
 import { Spin } from 'antd';
 import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
+import TodoPage from "./pages/TodoPage";
 export default function App() {
   const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
   const dispatch = useDispatch()
@@ -30,7 +30,8 @@ export default function App() {
               <CurseOfStrahd />
             </Route>
             <Route path="/">
-              <Home />
+              <TodoPage />
+              {/* <Home /> */}
             </Route>
           </Switch>
         }
