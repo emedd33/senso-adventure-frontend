@@ -42,7 +42,7 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
 const ScrollParentContainer = styled.div`
 display:flex;
 flex-direction:column;
-margin-top:-${px2vw(1000)};
+margin-top:-100vh};
 width:100%;
 jusify-content: center;
 background-image: url(${Background});
