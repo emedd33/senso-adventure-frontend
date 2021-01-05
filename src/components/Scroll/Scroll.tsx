@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ScrollImage from "../../assets/backgroundImage/scroll.png"
+import px2vw from '../../utils/px2vw';
 type ScrollProps = {
     title: string,
     content: string,
@@ -12,7 +13,8 @@ type ScrollProps = {
 
 function Scroll({ title, content, date, storyImage, isFirstScroll }: ScrollProps): JSX.Element {
 
-    return (
+    return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
+
         <ScrollContainer>
             <ScrollContent>
                 <ScrollDate >
@@ -35,35 +37,38 @@ function Scroll({ title, content, date, storyImage, isFirstScroll }: ScrollProps
                 {content}
             </ScrollContent>
         </ScrollContainer>
+    </div>
     )
 }
-const StoryImage = styled.img`
-max-width: 30rem; 
-height: 10rem; 
-justify-content: flex-start;
-marginTop: -1rem;
-`
-
-const ScrollDate = styled.h2`
-margin-top: -8rem;
-`
-const ScrollTitle = styled.h1`
-text-align:center;
-`
-
 const ScrollContainer = styled.div`
 z-index:20;
-margin-top:5rem;
-min-width:50rem;
+margin: ${px2vw(22)};
+width:${px2vw(1000)};
+min-width:20rem;
 background-image: url(${ScrollImage});
 background-repeat: no-repeat;
 background-size: 100% 100%;
 `
+const StoryImage = styled.img`
+justify-content: flex-start;
+marginTop: -1rem;
+width: ${px2vw(500)};
+`
+
+const ScrollDate = styled.h2`
+margin-top: -${px2vw(5)};
+`
+const ScrollTitle = styled.h1`
+text-align:center;
+font-size:  ${px2vw(100)}; ;
+`
+
 const ScrollContent = styled.div`
-font-size: 2rem;
-padding-top:35%;
-padding-bottom: 35%;
-padding-right:10%;
+font-size: ${px2vw(40)};
+padding-top:45%;
+padding-bottom: 45%;
+padding-right:15%;
 padding-left:15%;
+margin-left:0;
 `
 export default Scroll

@@ -1,5 +1,5 @@
 import Scroll from "./Scroll";
-const MAX_CHARACTER = 2000
+const MAX_CHARACTER = 1000
 function recursiveSplitString(content: string): any {
     // Recursive split string into substrings smaller than 2000 characters
     if (content.length <= MAX_CHARACTER) {

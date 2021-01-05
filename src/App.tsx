@@ -11,6 +11,7 @@ import { Spin } from 'antd';
 import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
 import TodoPage from "./pages/TodoPage";
+import { Global } from "./assets/styles/global";
 export default function App() {
   const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
   const dispatch = useDispatch()
@@ -19,8 +20,9 @@ export default function App() {
   }, [dispatch])
   return (
     <Router>
+      <Global />
       <Navbar />
-      <div>
+      <div style={{ paddingTop: "5rem" }}>
         {isLoading ?
           <div style={{ alignItems: "center", justifyContent: "center", display: "flex", height: "100vh" }}>
             <Spin />
