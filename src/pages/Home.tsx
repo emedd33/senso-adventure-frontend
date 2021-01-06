@@ -7,23 +7,23 @@ import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
-    const adventures = useSelector((state: RootReducerProp) => state.campaign.adventures)
-    const renderScrolls = () => {
-        return adventures.map((adv: IAdventure, index: number) => {
-            let storyImage = ""
-            switch (adv.story) {
-                case "Curse of Strahd":
-                    storyImage = CosTitle
-            }
-            return renderSplitScrolls(adv, storyImage)
-        })
-    }
+    const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
+    // const renderScrolls = () => {
+    //     return campaigns.map((adv: IAdventure, index: number) => {
+    //         let storyImage = ""
+    //         switch (adv.story) {
+    //             case "Curse of Strahd":
+    //                 storyImage = CosTitle
+    //         }
+    //         return renderSplitScrolls(adv, storyImage)
+    //     })
+    // }
     return (
         <Container>
             <Image src={Background} alt="logo" />
 
             <ScrollParentContainer>
-                {renderScrolls()}
+                {/* {renderScrolls()} */}
             </ScrollParentContainer>
 
         </Container >

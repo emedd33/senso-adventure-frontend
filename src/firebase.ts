@@ -25,5 +25,6 @@ const config = {
 firebase.initializeApp(config);
 const databaseRef = firebase.database().ref();
 export const todosRef = databaseRef.child("todos")
-export const curseOfStrahdRef = databaseRef.child("campaigns/curseOfStrahd/adventures")
+export const campaignsRef = databaseRef.child("campaigns")
+export const curseOfStrahdRef = databaseRef.child("campaigns/curseOfStrahd/sessions")
 export default firebase;

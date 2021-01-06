@@ -25,18 +25,18 @@ function flatten(arr: Array<any>): any {
         return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
 }
-const renderSplitScrolls = (adv: IAdventure, storyImage: string) => {
-    if (adv.body.length > MAX_CHARACTER) {
-        const splitContent = recursiveSplitString(adv.body)
+const renderSplitScrolls = (session: ISession, storyImage: string) => {
+    if (session.story.length > MAX_CHARACTER) {
+        const splitContent = recursiveSplitString(session.story)
         const flatArray = flatten(splitContent)
         const firstContent = flatArray.shift()!
-        const ScrollElements = flatArray.map((content: string, index: any) => <Scroll title={adv.title} content={
+        const ScrollElements = flatArray.map((content: string, index: any) => <Scroll title={session.title} content={
             index + 1 === splitContent.length ? "......".concat(content) : "......".concat(content).concat("......")
-        } date={adv.date} storyImage={storyImage} isFirstScroll={false} />)
-        ScrollElements.unshift(<Scroll title={adv.title} content={firstContent.concat("......")} date={adv.date} storyImage={storyImage} isFirstScroll={true} />)
+        } date={session.date} storyImage={storyImage} isFirstScroll={false} />)
+        ScrollElements.unshift(<Scroll title={session.title} content={firstContent.concat("......")} date={session.date} storyImage={storyImage} isFirstScroll={true} />)
         return ScrollElements
     }
-    return <Scroll title={adv.title} content={adv.body} date={adv.date} storyImage={storyImage} isFirstScroll={true} />
+    return <Scroll title={session.title} content={session.story} date={session.date} storyImage={storyImage} isFirstScroll={true} />
 
 
 }

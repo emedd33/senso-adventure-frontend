@@ -1,7 +1,9 @@
 import * as actionTypes from "./campaignActions"
 
 const initialCampaignState: CampaignState = {
-    adventures: []
+    curseOfStrahd: {
+        sessions: []
+    }
 }
 
 const adventureReducer = (
@@ -9,8 +11,8 @@ const adventureReducer = (
     action: AdventureAction
 ): CampaignState => {
     switch (action.type) {
-        case actionTypes.GET_ADVENTURES:
-            return { ...state, adventures: action.payload }
+        case actionTypes.SET_CAMPAIGNS:
+            return { ...action.payload }
     }
     return state
 }

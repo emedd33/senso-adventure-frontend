@@ -1,12 +1,13 @@
-interface IAdventure {
-    id: number
+interface ISession {
     title: string
-    body: string
     story: string
     date: string
 }
+interface ICampaign {
+    sessions: ISession[]
+}
 type CampaignState = {
-    adventures: IAdventure[]
+    curseOfStrahd: ICampaign
 }
 
 type AdventureAction = {
