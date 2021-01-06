@@ -10,7 +10,6 @@ const adventureReducer = (
 ): CampaignState => {
     switch (action.type) {
         case actionTypes.GET_ADVENTURES:
-            console.log(action.payload)
             return { ...state, adventures: action.payload }
     }
     return state

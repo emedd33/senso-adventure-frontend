@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ScrollImage from "../../assets/backgroundImage/scroll.png"
 import px2vw from '../../utils/px2vw';
+import ReactHtmlParser from "react-html-parser"
 type ScrollProps = {
     title: string,
     content: string,
@@ -34,7 +35,8 @@ function Scroll({ title, content, date, storyImage, isFirstScroll }: ScrollProps
                     :
                     null
                 }
-                {content}
+
+                <div>{ReactHtmlParser(content)}</div>
             </ScrollContent>
         </ScrollContainer>
     </div>

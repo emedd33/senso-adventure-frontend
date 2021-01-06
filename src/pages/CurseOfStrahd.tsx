@@ -1,9 +1,10 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/cos_background.jpg"
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import renderSplitScrolls from "../components/Scroll/ScrollUtils";
+import { curseOfStrahdRef, todosRef } from "../firebase";
 
 type CurseOfStrahdProps = {
 
@@ -12,8 +13,17 @@ type CurseOfStrahdProps = {
 
 const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     const adventures = useSelector((state: RootReducerProp) => state.campaign.adventures.filter(adv => adv.story === "Curse of Strahd"))
+    const [todos, setTodos] = useState<any>(null);
+    useEffect(() => {
+
+        curseOfStrahdRef.once('value', (snapshot) => {
+            let items = snapshot.val();
+            setTodos(Object.values(items))
+        });
+    }, [])
+    console.log(todos)
     const renderScrolls = () => {
-        return adventures.map((adv: IAdventure, index: number) => {
+        return todos.map((adv: IAdventure, index: number) => {
             return renderSplitScrolls(adv, CosTitle)
         })
     }
@@ -21,7 +31,10 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
         <Container>
 
             <ScrollParentContainer >
-                {renderScrolls()}
+                {todos ?
+                    renderScrolls()
+                    : null
+                }
             </ScrollParentContainer>
 
         </Container >
