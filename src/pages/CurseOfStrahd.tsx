@@ -2,12 +2,8 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/cos_background.jpg"
-import BackgroundMobile from "../assets/backgroundImage/cos_background_mobile.jpg"
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import renderSplitScrolls from "../components/Scroll/ScrollUtils";
-import px2vw from "../utils/px2vw";
-import useWindowSize from "../store/hooks/useWindowSize";
-import { useEffect } from "react";
 
 type CurseOfStrahdProps = {
 
@@ -21,16 +17,10 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
             return renderSplitScrolls(adv, CosTitle)
         })
     }
-    const size = useWindowSize();
-    let background = Background
-    if (size.height! > size.width!) {
-        background = BackgroundMobile
-    }
     return (
         <Container>
-            <Image src={background} alt="logo" style={{ width: size.width, height: size.height }} />
 
-            <ScrollParentContainer>
+            <ScrollParentContainer >
                 {renderScrolls()}
             </ScrollParentContainer>
 
@@ -42,23 +32,19 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
 const ScrollParentContainer = styled.div`
 display:flex;
 flex-direction:column;
-margin-top:-100vh};
 width:100%;
 jusify-content: center;
 background-image: url(${Background});
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-size: cover;
 `
-const Image = styled.img`
-position: sticky;
-top: 5rem;
-margin-top:-${px2vw(100)};
-z-index:10;
 
-`
 const Container = styled.div`
     display:flex;
     justify-content:center;
     flex-direction: column;
-    padding-top:5rem;
+    padding-top:3rem;
     background-color:black;
     
 `

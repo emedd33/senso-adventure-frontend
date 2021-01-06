@@ -35,7 +35,6 @@ const ScrollParentContainer = styled.div`
 display:flex;
 flex-direction:column;
 width:100%;
-margin-top:-150vh;
 jusify-content: center;
 `
 const Image = styled.img`

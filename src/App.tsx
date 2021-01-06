@@ -22,7 +22,7 @@ export default function App() {
     <Router>
       <Global />
       <Navbar />
-      <div style={{ paddingTop: "5rem" }}>
+      <div style={{}}>
         {isLoading ?
           <div style={{ alignItems: "center", justifyContent: "center", display: "flex", height: "100vh" }}>
             <Spin />

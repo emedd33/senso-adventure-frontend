@@ -56,7 +56,7 @@ width: ${px2vw(500)};
 `
 
 const ScrollDate = styled.h2`
-margin-top: -${px2vw(5)};
+margin-top: -${px2vw(4)};
 `
 const ScrollTitle = styled.h1`
 text-align:center;
@@ -64,9 +64,9 @@ font-size:  ${px2vw(100)}; ;
 `
 
 const ScrollContent = styled.div`
-font-size: ${px2vw(40)};
-padding-top:45%;
-padding-bottom: 45%;
+font-size: ${px2vw(20)};
+padding-top:30%;
+padding-bottom: 30%;
 padding-right:15%;
 padding-left:15%;
 margin-left:0;
