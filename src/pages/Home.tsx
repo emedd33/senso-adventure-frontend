@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
@@ -7,23 +7,21 @@ import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
-    const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
-    // const renderScrolls = () => {
-    //     return campaigns.map((adv: IAdventure, index: number) => {
-    //         let storyImage = ""
-    //         switch (adv.story) {
-    //             case "Curse of Strahd":
-    //                 storyImage = CosTitle
-    //         }
-    //         return renderSplitScrolls(adv, storyImage)
-    //     })
-    // }
+    const sessions = useSelector((state: RootReducerProp) => {
+        return Object.values(state.campaigns).map(campaign => Object.values(campaign.sessions)).flat()
+    })
+    const renderScrolls = () => {
+        return Object.values(sessions).map((session: ISession,) => {
+            return renderSplitScrolls(session, CosTitle)
+        })
+    }
     return (
         <Container>
-            <Image src={Background} alt="logo" />
-
             <ScrollParentContainer>
-                {/* {renderScrolls()} */}
+                {sessions ?
+                    renderScrolls()
+                    : null
+                }
             </ScrollParentContainer>
 
         </Container >
@@ -36,22 +34,18 @@ display:flex;
 flex-direction:column;
 width:100%;
 jusify-content: center;
+background-image: url(${Background});
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-size: cover;
 `
-const Image = styled.img`
-position: -webkit-sticky;
-position: sticky;
-top: 5rem;
-margin: auto;
-width:250vh;
-z-index:10;
-`
+
 const Container = styled.div`
     display:flex;
     justify-content:center;
     flex-direction: column;
-    padding-top:5rem;
+    padding-top:3rem;
     background-color:black;
     
 `
-
 export default Home

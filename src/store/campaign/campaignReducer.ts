@@ -3,6 +3,9 @@ import * as actionTypes from "./campaignActions"
 const initialCampaignState: CampaignState = {
     curseOfStrahd: {
         sessions: []
+    },
+    fireAndFury: {
+        sessions: []
     }
 }
 

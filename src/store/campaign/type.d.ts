@@ -7,7 +7,8 @@ interface ICampaign {
     sessions: ISession[]
 }
 type CampaignState = {
-    curseOfStrahd: ICampaign
+    curseOfStrahd: ICampaign,
+    fireAndFury: ICampaign
 }
 
 type AdventureAction = {

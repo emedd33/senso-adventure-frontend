@@ -12,6 +12,7 @@ import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
 import TodoPage from "./pages/TodoPage";
 import { Global } from "./assets/styles/global";
+import Home from "./pages/Home";
 export default function App() {
   const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
   const dispatch = useDispatch()
@@ -32,8 +33,8 @@ export default function App() {
               <CurseOfStrahd />
             </Route>
             <Route path="/">
-              <TodoPage />
-              {/* <Home /> */}
+              {/* <TodoPage /> */}
+              <Home />
             </Route>
           </Switch>
         }
