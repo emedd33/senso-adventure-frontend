@@ -32,7 +32,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                         <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
 
                             <NavBarItem >
-                                <Link to="/curse_of_strahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
+                                <Link to="/curseOfStrahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
                                     <span><CosTitle>Curse of Strahd</CosTitle></span>
                                 </Link>
                             </NavBarItem>

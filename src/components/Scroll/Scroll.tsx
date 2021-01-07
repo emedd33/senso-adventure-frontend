@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import ScrollImage from "../../assets/backgroundImage/scroll.png"
 import px2vw from '../../utils/px2vw';
 import ReactHtmlParser from "react-html-parser"
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 type ScrollProps = {
     title: string,
     content: string,
@@ -15,38 +15,34 @@ type ScrollProps = {
 
 
 function Scroll({ title, content, date, storyImage, isFirstScroll, campaign }: ScrollProps): JSX.Element {
-    const history = useHistory();
     console.log(campaign)
     return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
+        <Link to={"/" + campaign}>
+            <ScrollContainer>
 
-        <ScrollContainer onClick={() => {
+                <ScrollContent>
+                    <ScrollDate >
+                        {date}
+                    </ScrollDate>
+                    {isFirstScroll ?
+                        <div>
 
-            history.push('/' + campaign)
-        }
-        }>
+                            <div style={{ justifyContent: "center", display: "flex" }}>
 
-            <ScrollContent>
-                <ScrollDate >
-                    {date}
-                </ScrollDate>
-                {isFirstScroll ?
-                    <div>
-
-                        <div style={{ justifyContent: "center", display: "flex" }}>
-
-                            <StoryImage src={storyImage} alt="" />
+                                <StoryImage src={storyImage} alt="" />
+                            </div>
+                            <ScrollTitle>
+                                {title}
+                            </ScrollTitle>
                         </div>
-                        <ScrollTitle>
-                            {title}
-                        </ScrollTitle>
-                    </div>
-                    :
-                    null
-                }
+                        :
+                        null
+                    }
 
-                <div>{ReactHtmlParser(content)}</div>
-            </ScrollContent>
-        </ScrollContainer>
+                    <div>{ReactHtmlParser(content)}</div>
+                </ScrollContent>
+            </ScrollContainer>
+        </Link>
     </div>
     )
 }

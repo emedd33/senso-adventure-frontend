@@ -10,7 +10,6 @@ import CurseOfStrahd from "./pages/CurseOfStrahd";
 import { Spin } from 'antd';
 import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
-import TodoPage from "./pages/TodoPage";
 import { Global } from "./assets/styles/global";
 import Home from "./pages/Home";
 export default function App() {
@@ -29,7 +28,7 @@ export default function App() {
             <Spin />
           </div>
           : <Switch>
-            <Route path="/Curse_of_strahd">
+            <Route exact path="/curseOfStrahd">
               <CurseOfStrahd />
             </Route>
             <Route path="/">

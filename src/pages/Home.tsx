@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
@@ -19,6 +19,8 @@ const Home: FunctionComponent<HomeProps> = () => {
                     return renderSplitScrolls(session, CosTitle)
                 case "fireAndFury":
                     return renderSplitScrolls(session, "")
+                default:
+                    return null
             }
         })
     }
