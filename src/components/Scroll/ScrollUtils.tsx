@@ -32,11 +32,11 @@ const renderSplitScrolls = (session: ISession, storyImage: string) => {
         const firstContent = flatArray.shift()!
         const ScrollElements = flatArray.map((content: string, index: any) => <Scroll title={session.title} content={
             index + 1 === splitContent.length ? "......".concat(content) : "......".concat(content).concat("......")
-        } date={session.date} storyImage={storyImage} isFirstScroll={false} />)
-        ScrollElements.unshift(<Scroll title={session.title} content={firstContent.concat("......")} date={session.date} storyImage={storyImage} isFirstScroll={true} />)
+        } date={session.date} storyImage={storyImage} isFirstScroll={false} campaign={session.campaign} />)
+        ScrollElements.unshift(<Scroll title={session.title} content={firstContent.concat("......")} date={session.date} storyImage={storyImage} isFirstScroll={true} campaign={session.campaign} />)
         return ScrollElements
     }
-    return <Scroll title={session.title} content={session.story} date={session.date} storyImage={storyImage} isFirstScroll={true} />
+    return <Scroll title={session.title} content={session.story} date={session.date} storyImage={storyImage} isFirstScroll={true} campaign={session.campaign} />
 
 }
 

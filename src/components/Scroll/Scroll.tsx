@@ -1,22 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ScrollImage from "../../assets/backgroundImage/scroll.png"
 import px2vw from '../../utils/px2vw';
 import ReactHtmlParser from "react-html-parser"
+import { useHistory } from 'react-router-dom';
 type ScrollProps = {
     title: string,
     content: string,
     date: string,
     storyImage: string,
-    isFirstScroll: boolean
+    isFirstScroll: boolean,
+    campaign: string,
 }
 
 
-function Scroll({ title, content, date, storyImage, isFirstScroll }: ScrollProps): JSX.Element {
-
+function Scroll({ title, content, date, storyImage, isFirstScroll, campaign }: ScrollProps): JSX.Element {
+    const history = useHistory();
+    console.log(campaign)
     return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
 
-        <ScrollContainer>
+        <ScrollContainer onClick={() => {
+
+            history.push('/' + campaign)
+        }
+        }>
+
             <ScrollContent>
                 <ScrollDate >
                     {date}
@@ -42,6 +50,12 @@ function Scroll({ title, content, date, storyImage, isFirstScroll }: ScrollProps
     </div>
     )
 }
+const StoryImage = styled.img`
+justify-content: flex-start;
+marginTop: -1rem;
+width: ${px2vw(500)};
+
+`
 const ScrollContainer = styled.div`
 z-index:20;
 margin: ${px2vw(22)};
@@ -49,12 +63,14 @@ width:${px2vw(1000)};
 min-width:20rem;
 background-image: url(${ScrollImage});
 background-repeat: no-repeat;
-background-size: 100% 100%;
-`
-const StoryImage = styled.img`
-justify-content: flex-start;
-marginTop: -1rem;
-width: ${px2vw(500)};
+background-size: 100% 100%; 
+transition:250ms; 
+&:hover {
+   
+    width:${px2vw(1100)};
+    cursor: pointer;
+   
+  }
 `
 
 const ScrollDate = styled.h2`
