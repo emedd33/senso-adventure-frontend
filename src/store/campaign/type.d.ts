@@ -2,6 +2,7 @@ interface ISession {
     title: string
     story: string
     date: string
+    campaign: string
 }
 interface ICampaign {
     sessions: ISession[]

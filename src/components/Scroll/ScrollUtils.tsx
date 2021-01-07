@@ -38,6 +38,6 @@ const renderSplitScrolls = (session: ISession, storyImage: string) => {
     }
     return <Scroll title={session.title} content={session.story} date={session.date} storyImage={storyImage} isFirstScroll={true} />
 
-
 }
+
 export default renderSplitScrolls

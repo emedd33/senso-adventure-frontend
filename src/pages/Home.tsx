@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import renderSplitScrolls from "../components/Scroll/ScrollUtils";
+import sortByDateValue from "../utils/sortArrayDyDate";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
@@ -11,10 +12,17 @@ const Home: FunctionComponent<HomeProps> = () => {
         return Object.values(state.campaigns).map(campaign => Object.values(campaign.sessions)).flat()
     })
     const renderScrolls = () => {
-        return Object.values(sessions).map((session: ISession,) => {
-            return renderSplitScrolls(session, CosTitle)
+        sortByDateValue(sessions)
+        return Object.values(sessions).map((session: any,) => {
+            switch (session.campaign) {
+                case "curseOfStrahd":
+                    return renderSplitScrolls(session, CosTitle)
+                case "fireAndFury":
+                    return renderSplitScrolls(session, "")
+            }
         })
     }
+
     return (
         <Container>
             <ScrollParentContainer>
@@ -22,6 +30,9 @@ const Home: FunctionComponent<HomeProps> = () => {
                     renderScrolls()
                     : null
                 }
+                <div style={{ height: "100vh", width: "100%" }}>
+
+                </div>
             </ScrollParentContainer>
 
         </Container >
@@ -33,6 +44,7 @@ const ScrollParentContainer = styled.div`
 display:flex;
 flex-direction:column;
 width:100%;
+height:100%;
 jusify-content: center;
 background-image: url(${Background});
 background-repeat: no-repeat;
@@ -45,7 +57,8 @@ const Container = styled.div`
     justify-content:center;
     flex-direction: column;
     padding-top:3rem;
-    background-color:black;
+    width:100%;
+    height:100%;
     
 `
 export default Home
