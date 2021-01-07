@@ -24,7 +24,6 @@ const Home: FunctionComponent<HomeProps> = () => {
             }
         })
     }
-    debugger
     return (
         <Container>
             <ScrollParentContainer>
