@@ -30,7 +30,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                         </Link>
                     </div>
                     <div style={{ flex: "1", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "4rem" }}>
-                        <Link to="/" onClick={() => setSidebar(false)} style={{ textDecoration: 'none', color: "black" }}>
+                        <Link to="/login" onClick={() => setSidebar(false)} style={{ textDecoration: 'none', color: "black" }}>
                             <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                 <BsIcons.BsPersonFill onClick={() => console.log("hei")} />
                                 <p style={{ marginBottom: "0" }}>Sign in</p>

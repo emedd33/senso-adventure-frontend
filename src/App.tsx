@@ -12,6 +12,7 @@ import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
 import { Global } from "./assets/styles/global";
 import Home from "./pages/Home";
+import SignIn from "./components/Login/Login";
 export default function App() {
   const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
   const dispatch = useDispatch()
@@ -30,6 +31,10 @@ export default function App() {
           : <Switch>
             <Route exact path="/curseOfStrahd">
               <CurseOfStrahd />
+            </Route>
+            <Route exact path="/login">
+
+              <SignIn />
             </Route>
             <Route path="/">
 
