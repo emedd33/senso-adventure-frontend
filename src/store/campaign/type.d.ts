@@ -9,7 +9,8 @@ interface IPlayer {
     characterName: string,
     race: string,
     class: string,
-    level: number
+    level: number,
+    isDead: string,
 }
 interface ICampaign {
     sessions: ISession[],

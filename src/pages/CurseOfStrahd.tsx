@@ -2,9 +2,9 @@ import React, { FunctionComponent, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/cos_background.jpg"
-import OldFrame from "../assets/backgroundImage/old_sign.png"
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import renderSplitScrolls from "../components/Scroll/ScrollUtils";
+import Characters from "../components/Characters/Characters"
 import {
     FloatingMenu,
     MainButton,
@@ -22,21 +22,12 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
             return renderSplitScrolls(session, CosTitle)
         })
     }
-    const renderPlayers = () => {
-        return Object.values(campaign.players).map((player: IPlayer) => {
-            console.log(player.characterName)
-            return <p>{player.playerName}:{player.characterName}-level {player.level}-{player.race}-{player.class}</p>
-        })
-    }
+
     return (
         <Container>
 
             <ScrollParentContainer >
-                <CharacterConatiner>
-                    {campaign ?
-                        renderPlayers()
-                        : null}
-                </CharacterConatiner>
+                <Characters players={campaign.players} />
                 {campaign ?
                     renderScrolls()
                     : null
@@ -95,19 +86,7 @@ background-attachment: fixed;
 background-size: cover;
 z-index:300;
 `
-const CharacterConatiner = styled.div`
-width: 60%; 
-min-height: 40rem; 
-padding:10%;
-background-image: url(${OldFrame});
-background-repeat: no-repeat;
-background-color:#FAEBD7;
-background-size: 100% 100%;
-margin: 5rem; 
-padding
-margin-top: 10rem;
-z-index: 400; 
-`
+
 
 const Container = styled.div`
     display:flex;

@@ -39,7 +39,7 @@ function Scroll({ title, content, date, storyImage, isFirstScroll, campaign }: S
                         null
                     }
 
-                    <div>{ReactHtmlParser(content)}</div>
+                    <div style={{ color: "black" }}>{ReactHtmlParser(content)}</div>
                 </ScrollContent>
             </ScrollContainer>
         </Link>

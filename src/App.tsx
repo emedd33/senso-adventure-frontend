@@ -32,7 +32,7 @@ export default function App() {
               <CurseOfStrahd />
             </Route>
             <Route path="/">
-              {/* <TodoPage /> */}
+
               <Home />
             </Route>
           </Switch>
