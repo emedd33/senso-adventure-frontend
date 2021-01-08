@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
+import * as BsIcons from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { IconContext } from 'react-icons';
@@ -28,9 +29,15 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 <div className={sidebar ? 'opacity-container active' : "opacity-container"} onClick={() => sidebar ? setSidebar(false) : null}>
                 </div>
                 <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-                    <ul style={{ width: "80%", paddingTop: "20vh" }} onClick={showSidebar}>
-                        <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
 
+                    <ul style={{ width: "100%" }} onClick={showSidebar}>
+
+                        <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
+                            <NavBarItem >
+                                <Link to="/" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
+                                    <span><CosTitle>Home</CosTitle></span>
+                                </Link>
+                            </NavBarItem>
                             <NavBarItem >
                                 <Link to="/curseOfStrahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
                                     <span><CosTitle>Curse of Strahd</CosTitle></span>
@@ -58,7 +65,6 @@ margin-left:2vh;
 `
 const NavBarHeader = styled.div`
     background-color: #AB9696;
-  height: 80px;
   width:100%;
   box-shadow
   padding:10rem;
@@ -74,6 +80,7 @@ const NavBarOpenIcon = styled(Link)`
     marin-ritgh: 2rem;
     font-size: 2rem;
     background: none;`
+
 
 const NavBarItem = styled.ul`
     background-color:#AB9696;

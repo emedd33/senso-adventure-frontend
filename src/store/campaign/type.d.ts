@@ -4,8 +4,16 @@ interface ISession {
     date: string
     campaign: string
 }
+interface IPlayer {
+    playerName: string,
+    characterName: string,
+    race: string,
+    class: string,
+    level: number
+}
 interface ICampaign {
-    sessions: ISession[]
+    sessions: ISession[],
+    players: IPlayer[]
 }
 type CampaignState = {
     curseOfStrahd: ICampaign,

@@ -51,13 +51,14 @@ background-image: url(${Background});
 background-repeat: no-repeat;
 background-attachment: fixed;
 background-size: cover;
+z-index:300;
 `
 
 const Container = styled.div`
     display:flex;
     justify-content:center;
     flex-direction: column;
-    padding-top:3rem;
+    padding-top:5rem;
     width:100%;
     height:100%;
     
