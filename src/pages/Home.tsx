@@ -5,9 +5,11 @@ import Background from "../assets/backgroundImage/dnd_background.jpg"
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 import sortByDateValue from "../utils/sortArrayDyDate";
+import IsLoading from "../components/IsLoading/IsLoading";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
+    const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const sessions = useSelector((state: RootReducerProp) => {
         return Object.values(state.campaigns).map(campaign => Object.values(campaign.sessions)).flat()
     })
@@ -24,43 +26,41 @@ const Home: FunctionComponent<HomeProps> = () => {
             }
         })
     }
+    if (isLoading) {
+        return (
+            <Container>
+                <IsLoading />
+            </Container>
+        )
+    }
     return (
         <Container>
-            <ScrollParentContainer>
-                {sessions ?
-                    renderScrolls()
-                    : null
-                }
-                <div style={{ height: "100vh", width: "100%" }}>
+            {sessions ?
+                renderScrolls()
+                : null
+            }
+            <div style={{ height: "100vh", width: "100%" }}>
 
-                </div>
-            </ScrollParentContainer>
-
+            </div>
         </Container >
     )
 
 
 }
-const ScrollParentContainer = styled.div`
+
+const Container = styled.div`
+z-index:300;
 display:flex;
-flex-direction:column;
-width:100%;
-height:100%;
-jusify-content: center;
 background-image: url(${Background});
 background-repeat: no-repeat;
 background-attachment: fixed;
 background-size: cover;
-z-index:300;
-`
-
-const Container = styled.div`
-    display:flex;
-    justify-content:center;
-    flex-direction: column;
-    padding-top:5vh;
-    width:100%;
-    height:100%;
-    
+justify-content:center;
+align-items:center;
+flex-direction: column;
+padding-top:5vh;
+width:100%;
+height:100%;
+min-height:95vh;
 `
 export default Home

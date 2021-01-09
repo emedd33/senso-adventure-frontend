@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import OldFrame from "../../assets/backgroundImage/old_sign.png"
 import * as FaIcons from 'react-icons/fa';
+import { OLD_WHITE } from "../../assets/styles/colors";
 
 export interface CharactersProps {
     players: IPlayer[]
@@ -32,10 +33,6 @@ const Characters: React.SFC<CharactersProps> = ({ players }) => {
                 })}
             </table>
         )
-        // <p>
-        //     {player.playerName}:{player.characterName}-level {player.level}-{player.race}-{player.class}</p>
-        // return Object.values(players).map((player: IPlayer) => {
-        //     console.log(player.characterName)
     }
     return (<CharacterConatiner>
 
@@ -53,7 +50,7 @@ height:40rem;
 padding:11%;
 background-image: url(${OldFrame});
 background-repeat: no-repeat;
-background-color:#FAEBD7;
+background-color:${OLD_WHITE};
 background-size: 100% 100%;
 margin: 5rem; 
 padding

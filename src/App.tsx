@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,41 +7,33 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import CurseOfStrahd from "./pages/CurseOfStrahd";
-import { Spin } from 'antd';
 import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
-import { Global } from "./assets/styles/global";
 import Home from "./pages/Home";
-import SignIn from "./components/Login/Login";
+import Login from "./pages/Login";
 export default function App() {
-  const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchCampaigns)
   }, [dispatch])
   return (
     <Router>
-      <Global />
       <Navbar />
       <div style={{}}>
-        {isLoading ?
-          <div style={{ alignItems: "center", justifyContent: "center", display: "flex", height: "100vh" }}>
-            <Spin />
-          </div>
-          : <Switch>
-            <Route exact path="/curseOfStrahd">
-              <CurseOfStrahd />
-            </Route>
-            <Route exact path="/login">
 
-              <SignIn />
-            </Route>
-            <Route path="/">
+        <Switch>
+          <Route exact path="/curseOfStrahd">
+            <CurseOfStrahd />
+          </Route>
+          <Route exact path="/login">
 
-              <Home />
-            </Route>
-          </Switch>
-        }
+            <Login />
+          </Route>
+          <Route path="/">
+
+            <Home />
+          </Route>
+        </Switch>
       </div>
     </Router>
   );
