@@ -13,16 +13,16 @@ const Characters: React.SFC<CharactersProps> = ({ players }) => {
             <table style={{ minWidth: "100%" }}>
                 <tr>
                     <th></th>
-                    <th>Player</th>
-                    <th>Character</th>
-                    <th>Race</th>
-                    <th>Class</th>
-                    <th>Level</th>
+                    <th style={{ textAlign: "left" }}>Player</th>
+                    <th style={{ textAlign: "left" }}>Character</th>
+                    <th style={{ textAlign: "left" }}>Race</th>
+                    <th style={{ textAlign: "left" }}>Class</th>
+                    <th style={{ textAlign: "left" }}>Level</th>
                 </tr>
                 {Object.values(players).map((player: IPlayer) => {
                     console.log(player)
                     return (<tr>
-                        <td>{player.isDead === "True" ? <FaIcons.FaSkullCrossbones /> : null}</td>
+                        <td >{player.isDead === "True" ? <FaIcons.FaSkullCrossbones /> : null}</td>
                         <td>{player.isDead === "True" ? <s>{player.playerName}</s> : player.playerName}</td>
                         <td>{player.isDead === "True" ? <s>{player.characterName}</s> : player.characterName}</td>
                         <td>{player.isDead === "True" ? <s>{player.race}</s> : player.race}</td>
@@ -35,7 +35,7 @@ const Characters: React.SFC<CharactersProps> = ({ players }) => {
     }
     return (<CharacterConatiner>
 
-        <div style={{ height: "20rem", zIndex: 200, overflowY: "scroll", overflowX: "scroll" }}>
+        <div style={{ height: "20rem", zIndex: 200 }}>
             {renderPlayers()}
 
 
@@ -45,7 +45,7 @@ const Characters: React.SFC<CharactersProps> = ({ players }) => {
 
 const CharacterConatiner = styled.div`
 width: 60%;  
-height:40rem;
+min-height:10rem;
 padding:11%;
 background-image: url(${OldFrame});
 background-repeat: no-repeat;
