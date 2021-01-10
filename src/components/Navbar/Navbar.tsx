@@ -1,12 +1,13 @@
 import React, { FunctionComponent, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
-import * as BsIcons from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import CosCrest from "../../assets/backgroundImage/CosCrest.png"
 import HomeCrest from "../../assets/backgroundImage/home_crest.png"
 import './Navbar.css';
 import { IconContext } from 'react-icons';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import MenuListComposition from '../MenuList/MenuList';
 type NavbarProps = {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
     const [sidebar, setSidebar] = useState(false);
@@ -29,14 +30,8 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                             </span>
                         </Link>
                     </div>
-                    <div style={{ flex: "1", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "4rem" }}>
-                        <Link to="/login" onClick={() => setSidebar(false)} style={{ textDecoration: 'none', color: "black" }}>
-                            <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                <BsIcons.BsPersonFill onClick={() => console.log("hei")} />
-                                <p style={{ marginBottom: "0" }}>Login</p>
-                            </span>
-                        </Link>
-                    </div>
+                    <MenuListComposition />
+
 
 
 

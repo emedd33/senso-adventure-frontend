@@ -1,5 +1,6 @@
 
 interface IAuthUser {
+    user: any
     username: string,
     firstname: string,
     lastname: string,

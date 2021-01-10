@@ -5,11 +5,10 @@ import { SET_IS_LOADING, SET_ERROR, SET_AUTH_USER } from "./adminActions";
 export const dispatchLogin = (payload: ILogin) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true));
-        let isSuccess = await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+        await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
             .then((user) => {
                 console.log(user)
                 dispatch(loginSuccess(user))
-                return "SUCCESS"
             })
             .catch((error) => {
                 let errorMessage = "An error has occured"
@@ -20,9 +19,17 @@ export const dispatchLogin = (payload: ILogin) => {
                         errorMessage = "invalid email or password"
                 }
                 dispatch(setError(errorMessage))
-                return "FAILURE"
             }).finally(() => dispatch(setIsLoading(false)))
-        return isSuccess
+    }
+}
+export const dispatchLogout = () => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setIsLoading(true));
+        firebase.auth().signOut().then(() => {
+            dispatch({ type: SET_AUTH_USER, payload: null })
+        }).catch((error) => {
+            dispatch({ type: SET_ERROR, payload: "An error has occured" })
+        }).finally(() => dispatch(setIsLoading(false)))
     }
 }
 export const dispatchSignup = (payload: any) => {

@@ -9,6 +9,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import { OLD_WHITE } from '../../assets/styles/colors';
 import { Link } from 'react-router-dom';
+import { dispatchLogin } from '../../store/admin/adminCreator';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,6 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LoginForm = () => {
   const classes = useStyles();
+  const dispatch = useDispatch()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isError, setIsError] = useState(false)
@@ -74,6 +77,7 @@ const LoginForm = () => {
       setHelperText("Please type in your email and password")
       setIsError(true)
     } else {
+      dispatch(dispatchLogin({ "email": email, "password": password }))
     }
   }
   return (
