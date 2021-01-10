@@ -8,9 +8,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import { OLD_WHITE } from '../../assets/styles/colors';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
-import { dispatchLogin } from '../../store/admin/adminCreator';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,7 +62,6 @@ const LoginForm = () => {
   const [isError, setIsError] = useState(false)
   const [helperText, setHelperText] = useState("")
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
-  const dispatch = useDispatch()
   useEffect(() => {
     if (email.trim() && password.trim()) {
       setIsButtonDisabled(false)
@@ -77,7 +74,6 @@ const LoginForm = () => {
       setHelperText("Please type in your email and password")
       setIsError(true)
     } else {
-      const isSuccess = dispatch(dispatchLogin({ "email": email, "password": password }))
     }
   }
   return (
