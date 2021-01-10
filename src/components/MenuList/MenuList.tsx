@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import * as BsIcons from 'react-icons/bs';
+import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { dispatchLogout } from '../../store/admin/adminCreator';
 
@@ -66,7 +66,7 @@ export default function MenuListComposition() {
         return (
 
             <div style={{ flex: "1", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "4rem" }}>
-                <BsIcons.BsPersonFill onClick={() => console.log("hei")} />
+                <AiIcons.AiFillCaretDown onClick={() => console.log("hei")} />
                 <Link to="/login" style={{ textDecoration: 'none', color: "black", textTransform: "none" }}>
                     <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <p style={{ margin: "0", paddingLeft: "1rem" }}>Login</p>
@@ -87,7 +87,7 @@ export default function MenuListComposition() {
                         onClick={handleToggle}
                     >
                         {authUser.username}
-                        <BsIcons.BsChevronCompactDown style={{ marginLeft: "1rem" }} />
+                        <AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
                     </Button>
                     <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                         {({ TransitionProps, placement }) => (
