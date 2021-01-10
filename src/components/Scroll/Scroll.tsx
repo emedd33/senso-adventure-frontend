@@ -15,7 +15,6 @@ type ScrollProps = {
 
 
 function Scroll({ title, content, date, storyImage, isFirstScroll, campaign }: ScrollProps): JSX.Element {
-    console.log(campaign)
     return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
         <Link to={"/" + campaign} style={{ textDecoration: "none", color: "black" }}>
             <ScrollContainer>

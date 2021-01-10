@@ -85,7 +85,7 @@ export default function MenuListComposition() {
                         aria-haspopup="true"
                         onClick={handleToggle}
                     >
-                        {authUser?.user.email}
+                        {authUser?.email}
                         <BsIcons.BsChevronCompactDown style={{ marginLeft: "1rem" }} />
                     </Button>
                     <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>

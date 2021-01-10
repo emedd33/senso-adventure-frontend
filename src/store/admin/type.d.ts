@@ -22,7 +22,7 @@ type ILogin = {
 
 type AdminAction = {
     type: string
-    payload?: any
+    payload?: AdminState
 }
 
 

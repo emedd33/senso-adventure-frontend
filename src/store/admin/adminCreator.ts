@@ -12,7 +12,6 @@ export const dispatchLogin = (payload: ILogin) => {
             })
             .catch((error) => {
                 let errorMessage = "An error has occured"
-                console.log(error)
 
                 switch (error.code) {
                     case "auth/invalid-email":
@@ -35,16 +34,28 @@ export const dispatchLogout = () => {
 export const dispatchSignup = (payload: any) => {
     return async (dispatch: any) => {
         dispatch(setIsLoading(true));
-        let res = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-            .then((user) => {
-                console.log(user)
-                dispatch(loginSuccess(user))
+        await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+            .then(async (user) => {
+                return firebase.auth().currentUser
+            }).then(user => {
+                if (user) {
+                    user.updateProfile({
+                        displayName: "Eskild"
+                    }).then(function () {
+                        console.log("SUCCESS")
+                    }).catch(function (error) {
+                        console.log(error)
+                    });
+                }
             })
             .catch((error) => {
                 let errorMessage = "Could not create user"
                 dispatch(setError(errorMessage))
-            }).finally(() => dispatch(setIsLoading(false)))
-        return res
+            }).finally(() => {
+                dispatch(setIsLoading(false))
+            })
+        // if (firebaseUser) {
+        // }
     }
 }
 

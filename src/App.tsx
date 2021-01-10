@@ -14,12 +14,26 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
+import firebase from "firebase";
+import { SET_AUTH_USER } from "./store/admin/adminActions";
 export default function App() {
   const dispatch = useDispatch()
   const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
   useEffect(() => {
     dispatch(fetchCampaigns)
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        dispatch({
+          type: SET_AUTH_USER,
+          payload: {
+            username: user.displayName,
+            email: user.email
+          }
+        })
+      }
+    });
   }, [dispatch])
+
   return (
     <Router>
       <Navbar />

@@ -20,7 +20,6 @@ const Characters: React.SFC<CharactersProps> = ({ players }) => {
                     <th style={{ textAlign: "left" }}>Level</th>
                 </tr>
                 {Object.values(players).map((player: IPlayer) => {
-                    console.log(player)
                     return (<tr>
                         <td >{player.isDead === "True" ? <FaIcons.FaSkullCrossbones /> : null}</td>
                         <td>{player.isDead === "True" ? <s>{player.playerName}</s> : player.playerName}</td>

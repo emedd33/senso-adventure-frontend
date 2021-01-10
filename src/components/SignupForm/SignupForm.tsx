@@ -49,13 +49,9 @@ const SignupForm: React.FC<SignUpProps> = () => {
     const dispatch = useDispatch()
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
     const [firstPassword, setFirstPassword] = useState("")
     const [secondPassword, setSecondPassword] = useState("")
     const [usernameError, setUsernameError] = useState(false)
-    const [firstNameError, setFirstNameError] = useState(false)
-    const [lastNameError, setLastNameError] = useState(false)
     const [emailError, setEmailError] = useState(false)
     const [firstPasswordError, setfirstPasswordError] = useState(false)
     const [secondPasswordError, setSecondPasswordError] = useState(false)
@@ -65,27 +61,24 @@ const SignupForm: React.FC<SignUpProps> = () => {
         !username ? setUsernameError(true) : setUsernameError(false)
         !firstPassword ? setfirstPasswordError(true) : setfirstPasswordError(false)
         !secondPassword ? setSecondPasswordError(true) : setSecondPasswordError(false)
-        !firstName ? setFirstNameError(true) : setFirstNameError(false)
-        !lastName ? setLastNameError(true) : setLastNameError(false)
         !email ? setEmailError(true) : setEmailError(false)
-        !username ? setUsernameError(true) : setUsernameError(false)
-        console.log("heier")
-        if (username && firstPassword && email && firstName && lastName) {
+        if (username && firstPassword && email) {
             if (firstPassword !== secondPassword) {
                 setConfirmPasswordHelperText("Passwords are not equal")
                 setSecondPasswordError(true)
                 return
             }
-            dispatch(dispatchSignup({ "email": email, "password": firstPassword }))
+            dispatch(dispatchSignup({ "email": email, "password": firstPassword, "userName": username }))
+
         }
     }
     useEffect(() => {
-        if (username.trim() && firstName.trim() && lastName.trim() && email.trim() && firstPassword.trim() && secondPassword.trim()) {
+        if (username.trim() && email.trim() && firstPassword.trim() && secondPassword.trim()) {
             setIsButtonDisabled(false)
         } else {
             setIsButtonDisabled(true)
         }
-    }, [username, firstPassword, secondPassword, email, firstName, lastName]);
+    }, [username, firstPassword, secondPassword, email]);
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
@@ -94,35 +87,6 @@ const SignupForm: React.FC<SignUpProps> = () => {
         </Typography>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                autoComplete="fname"
-                                name="firstName"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                error={firstNameError}
-                                id="firstName"
-                                label="First Name"
-                                autoFocus
-                                onKeyDown={e => e.key === 'Enter' ? handleSignup() : null}
-                                onChange={(event) => setFirstName(event.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                error={lastNameError}
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
-                                onKeyDown={e => e.key === 'Enter' ? handleSignup() : null}
-                                onChange={(event) => setLastName(event.target.value)}
-                            />
-                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
