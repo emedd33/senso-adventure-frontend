@@ -1,8 +1,8 @@
-@import '~antd/dist/antd.css';
 body {
     margin: 0;
     padding: 0;
     margin-top:0;
     font-family: 'Italianno', cursive;
-    
-  }
+    color: #000;
+
+  } 

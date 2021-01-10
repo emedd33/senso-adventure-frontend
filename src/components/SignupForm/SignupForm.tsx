@@ -6,10 +6,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "firebase"
 import { useDispatch } from "react-redux";
-import { dispatchLogin } from "../../store/admin/adminCreator";
+import { dispatchSignup } from "../../store/admin/adminCreator";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -46,6 +46,7 @@ export interface SignUpProps {
 
 const SignupForm: React.FC<SignUpProps> = () => {
     const classes = useStyles();
+    const history = useHistory();
     const dispatch = useDispatch()
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
@@ -76,8 +77,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
                 setSecondPasswordError(true)
                 return
             }
-
-            dispatch(dispatchLogin({ "email": email, "password": firstPassword }))
+            dispatch(dispatchSignup({ "email": email, "password": firstPassword }))
         }
     }
     useEffect(() => {

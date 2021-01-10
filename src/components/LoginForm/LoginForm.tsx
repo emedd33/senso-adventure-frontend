@@ -8,8 +8,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import { OLD_WHITE } from '../../assets/styles/colors';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { dispatchLogin } from '../../store/admin/adminCreator';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LoginForm = () => {
   const classes = useStyles();
-  const [email, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isError, setIsError] = useState(false)
   const [helperText, setHelperText] = useState("")
@@ -72,12 +72,12 @@ const LoginForm = () => {
       setIsButtonDisabled(true)
     }
   }, [email, password]);
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       setHelperText("Please type in your email and password")
       setIsError(true)
     } else {
-      dispatch(dispatchLogin({ "email": email, "password": password }))
+      const isSuccess = dispatch(dispatchLogin({ "email": email, "password": password }))
     }
   }
   return (
@@ -92,10 +92,10 @@ const LoginForm = () => {
               id="email"
               type="email"
               color="secondary"
-              label="Username"
+              label="Email"
               placeholder="Email"
               margin="normal"
-              onChange={(event) => setUsername(event.target.value)}
+              onChange={(event) => setEmail(event.target.value)}
               onKeyDown={e => e.key === 'Enter' ? handleLogin() : null}
             />
             <TextField

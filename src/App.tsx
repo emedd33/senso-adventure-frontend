@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import CurseOfStrahd from "./pages/CurseOfStrahd";
@@ -12,8 +13,10 @@ import { fetchCampaigns } from "./store/campaign/campaignCreators";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import AlertDialog from "./components/AlertDialog/AlertDialog";
 export default function App() {
   const dispatch = useDispatch()
+  const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
   useEffect(() => {
     dispatch(fetchCampaigns)
   }, [dispatch])
@@ -21,18 +24,22 @@ export default function App() {
     <Router>
       <Navbar />
       <div style={{}}>
+        <AlertDialog />
 
         <Switch>
           <Route exact path="/curseOfStrahd">
             <CurseOfStrahd />
           </Route>
           <Route exact path="/login">
-
-            <Login />
+            {authUser ?
+              <Redirect to="/" /> :
+              <Login />}
           </Route>
           <Route exact path="/login/signup">
 
-            <SignUp />
+            {authUser ?
+              <Redirect to="/" /> :
+              <SignUp />}
           </Route>
           <Route path="/">
 

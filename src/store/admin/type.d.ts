@@ -1,5 +1,5 @@
 
-interface IUser {
+interface IAuthUser {
     username: string,
     firstname: string,
     lastname: string,
@@ -11,8 +11,8 @@ interface IError {
 }
 type AdminState = {
     isLoading: boolean
-    user?: IUser
-    error?: IError
+    authUser?: IAuthUser
+    error: IError
 }
 type ILogin = {
     email: string,
