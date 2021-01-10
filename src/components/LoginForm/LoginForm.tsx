@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import { OLD_WHITE } from '../../assets/styles/colors';
 import { useDispatch } from 'react-redux';
 import { SET_IS_LOADING } from '../../store/admin/adminActions';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,7 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     loginBtn: {
       marginTop: theme.spacing(2),
-      flexGrow: 1
+      flexGrow: 1,
+      margin: "1rem"
     },
     header: {
       textAlign: 'center',
@@ -34,7 +36,20 @@ const useStyles = makeStyles((theme: Theme) =>
     card: {
       marginTop: theme.spacing(10),
       background: OLD_WHITE
+    },
+    actions: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "stretch",
+      alignItems: "stretch"
+    },
+    link: {
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+      display: "flex"
     }
+
   })
 );
 
@@ -68,7 +83,7 @@ const LoginForm = () => {
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <Card className={classes.card}>
-        <CardHeader className={classes.header} title="Login App" />
+        <CardHeader className={classes.header} title="Login" />
         <CardContent>
           <div>
             <TextField
@@ -98,7 +113,7 @@ const LoginForm = () => {
             />
           </div>
         </CardContent>
-        <CardActions>
+        <CardActions className={classes.actions}>
           <Button
             variant="contained"
             size="large"
@@ -108,6 +123,12 @@ const LoginForm = () => {
             disabled={isButtonDisabled}>
             Login
           </Button>
+          <Link to={"/login/signup"} className={classes.link}>
+
+            <Button color="secondary" size="medium">
+              Or sign up
+            </Button>
+          </Link>
         </CardActions>
       </Card>
     </form>

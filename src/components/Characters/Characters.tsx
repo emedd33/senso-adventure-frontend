@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import OldFrame from "../../assets/backgroundImage/old_sign.png"
 import * as FaIcons from 'react-icons/fa';
-import { OLD_WHITE } from "../../assets/styles/colors";
 
 export interface CharactersProps {
     players: IPlayer[]
@@ -50,7 +49,6 @@ height:40rem;
 padding:11%;
 background-image: url(${OldFrame});
 background-repeat: no-repeat;
-background-color:${OLD_WHITE};
 background-size: 100% 100%;
 margin: 5rem; 
 padding

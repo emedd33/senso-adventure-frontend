@@ -33,7 +33,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                         <Link to="/login" onClick={() => setSidebar(false)} style={{ textDecoration: 'none', color: "black" }}>
                             <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                 <BsIcons.BsPersonFill onClick={() => console.log("hei")} />
-                                <p style={{ marginBottom: "0" }}>Sign in</p>
+                                <p style={{ marginBottom: "0" }}>Login</p>
                             </span>
                         </Link>
                     </div>
@@ -74,7 +74,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 }
 const Title = styled.h1`
 text-shadow: 0px 1px;
-margin-left:2vh
+margin-left:2vh;
 `
 const CosTitle = styled.h2`
 font-size: 2rem;

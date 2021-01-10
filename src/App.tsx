@@ -11,6 +11,7 @@ import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 export default function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -28,6 +29,10 @@ export default function App() {
           <Route exact path="/login">
 
             <Login />
+          </Route>
+          <Route exact path="/login/signup">
+
+            <SignUp />
           </Route>
           <Route path="/">
 
