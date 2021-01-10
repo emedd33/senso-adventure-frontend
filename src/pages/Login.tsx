@@ -27,13 +27,12 @@ display:flex;
 background-image: url(${Background});
 background-repeat: no-repeat;
 background-attachment: fixed;
-background-size: cover;
+background-size: cover ;
 justify-content:center;
 align-items:center;
 flex-direction: column;
 padding-top:5vh;
 width:100%;
-height:100%;
 min-height:100vh;
 margin:auto;
 `

@@ -6,7 +6,6 @@ import HomeCrest from "../../assets/backgroundImage/home_crest.png"
 import './Navbar.css';
 import { IconContext } from 'react-icons';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import MenuListComposition from '../MenuList/MenuList';
 type NavbarProps = {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
@@ -40,14 +39,14 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 </div>
                 <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
 
-                    <ul style={{ width: "100%" }} onClick={showSidebar}>
+                    <ul style={{ width: "100%", paddingLeft: "1rem" }} onClick={showSidebar}>
 
                         <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
                             <NavBarItem >
                                 <Link to="/" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
                                     <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                         <img src={HomeCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
-                                        <CosTitle>Home</CosTitle>
+                                        <CampaignTitle>Home</CampaignTitle>
                                     </span>
                                 </Link>
                             </NavBarItem>
@@ -55,7 +54,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                 <Link to="/curseOfStrahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
                                     <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                         <img src={CosCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
-                                        <CosTitle>Curse of Strahd</CosTitle>
+                                        <CampaignTitle>Curse of Strahd</CampaignTitle>
                                     </span>
                                 </Link>
                             </NavBarItem>
@@ -67,14 +66,14 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         </>
     );
 }
-const Title = styled.h1`
-text-shadow: 0px 1px;
+const Title = styled.h2`
 margin-left:2vh;
 `
-const CosTitle = styled.h2`
-font-size: 2rem;
-margin-bottom: 0;
-margin-left:2vh;
+const CampaignTitle = styled.h3`
+font-size: 100%;
+padding;0;
+margin:0;
+margin-left:2vw;
 :hover {
     color: #ed1212;
     cursor: pointer;
@@ -101,7 +100,7 @@ const NavBarOpenIcon = styled(Link)`
 
 const NavBarItem = styled.ul`
     background-color:#AB9696;
-  width: 80%;
+  width: 100%;
   height: 80px;
   display: flex;
   justify-content: start;

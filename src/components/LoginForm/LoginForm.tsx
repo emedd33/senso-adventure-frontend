@@ -17,10 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       display: 'flex',
       flexWrap: 'wrap',
-      width: 400,
-      webkitBoxShadow: "7px 7px 5px 0px rgba(50, 50, 50, 0.75)",
-      mozBoxShadow: "7px 7px 5px 0px rgba(50, 50, 50, 0.75)",
-      boxShadow: "7px 7px 5px 0px rgba(50, 50, 50, 0.75)",
+      width: "90%",
       margin: `${theme.spacing(0)} auto`
     },
     loginBtn: {
