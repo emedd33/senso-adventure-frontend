@@ -40,7 +40,7 @@ export const dispatchSignup = (payload: any) => {
             }).then(user => {
                 if (user) {
                     user.updateProfile({
-                        displayName: "Eskild"
+                        displayName: payload.username
                     }).then(function () {
                         console.log("SUCCESS")
                     }).catch(function (error) {

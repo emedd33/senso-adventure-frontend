@@ -68,7 +68,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
                 setSecondPasswordError(true)
                 return
             }
-            dispatch(dispatchSignup({ "email": email, "password": firstPassword, "userName": username }))
+            dispatch(dispatchSignup({ "email": email, "password": firstPassword, "username": username }))
 
         }
     }

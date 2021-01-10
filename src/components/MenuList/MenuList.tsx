@@ -67,14 +67,15 @@ export default function MenuListComposition() {
 
             <div style={{ flex: "1", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "4rem" }}>
                 <BsIcons.BsPersonFill onClick={() => console.log("hei")} />
-                <Link to="/login" style={{ textDecoration: 'none', color: "black" }}>
+                <Link to="/login" style={{ textDecoration: 'none', color: "black", textTransform: "none" }}>
                     <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <p style={{ margin: "0", paddingLeft: "1rem" }}>{authUser ? "email" : "Login"}</p>
+                        <p style={{ margin: "0", paddingLeft: "1rem" }}>Login</p>
                     </span>
                 </Link>
             </div>
         )
     }
+    console.log("authUser", authUser)
     return (
         <div style={{ flex: "1", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "4rem" }}>
             <div className={classes.root}>
@@ -85,7 +86,7 @@ export default function MenuListComposition() {
                         aria-haspopup="true"
                         onClick={handleToggle}
                     >
-                        {authUser?.email}
+                        {authUser.username}
                         <BsIcons.BsChevronCompactDown style={{ marginLeft: "1rem" }} />
                     </Button>
                     <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
