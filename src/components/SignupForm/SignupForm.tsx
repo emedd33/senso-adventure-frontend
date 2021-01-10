@@ -7,6 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
+import "firebase"
+import { useDispatch } from "react-redux";
+import { dispatchLogin } from "../../store/admin/adminCreator";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -43,6 +46,7 @@ export interface SignUpProps {
 
 const SignupForm: React.FC<SignUpProps> = () => {
     const classes = useStyles();
+    const dispatch = useDispatch()
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [firstName, setFirstName] = useState("")
@@ -65,16 +69,15 @@ const SignupForm: React.FC<SignUpProps> = () => {
         !lastName ? setLastNameError(true) : setLastNameError(false)
         !email ? setEmailError(true) : setEmailError(false)
         !username ? setUsernameError(true) : setUsernameError(false)
-
+        console.log("heier")
         if (username && firstPassword && email && firstName && lastName) {
             if (firstPassword !== secondPassword) {
                 setConfirmPasswordHelperText("Passwords are not equal")
                 setSecondPasswordError(true)
                 return
             }
-            setConfirmPasswordHelperText("")
-            setSecondPasswordError(false)
-            return
+
+            dispatch(dispatchLogin({ "email": email, "password": firstPassword }))
         }
     }
     useEffect(() => {

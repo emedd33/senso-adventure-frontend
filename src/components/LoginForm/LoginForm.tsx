@@ -9,8 +9,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import { OLD_WHITE } from '../../assets/styles/colors';
 import { useDispatch } from 'react-redux';
-import { SET_IS_LOADING } from '../../store/admin/adminActions';
 import { Link } from 'react-router-dom';
+import { dispatchLogin } from '../../store/admin/adminCreator';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,25 +59,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LoginForm = () => {
   const classes = useStyles();
-  const [username, setUsername] = useState("")
+  const [email, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [isError, setIsError] = useState(false)
   const [helperText, setHelperText] = useState("")
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const dispatch = useDispatch()
   useEffect(() => {
-    if (username.trim() && password.trim()) {
+    if (email.trim() && password.trim()) {
       setIsButtonDisabled(false)
     } else {
       setIsButtonDisabled(true)
     }
-  }, [username, password]);
+  }, [email, password]);
   const handleLogin = () => {
-    if (!username || !password) {
-      setHelperText("Please type in your username and password")
+    if (!email || !password) {
+      setHelperText("Please type in your email and password")
       setIsError(true)
     } else {
-      dispatch({ type: SET_IS_LOADING, payload: true })
+      dispatch(dispatchLogin({ "email": email, "password": password }))
     }
   }
   return (
@@ -89,11 +89,11 @@ const LoginForm = () => {
             <TextField
               error={isError}
               fullWidth
-              id="username"
+              id="email"
               type="email"
               color="secondary"
               label="Username"
-              placeholder="Username"
+              placeholder="Email"
               margin="normal"
               onChange={(event) => setUsername(event.target.value)}
               onKeyDown={e => e.key === 'Enter' ? handleLogin() : null}

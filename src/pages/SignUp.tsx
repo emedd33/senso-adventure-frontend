@@ -2,22 +2,26 @@ import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_login.jpg"
 import React, { } from 'react';
 import SignupForm from "../components/SignupForm/SignupForm";
+import { useSelector } from "react-redux";
+import IsLoading from "../components/IsLoading/IsLoading";
 
 export interface SignUpFormProps {
 
 }
 
 const SignUp: React.FC<SignUpFormProps> = () => {
-
+    const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     return (
-        <MainContainer>
-            <SignupForm />
-        </MainContainer>
+        <Container>
+            {isLoading ? <IsLoading /> :
+                <SignupForm />
+            }
+        </Container>
     );
 }
 
 
-const MainContainer = styled.div`
+const Container = styled.div`
 z-index:300;
 display:flex;
 background-image: url(${Background});
