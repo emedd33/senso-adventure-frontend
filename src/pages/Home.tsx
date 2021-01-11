@@ -6,10 +6,12 @@ import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 import sortByDateValue from "../utils/sortArrayDyDate";
 import IsLoading from "../components/IsLoading/IsLoading";
+import { useHistory } from "react-router-dom";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
+    const history = useHistory()
     const sessions = useSelector((state: RootReducerProp) => {
         return Object.values(state.campaigns).map(campaign => Object.values(campaign.sessions)).flat()
     })
@@ -18,9 +20,9 @@ const Home: FunctionComponent<HomeProps> = () => {
         return Object.values(sessions).map((session: any,) => {
             switch (session.campaign) {
                 case "curseOfStrahd":
-                    return renderSplitScrolls(session, CosTitle)
+                    return renderSplitScrolls(session, CosTitle, () => history.push("/curseOfStrahd"))
                 case "fireAndFury":
-                    return renderSplitScrolls(session, "")
+                    return renderSplitScrolls(session, "", () => history.push("/fireAndFury"))
                 default:
                     return null
             }

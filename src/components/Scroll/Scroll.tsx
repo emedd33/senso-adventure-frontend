@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ScrollImage from "../../assets/backgroundImage/scroll.png"
 import px2vw from '../../utils/px2vw';
 import ReactHtmlParser from "react-html-parser"
-import { Link } from 'react-router-dom';
+import "./Scroll.scss"
 type ScrollProps = {
     title: string,
     content: string,
@@ -11,37 +11,36 @@ type ScrollProps = {
     storyImage: string,
     isFirstScroll: boolean,
     campaign: string,
+    onClick: any
 }
 
 
-function Scroll({ title, content, date, storyImage, isFirstScroll, campaign }: ScrollProps): JSX.Element {
+function Scroll({ title, content, date, storyImage, isFirstScroll, campaign, onClick }: ScrollProps): JSX.Element {
     return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
-        <Link to={"/" + campaign} style={{ textDecoration: "none", color: "black" }}>
-            <ScrollContainer>
+        <ScrollContainer onClick={onClick} className={onClick ? "scroll-container-active" : "scroll-container"} >
 
-                <ScrollContent>
-                    <ScrollDate >
-                        {date}
-                    </ScrollDate>
-                    {isFirstScroll ?
-                        <div>
+            <ScrollContent>
+                <ScrollDate >
+                    {date}
+                </ScrollDate>
+                {isFirstScroll ?
+                    <div>
 
-                            <div style={{ justifyContent: "center", display: "flex" }}>
+                        <div style={{ justifyContent: "center", display: "flex" }}>
 
-                                <StoryImage src={storyImage} alt="" />
-                            </div>
-                            <ScrollTitle>
-                                {title}
-                            </ScrollTitle>
+                            <StoryImage src={storyImage} alt="" />
                         </div>
-                        :
-                        null
-                    }
+                        <ScrollTitle>
+                            {title}
+                        </ScrollTitle>
+                    </div>
+                    :
+                    null
+                }
 
-                    <div style={{ color: "black" }}>{ReactHtmlParser(content)}</div>
-                </ScrollContent>
-            </ScrollContainer>
-        </Link>
+                <div style={{ color: "black" }}>{ReactHtmlParser(content)}</div>
+            </ScrollContent>
+        </ScrollContainer>
     </div>
     )
 }
@@ -52,19 +51,11 @@ width: ${px2vw(500)};
 
 `
 const ScrollContainer = styled.div`
-z-index:20;
 margin: ${px2vw(22)};
 width:${px2vw(1000)};
-min-width:20rem;
 background-image: url(${ScrollImage});
-background-repeat: no-repeat;
-background-size: 100% 100%; 
-transition:250ms; 
-&:hover {
-   
+&:hover {   
     width:${px2vw(1100)};
-    cursor: pointer;
-   
   }
 `
 

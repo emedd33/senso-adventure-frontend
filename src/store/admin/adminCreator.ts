@@ -7,7 +7,6 @@ export const dispatchLogin = (payload: ILogin) => {
         dispatch(setIsLoading(true));
         await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
             .then((user) => {
-                console.log(user)
                 dispatch(loginSuccess(user))
             })
             .catch((error) => {
@@ -41,10 +40,8 @@ export const dispatchSignup = (payload: any) => {
                 if (user) {
                     user.updateProfile({
                         displayName: payload.username
-                    }).then(function () {
-                        console.log("SUCCESS")
                     }).catch(function (error) {
-                        console.log(error)
+                        console.log("An error has occured while updating username")
                     });
                 }
             })

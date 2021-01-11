@@ -75,7 +75,6 @@ export default function MenuListComposition() {
             </div>
         )
     }
-    console.log("authUser", authUser)
     return (
         <div style={{ flex: "1", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "4rem" }}>
             <div className={classes.root}>

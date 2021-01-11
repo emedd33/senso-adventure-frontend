@@ -14,7 +14,7 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     const campaign = useSelector((state: RootReducerProp) => state.campaigns.curseOfStrahd)
     const renderScrolls = () => {
         return Object.values(campaign.sessions).map((session: ISession) => {
-            return renderSplitScrolls(session, CosTitle)
+            return renderSplitScrolls(session, CosTitle, null)
         })
     }
     if (isLoading) {
