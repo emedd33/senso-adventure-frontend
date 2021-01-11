@@ -4,12 +4,14 @@ const initialCampaignState: CampaignState = {
     curseOfStrahd: {
         sessions: [],
         players: [],
-        dungeonMaster: ""
+        dungeonMaster: "",
+        id: "curseOfStrahd"
     },
     fireAndFury: {
         sessions: [],
         players: [],
-        dungeonMaster: ""
+        dungeonMaster: "",
+        id: "fireAndFury"
     }
 }
 

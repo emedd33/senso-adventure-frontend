@@ -12,6 +12,7 @@ type CurseOfStrahdProps = {}
 const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const campaign = useSelector((state: RootReducerProp) => state.campaigns.curseOfStrahd)
+    const players = useSelector((state: RootReducerProp) => state.campaigns.curseOfStrahd.players)
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
         let username = state.admin.authUser?.username
         if (username) {
@@ -33,7 +34,7 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     }
     return (
         <Container>
-            <Characters players={campaign.players} isDungeonMaster={isDungeonMaster} />
+            <Characters players={campaign.players} isDungeonMaster={isDungeonMaster} campaign={campaign.id} />
             {campaign ?
                 renderScrolls()
                 : null

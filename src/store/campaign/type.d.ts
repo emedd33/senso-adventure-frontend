@@ -13,6 +13,7 @@ interface IPlayer {
     isDead: string,
 }
 interface ICampaign {
+    id: string
     dungeonMaster: string
     sessions: ISession[],
     players: IPlayer[]
