@@ -3,11 +3,13 @@ import * as actionTypes from "./campaignActions"
 const initialCampaignState: CampaignState = {
     curseOfStrahd: {
         sessions: [],
-        players: []
+        players: [],
+        dungeonMaster: ""
     },
     fireAndFury: {
         sessions: [],
-        players: []
+        players: [],
+        dungeonMaster: ""
     }
 }
 

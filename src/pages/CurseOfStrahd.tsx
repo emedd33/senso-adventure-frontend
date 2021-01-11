@@ -12,6 +12,13 @@ type CurseOfStrahdProps = {}
 const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const campaign = useSelector((state: RootReducerProp) => state.campaigns.curseOfStrahd)
+    const isDungeonMaster = useSelector((state: RootReducerProp) => {
+        let username = state.admin.authUser?.username
+        if (username) {
+            return state.campaigns.curseOfStrahd.dungeonMaster === username
+        }
+        return
+    })
     const renderScrolls = () => {
         return Object.values(campaign.sessions).map((session: ISession) => {
             return renderSplitScrolls(session, CosTitle, null)
@@ -19,14 +26,14 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
     }
     if (isLoading) {
         return (
-            <Container>
+            <Container >
                 <IsLoading />
             </Container>
         )
     }
     return (
         <Container>
-            <Characters players={campaign.players} />
+            <Characters players={campaign.players} isDungeonMaster={isDungeonMaster} />
             {campaign ?
                 renderScrolls()
                 : null
