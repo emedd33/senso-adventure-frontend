@@ -2,8 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import ScrollImage from "../../assets/backgroundImage/scroll.png"
 import px2vw from '../../utils/px2vw';
+import * as AiIcons from 'react-icons/ai';
 import ReactHtmlParser from "react-html-parser"
+import { Button } from '@material-ui/core';
+
 import "./Scroll.scss"
+import { Link } from 'react-router-dom';
 type ScrollProps = {
     title: string,
     content: string,
@@ -11,15 +15,25 @@ type ScrollProps = {
     storyImage: string,
     isFirstScroll: boolean,
     campaign: string,
-    onClick: any
+    onClick: any, isDungeonMaster: boolean
 }
 
 
-function Scroll({ title, content, date, storyImage, isFirstScroll, campaign, onClick }: ScrollProps): JSX.Element {
+function Scroll({ title, content, date, storyImage, isFirstScroll, campaign, onClick, isDungeonMaster }: ScrollProps): JSX.Element {
     return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
         <ScrollContainer onClick={onClick} className={onClick ? "scroll-container-active" : "scroll-container"} >
 
             <ScrollContent>
+                {isDungeonMaster ?
+                    <div style={{ justifyContent: "flex-end", alignItems: "center", display: "flex" }}>
+                        <Link to={"/curseOfStrahd/edit"}>
+                            <Button size="large">
+                                <AiIcons.AiFillEdit onClick={() => { }} />
+                            </Button>
+                        </Link>
+                    </div>
+                    : null}
+
                 <ScrollDate >
                     {date}
                 </ScrollDate>

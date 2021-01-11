@@ -25,19 +25,18 @@ function flatten(arr: Array<any>): any {
         return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
 }
-const renderSplitScrolls = (session: ISession, storyImage: string, clickAction: any) => {
+const renderSplitScrolls = (session: ISession, storyImage: string, clickAction: any, isDungeonMaster: boolean) => {
     if (session.story.length > MAX_CHARACTER) {
         const splitContent = recursiveSplitString(session.story)
         const flatArray = flatten(splitContent)
         const firstContent = flatArray.shift()!
         const ScrollElements = flatArray.map((content: string, index: any) => <Scroll title={session.title} content={
             index + 1 === splitContent.length ? "......".concat(content) : "......".concat(content).concat("......")
-        } date={session.date} storyImage={storyImage} isFirstScroll={false} campaign={session.campaign} onClick={clickAction} />)
-        ScrollElements.unshift(<Scroll title={session.title} content={firstContent.concat("......")} date={session.date} storyImage={storyImage} isFirstScroll={true} campaign={session.campaign} onClick={clickAction} />)
+        } date={session.date} storyImage={storyImage} isFirstScroll={false} campaign={session.campaign} onClick={clickAction} isDungeonMaster={isDungeonMaster} />)
+        ScrollElements.unshift(<Scroll title={session.title} content={firstContent.concat("......")} date={session.date} storyImage={storyImage} isFirstScroll={true} campaign={session.campaign} onClick={clickAction} isDungeonMaster={isDungeonMaster} />)
         return ScrollElements
     }
-    return <Scroll title={session.title} content={session.story} date={session.date} storyImage={storyImage} isFirstScroll={true} campaign={session.campaign} onClick={clickAction} />
-
+    return <Scroll title={session.title} content={session.story} date={session.date} storyImage={storyImage} isFirstScroll={true} campaign={session.campaign} onClick={clickAction} isDungeonMaster={isDungeonMaster} />
 }
 
 export default renderSplitScrolls

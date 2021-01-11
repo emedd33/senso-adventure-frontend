@@ -20,9 +20,9 @@ const Home: FunctionComponent<HomeProps> = () => {
         return Object.values(sessions).map((session: any,) => {
             switch (session.campaign) {
                 case "curseOfStrahd":
-                    return renderSplitScrolls(session, CosTitle, () => history.push("/curseOfStrahd"))
+                    return renderSplitScrolls(session, CosTitle, () => history.push("/curseOfStrahd"), false)
                 case "fireAndFury":
-                    return renderSplitScrolls(session, "", () => history.push("/fireAndFury"))
+                    return renderSplitScrolls(session, "", () => history.push("/fireAndFury"), false)
                 default:
                     return null
             }

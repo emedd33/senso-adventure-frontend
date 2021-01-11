@@ -7,8 +7,6 @@ import { campaignsRef } from '../../firebase';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import * as FaIcons from 'react-icons/fa';
 import * as GiIcons from 'react-icons/gi';
-import { kill } from 'process';
-import { useSelector } from 'react-redux';
 
 
 interface SelectedPlayerProps {
@@ -25,7 +23,6 @@ interface SelectedPlayerProps {
   campaign: string
 }
 const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, isNewPlayer, campaign }) => {
-  const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
   const [playerName, setPlayerName] = useState(selectedPlayer.player)
   const [playerNameHelperText, setPlayerNameHelperText] = useState("")
   const [playerNameError, setPlayerNameError] = useState(false)
@@ -34,7 +31,7 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, i
   const [race, setRace] = useState(selectedPlayer.race)
   const [level, setLevel] = useState(selectedPlayer.level)
   const [playerClass, setPlayerClass] = useState(selectedPlayer.class)
-  const [isDead, setIsDead] = useState(selectedPlayer.isDead)
+  const [isDead,] = useState(selectedPlayer.isDead)
   const handleSubmit = () => {
     if (!playerName) {
       setPlayerNameHelperText("Please write in the player name")

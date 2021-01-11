@@ -16,6 +16,7 @@ import SignUp from "./pages/SignUp";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import firebase from "firebase";
 import { SET_AUTH_USER } from "./store/admin/adminActions";
+import CurseOfStrahdEdit from "./pages/CurseOfStrahdEdit";
 export default function App() {
   const dispatch = useDispatch()
   const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
@@ -43,6 +44,9 @@ export default function App() {
         <Switch>
           <Route exact path="/curseOfStrahd">
             <CurseOfStrahd />
+          </Route>
+          <Route exact path="/curseOfStrahd/edit">
+            <CurseOfStrahdEdit />
           </Route>
           <Route exact path="/login">
             {authUser ?
