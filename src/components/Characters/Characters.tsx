@@ -54,18 +54,18 @@ const Characters: React.FC<CharactersProps> = () => {
                 {
                     campaign!.players ?
 
-                        Object.values(campaign!.players).map((player: IPlayer) => {
+                        Object.keys(campaign!.players).map((key: any) => {
                             return (<tr>
-                                <td style={{ textAlign: "center" }}>{player.isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
-                                <td>{player.isDead === "TRUE" ? <s>{player.playerName}</s> : player.playerName}</td>
-                                <td>{player.isDead === "TRUE" ? <s>{player.characterName}</s> : player.characterName}</td>
-                                <td>{player.isDead === "TRUE" ? <s>{player.race}</s> : player.race}</td>
-                                <td>{player.isDead === "TRUE" ? <s>{player.class}</s> : player.class}</td>
-                                <td>{player.isDead === "TRUE" ? <s>{player.level}</s> : player.level}</td>
+                                <td style={{ textAlign: "center" }}>{campaign!.players[key].isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
+                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].playerName}</s> : campaign!.players[key].playerName}</td>
+                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].characterName}</s> : campaign!.players[key].characterName}</td>
+                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].race}</s> : campaign!.players[key].race}</td>
+                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].class}</s> : campaign!.players[key].class}</td>
+                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].level}</s> : campaign!.players[key].level}</td>
                                 <td> {isDungeonMaster ? <Button color="primary">
 
                                     <AiIcons.AiFillEdit onClick={() => {
-                                        dispatch(dispatchSetSelectedPlayer({ "isNew": false, "player": { "playerName": player.playerName, "characterName": player.characterName, "race": player.race, "class": player.class, "level": player.level, "isDead": player.isDead } }))
+                                        dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.players[key].playerName, "characterName": campaign!.players[key].characterName, "race": campaign!.players[key].race, "class": campaign!.players[key].class, "level": campaign!.players[key].level, "isDead": campaign!.players[key].isDead } }))
                                         setIsEditPlayerOpen(true)
                                     }} />
                                 </Button>

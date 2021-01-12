@@ -11,10 +11,8 @@ const selectedReducer = (
             state.selectedCampaign = action.payload
             return state
         case SET_SELECTED_PLAYER: {
-            return {
-                selectedPlayer: action.payload,
-                ...state
-            }
+            state.selectedPlayer = action.payload
+            return state
         }
         case UPDATE_SELECTED_PLAYER: {
             if (state.selectedPlayer && state.selectedPlayer.player[action.payload.type]) {

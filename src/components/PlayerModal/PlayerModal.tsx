@@ -37,12 +37,17 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
     }
   }, [selectedPlayer])
 
-  if (!selectedPlayer || !selectedCampaign) {
+  if (!selectedPlayer) {
     return (
       <IsLoading />
     )
   }
-  const addNewPlayer = async () => {
+  if (!selectedCampaign) {
+    return (
+      <IsLoading />
+    )
+  }
+  const addNewPlayerToFirebase = async () => {
     campaignsRef.child(selectedCampaign?.id).child("players").push({
       playerName: playerName,
       race: playerRace,
@@ -55,6 +60,20 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
     }
     )
   }
+  const updatePlayerInFirebase = async () => {
+    if (selectedPlayer && selectedPlayer.id) {
+      campaignsRef.child(selectedCampaign?.id).child("players").child(selectedPlayer.id).set({
+        playerName: playerName,
+        race: playerRace,
+        class: playerClass,
+        level: playerLevel,
+        characterName: characterName,
+        isDead: selectedPlayer.player.isDead
+      }).then((e) => {
+        dispatch(dispatchSetSelectedCampaign(selectedCampaign.id))
+      })
+    }
+  }
   const handleSubmit = () => {
     if (!playerName) {
       setPlayerNameHelperText("Please write in the player name")
@@ -64,31 +83,41 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
     setPlayerNameError(false)
     setPlayerNameHelperText("")
     if (selectedPlayer.isNew) {
-      addNewPlayer()
+      addNewPlayerToFirebase()
+    } else {
+      updatePlayerInFirebase()
     }
     handleClose()
 
   }
   const handleDelete = () => {
-    campaignsRef.child(selectedCampaign.id).child("players").child(selectedPlayer.player.playerName).set(null)
+    if (selectedPlayer && selectedPlayer.id) {
+      campaignsRef.child(selectedCampaign?.id).child("players").child(selectedPlayer.id).set(null)
+        .then((e) => {
+          dispatch(dispatchSetSelectedCampaign(selectedCampaign.id))
+        })
+    }
     handleClose()
-    window.location.reload()
+
 
   }
   const handleKillOrRevive = () => {
     let isDeadVariable = selectedPlayer.player.isDead === "TRUE" ? "FALSE" : "TRUE"
     setPlayerNameError(false)
     setPlayerNameHelperText("")
-    campaignsRef.child(selectedCampaign.id).child("players").child(playerName).set({
-      playerName: playerName,
-      race: playerRace,
-      class: playerClass,
-      level: playerLevel,
-      characterName: characterName,
-      isDead: isDeadVariable
-    })
+    if (selectedPlayer && selectedPlayer.id) {
+      campaignsRef.child(selectedCampaign.id).child("players").child(selectedPlayer.id).set({
+        playerName: playerName,
+        race: playerRace,
+        class: playerClass,
+        level: playerLevel,
+        characterName: characterName,
+        isDead: isDeadVariable
+      }).then((e) => {
+        dispatch(dispatchSetSelectedCampaign(selectedCampaign.id))
+      })
+    }
     handleClose()
-    window.location.reload()
 
   }
   const toggleInputChange = (update: any) => {
