@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
@@ -7,11 +7,14 @@ import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 import sortByDateValue from "../utils/sortArrayDyDate";
 import IsLoading from "../components/IsLoading/IsLoading";
 import { useHistory } from "react-router-dom";
+import { dispatchSetSelectedCampaign } from "../store/selected/selectedCreators";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
+    const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
     const history = useHistory()
+    const dispatch = useDispatch()
     const sessions = useSelector((state: RootReducerProp) => {
         return Object.values(state.campaigns).map(campaign => Object.values(campaign.sessions)).flat()
     })
@@ -20,9 +23,16 @@ const Home: FunctionComponent<HomeProps> = () => {
         return Object.values(sessions).map((session: any,) => {
             switch (session.campaign) {
                 case "curseOfStrahd":
-                    return renderSplitScrolls(session, CosTitle, () => history.push("/curseOfStrahd"), false)
+                    return renderSplitScrolls(session, CosTitle, () => {
+                        dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd))
+                        history.push("/campaign")
+                    }, false)
+
                 case "fireAndFury":
-                    return renderSplitScrolls(session, "", () => history.push("/fireAndFury"), false)
+                    return renderSplitScrolls(session, "", () => {
+                        dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury))
+                        history.push("/campaign")
+                    }, false)
                 default:
                     return null
             }

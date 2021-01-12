@@ -56,20 +56,20 @@ export const dispatchSignup = (payload: any) => {
     }
 }
 
-const loginSuccess = (user: any) => ({
+export const loginSuccess = (user: any) => ({
     type: SET_AUTH_USER,
     payload: {
         ...user
     }
 });
 
-const setIsLoading = (isLoading: boolean) => ({
+export const setIsLoading = (isLoading: boolean) => ({
     type: SET_IS_LOADING,
     payload: isLoading
 });
 
 
-const setError = (errorMessage: any) => ({
+export const setError = (errorMessage: any) => ({
     type: SET_ERROR,
     payload: {
         errorMessage: errorMessage,

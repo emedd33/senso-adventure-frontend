@@ -23,10 +23,10 @@ type CampaignState = {
     fireAndFury: ICampaign
 }
 
-type AdventureAction = {
+type CampaignAction = {
     type: string,
     payload: any
 }
 
 
-type AdventureDispatchType = (args: AdventureAction) => AdventureAction 
+type AdventureDispatchType = (args: CampaignAction) => CampaignAction 

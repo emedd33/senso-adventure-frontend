@@ -3,6 +3,7 @@ import { SET_IS_LOADING } from "../admin/adminActions"
 import { SET_CAMPAIGNS } from "./campaignActions"
 
 
+
 // Thunk function
 export async function fetchCampaigns(dispatch: any) {
     dispatch({ type: SET_IS_LOADING, payload: true })

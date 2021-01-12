@@ -7,7 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import CurseOfStrahd from "./pages/CurseOfStrahd";
+import Campaign from "./pages/Campaign";
 import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
 import Home from "./pages/Home";
@@ -16,7 +16,7 @@ import SignUp from "./pages/SignUp";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import firebase from "firebase";
 import { SET_AUTH_USER } from "./store/admin/adminActions";
-import CurseOfStrahdEdit from "./pages/CurseOfStrahdEdit";
+import CampaignEdit from "./pages/CampaignEdit";
 export default function App() {
   const dispatch = useDispatch()
   const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
@@ -42,11 +42,11 @@ export default function App() {
         <AlertDialog />
 
         <Switch>
-          <Route exact path="/curseOfStrahd">
-            <CurseOfStrahd />
+          <Route exact path="/campaign">
+            <Campaign />
           </Route>
-          <Route exact path="/curseOfStrahd/edit">
-            <CurseOfStrahdEdit />
+          <Route exact path="/campaign/edit">
+            <CampaignEdit />
           </Route>
           <Route exact path="/login">
             {authUser ?

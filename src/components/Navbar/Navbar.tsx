@@ -7,12 +7,19 @@ import './Navbar.css';
 import { IconContext } from 'react-icons';
 import styled from 'styled-components';
 import MenuListComposition from '../MenuList/MenuList';
+import { useDispatch, useSelector } from 'react-redux';
+import { dispatchSetSelectedCampaign } from '../../store/selected/selectedCreators';
 type NavbarProps = {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
+    const dispatch = useDispatch()
+    const campaign = useSelector((state: RootReducerProp) => state.campaigns)
     const [sidebar, setSidebar] = useState(false);
     const [cosHover, setCosHover] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
     const toggleCosHover = () => setCosHover(!cosHover)
+    const toggleSetCampaign = (campaign: ICampaign) => {
+        dispatch(dispatchSetSelectedCampaign(campaign))
+    }
     return (
         <>
 
@@ -51,7 +58,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                 </Link>
                             </NavBarItem>
                             <NavBarItem >
-                                <Link to="/curseOfStrahd" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
+                                <Link to="/campaign" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} onClick={() => toggleSetCampaign(campaign.curseOfStrahd)} style={{ textDecoration: 'none', color: "black" }}>
                                     <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                         <img src={CosCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
                                         <CampaignTitle>Curse of Strahd</CampaignTitle>

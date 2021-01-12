@@ -5,12 +5,12 @@ import Background from "../assets/backgroundImage/cos_background.jpg"
 import IsLoading from "../components/IsLoading/IsLoading"
 
 
-export interface CurseOfStrahdEditProps {
+export interface CampaignEditProps {
 
 }
 
-const CurseOfStrahdEdit: React.FC<CurseOfStrahdEditProps> = () => {
-    const campaign = useSelector((state: RootReducerProp) => state.campaigns.curseOfStrahd)
+const CampaignEdit: React.FC<CampaignEditProps> = () => {
+    // const campaign = useSelector((state: RootReducerProp) => state.campaigns.curseOfStrahd)
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
 
     if (isLoading) {
@@ -39,4 +39,4 @@ width:100%;
 height:100%;
 min-height:100vh;
 `
-export default CurseOfStrahdEdit;
+export default CampaignEdit;

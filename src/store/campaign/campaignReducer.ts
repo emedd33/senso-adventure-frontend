@@ -17,7 +17,7 @@ const initialCampaignState: CampaignState = {
 
 const adventureReducer = (
     state: CampaignState = initialCampaignState,
-    action: AdventureAction
+    action: CampaignAction
 ): CampaignState => {
     switch (action.type) {
         case actionTypes.SET_CAMPAIGNS:

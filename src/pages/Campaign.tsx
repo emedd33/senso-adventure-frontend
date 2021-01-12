@@ -8,12 +8,12 @@ import Characters from "../components/Characters/Characters"
 import IsLoading from "../components/IsLoading/IsLoading";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
-type CurseOfStrahdProps = {}
-const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
+type CampaignProps = {}
+const Campaign: FunctionComponent<CampaignProps> = () => {
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
-    const campaign = useSelector((state: RootReducerProp) => state.campaigns.curseOfStrahd)
+    const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
         let username = state.admin.authUser?.username
         if (username) {
@@ -22,7 +22,7 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
         return false
     })
     const renderScrolls = () => {
-        return Object.values(campaign.sessions).map((session: ISession) => {
+        return Object.values(selectedCampaign!.sessions).map((session: ISession) => {
             return renderSplitScrolls(session, CosTitle, null, isDungeonMaster)
         })
     }
@@ -33,10 +33,14 @@ const CurseOfStrahd: FunctionComponent<CurseOfStrahdProps> = () => {
             </Container>
         )
     }
+
+    if (!selectedCampaign) {
+        return (<Redirect to="/" />)
+    }
     return (
         <Container>
-            <Characters players={campaign.players} isDungeonMaster={isDungeonMaster} campaign={campaign.id} />
-            {campaign ?
+            <Characters players={selectedCampaign.players} isDungeonMaster={isDungeonMaster} campaign={selectedCampaign.id} />
+            {selectedCampaign ?
                 renderScrolls()
                 : null
             }
@@ -68,4 +72,4 @@ width:100%;
 height:100%;
 min-height:100vh;
 `
-export default CurseOfStrahd
+export default Campaign
