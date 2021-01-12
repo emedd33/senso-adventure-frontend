@@ -24,13 +24,13 @@ const Home: FunctionComponent<HomeProps> = () => {
             switch (session.campaign) {
                 case "curseOfStrahd":
                     return renderSplitScrolls(session, CosTitle, () => {
-                        dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd))
+                        dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
                         history.push("/campaign")
                     }, false)
 
                 case "fireAndFury":
                     return renderSplitScrolls(session, "", () => {
-                        dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury))
+                        // dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury))
                         history.push("/campaign")
                     }, false)
                 default:

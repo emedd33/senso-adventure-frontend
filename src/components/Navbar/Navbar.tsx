@@ -18,7 +18,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     const showSidebar = () => setSidebar(!sidebar);
     const toggleCosHover = () => setCosHover(!cosHover)
     const toggleSetCampaign = (campaign: ICampaign) => {
-        dispatch(dispatchSetSelectedCampaign(campaign))
+        dispatch(dispatchSetSelectedCampaign(campaign.id))
     }
     return (
         <>

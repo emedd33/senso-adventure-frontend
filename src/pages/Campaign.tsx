@@ -39,7 +39,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     }
     return (
         <Container>
-            <Characters players={selectedCampaign.players} isDungeonMaster={isDungeonMaster} campaign={selectedCampaign.id} />
+            <Characters />
             {selectedCampaign ?
                 renderScrolls()
                 : null

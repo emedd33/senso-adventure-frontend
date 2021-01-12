@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
@@ -7,74 +7,104 @@ import { campaignsRef } from '../../firebase';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import * as FaIcons from 'react-icons/fa';
 import * as GiIcons from 'react-icons/gi';
+import { useDispatch, useSelector } from 'react-redux';
+import IsLoading from '../IsLoading/IsLoading';
+import { dispatchSetSelectedCampaign, updateSelectedPlayer } from '../../store/selected/selectedCreators';
 
 
 interface SelectedPlayerProps {
-  selectedPlayer: {
-    player: string,
-    characterName: string,
-    race: string,
-    class: string,
-    level: number,
-    isDead: string
-  }
   onClose: any,
-  isNewPlayer: boolean,
-  campaign: string
-}
-const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, isNewPlayer, campaign }) => {
-  const [playerName, setPlayerName] = useState(selectedPlayer.player)
-  const [playerNameHelperText, setPlayerNameHelperText] = useState("")
-  const [playerNameError, setPlayerNameError] = useState(false)
 
-  const [characterName, setCharacterName] = useState(selectedPlayer.characterName)
-  const [race, setRace] = useState(selectedPlayer.race)
-  const [level, setLevel] = useState(selectedPlayer.level)
-  const [playerClass, setPlayerClass] = useState(selectedPlayer.class)
-  const [isDead,] = useState(selectedPlayer.isDead)
+}
+const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
+  const dispatch = useDispatch()
+  const [playerName, setPlayerName] = useState("")
+  const [characterName, setCharacterName] = useState("")
+  const [playerRace, setPlayerRace] = useState("")
+  const [playerClass, setPlayerClass] = useState("")
+  const [playerLevel, setPlayerLevel] = useState(1)
+  const [playerNameError, setPlayerNameError] = useState(false)
+  const [playerNameHelperText, setPlayerNameHelperText] = useState("")
+  const selectedPlayer = useSelector((state: RootReducerProp) => state.selected.selectedPlayer)
+  const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
+  useEffect(() => {
+    if (selectedPlayer) {
+      setPlayerName(selectedPlayer.player.playerName)
+      setCharacterName(selectedPlayer.player.characterName);
+      setPlayerRace(selectedPlayer.player.race);
+      setPlayerClass(selectedPlayer.player.class);
+      setPlayerLevel(selectedPlayer.player.level);
+    }
+  }, [selectedPlayer])
+
+  if (!selectedPlayer || !selectedCampaign) {
+    return (
+      <IsLoading />
+    )
+  }
+  const addNewPlayer = async () => {
+    campaignsRef.child(selectedCampaign?.id).child("players").push({
+      playerName: playerName,
+      race: playerRace,
+      class: playerClass,
+      level: playerLevel,
+      characterName: characterName,
+      isDead: selectedPlayer.player.isDead
+    }).then((e) => {
+      dispatch(dispatchSetSelectedCampaign(selectedCampaign.id))
+    }
+    )
+  }
   const handleSubmit = () => {
     if (!playerName) {
       setPlayerNameHelperText("Please write in the player name")
       setPlayerNameError(true)
       return
     }
-    else {
-      setPlayerNameError(false)
-      setPlayerNameHelperText("")
-      campaignsRef.child(campaign).child("players").child(playerName).set({
-        playerName: playerName,
-        race: race,
-        class: playerClass,
-        level: level,
-        characterName: characterName,
-        isDead: isDead
-      })
+    setPlayerNameError(false)
+    setPlayerNameHelperText("")
+    if (selectedPlayer.isNew) {
+      addNewPlayer()
     }
     handleClose()
-    window.location.reload()
 
   }
   const handleDelete = () => {
-    campaignsRef.child(campaign).child("players").child(playerName).set(null)
+    campaignsRef.child(selectedCampaign.id).child("players").child(selectedPlayer.player.playerName).set(null)
     handleClose()
     window.location.reload()
 
   }
   const handleKillOrRevive = () => {
-    let isDeadVariable = isDead === "TRUE" ? "FALSE" : "TRUE"
+    let isDeadVariable = selectedPlayer.player.isDead === "TRUE" ? "FALSE" : "TRUE"
     setPlayerNameError(false)
     setPlayerNameHelperText("")
-    campaignsRef.child(campaign).child("players").child(playerName).set({
+    campaignsRef.child(selectedCampaign.id).child("players").child(playerName).set({
       playerName: playerName,
-      race: race,
+      race: playerRace,
       class: playerClass,
-      level: level,
+      level: playerLevel,
       characterName: characterName,
       isDead: isDeadVariable
     })
     handleClose()
     window.location.reload()
 
+  }
+  const toggleInputChange = (update: any) => {
+    dispatch(updateSelectedPlayer(update))
+    switch (update.type) {
+      case "playerName":
+        setPlayerName(update.payload); break
+      case "characterName":
+        setCharacterName(update.payload); break
+      case "playerRace":
+        setPlayerRace(update.payload); break
+      case "playerClass":
+        setPlayerClass(update.payload); break
+      case "playerLevel":
+        setPlayerLevel(update.payload); break
+    }
   }
   const handleClose = () => {
     onClose(false)
@@ -92,8 +122,8 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, i
         <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
           <Button color="secondary" onClick={() => {
             handleDelete()
-          }} type="submit" disabled={isNewPlayer}>
-            <Alert severity={isNewPlayer ? "info" : "error"}>
+          }} type="submit" disabled={selectedPlayer.isNew}>
+            <Alert severity={selectedPlayer.isNew ? "info" : "error"}>
               <AlertTitle>Delete</AlertTitle>
             </Alert>
 
@@ -110,8 +140,9 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, i
           margin="normal"
           error={playerNameError}
           helperText={playerNameHelperText}
-          onChange={(event) => setPlayerName(event.target.value)}
-          onKeyDown={e => e.key === 'Enter' ? handleSubmit() : null}
+          disabled={!selectedPlayer.isNew}
+          onChange={(event) => toggleInputChange({ type: "playerName", payload: event.target.value })}
+
 
         />
         <TextField
@@ -124,7 +155,8 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, i
           value={characterName}
           onKeyDown={e => e.key === 'Enter' ? handleSubmit() : null}
           margin="normal"
-          onChange={(event) => setCharacterName(event.target.value)}
+          onChange={(event) => toggleInputChange({ type: "characterName", payload: event.target.value })}
+
         />
         <TextField
           fullWidth
@@ -133,10 +165,11 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, i
           color="primary"
           label="Race"
           placeholder="Race"
-          value={race}
+          value={playerRace}
           onKeyDown={e => e.key === 'Enter' ? handleSubmit() : null}
           margin="normal"
-          onChange={(event) => setRace(event.target.value)}
+          onChange={(event) => toggleInputChange({ type: "playerRace", payload: event.target.value })}
+
         />
         <TextField
           fullWidth
@@ -148,7 +181,8 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, i
           value={playerClass}
           onKeyDown={e => e.key === 'Enter' ? handleSubmit() : null}
           margin="normal"
-          onChange={(event) => setPlayerClass(event.target.value)}
+          onChange={(event) => toggleInputChange({ type: "playerClass", payload: event.target.value })}
+
         />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
@@ -160,17 +194,17 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ selectedPlayer, onClose, i
             InputLabelProps={{
               shrink: true,
             }}
-            value={level}
+            value={playerLevel}
             onChange={(event) => {
               let level = parseInt(event.target.value) < 0 ? 0 : parseInt(event.target.value)
-              return setLevel(level)
+              return toggleInputChange({ type: "playerLevel", payload: level })
             }}
             variant="outlined"
           />
           <Button variant="contained" color="primary" onClick={handleSubmit} >Submit</Button>
-          <Button color="secondary" onClick={handleKillOrRevive} disabled={isNewPlayer} >
-            <Alert icon={selectedPlayer.isDead === "TRUE" ? <GiIcons.GiHealthPotion /> : <FaIcons.FaSkullCrossbones />} severity={isNewPlayer ? "info" : "warning"}>
-              {selectedPlayer.isDead === "TRUE" ? "Revive character" : "Kill character"}
+          <Button color="secondary" onClick={handleKillOrRevive} disabled={selectedPlayer.isNew} >
+            <Alert icon={selectedPlayer.player.isDead === "TRUE" ? <GiIcons.GiHealthPotion /> : <FaIcons.FaSkullCrossbones />} severity={selectedPlayer.isNew ? "info" : "warning"}>
+              {selectedPlayer.player.isDead === "TRUE" ? "Revive character" : "Kill character"}
             </Alert>
           </Button>
 

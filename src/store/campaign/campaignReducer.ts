@@ -22,6 +22,7 @@ const adventureReducer = (
     switch (action.type) {
         case actionTypes.SET_CAMPAIGNS:
             return { ...action.payload }
+
     }
     return state
 }
