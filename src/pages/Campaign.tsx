@@ -6,9 +6,8 @@ import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 import Characters from "../components/Characters/Characters"
 import IsLoading from "../components/IsLoading/IsLoading";
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import { Link, Redirect } from "react-router-dom";
+import SpeedDials from "../components/SpeedDials/SpeedDials";
 
 type CampaignProps = {}
 const Campaign: FunctionComponent<CampaignProps> = () => {
@@ -45,10 +44,8 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 : null
             }
             {isDungeonMaster ?
-                <Link to={"/curseOfStrahd/edit"}>
-                    <Fab color="primary" aria-label="add" style={{ position: "fixed", right: "0", bottom: "0", margin: "3rem", zIndex: 400 }}>
-                        <AddIcon />
-                    </Fab>
+                <Link to={"/campaign/edit"}>
+                    <SpeedDials />
                 </Link>
                 : null}
         </Container >

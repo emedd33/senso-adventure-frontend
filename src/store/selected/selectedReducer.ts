@@ -1,4 +1,4 @@
-import { SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, UPDATE_SELECTED_PLAYER } from "./selectedActions"
+import { SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, SET_SELECTED_SESSION, UPDATE_SELECTED_PLAYER } from "./selectedActions"
 
 const initialSelectedState: SelectedState = {
 }
@@ -17,8 +17,12 @@ const selectedReducer = (
         case UPDATE_SELECTED_PLAYER: {
             if (state.selectedPlayer && state.selectedPlayer.player[action.payload.type]) {
                 state.selectedPlayer.player[action.payload.type] = action.payload.payload
-                return state
             }
+            return state
+        }
+        case SET_SELECTED_SESSION: {
+            state.selectedSession = action.payload
+            return state
         }
     }
     return state

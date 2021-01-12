@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import OldFrame from "../../assets/backgroundImage/old_sign.png"
 import * as FaIcons from 'react-icons/fa';
-import * as BsIcons from 'react-icons/bs';
-import * as AiIcons from 'react-icons/ai';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import EditIcon from '@material-ui/icons/Edit';
 import React, { useState } from "react";
 import PlayerModal from "../PlayerModal/PlayerModal";
 import { Button } from '@material-ui/core';
@@ -29,7 +29,7 @@ const Characters: React.FC<CharactersProps> = () => {
         dispatch(dispatchSetSelectedPlayer(
             {
                 "isNew": true,
-                "player": { "playerName": "new player", "characterName": "", "race": "", "class": "", "level": 1, "isDead": "FALSE" }
+                "player": { "playerName": "New player", "characterName": "", "race": "", "class": "", "level": 1, "isDead": "FALSE" }
             }))
         setIsEditPlayerOpen(true)
     }
@@ -40,7 +40,8 @@ const Characters: React.FC<CharactersProps> = () => {
                 <tr><th >
                     {isDungeonMaster ?
                         <Button color="primary" onClick={handleNewPlayer}>
-                            <BsIcons.BsPersonPlusFill />
+                            <PersonAddIcon />
+
                         </Button>
                         : null}
                 </th>
@@ -62,12 +63,12 @@ const Characters: React.FC<CharactersProps> = () => {
                                 <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].race}</s> : campaign!.players[key].race}</td>
                                 <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].class}</s> : campaign!.players[key].class}</td>
                                 <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].level}</s> : campaign!.players[key].level}</td>
-                                <td> {isDungeonMaster ? <Button color="primary">
+                                <td> {isDungeonMaster ? <Button color="primary" onClick={() => {
+                                    dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.players[key].playerName, "characterName": campaign!.players[key].characterName, "race": campaign!.players[key].race, "class": campaign!.players[key].class, "level": campaign!.players[key].level, "isDead": campaign!.players[key].isDead } }))
+                                    setIsEditPlayerOpen(true)
+                                }}>
 
-                                    <AiIcons.AiFillEdit onClick={() => {
-                                        dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.players[key].playerName, "characterName": campaign!.players[key].characterName, "race": campaign!.players[key].race, "class": campaign!.players[key].class, "level": campaign!.players[key].level, "isDead": campaign!.players[key].isDead } }))
-                                        setIsEditPlayerOpen(true)
-                                    }} />
+                                    <EditIcon />
                                 </Button>
                                     : null}</td>
                             </tr>)
