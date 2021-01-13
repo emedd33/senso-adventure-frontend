@@ -16,27 +16,30 @@ const Home: FunctionComponent<HomeProps> = () => {
     const history = useHistory()
     const dispatch = useDispatch()
     const sessions = useSelector((state: RootReducerProp) => {
-        return Object.values(state.campaigns).map(campaign => Object.values(campaign.sessions)).flat()
+        return Object.values(state.campaigns).map(campaign => campaign.sessions ? Object.values(campaign.sessions) : [])
+            .flat()
     })
     const renderScrolls = () => {
         sortByDateValue(sessions)
-        return Object.values(sessions).map((session: any,) => {
-            switch (session.campaign) {
-                case "curseOfStrahd":
-                    return renderSplitScrolls(session, CosTitle, () => {
-                        dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
-                        history.push("/campaign")
-                    }, false)
+        if (sessions.length > 0) {
+            return Object.keys(sessions).map((key: any,) => {
+                switch (sessions[key].campaign) {
+                    case "curseOfStrahd":
+                        return renderSplitScrolls(key, sessions[key], CosTitle, () => {
+                            dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
+                            history.push("/campaign")
+                        }, false)
 
-                case "fireAndFury":
-                    return renderSplitScrolls(session, "", () => {
-                        // dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury))
-                        history.push("/campaign")
-                    }, false)
-                default:
-                    return null
-            }
-        })
+                    case "fireAndFury":
+                        return renderSplitScrolls(key, sessions[key], "", () => {
+                            // dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury))
+                            history.push("/campaign")
+                        }, false)
+                    default:
+                        return null
+                }
+            })
+        }
     }
     if (isLoading) {
         return (

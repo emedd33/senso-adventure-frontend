@@ -21,7 +21,7 @@ export const dispatchSetSelectedPlayer = (selectedPlayer: ISelectedPlayer) => {
     }
 }
 
-export const dispatchSetSelectedSession = (selectedSession?: ISession) => {
+export const dispatchSetSelectedSession = (selectedSession?: ISelectedSession) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true));
         dispatch(setSelectedSession(selectedSession))
@@ -48,7 +48,7 @@ export const setSelectedCampaign = (selectedCampaign?: ICampaign) => {
         payload: selectedCampaign
     }
 }
-export const setSelectedSession = (selectedSession?: ISession) => {
+export const setSelectedSession = (selectedSession?: ISelectedSession) => {
     return {
         type: SET_SELECTED_SESSION,
         payload: selectedSession

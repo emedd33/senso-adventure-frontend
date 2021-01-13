@@ -2,13 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import ScrollImage from "../../assets/backgroundImage/scroll.png"
 import px2vw from '../../utils/px2vw';
-import * as AiIcons from 'react-icons/ai';
+import EditIcon from '@material-ui/icons/Edit';
 import ReactHtmlParser from "react-html-parser"
 import { Button } from '@material-ui/core';
 
 import "./Scroll.scss"
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { dispatchSetSelectedSession } from '../../store/selected/selectedCreators';
+import { useDispatch } from 'react-redux';
 type ScrollProps = {
+    id: string,
     title: string,
     content: string,
     date: string,
@@ -19,16 +22,29 @@ type ScrollProps = {
 }
 
 
-function Scroll({ title, content, date, storyImage, isFirstScroll, campaign, onClick, isDungeonMaster }: ScrollProps): JSX.Element {
+function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign, onClick, isDungeonMaster }: ScrollProps): JSX.Element {
+    const dispatch = useDispatch()
+    const history = useHistory()
     return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
         <ScrollContainer onClick={onClick} className={onClick ? "scroll-container-active" : "scroll-container"} >
 
             <ScrollContent>
                 {isDungeonMaster ?
                     <div style={{ justifyContent: "flex-end", alignItems: "center", display: "flex" }}>
-                        <Link to={"/curseOfStrahd/edit"}>
-                            <Button size="large">
-                                <AiIcons.AiFillEdit onClick={() => { }} />
+                        <Link to={"/campaign/edit"}>
+                            <Button size="large" onClick={() => {
+                                dispatch(dispatchSetSelectedSession({
+                                    id: id,
+                                    session: {
+                                        title: title,
+                                        story: content,
+                                        date: date,
+                                        campaign: campaign
+                                    }
+                                }))
+                                history.push("/campaign/edit")
+                            }} >
+                                <EditIcon />
                             </Button>
                         </Link>
                     </div>

@@ -1,8 +1,13 @@
 
 type SelectedState = {
     selectedCampaign?: ICampaign
-    selectedSession?: ISession
+    selectedSession?: ISelectedSession
     selectedPlayer?: ISelectedPlayer
+}
+
+type ISelectedSession = {
+    id?: string,
+    session: ISesson
 }
 type SelectedActions = {
     type: string,

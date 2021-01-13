@@ -6,7 +6,7 @@ import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 import Characters from "../components/Characters/Characters"
 import IsLoading from "../components/IsLoading/IsLoading";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import SpeedDials from "../components/SpeedDials/SpeedDials";
 
 type CampaignProps = {}
@@ -21,9 +21,11 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         return false
     })
     const renderScrolls = () => {
-        return Object.values(selectedCampaign!.sessions).map((session: ISession) => {
-            return renderSplitScrolls(session, CosTitle, null, isDungeonMaster)
-        })
+        if (selectedCampaign?.sessions) {
+            return Object.keys(selectedCampaign.sessions).map((key: any) => {
+                return renderSplitScrolls(key, selectedCampaign!.sessions[key], CosTitle, null, isDungeonMaster)
+            })
+        }
     }
     if (isLoading) {
         return (
@@ -44,9 +46,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 : null
             }
             {isDungeonMaster ?
-                <Link to={"/campaign/edit"}>
-                    <SpeedDials />
-                </Link>
+                <SpeedDials />
                 : null}
         </Container >
     )

@@ -62,10 +62,12 @@ export default function SpeedDials() {
                         tooltipTitle={"Add new session"}
                         onClick={() => {
                             dispatch(dispatchSetSelectedSession({
-                                title: "",
-                                story: "",
-                                date: "",
-                                campaign: selectedCampaign ? selectedCampaign.id : ""
+                                session: {
+                                    title: "",
+                                    story: "",
+                                    date: "",
+                                    campaign: selectedCampaign ? selectedCampaign.id : ""
+                                }
                             }));
                             history.push("/campaign/edit")
                         }}

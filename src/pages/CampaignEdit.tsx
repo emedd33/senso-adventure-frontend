@@ -1,7 +1,7 @@
 import { Button, TextField } from "@material-ui/core"
 import React, { useState } from "react"
-import { useSelector } from "react-redux"
-import { Redirect } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { Redirect, useHistory } from "react-router-dom"
 import styled from "styled-components"
 import Background from "../assets/backgroundImage/cos_background.jpg"
 import { OLD_WHITE } from "../assets/styles/colors"
@@ -9,22 +9,51 @@ import IsLoading from "../components/IsLoading/IsLoading"
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from "@material-ui/pickers";
+import { campaignsRef } from "../firebase"
+import { dispatchSetSelectedCampaign } from "../store/selected/selectedCreators"
 export interface CampaignEditProps {
 
 }
 
 
 const CampaignEdit: React.FC<CampaignEditProps> = () => {
-    // const campaign = useSelector((state: RootReducerProp) => state.campaigns.curseOfStrahd)
+    const dispatch = useDispatch()
+    const history = useHistory()
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const selectedSession = useSelector((state: RootReducerProp) => state.selected.selectedSession)
-    const [sessionTitle, setSessionTitle] = useState<string | null>()
-    const [sessionStory, setSessionStory] = useState<string | null>()
+    const selectedCampaign = selectedSession ? selectedSession.session.campaign : null
+    const sessionsId = selectedSession ? selectedSession.id : null
+    const [sessionTitle, setSessionTitle] = useState<string | null>(selectedSession?.session.title)
+    const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
+    const [sessionStory, setSessionStory] = useState<string | null>(selectedSession?.session.story)
     const [sessionDate, setSessionDate] = useState<Date | null>(
-        new Date(),
+        new Date(selectedSession?.session.date)
     );
     const submitSession = () => {
-        console.log("submitting")
+        if (!sessionTitle) {
+            setSessionTitleError(true);
+            return;
+        }
+        if (!sessionsId) {
+            campaignsRef.child(selectedCampaign).child("sessions").push({
+                campaign: selectedCampaign,
+                date: sessionDate?.toLocaleDateString(),
+                story: sessionStory,
+                title: sessionTitle,
+            }).then((e) => {
+                dispatch(dispatchSetSelectedCampaign(selectedCampaign))
+            })
+        } else {
+            campaignsRef.child(selectedCampaign).child("sessions").child(sessionsId).set({
+                campaign: selectedCampaign,
+                date: sessionDate?.toLocaleDateString(),
+                story: sessionStory,
+                title: sessionTitle,
+            }).then((e) => {
+                dispatch(dispatchSetSelectedCampaign(selectedCampaign))
+            })
+        }
+        history.push("/campaign")
     }
     if (isLoading) {
         return (
@@ -47,6 +76,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         placeholder="Write a fitting title"
                         style={{ height: "100%", width: "100%" }}
                         variant="filled"
+                        error={sessionTitleError}
                         value={sessionTitle}
                         onChange={(event) => setSessionTitle(event.target.value)}
                     />
