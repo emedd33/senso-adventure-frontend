@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Background from "../assets/backgroundImage/dnd_background.jpg"
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
-import renderSplitScrolls from "../components/Scroll/ScrollUtils";
 import sortByDateValue from "../utils/sortArrayDyDate";
 import IsLoading from "../components/IsLoading/IsLoading";
 import { useHistory } from "react-router-dom";
 import { dispatchSetSelectedCampaign } from "../store/selected/selectedCreators";
+import Scroll from "../components/Scroll/Scroll";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
@@ -23,18 +23,22 @@ const Home: FunctionComponent<HomeProps> = () => {
         sortByDateValue(sessions)
         if (sessions.length > 0) {
             return Object.keys(sessions).map((key: any,) => {
+                let story = sessions[key].story
+                story = story.length > 1000 ? story.substring(0, 1000).concat("...") : story
                 switch (sessions[key].campaign) {
                     case "curseOfStrahd":
-                        return renderSplitScrolls(key, sessions[key], CosTitle, () => {
+                        return <Scroll id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
                             dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
                             history.push("/campaign")
-                        }, false)
+                        }}
+                            isDungeonMaster={false} />
 
                     case "fireAndFury":
-                        return renderSplitScrolls(key, sessions[key], "", () => {
-                            // dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury))
+                        return <Scroll id={sessions[key]} title={sessions[key].title} content={sessions[key].story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
+                            dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury.id))
                             history.push("/campaign")
-                        }, false)
+                        }}
+                            isDungeonMaster={false} />
                     default:
                         return null
                 }
