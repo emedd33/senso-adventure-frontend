@@ -11,6 +11,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from "@material-ui/pickers";
 import { campaignsRef } from "../firebase"
 import { dispatchSetSelectedCampaign } from "../store/selected/selectedCreators"
+import parseStringToDate from "../utils/parseStringToDate"
 export interface CampaignEditProps {
 
 }
@@ -26,9 +27,9 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const [sessionTitle, setSessionTitle] = useState<string | null>(selectedSession?.session.title)
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
     const [sessionStory, setSessionStory] = useState<string | null>(selectedSession?.session.story)
-    const [sessionDate, setSessionDate] = useState<Date | null>(
-        new Date(selectedSession?.session.date)
-    );
+    const [sessionDate, setSessionDate] = useState<Date | any>(
+        selectedSession?.session.date ? parseStringToDate(selectedSession.session.date) : Date()
+    )
     const submitSession = () => {
         if (!sessionTitle) {
             setSessionTitleError(true);
