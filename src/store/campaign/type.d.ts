@@ -16,7 +16,8 @@ interface ICampaign {
     id: string
     dungeonMaster: string
     sessions: ISession[],
-    players: IPlayer[]
+    players: IPlayer[],
+    backgroundImage: string,
 }
 type CampaignState = {
     curseOfStrahd: ICampaign,

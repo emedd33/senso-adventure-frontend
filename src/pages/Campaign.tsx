@@ -1,16 +1,17 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import Background from "../assets/backgroundImage/cos_background.jpg"
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import Characters from "../components/Characters/Characters"
 import IsLoading from "../components/IsLoading/IsLoading";
 import { Redirect } from "react-router-dom";
 import SpeedDials from "../components/SpeedDials/SpeedDials";
 import Scroll from "../components/Scroll/Scroll";
+import { storage } from "../firebase";
 
 type CampaignProps = {}
 const Campaign: FunctionComponent<CampaignProps> = () => {
+    const [imageUrl, setImageUrl] = useState("")
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
@@ -20,6 +21,9 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         }
         return false
     })
+    useEffect(() => {
+        storage.ref('Images/Background/' + selectedCampaign?.backgroundImage).getDownloadURL().then((url: string) => setImageUrl(url))
+    }, [selectedCampaign])
     const renderScrolls = () => {
         if (selectedCampaign?.sessions) {
             return Object.keys(selectedCampaign.sessions).map((key: any) => {
@@ -41,7 +45,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         return (<Redirect to="/" />)
     }
     return (
-        <Container>
+        <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
             <Characters />
             {selectedCampaign ?
                 renderScrolls()
@@ -59,7 +63,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 const Container = styled.div`
 z-index:300;
 display:flex;
-background-image: url(${Background});
 background-repeat: no-repeat;
 background-attachment: fixed;
 background-size: cover;

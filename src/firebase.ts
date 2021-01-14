@@ -24,6 +24,7 @@ const config = {
 // };
 firebase.initializeApp(config);
 const databaseRef = firebase.database().ref();
+export const storage = firebase.storage();
 export const todosRef = databaseRef.child("todos")
 export const campaignsRef = databaseRef.child("campaigns")
 export default firebase;

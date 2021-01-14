@@ -5,13 +5,15 @@ const initialCampaignState: CampaignState = {
         sessions: [],
         players: [],
         dungeonMaster: "",
-        id: "curseOfStrahd"
+        id: "curseOfStrahd",
+        backgroundImage: ""
     },
     fireAndFury: {
         sessions: [],
         players: [],
         dungeonMaster: "",
-        id: "fireAndFury"
+        id: "fireAndFury",
+        backgroundImage: ""
     }
 }
 
