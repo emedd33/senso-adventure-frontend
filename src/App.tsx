@@ -7,16 +7,14 @@ import {
   Redirect,
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import Campaign from "./pages/Campaign";
 import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import firebase from "firebase";
 import { SET_AUTH_USER } from "./store/admin/adminActions";
-import CampaignEdit from "./pages/CampaignEdit";
+import CampaignIndex from "./pages/Campaign/CampaignIndex";
+import LoginIndex from "./pages/Login/LoginIndex";
 export default function App() {
   const dispatch = useDispatch()
   const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
@@ -42,25 +40,16 @@ export default function App() {
         <AlertDialog />
 
         <Switch>
-          <Route exact path="/campaign">
-            <Campaign />
+          <Route path="/campaign" >
+            <CampaignIndex />
           </Route>
-          <Route exact path="/campaign/edit">
-            <CampaignEdit />
-          </Route>
-          <Route exact path="/login">
-            {authUser ?
-              <Redirect to="/" /> :
-              <Login />}
-          </Route>
-          <Route exact path="/login/signup">
+          <Route path="/login">
 
             {authUser ?
               <Redirect to="/" /> :
-              <SignUp />}
+              <LoginIndex />}
           </Route>
           <Route path="/">
-
             <Home />
           </Route>
         </Switch>
