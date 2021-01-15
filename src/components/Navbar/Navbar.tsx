@@ -9,8 +9,19 @@ import styled from 'styled-components';
 import MenuListComposition from '../MenuList/MenuList';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchSetSelectedCampaign } from '../../store/selected/selectedCreators';
+import { Backdrop, Breadcrumbs, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        backdrop: {
+            zIndex: theme.zIndex.drawer + 1,
+            color: '#fff',
+        },
+    }),
+);
+
 type NavbarProps = {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
+    const classes = useStyles();
     const dispatch = useDispatch()
     const campaign = useSelector((state: RootReducerProp) => state.campaigns)
     const [sidebar, setSidebar] = useState(false);
@@ -31,10 +42,21 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                             <FaIcons.FaBars onClick={showSidebar} />
                         </NavBarOpenIcon>
                         <Link to="/" onClick={() => setSidebar(false)} style={{ textDecoration: 'none', color: "black" }}>
-                            <span>
+                            <span >
                                 <Title>Senso Adventure</Title>
                             </span>
                         </Link>
+                        <div style={{ width: "100%", display: "flex", justifyContent: "flex-start", alignItems: "flex-start" }}>
+                            <Breadcrumbs aria-label="breadcrumb">
+
+                                <Link to="/" style={{ textDecoration: "none" }} >
+                                    <h3 style={{ color: "black", fontFamily: "Italliano cursive" }}>Home</h3>
+                                </Link>
+                                <Typography color="textPrimary">
+                                    <h3 style={{ color: "black", fontFamily: "Italliano cursive", opacity: 0.5 }}>Home</h3>
+                                </Typography>
+                            </Breadcrumbs>
+                        </div>
                     </div>
                     <MenuListComposition />
 
@@ -42,39 +64,41 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
 
                 </NavBarHeader>
-                <div className={sidebar ? 'opacity-container active' : "opacity-container"} onClick={() => sidebar ? setSidebar(false) : null}>
-                </div>
-                <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
+                <Backdrop className={classes.backdrop} open={sidebar} onClick={showSidebar}>
+                    <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
 
-                    <ul style={{ width: "100%", paddingLeft: "1rem" }} onClick={showSidebar}>
+                        <ul style={{ width: "100%", paddingLeft: "1rem" }} onClick={showSidebar}>
 
-                        <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
-                            <NavBarItem >
-                                <Link to="/" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
-                                    <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                        <img src={HomeCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
-                                        <CampaignTitle>Home</CampaignTitle>
-                                    </span>
-                                </Link>
-                            </NavBarItem>
-                            <NavBarItem >
-                                <Link to="/campaign" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} onClick={() => toggleSetCampaign(campaign.curseOfStrahd)} style={{ textDecoration: 'none', color: "black" }}>
-                                    <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                        <img src={CosCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
-                                        <CampaignTitle>Curse of Strahd</CampaignTitle>
-                                    </span>
-                                </Link>
-                            </NavBarItem>
-                        </div>
+                            <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
+                                <NavBarItem >
+                                    <Link to="/" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
+                                        <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                            <img src={HomeCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
+                                            <CampaignTitle>Home</CampaignTitle>
+                                        </span>
+                                    </Link>
+                                </NavBarItem>
+                                <NavBarItem >
+                                    <Link to="/campaign" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} onClick={() => toggleSetCampaign(campaign.curseOfStrahd)} style={{ textDecoration: 'none', color: "black" }}>
+                                        <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                            <img src={CosCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
+                                            <CampaignTitle>Curse of Strahd</CampaignTitle>
+                                        </span>
+                                    </Link>
+                                </NavBarItem>
+                            </div>
 
-                    </ul>
-                </nav>
+                        </ul>
+                    </nav>
+                </Backdrop>
             </IconContext.Provider>
         </>
     );
 }
 const Title = styled.h2`
 margin-left:2vh;
+width:10rem;
+height:
 `
 const CampaignTitle = styled.h3`
 font-size: 100%;

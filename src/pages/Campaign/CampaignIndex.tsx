@@ -30,6 +30,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     }
     return (
         <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+
             <Route exact path="/campaign">
                 <Campaign />
             </Route>
@@ -39,14 +40,12 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             <Route exact path="/campaign/session/edit">
                 <CampaignEdit />
             </Route>
-        </Container >
+        </Container>
     )
 
 
 }
-
 const Container = styled.div`
-z-index:300;
 display:flex;
 background-repeat: no-repeat;
 background-attachment: fixed;
@@ -54,7 +53,7 @@ background-size: cover;
 justify-content:center;
 align-items:center;
 flex-direction: column;
-padding-top:5vh;
+padding-top:5rem;
 width:100%;
 height:100%;
 min-height:100vh;
