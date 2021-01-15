@@ -6,6 +6,7 @@ import { Redirect, Route } from "react-router-dom";
 import { storage } from "../../firebase";
 import Campaign from "./Campaign";
 import CampaignEdit from "./CampaignEdit";
+import CampaignSession from "./CampaignSession";
 
 type CampaignIndexProps = {}
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
@@ -32,7 +33,10 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             <Route exact path="/campaign">
                 <Campaign />
             </Route>
-            <Route exact path="/campaign/edit">
+            <Route exact path="/campaign/session">
+                <CampaignSession />
+            </Route>
+            <Route exact path="/campaign/session/edit">
                 <CampaignEdit />
             </Route>
         </Container >

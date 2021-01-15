@@ -69,7 +69,7 @@ export default function SpeedDials() {
                                     campaign: selectedCampaign ? selectedCampaign.id : ""
                                 }
                             }));
-                            history.push("/campaign/edit")
+                            history.push("/campaign/session/edit")
                         }}
                     />
 
