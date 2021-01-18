@@ -1,6 +1,6 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import CosCrest from "../../assets/backgroundImage/CosCrest.png"
 import HomeCrest from "../../assets/backgroundImage/home_crest.png"
 import './Navbar.css';
@@ -22,7 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
 type NavbarProps = {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
     const classes = useStyles();
+    const location = useLocation()
     const dispatch = useDispatch()
+    const urlPathArray = location.pathname.split("/")
     const campaign = useSelector((state: RootReducerProp) => state.campaigns)
     const [sidebar, setSidebar] = useState(false);
     const [cosHover, setCosHover] = useState(false);
@@ -31,6 +33,14 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     const toggleSetCampaign = (campaign: ICampaign) => {
         dispatch(dispatchSetSelectedCampaign(campaign.id))
     }
+    useEffect(() => {
+        const formatBreadCrumbUrlPath = () => {
+            if (urlPathArray.length === 2 && urlPathArray[0] === urlPathArray[1]) {
+                urlPathArray.pop()
+            }
+        }
+        formatBreadCrumbUrlPath()
+    }, [urlPathArray])
     return (
         <>
 
@@ -48,13 +58,30 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                         </Link>
                         <div style={{ width: "100%", display: "flex", justifyContent: "flex-start", alignItems: "flex-start" }}>
                             <Breadcrumbs aria-label="breadcrumb">
+                                {urlPathArray.map((path: string, index: any) => {
+                                    // path ? linkPath.concat("/").concat(path) : null
+                                    // console.log(linkPath)
 
-                                <Link to="/" style={{ textDecoration: "none" }} >
-                                    <h3 style={{ color: "black", fontFamily: "Italliano cursive" }}>Home</h3>
-                                </Link>
-                                <Typography color="textPrimary">
-                                    <h3 style={{ color: "black", fontFamily: "Italliano cursive", opacity: 0.5 }}>Home</h3>
-                                </Typography>
+                                    let crumb = !path ? "Home" : path.charAt(0).toUpperCase() + path.slice(1)
+                                    let linkPath = urlPathArray.slice(0, index + 1).join("/")
+                                    linkPath = !linkPath ? "/" : linkPath
+                                    if (urlPathArray.length - 1 === index) {
+                                        return (
+                                            <Typography color="textPrimary">
+                                                <h3 style={{ color: "black", fontFamily: "Italliano cursive", opacity: 0.5 }}>{crumb}</h3>
+                                            </Typography>
+                                        )
+                                    }
+                                    else {
+
+                                        return (
+                                            <Link to={linkPath} style={{ textDecoration: "none" }} >
+                                                <h3 style={{ color: "black", fontFamily: "Italliano cursive" }}>{crumb}</h3>
+                                            </Link>
+                                        )
+                                    }
+                                })}
+
                             </Breadcrumbs>
                         </div>
                     </div>

@@ -21,7 +21,7 @@ const Home: FunctionComponent<HomeProps> = () => {
             .flat()
     })
     useEffect(() => {
-        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL().then((url: string) => setImageUrl(url))
+        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL().then((url: string) => setImageUrl(url)).catch(e => console.log(e))
     }, [])
 
     const renderScrolls = () => {

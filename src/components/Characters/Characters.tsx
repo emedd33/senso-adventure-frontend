@@ -24,7 +24,6 @@ const Characters: React.FC<CharactersProps> = () => {
         }
         return false
     })
-    console.log(isDungeonMaster)
     const handleNewPlayer = () => {
         dispatch(dispatchSetSelectedPlayer(
             {
