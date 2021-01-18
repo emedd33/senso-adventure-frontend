@@ -5,7 +5,6 @@ import px2vw from '../../utils/px2vw';
 import ReactHtmlParser from "react-html-parser"
 
 import "./Scroll.scss"
-import useWindowSize from '../../store/hooks/useWindowSize';
 type ScrollProps = {
     id: any,
     title: string,
