@@ -21,7 +21,7 @@ const Home: FunctionComponent<HomeProps> = () => {
             .flat()
     })
     useEffect(() => {
-        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL().then((url: string) => setImageUrl(url)).catch((e: any) => console.log(e))
+        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL().catch(e => console.log(e)).then((url: string) => setImageUrl(url)).catch((e: any) => console.log(e))
     }, [])
 
     const renderScrolls = () => {
@@ -52,7 +52,7 @@ const Home: FunctionComponent<HomeProps> = () => {
             })
         }
     }
-    if (isLoading) {
+    if (isLoading || !imageUrl) {
         return (
             <Container>
                 <IsLoading />

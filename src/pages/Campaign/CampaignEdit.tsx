@@ -7,24 +7,19 @@ import IsLoading from "../../components/IsLoading/IsLoading"
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from "@material-ui/pickers";
-import { campaignsRef } from "../../firebase"
+import { campaignsRef, firebaseStorageRef } from "../../firebase"
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators"
 import parseStringToDate from "../../utils/parseStringToDate"
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 // import style manually
 import 'react-markdown-editor-lite/lib/index.css';
+import { setError } from "../../store/admin/adminCreator"
 export interface CampaignEditProps {
 
 }
 
-// Register plugins if required
-// MdEditor.use(YOUR_PLUGINS_HERE);
-
-// Initialize a markdown parser
 const mdParser = new MarkdownIt(/* Markdown-it options */);
-
-
 const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const dispatch = useDispatch()
     const history = useHistory()
@@ -42,26 +37,35 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
             setSessionTitleError(true);
             return;
         }
-        if (!sessionsId) {
-            campaignsRef.child(selectedCampaign!.id).child("sessions").push({
-                campaign: selectedCampaign,
-                date: sessionDate?.toLocaleDateString(),
-                story: sessionStory,
-                title: sessionTitle,
-            }).then((e) => {
-                dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
-            })
-        } else {
-            campaignsRef.child(selectedCampaign!.id).child("sessions").child(sessionsId).set({
-                campaign: selectedCampaign,
-                date: sessionDate?.toLocaleDateString(),
-                story: sessionStory,
-                title: sessionTitle,
-            }).then((e) => {
-                dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
-            })
+        if (selectedCampaign?.id && sessionStory && sessionDate) {
+            let sessionFile = selectedCampaign.id + "_" + sessionDate.toLocaleDateString() + ".md"
+            try {
+                if (!sessionsId) {
+                    campaignsRef.child(selectedCampaign.id).child("sessions").push({
+                        campaign: selectedCampaign.id,
+                        date: sessionDate?.toLocaleDateString(),
+                        story: sessionFile,
+                        title: sessionTitle,
+                    }).then((e) => {
+                        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+                    })
+                } else {
+                    campaignsRef.child(selectedCampaign.id).child("sessions").child(sessionsId).set({
+                        campaign: selectedCampaign.id,
+                        date: sessionDate?.toLocaleDateString(),
+                        story: sessionFile,
+                        title: sessionTitle,
+                    }).then((e) => {
+                        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+                    })
+                }
+                var file = new File([sessionFile], sessionStory, { type: "text/plain;charset=utf-8" });
+                firebaseStorageRef.child("SessionStories").child(sessionFile).put(file)
+                history.push("/campaign")
+            } catch (error) {
+                dispatch(setError("Could not upload file"))
+            }
         }
-        history.push("/campaign")
     }
     if (!selectedSession) {
         return (
