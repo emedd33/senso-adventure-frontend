@@ -10,9 +10,19 @@ import { DatePicker } from "@material-ui/pickers";
 import { campaignsRef } from "../../firebase"
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators"
 import parseStringToDate from "../../utils/parseStringToDate"
+import MarkdownIt from 'markdown-it'
+import MdEditor from 'react-markdown-editor-lite'
+// import style manually
+import 'react-markdown-editor-lite/lib/index.css';
 export interface CampaignEditProps {
 
 }
+
+// Register plugins if required
+// MdEditor.use(YOUR_PLUGINS_HERE);
+
+// Initialize a markdown parser
+const mdParser = new MarkdownIt(/* Markdown-it options */);
 
 
 const CampaignEdit: React.FC<CampaignEditProps> = () => {
@@ -61,6 +71,9 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     if (!selectedSession) {
         return (<Redirect to="/" />)
     }
+    function handleEditorChange(html: any) {
+        setSessionStory(html.text)
+    }
     return (
         <div style={{ marginTop: "10rem", marginBottom: "10rem", width: "50%", backgroundColor: OLD_WHITE, height: "50rem", justifyContent: "center", display: "flex", padding: "1rem", flexDirection: "column", }}>
             <div style={{ justifyContent: "center", alignItems: "center", display: "flex", flexDirection: "column" }}>
@@ -92,15 +105,11 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                 </MuiPickersUtilsProvider>
             </div>
             <h3>The Story</h3>
-            <TextField
-                id="outlined-multiline-static"
-                multiline
-                placeholder="Write down your adventure for this session"
-                rows={20}
-                style={{ height: "100%", width: "100%" }}
-                variant="filled"
-                value={sessionStory}
-                onChange={((event) => setSessionStory(event.target.value))}
+            <MdEditor
+                style={{ height: "500px" }}
+                renderHTML={(text) => mdParser.render(text)}
+                onChange={handleEditorChange}
+                value={sessionStory ? sessionStory : ""}
             />
             <Button variant="contained" color="primary" onClick={submitSession}>
                 Submit
