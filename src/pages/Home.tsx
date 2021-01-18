@@ -30,7 +30,8 @@ const Home: FunctionComponent<HomeProps> = () => {
             return Object.keys(sessions).map((key: any,) => {
                 let story = sessions[key].story
                 story = story.length > 1000 ? story.substring(0, 1000).concat("...") : story
-                switch (sessions[key].campaign) {
+                console.log(sessions)
+                switch (sessions[key].campaign.id) {
                     case "curseOfStrahd":
                         return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
                             dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
@@ -45,6 +46,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                         }}
                         />
                     default:
+                        console.log("session", sessions[key].campaign.id)
                         return null
                 }
             })

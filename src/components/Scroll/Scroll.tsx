@@ -12,7 +12,7 @@ type ScrollProps = {
     date: string,
     storyImage: string,
     isFirstScroll: boolean,
-    campaign: string,
+    campaign: ICampaign,
     onClick: any
 }
 
@@ -41,7 +41,6 @@ function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign,
                     null
                 }
                 <div style={{ "display": "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-
                     <ScrollStory>{ReactHtmlParser(content)}</ScrollStory>
                 </div>
                 <div style={{ backgroundColor: "transparent", height: "60vh", width: "100%" }}></div>

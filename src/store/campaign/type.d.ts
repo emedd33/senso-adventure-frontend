@@ -2,7 +2,7 @@ interface ISession {
     title: string
     story: string
     date: string
-    campaign: string
+    campaign: ICampaign
 }
 interface IPlayer {
     playerName: string,
