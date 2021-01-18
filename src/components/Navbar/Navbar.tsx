@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import CosCrest from "../../assets/backgroundImage/CosCrest.png"
@@ -10,6 +10,7 @@ import MenuListComposition from '../MenuList/MenuList';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchSetSelectedCampaign } from '../../store/selected/selectedCreators';
 import { Backdrop, Breadcrumbs, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+import useWindowSize from '../../store/hooks/useWindowSize';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         backdrop: {
@@ -22,9 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
 type NavbarProps = {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
     const classes = useStyles();
+    const size = useWindowSize()
     const location = useLocation()
     const dispatch = useDispatch()
     const urlPathArray = location.pathname.split("/")
+    if (urlPathArray.length === 2 && urlPathArray[0] === urlPathArray[1]) {
+        urlPathArray.pop()
+    }
     const campaign = useSelector((state: RootReducerProp) => state.campaigns)
     const [sidebar, setSidebar] = useState(false);
     const [cosHover, setCosHover] = useState(false);
@@ -33,20 +38,12 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     const toggleSetCampaign = (campaign: ICampaign) => {
         dispatch(dispatchSetSelectedCampaign(campaign.id))
     }
-    useEffect(() => {
-        const formatBreadCrumbUrlPath = () => {
-            if (urlPathArray.length === 2 && urlPathArray[0] === urlPathArray[1]) {
-                urlPathArray.pop()
-            }
-        }
-        formatBreadCrumbUrlPath()
-    }, [urlPathArray])
     return (
         <>
 
             <IconContext.Provider value={{ color: 'black' }}>
                 <NavBarHeader>
-                    <div style={{ flex: "1", display: "flex", alignItems: "center" }}>
+                    <div style={{ height: "5rem", flex: "3", display: "flex", alignItems: "center" }}>
 
                         <NavBarOpenIcon to='#'>
                             <FaIcons.FaBars onClick={showSidebar} />
@@ -56,33 +53,37 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                 <Title>Senso Adventure</Title>
                             </span>
                         </Link>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "flex-start", alignItems: "flex-start" }}>
-                            <Breadcrumbs aria-label="breadcrumb">
-                                {urlPathArray.map((path: string, index: any) => {
-                                    // path ? linkPath.concat("/").concat(path) : null
-                                    // console.log(linkPath)
+                        <div style={{ display: "flex", height: "5rem", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "nowrap" }}>
+                            {size.width && size.width! > 769 ?
 
-                                    let crumb = !path ? "Home" : path.charAt(0).toUpperCase() + path.slice(1)
-                                    let linkPath = urlPathArray.slice(0, index + 1).join("/")
-                                    linkPath = !linkPath ? "/" : linkPath
-                                    if (urlPathArray.length - 1 === index) {
-                                        return (
-                                            <Typography color="textPrimary">
-                                                <h3 style={{ color: "black", fontFamily: "Italliano cursive", opacity: 0.5 }}>{crumb}</h3>
-                                            </Typography>
-                                        )
-                                    }
-                                    else {
+                                <Breadcrumbs aria-label="breadcrumb" >
+                                    {urlPathArray.map((path: string, index: any) => {
+                                        // path ? linkPath.concat("/").concat(path) : null
+                                        // console.log(linkPath)
+                                        console.log("url", urlPathArray)
 
-                                        return (
-                                            <Link to={linkPath} style={{ textDecoration: "none" }} >
-                                                <h3 style={{ color: "black", fontFamily: "Italliano cursive" }}>{crumb}</h3>
-                                            </Link>
-                                        )
-                                    }
-                                })}
+                                        let crumb = !path ? "Home" : path.charAt(0).toUpperCase() + path.slice(1)
+                                        let linkPath = urlPathArray.slice(0, index + 1).join("/")
+                                        linkPath = !linkPath ? "/" : linkPath
+                                        if (urlPathArray.length - 1 === index) {
+                                            return (
+                                                <Typography color="textPrimary">
+                                                    <h3 style={{ color: "black", fontFamily: "Italliano cursive", opacity: 0.5 }}>{crumb}</h3>
+                                                </Typography>
+                                            )
+                                        }
+                                        else {
 
-                            </Breadcrumbs>
+                                            return (
+                                                <Link to={linkPath} style={{ textDecoration: "none" }} >
+                                                    <h3 style={{ color: "black", fontFamily: "Italliano cursive" }}>{crumb}</h3>
+                                                </Link>
+                                            )
+                                        }
+                                    })}
+
+                                </Breadcrumbs>
+                                : null}
                         </div>
                     </div>
                     <MenuListComposition />

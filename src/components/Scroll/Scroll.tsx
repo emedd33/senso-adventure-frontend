@@ -5,6 +5,7 @@ import px2vw from '../../utils/px2vw';
 import ReactHtmlParser from "react-html-parser"
 
 import "./Scroll.scss"
+import useWindowSize from '../../store/hooks/useWindowSize';
 type ScrollProps = {
     id: any,
     title: string,
@@ -22,6 +23,7 @@ function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign,
         <ScrollContainer onClick={onClick} className={onClick ? "scroll-container-active" : "scroll-container"} >
 
             <ScrollContent>
+                <div style={{ backgroundColor: "transparent", height: "60vh", width: "100%" }}></div>
                 <ScrollDate >
                     {date}
                 </ScrollDate>
@@ -43,14 +45,17 @@ function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign,
 
                     <ScrollStory>{ReactHtmlParser(content)}</ScrollStory>
                 </div>
+                <div style={{ backgroundColor: "transparent", height: "60vh", width: "100%" }}></div>
+
             </ScrollContent>
+
         </ScrollContainer>
     </div>
     )
 }
 const StoryImage = styled.img`
 marginTop: -1rem;
-width: 30rem;
+width: ${px2vw(500)};
 transition:200ms;
 `
 const ScrollContent = styled.div`
@@ -64,7 +69,7 @@ margin-left:0;
 
 const ScrollStory = styled.p`
 width:${px2vw(730)};
-text-align:center;
+text-align:left;
 font-size:1.5rem;
 margin-bottom:4rem;
 transition:200ms;
@@ -87,7 +92,8 @@ background-image: url(${ScrollImage});
     font-size:2rem;
 }
 &:hover ${StoryImage}{   
-    width: 40rem;
+width: ${px2vw(600)};
+
 }
 &:hover ${ScrollTitle}{   
     font-size: ${px2vw(100)}; 
