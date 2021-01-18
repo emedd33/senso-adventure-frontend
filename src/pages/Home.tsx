@@ -5,15 +5,17 @@ import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import sortByDateValue from "../utils/sortArrayDyDate";
 import IsLoading from "../components/IsLoading/IsLoading";
 import { useHistory } from "react-router-dom";
-import { dispatchSetSelectedCampaign } from "../store/selected/selectedCreators";
+import { dispatchSetSelectedCampaign, dispatchSetSelectedSession } from "../store/selected/selectedCreators";
 import Scroll from "../components/Scroll/Scroll";
 import { storage } from "../firebase";
+import { setIsLoading } from "../store/admin/adminCreator";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
     const [imageUrl, setImageUrl] = useState("")
+    const [campaignTitles, setCampaingTitles] = useState({})
     const history = useHistory()
     const dispatch = useDispatch()
     const sessions = useSelector((state: RootReducerProp) => {
@@ -21,8 +23,23 @@ const Home: FunctionComponent<HomeProps> = () => {
             .flat()
     })
     useEffect(() => {
-        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL().catch(e => console.log(e)).then((url: string) => setImageUrl(url)).catch((e: any) => console.log(e))
-    }, [])
+        dispatch(setIsLoading(true))
+        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL()
+            .then((url: string) => setImageUrl(url))
+            .catch((e: any) => { })
+
+        storage.ref('Images/CampaignTitle').listAll()
+            .then(res => {
+                res.items.forEach(item => {
+                    item.getMetadata().then(data => setCampaingTitles({ ...campaignTitles, "title": data.name })
+                    )
+                }
+                )
+            })
+            .catch(e => console.log(e))
+        dispatch(setIsLoading(false))
+
+    }, [campaignTitles, dispatch])
 
     const renderScrolls = () => {
         sortByDateValue(sessions)
@@ -35,24 +52,19 @@ const Home: FunctionComponent<HomeProps> = () => {
                     case "curseOfStrahd":
                         return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
                             dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
-                            history.push("/campaign")
+                            dispatch(dispatchSetSelectedSession({ id: key, session: sessions[key] }))
+                            history.push("/campaign/session")
                         }}
                         />
 
-                    case "fireAndFury":
-                        return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={sessions[key].story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
-                            dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury.id))
-                            history.push("/campaign")
-                        }}
-                        />
+
                     default:
-                        console.log("session", sessions[key].campaign.id)
                         return null
                 }
             })
         }
     }
-    if (isLoading || !imageUrl) {
+    if (isLoading) {
         return (
             <Container>
                 <IsLoading />

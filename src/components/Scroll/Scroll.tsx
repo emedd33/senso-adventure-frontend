@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import ScrollImage from "../../assets/backgroundImage/scroll.png"
 import px2vw from '../../utils/px2vw';
-import ReactHtmlParser from "react-html-parser"
 
 import "./Scroll.scss"
 type ScrollProps = {
@@ -22,7 +21,6 @@ function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign,
         <ScrollContainer onClick={onClick} className={onClick ? "scroll-container-active" : "scroll-container"} >
 
             <ScrollContent>
-                <div style={{ backgroundColor: "transparent", height: "60vh", width: "100%" }}></div>
                 <ScrollDate >
                     {date}
                 </ScrollDate>
@@ -40,10 +38,6 @@ function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign,
                     :
                     null
                 }
-                <div style={{ "display": "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                    <ScrollStory>{ReactHtmlParser(content)}</ScrollStory>
-                </div>
-                <div style={{ backgroundColor: "transparent", height: "60vh", width: "100%" }}></div>
 
             </ScrollContent>
 

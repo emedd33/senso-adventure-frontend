@@ -60,7 +60,13 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                     })
                 }
                 var file = new File([sessionFile], sessionStory, { type: "text/plain;charset=utf-8" });
-                firebaseStorageRef.child("SessionStories").child(sessionFile).put(file)
+                var metadata = {
+                    contentType: 'markdown',
+                    session: sessionsId,
+                    campaign: selectedCampaign.id,
+                    date: sessionDate
+                };
+                firebaseStorageRef.child("SessionStories").child(sessionFile).put(file, metadata)
                 history.push("/campaign")
             } catch (error) {
                 dispatch(setError("Could not upload file"))
