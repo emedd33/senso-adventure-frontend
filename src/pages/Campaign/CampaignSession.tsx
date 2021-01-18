@@ -8,6 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { useHistory } from "react-router-dom";
+import ReactHtmlParser from "react-html-parser"
 
 type CampaignSessionProps = {}
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
@@ -53,7 +54,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
             </p>
             <p style={{ fontSize: "1.5rem" }}>
 
-                {selectedSession?.session.story}
+                {ReactHtmlParser(selectedSession?.session.story)}
             </p>
         </Container>
     </>
