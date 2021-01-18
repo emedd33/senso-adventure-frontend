@@ -53,31 +53,28 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                 <Title>Senso Adventure</Title>
                             </span>
                         </Link>
-                        <div style={{ display: "flex", height: "5rem", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "nowrap" }}>
+                        <div style={{ display: "flex", height: "5rem", justifyContent: "flex-start", alignItems: "center", flexWrap: "nowrap" }}>
                             {size.width && size.width! > 769 ?
 
                                 <Breadcrumbs aria-label="breadcrumb" >
                                     {urlPathArray.map((path: string, index: any) => {
-                                        // path ? linkPath.concat("/").concat(path) : null
-                                        // console.log(linkPath)
-                                        console.log("url", urlPathArray)
 
                                         let crumb = !path ? "Home" : path.charAt(0).toUpperCase() + path.slice(1)
                                         let linkPath = urlPathArray.slice(0, index + 1).join("/")
                                         linkPath = !linkPath ? "/" : linkPath
-                                        if (urlPathArray.length - 1 === index) {
+                                        if (urlPathArray.length - 1 !== index) {
                                             return (
-                                                <Typography color="textPrimary">
-                                                    <h3 style={{ color: "black", fontFamily: "Italliano cursive", opacity: 0.5 }}>{crumb}</h3>
-                                                </Typography>
+                                                <Link to={linkPath} style={{ textDecoration: "none", color: "black", fontFamily: "italianno, cursive", fontSize: "1.5rem" }} key={index} >
+                                                    {crumb}
+                                                </Link>
                                             )
                                         }
                                         else {
 
                                             return (
-                                                <Link to={linkPath} style={{ textDecoration: "none" }} >
-                                                    <h3 style={{ color: "black", fontFamily: "Italliano cursive" }}>{crumb}</h3>
-                                                </Link>
+                                                <Typography color="textPrimary" style={{ textDecoration: "none", color: "black", fontFamily: "italianno, cursive", fontSize: "1.5rem", opacity: 0.8 }} key={index}>
+                                                    {crumb}
+                                                </Typography>
                                             )
                                         }
                                     })}
@@ -99,17 +96,17 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
                             <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
                                 <NavBarItem >
-                                    <Link to="/" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black" }}>
+                                    <Link to="/" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
                                         <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                            <img src={HomeCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
+                                            <img src={HomeCrest} alt={"Curse of strahd"} style={{ width: "3rem", height: "3rem" }} />
                                             <CampaignTitle>Home</CampaignTitle>
                                         </span>
                                     </Link>
                                 </NavBarItem>
                                 <NavBarItem >
-                                    <Link to="/campaign" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} onClick={() => toggleSetCampaign(campaign.curseOfStrahd)} style={{ textDecoration: 'none', color: "black" }}>
+                                    <Link to="/campaign" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} onClick={() => toggleSetCampaign(campaign.curseOfStrahd)} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
                                         <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                            <img src={CosCrest} alt={"Curse of strahd"} style={{ width: "2rem", height: "2rem" }} />
+                                            <img src={CosCrest} alt={"Curse of strahd"} style={{ width: "3rem", height: "3rem" }} />
                                             <CampaignTitle>Curse of Strahd</CampaignTitle>
                                         </span>
                                     </Link>
@@ -126,12 +123,13 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 const Title = styled.h2`
 margin-left:2vh;
 width:10rem;
-height:
+font-size: 1.7rem;
 `
-const CampaignTitle = styled.h3`
-font-size: 100%;
+const CampaignTitle = styled.h1`
 padding;0;
 margin:0;
+width:100%;
+font-size: 2rem;
 margin-left:2vw;
 :hover {
     color: #ed1212;

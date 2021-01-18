@@ -11,16 +11,16 @@ import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
 import Home from "./pages/Home";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
-import firebase from "firebase";
 import { SET_AUTH_USER } from "./store/admin/adminActions";
 import CampaignIndex from "./pages/Campaign/CampaignIndex";
 import LoginIndex from "./pages/Login/LoginIndex";
+import { firebaseAuth } from "./firebase";
 export default function App() {
   const dispatch = useDispatch()
   const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
   useEffect(() => {
     dispatch(fetchCampaigns)
-    firebase.auth().onAuthStateChanged(function (user) {
+    firebaseAuth.onAuthStateChanged(function (user) {
       if (user) {
         dispatch({
           type: SET_AUTH_USER,

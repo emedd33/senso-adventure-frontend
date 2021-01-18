@@ -69,7 +69,7 @@ export default function MenuListComposition() {
                 <AiIcons.AiFillCaretDown onClick={() => console.log("hei")} />
                 <Link to="/login" style={{ textDecoration: 'none', color: "black", textTransform: "none" }}>
                     <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <p style={{ margin: "0", paddingLeft: "1rem" }}>Login</p>
+                        <p style={{ margin: "0", paddingLeft: "1rem", fontFamily: "italianno, cursive" }}>Login</p>
                     </span>
                 </Link>
             </div>
@@ -84,9 +84,10 @@ export default function MenuListComposition() {
                         aria-controls={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         onClick={handleToggle}
+                        style={{ fontFamily: "italianno, cursive", fontSize: "1.5rem" }}
                     >
                         {authUser.username}
-                        <AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
+                        < AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
                     </Button>
                     <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                         {({ TransitionProps, placement }) => (
@@ -97,9 +98,7 @@ export default function MenuListComposition() {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} >
-                                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                            <MenuItem onClick={handleLogout} style={{ fontFamily: "italianno, cursive", fontSize: "1.5rem" }}>Logout</MenuItem>
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>
@@ -108,6 +107,6 @@ export default function MenuListComposition() {
                     </Popper>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

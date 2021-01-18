@@ -21,7 +21,7 @@ const Home: FunctionComponent<HomeProps> = () => {
             .flat()
     })
     useEffect(() => {
-        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL().then((url: string) => setImageUrl(url)).catch(e => console.log(e))
+        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL().then((url: string) => setImageUrl(url)).catch((e: any) => console.log(e))
     }, [])
 
     const renderScrolls = () => {
@@ -32,14 +32,14 @@ const Home: FunctionComponent<HomeProps> = () => {
                 story = story.length > 1000 ? story.substring(0, 1000).concat("...") : story
                 switch (sessions[key].campaign) {
                     case "curseOfStrahd":
-                        return <Scroll id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
+                        return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
                             dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
                             history.push("/campaign")
                         }}
                             isDungeonMaster={false} />
 
                     case "fireAndFury":
-                        return <Scroll id={sessions[key]} title={sessions[key].title} content={sessions[key].story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
+                        return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={sessions[key].story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
                             dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury.id))
                             history.push("/campaign")
                         }}

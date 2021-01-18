@@ -2,7 +2,8 @@
 .nav-menu {
   background-color: #AB9696;
   width: 40%;
-  max-width: 20rem;
+  max-width: 40rem;
+  min-width: 20rem;
   height: 100vh;
   display: flex;
 
