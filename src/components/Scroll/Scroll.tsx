@@ -13,11 +13,11 @@ type ScrollProps = {
     storyImage: string,
     isFirstScroll: boolean,
     campaign: string,
-    onClick: any, isDungeonMaster: boolean
+    onClick: any
 }
 
 
-function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign, onClick, isDungeonMaster }: ScrollProps): JSX.Element {
+function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign, onClick }: ScrollProps): JSX.Element {
     return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
         <ScrollContainer onClick={onClick} className={onClick ? "scroll-container-active" : "scroll-container"} >
 

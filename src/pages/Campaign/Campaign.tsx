@@ -49,7 +49,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                             history.push("/campaign/session")
                         }
                         }
-                        isDungeonMaster={isDungeonMaster} />
+                    />
                 )
             })
         }

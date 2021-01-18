@@ -36,14 +36,14 @@ const Home: FunctionComponent<HomeProps> = () => {
                             dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
                             history.push("/campaign")
                         }}
-                            isDungeonMaster={false} />
+                        />
 
                     case "fireAndFury":
                         return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={sessions[key].story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
                             dispatch(dispatchSetSelectedCampaign(campaigns.fireAndFury.id))
                             history.push("/campaign")
                         }}
-                            isDungeonMaster={false} />
+                        />
                     default:
                         return null
                 }
