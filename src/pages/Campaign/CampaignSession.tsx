@@ -8,7 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import ReactMarkdown from 'react-markdown'
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import IsLoading from "../../components/IsLoading/IsLoading";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { setIsLoading } from "../../store/admin/adminCreator";
 import { storage } from "../../firebase";
 
@@ -40,6 +40,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     if (!selectedSession) {
         return <IsLoading />
     }
+    if (!selectedSession.id) {
+        return <Redirect to="/campaign" />
+    }
 
     return (<>
         <Container>
@@ -66,11 +69,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
             <p style={{ fontSize: "2rem", textAlign: "center" }}>
                 {selectedSession?.session.date}
             </p>
-            <p style={{ fontSize: "1.5rem" }}>
-                <ReactMarkdown>
-                    {sessionStory}
-                </ReactMarkdown>
-            </p>
+            <ReactMarkdown>
+                {sessionStory}
+            </ReactMarkdown>
         </Container>
     </>
     )

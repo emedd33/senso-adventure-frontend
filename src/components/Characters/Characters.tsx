@@ -34,47 +34,49 @@ const Characters: React.FC<CharactersProps> = () => {
     }
     const renderPlayers = () => {
         return (
-            <table style={{ width: "100%" }}>
-                <thead>
+            <div style={{ display: "flex", justifyContent: "center" }}>
 
+                <table style={{ width: "100%" }}>
+                    <thead>
+                        <tr>{isEditPlayerOpen ? <PlayerModal onClose={setIsEditPlayerOpen} /> : null}</tr>
+                        <tr style={{}}>
+                            <th></th>
+                            <th style={{ textAlign: "left" }}>Player</th>
+                            <th style={{ textAlign: "left" }}>Character</th>
+                            <th style={{ textAlign: "left" }}>Race</th>
+                            <th style={{ textAlign: "left" }}>Class</th>
+                            <th style={{ textAlign: "left" }}>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    {isEditPlayerOpen ? <PlayerModal onClose={setIsEditPlayerOpen} /> : null}
-                    <tr>
-                        <th style={{ textAlign: "left" }}>Player</th>
-                        <th style={{ textAlign: "left" }}>Character</th>
-                        <th style={{ textAlign: "left" }}>Race</th>
-                        <th style={{ textAlign: "left" }}>Class</th>
-                        <th style={{ textAlign: "left" }}>Level</th>
-                        <th style={{ textAlign: "left" }}></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        campaign ?
-                            Object.keys(campaign.players).map((key: any) => {
-                                return (
-                                    <tr id={key}>
-                                        <td style={{ textAlign: "center" }}>{campaign!.players[key].isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
-                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].playerName}</s> : campaign!.players[key].playerName}</td>
-                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].characterName}</s> : campaign!.players[key].characterName}</td>
-                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].race}</s> : campaign!.players[key].race}</td>
-                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].class}</s> : campaign!.players[key].class}</td>
-                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].level}</s> : campaign!.players[key].level}</td>
-                                        <td> {isDungeonMaster ? <Button color="primary" onClick={() => {
-                                            dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.players[key].playerName, "characterName": campaign!.players[key].characterName, "race": campaign!.players[key].race, "class": campaign!.players[key].class, "level": campaign!.players[key].level, "isDead": campaign!.players[key].isDead } }))
-                                            setIsEditPlayerOpen(true)
-                                        }}>
+                        {
+                            campaign ?
+                                Object.keys(campaign.players).map((key: any, index: number) => {
+                                    return (
+                                        <tr id={index + "row"} >
+                                            <td id={index + "dead"} style={{ textAlign: "center" }}>{campaign!.players[key].isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
+                                            <td id={index + "playerName"} >{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].playerName}</s> : campaign!.players[key].playerName}</td>
+                                            <td id={index + "characterName"}>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].characterName}</s> : campaign!.players[key].characterName}</td>
+                                            <td id={index + "race"}>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].race}</s> : campaign!.players[key].race}</td>
+                                            <td id={index + "class"}>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].class}</s> : campaign!.players[key].class}</td>
+                                            <td id={index + "level"}>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].level}</s> : campaign!.players[key].level}</td>
+                                            <td id={index + "edit"}> {isDungeonMaster ? <Button color="primary" onClick={() => {
+                                                dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.players[key].playerName, "characterName": campaign!.players[key].characterName, "race": campaign!.players[key].race, "class": campaign!.players[key].class, "level": campaign!.players[key].level, "isDead": campaign!.players[key].isDead } }))
+                                                setIsEditPlayerOpen(true)
+                                            }}>
 
-                                            <EditIcon />
-                                        </Button>
-                                            : null}</td>
-                                    </tr>
-                                )
-                            })
+                                                <EditIcon />
+                                            </Button>
+                                                : null}</td>
+                                        </tr>
+                                    )
+                                })
 
-                            : null}
-                </tbody>
-            </table>
+                                : null}
+                    </tbody>
+                </table>
+            </div>
         )
     }
     return (<CharacterConatiner>

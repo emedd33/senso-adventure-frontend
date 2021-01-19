@@ -21,7 +21,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     })
     const renderScrolls = () => {
         if (selectedCampaign?.sessions) {
-            return Object.keys(selectedCampaign.sessions).map((key: any) => {
+            Object.keys(selectedCampaign.sessions).map((key: any) => {
                 let story = selectedCampaign.sessions[key].story
                 story = story.length > 500 ? story.substring(0, 1000).concat("...") : story
                 let title = selectedCampaign!.sessions[key].title
