@@ -6,15 +6,9 @@ const initialCampaignState: CampaignState = {
         players: [],
         dungeonMaster: "",
         id: "curseOfStrahd",
-        backgroundImage: ""
+        backgroundImage: "",
+        campaignTitle: ""
     },
-    fireAndFury: {
-        sessions: [],
-        players: [],
-        dungeonMaster: "",
-        id: "fireAndFury",
-        backgroundImage: ""
-    }
 }
 
 const adventureReducer = (

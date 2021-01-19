@@ -2,7 +2,7 @@ interface ISession {
     title: string
     story: string
     date: string
-    campaign: ICampaign
+    campaign: any
 }
 interface IPlayer {
     playerName: string,
@@ -13,6 +13,7 @@ interface IPlayer {
     isDead: string,
 }
 interface ICampaign {
+    campaignTitle: any
     id: string
     dungeonMaster: string
     sessions: ISession[],
@@ -21,7 +22,6 @@ interface ICampaign {
 }
 type CampaignState = {
     curseOfStrahd: ICampaign,
-    fireAndFury: ICampaign
 }
 
 type CampaignAction = {

@@ -14,7 +14,7 @@ import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 // import style manually
 import 'react-markdown-editor-lite/lib/index.css';
-import { setError, setIsLoading } from "../../store/admin/adminCreator"
+import { setIsLoading } from "../../store/admin/adminCreator"
 export interface CampaignEditProps {
 
 }
@@ -25,6 +25,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const history = useHistory()
     const selectedSession = useSelector((state: RootReducerProp) => state.selected.selectedSession)
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
+    const sessionFile = useSelector((state: RootReducerProp) => state.selected.selectedSession?.session.story)
     const sessionsId = selectedSession ? selectedSession.id : null
     const [sessionTitle, setSessionTitle] = useState<string | null>(selectedSession?.session.title)
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
@@ -34,6 +35,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     )
     useEffect(() => {
         dispatch(setIsLoading(true))
+        console.log(selectedSession)
         if (selectedSession) {
             storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
                 .then(url => fetch(url)
@@ -50,41 +52,44 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
             return;
         }
         if (selectedCampaign?.id && sessionStory && sessionDate) {
-            let sessionFile = selectedCampaign.id + "_" + sessionDate.toLocaleDateString() + ".md"
             try {
-                if (!sessionsId) {
-                    campaignsRef.child(selectedCampaign.id).child("sessions").push({
+                if (sessionDate) {
+                    let sessionMDFile = sessionFile ? sessionFile : selectedCampaign.id + sessionTitle + sessionDate + ".md"
+                    const toUpload = {
                         campaign: selectedCampaign.id,
-                        date: sessionDate?.toLocaleDateString(),
-                        story: sessionFile,
+                        date: sessionDate,
+                        story: sessionMDFile,
                         title: sessionTitle,
-                    }).then((e) => {
-                        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
-                    })
-                } else {
-                    campaignsRef.child(selectedCampaign.id).child("sessions").child(sessionsId).set({
+                        campaignTitle: selectedCampaign.campaignTitle
+                    }
+                    console.log(sessionsId)
+                    if (sessionsId) {
+                        campaignsRef.child(selectedCampaign.id).child("sessions").child(sessionsId).set(toUpload).then((e) => {
+                            dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+                        })
+                    } else {
+                        campaignsRef.child(selectedCampaign.id).child("sessions").push(toUpload).then((e) => {
+                            dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+                        })
+                    }
+                    var file = new File([sessionStory], sessionMDFile, { type: "text/plain;charset=utf-8" });
+                    var metadata = {
+                        contentType: 'markdown',
+                        session: sessionsId,
                         campaign: selectedCampaign.id,
-                        date: sessionDate?.toLocaleDateString(),
-                        story: sessionFile,
-                        title: sessionTitle,
-                    }).then((e) => {
-                        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
-                    })
+                        date: sessionDate
+                    };
+                    console.log(file)
+                    firebaseStorageRef.child("SessionStories").child(sessionMDFile).put(file, metadata)
+                    history.push("/campaign/session")
                 }
-                var file = new File([sessionStory], sessionFile, { type: "text/plain;charset=utf-8" });
-                var metadata = {
-                    contentType: 'markdown',
-                    session: sessionsId,
-                    campaign: selectedCampaign.id,
-                    date: sessionDate
-                };
-                console.log(file)
-                firebaseStorageRef.child("SessionStories").child(sessionFile).put(file, metadata)
-                history.push("/campaign/session")
             } catch (error) {
-                dispatch(setError("Could not upload file"))
+                throw error
             }
         }
+    }
+    function handleEditorChange(html: any) {
+        setSessionStory(html.text)
     }
     if (!selectedSession) {
         return (
@@ -93,9 +98,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     }
     if (!selectedSession) {
         return (<Redirect to="/" />)
-    }
-    function handleEditorChange(html: any) {
-        setSessionStory(html.text)
     }
     return (
         <div style={{ marginTop: "10rem", marginBottom: "10rem", width: "50%", backgroundColor: OLD_WHITE, height: "50rem", justifyContent: "center", display: "flex", padding: "1rem", flexDirection: "column", }}>

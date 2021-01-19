@@ -3,16 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import CosTitle from "../assets/backgroundImage/CosTitle.png"
 import sortByDateValue from "../utils/sortArrayDyDate";
-import IsLoading from "../components/IsLoading/IsLoading";
 import { useHistory } from "react-router-dom";
 import { dispatchSetSelectedCampaign, dispatchSetSelectedSession } from "../store/selected/selectedCreators";
 import Scroll from "../components/Scroll/Scroll";
 import { storage } from "../firebase";
-import { setIsLoading } from "../store/admin/adminCreator";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
-    const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
     const [imageUrl, setImageUrl] = useState("")
     const [campaignTitles, setCampaingTitles] = useState({})
@@ -22,54 +19,37 @@ const Home: FunctionComponent<HomeProps> = () => {
         return Object.values(state.campaigns).map(campaign => campaign.sessions ? Object.values(campaign.sessions) : [])
             .flat()
     })
+
     useEffect(() => {
-        dispatch(setIsLoading(true))
         storage.ref('Images/Background/dnd_background.jpg').getDownloadURL()
             .then((url: string) => setImageUrl(url))
             .catch((e: any) => { })
-
         storage.ref('Images/CampaignTitle').listAll()
             .then(res => {
                 res.items.forEach(item => {
-                    item.getMetadata().then(data => setCampaingTitles({ ...campaignTitles, "title": data.name })
-                    )
-                }
-                )
+                    item.getMetadata().then(data => setCampaingTitles((titles) => { return { ...titles, title: data.name } }))
+                })
             })
             .catch(e => console.log(e))
-        dispatch(setIsLoading(false))
-
-    }, [campaignTitles, dispatch])
+    }, [])
 
     const renderScrolls = () => {
         sortByDateValue(sessions)
         if (sessions.length > 0) {
             return Object.keys(sessions).map((key: any,) => {
                 let story = sessions[key].story
+
                 story = story.length > 1000 ? story.substring(0, 1000).concat("...") : story
-                console.log(sessions)
-                switch (sessions[key].campaign.id) {
-                    case "curseOfStrahd":
-                        return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
-                            dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
-                            dispatch(dispatchSetSelectedSession({ id: key, session: sessions[key] }))
-                            history.push("/campaign/session")
-                        }}
-                        />
+                console.log(campaignTitles, sessions[key])
+                return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
+                    dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
+                    dispatch(dispatchSetSelectedSession({ id: key, session: sessions[key] }))
+                    history.push("/campaign/session")
+                }}
+                />
 
-
-                    default:
-                        return null
-                }
             })
         }
-    }
-    if (isLoading) {
-        return (
-            <Container>
-                <IsLoading />
-            </Container>
-        )
     }
     return (
         <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
