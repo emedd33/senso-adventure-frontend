@@ -1,5 +1,5 @@
 import { Button, TextField } from "@material-ui/core"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect, useHistory } from "react-router-dom"
 import { OLD_WHITE } from "../../assets/styles/colors"
@@ -7,14 +7,14 @@ import IsLoading from "../../components/IsLoading/IsLoading"
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from "@material-ui/pickers";
-import { campaignsRef, firebaseStorageRef } from "../../firebase"
+import { campaignsRef, firebaseStorageRef, storage } from "../../firebase"
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators"
 import parseStringToDate from "../../utils/parseStringToDate"
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 // import style manually
 import 'react-markdown-editor-lite/lib/index.css';
-import { setError } from "../../store/admin/adminCreator"
+import { setError, setIsLoading } from "../../store/admin/adminCreator"
 export interface CampaignEditProps {
 
 }
@@ -28,10 +28,22 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const sessionsId = selectedSession ? selectedSession.id : null
     const [sessionTitle, setSessionTitle] = useState<string | null>(selectedSession?.session.title)
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
-    const [sessionStory, setSessionStory] = useState<string | null>(selectedSession?.session.story)
+    const [sessionStory, setSessionStory] = useState<string | null>("")
     const [sessionDate, setSessionDate] = useState<Date | any>(
         selectedSession?.session.date ? parseStringToDate(selectedSession.session.date) : Date()
     )
+    useEffect(() => {
+        dispatch(setIsLoading(true))
+        if (selectedSession) {
+            storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
+                .then(url => fetch(url)
+                    .then(res => res.text())
+                    .then(res => setSessionStory(res))
+                )
+                .catch(e => console.log("error", e))
+            dispatch(setIsLoading(false))
+        }
+    }, [dispatch, selectedSession])
     const submitSession = () => {
         if (!sessionTitle) {
             setSessionTitleError(true);
@@ -59,15 +71,16 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
                     })
                 }
-                var file = new File([sessionFile], sessionStory, { type: "text/plain;charset=utf-8" });
+                var file = new File([sessionStory], sessionFile, { type: "text/plain;charset=utf-8" });
                 var metadata = {
                     contentType: 'markdown',
                     session: sessionsId,
                     campaign: selectedCampaign.id,
                     date: sessionDate
                 };
+                console.log(file)
                 firebaseStorageRef.child("SessionStories").child(sessionFile).put(file, metadata)
-                history.push("/campaign")
+                history.push("/campaign/session")
             } catch (error) {
                 dispatch(setError("Could not upload file"))
             }

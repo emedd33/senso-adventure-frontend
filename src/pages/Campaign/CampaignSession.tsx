@@ -1,20 +1,22 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/styles/colors";
 import { Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
+import ReactMarkdown from 'react-markdown'
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { useHistory } from "react-router-dom";
-import ReactHtmlParser from "react-html-parser"
+import { setIsLoading } from "../../store/admin/adminCreator";
+import { storage } from "../../firebase";
 
 type CampaignSessionProps = {}
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const dispatch = useDispatch()
     const history = useHistory()
-    // const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
+    const [sessionStory, setSessionStory] = useState("")
     const selectedSession = useSelector((state: RootReducerProp) => state.selected.selectedSession)
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
         let username = state.admin.authUser?.username
@@ -23,6 +25,18 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
         }
         return false
     })
+    useEffect(() => {
+        dispatch(setIsLoading(true))
+        if (selectedSession) {
+            storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
+                .then(url => fetch(url)
+                    .then(res => res.text())
+                    .then(res => setSessionStory(res))
+                )
+                .catch(e => console.log("error", e))
+            dispatch(setIsLoading(false))
+        }
+    }, [dispatch, selectedSession])
     if (!selectedSession) {
         return <IsLoading />
     }
@@ -53,8 +67,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 {selectedSession?.session.date}
             </p>
             <p style={{ fontSize: "1.5rem" }}>
-
-                {ReactHtmlParser(selectedSession?.session.story)}
+                <ReactMarkdown>
+                    {sessionStory}
+                </ReactMarkdown>
             </p>
         </Container>
     </>
