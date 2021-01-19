@@ -77,7 +77,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
 }
 const Container = styled.div`
 min-height:50rem;
-min-width:40rem;
+min-width:15rem;
 width:50%;
 padding:1rem;
 -webkit-box-shadow: 5px 5px 15px 5px #000000; 

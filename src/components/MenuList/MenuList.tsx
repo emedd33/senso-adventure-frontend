@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
         },
         paper: {
-            marginRight: theme.spacing(2),
+            marginRight: theme.spacing(5),
         },
     }),
 );
@@ -66,10 +66,10 @@ export default function MenuListComposition() {
         return (
 
             <div style={{ flex: "1", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "4rem" }}>
-                <AiIcons.AiFillCaretDown onClick={() => console.log("hei")} />
-                <Link to="/login" style={{ textDecoration: 'none', color: "black", textTransform: "none" }}>
+                <AiIcons.AiFillCaretDown />
+                <Link to="/login" style={{ textDecoration: 'none', color: "black", textTransform: "none", fontSize: "1rem" }}>
                     <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <p style={{ margin: "0", paddingLeft: "1rem", fontFamily: "italianno, cursive" }}>Login</p>
+                        <p style={{ margin: "0", paddingLeft: "1rem", fontFamily: "italianno, cursive", }}>Login</p>
                     </span>
                 </Link>
             </div>
@@ -84,7 +84,7 @@ export default function MenuListComposition() {
                         aria-controls={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         onClick={handleToggle}
-                        style={{ fontFamily: "italianno, cursive", fontSize: "1.5rem" }}
+                        style={{ fontFamily: "italianno, cursive", fontSize: "1.5rem", textTransform: "none" }}
                     >
                         {authUser.username}
                         < AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />

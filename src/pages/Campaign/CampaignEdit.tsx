@@ -9,7 +9,6 @@ import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from "@material-ui/pickers";
 import { campaignsRef, firebaseStorageRef, storage } from "../../firebase"
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators"
-import parseStringToDate from "../../utils/parseStringToDate"
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 // import style manually
@@ -31,7 +30,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
     const [sessionStory, setSessionStory] = useState<string | null>("")
     const [sessionDate, setSessionDate] = useState<Date | any>(
-        selectedSession?.session.date ? parseStringToDate(selectedSession.session.date) : Date()
+        selectedSession?.session.date ? new Date(selectedSession.session.date) : new Date()
     )
     useEffect(() => {
         dispatch(setIsLoading(true))
@@ -54,6 +53,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
         if (selectedCampaign?.id && sessionStory && sessionDate) {
             try {
                 if (sessionDate) {
+                    debugger
                     let sessionMDFile = sessionFile ? sessionFile : selectedCampaign.id + sessionTitle + sessionDate + ".md"
                     const toUpload = {
                         campaign: selectedCampaign.id,
@@ -62,7 +62,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         title: sessionTitle,
                         campaignTitle: selectedCampaign.campaignTitle
                     }
-                    console.log(sessionsId)
                     if (sessionsId) {
                         campaignsRef.child(selectedCampaign.id).child("sessions").child(sessionsId).set(toUpload).then((e) => {
                             dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
@@ -92,15 +91,15 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
         setSessionStory(html.text)
     }
     if (!selectedSession) {
+        return (<Redirect to="/" />)
+    }
+    if (!selectedSession) {
         return (
             <IsLoading />
         )
     }
-    if (!selectedSession) {
-        return (<Redirect to="/" />)
-    }
     return (
-        <div style={{ marginTop: "10rem", marginBottom: "10rem", width: "50%", backgroundColor: OLD_WHITE, height: "50rem", justifyContent: "center", display: "flex", padding: "1rem", flexDirection: "column", }}>
+        <div style={{ marginBottom: "10rem", width: "70%", backgroundColor: OLD_WHITE, height: "50rem", justifyContent: "center", display: "flex", padding: "1rem", flexDirection: "column", }}>
             <div style={{ justifyContent: "center", alignItems: "center", display: "flex", flexDirection: "column" }}>
                 <h2>Session title</h2>
 
@@ -123,7 +122,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         disableFuture
                         value={sessionDate}
                         onChange={(date) => {
-                            setSessionDate(date)
+                            setSessionDate(date?.toDateString())
                         }}
                     />
 

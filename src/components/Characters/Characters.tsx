@@ -34,52 +34,58 @@ const Characters: React.FC<CharactersProps> = () => {
     }
     const renderPlayers = () => {
         return (
-            <table style={{ minWidth: "100%" }}>
-                {isEditPlayerOpen ? <PlayerModal onClose={setIsEditPlayerOpen} /> : null}
-                <tr><th >
-                    {isDungeonMaster ?
-                        <Button color="primary" onClick={handleNewPlayer}>
-                            <PersonAddIcon />
+            <table style={{ width: "100%" }}>
+                <thead>
 
-                        </Button>
-                        : null}
-                </th>
-                    <th style={{ textAlign: "left" }}>Player</th>
-                    <th style={{ textAlign: "left" }}>Character</th>
-                    <th style={{ textAlign: "left" }}>Race</th>
-                    <th style={{ textAlign: "left" }}>Class</th>
-                    <th style={{ textAlign: "left" }}>Level</th>
-                    <th style={{ textAlign: "left" }}></th>
-                </tr>
-                {
-                    campaign!.players ?
 
-                        Object.keys(campaign!.players).map((key: any) => {
-                            return (<tr>
-                                <td style={{ textAlign: "center" }}>{campaign!.players[key].isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
-                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].playerName}</s> : campaign!.players[key].playerName}</td>
-                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].characterName}</s> : campaign!.players[key].characterName}</td>
-                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].race}</s> : campaign!.players[key].race}</td>
-                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].class}</s> : campaign!.players[key].class}</td>
-                                <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].level}</s> : campaign!.players[key].level}</td>
-                                <td> {isDungeonMaster ? <Button color="primary" onClick={() => {
-                                    dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.players[key].playerName, "characterName": campaign!.players[key].characterName, "race": campaign!.players[key].race, "class": campaign!.players[key].class, "level": campaign!.players[key].level, "isDead": campaign!.players[key].isDead } }))
-                                    setIsEditPlayerOpen(true)
-                                }}>
+                    {isEditPlayerOpen ? <PlayerModal onClose={setIsEditPlayerOpen} /> : null}
+                    <tr>
+                        <th style={{ textAlign: "left" }}>Player</th>
+                        <th style={{ textAlign: "left" }}>Character</th>
+                        <th style={{ textAlign: "left" }}>Race</th>
+                        <th style={{ textAlign: "left" }}>Class</th>
+                        <th style={{ textAlign: "left" }}>Level</th>
+                        <th style={{ textAlign: "left" }}></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        campaign ?
+                            Object.keys(campaign.players).map((key: any) => {
+                                return (
+                                    <tr id={key}>
+                                        <td style={{ textAlign: "center" }}>{campaign!.players[key].isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
+                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].playerName}</s> : campaign!.players[key].playerName}</td>
+                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].characterName}</s> : campaign!.players[key].characterName}</td>
+                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].race}</s> : campaign!.players[key].race}</td>
+                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].class}</s> : campaign!.players[key].class}</td>
+                                        <td>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].level}</s> : campaign!.players[key].level}</td>
+                                        <td> {isDungeonMaster ? <Button color="primary" onClick={() => {
+                                            dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.players[key].playerName, "characterName": campaign!.players[key].characterName, "race": campaign!.players[key].race, "class": campaign!.players[key].class, "level": campaign!.players[key].level, "isDead": campaign!.players[key].isDead } }))
+                                            setIsEditPlayerOpen(true)
+                                        }}>
 
-                                    <EditIcon />
-                                </Button>
-                                    : null}</td>
-                            </tr>)
-                        })
+                                            <EditIcon />
+                                        </Button>
+                                            : null}</td>
+                                    </tr>
+                                )
+                            })
 
-                        : null}
+                            : null}
+                </tbody>
             </table>
         )
     }
     return (<CharacterConatiner>
 
         <div style={{ height: "20rem", zIndex: 200 }}>
+            {isDungeonMaster ?
+                <Button color="primary" onClick={handleNewPlayer}>
+                    <PersonAddIcon />
+
+                </Button>
+                : null}
             {renderPlayers()}
 
 

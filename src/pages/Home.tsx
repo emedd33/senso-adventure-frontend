@@ -12,7 +12,7 @@ type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
     const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
     const [imageUrl, setImageUrl] = useState("")
-    const [campaignTitles, setCampaingTitles] = useState({})
+    const [, setCampaingTitles] = useState({})
     const history = useHistory()
     const dispatch = useDispatch()
     const sessions = useSelector((state: RootReducerProp) => {
@@ -40,7 +40,6 @@ const Home: FunctionComponent<HomeProps> = () => {
                 let story = sessions[key].story
 
                 story = story.length > 1000 ? story.substring(0, 1000).concat("...") : story
-                console.log(campaignTitles, sessions[key])
                 return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
                     dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
                     dispatch(dispatchSetSelectedSession({ id: key, session: sessions[key] }))

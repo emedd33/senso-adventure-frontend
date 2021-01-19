@@ -7,7 +7,7 @@ export interface IsLoadingProps {
 
 const IsLoading: React.FC<IsLoadingProps> = () => {
     return (
-        <div style={{ alignItems: "center", justifyContent: "center", display: "flex", height: "100vh" }}>
+        <div style={{ alignItems: "center", justifyContent: "center", color: "white", display: "flex", height: "100vh" }}>
             <CircularProgress />
         </div>
     )
