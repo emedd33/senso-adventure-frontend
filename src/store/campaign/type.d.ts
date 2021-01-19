@@ -3,6 +3,7 @@ interface ISession {
     story: string
     date: string
     campaign: any
+    subtitle?: string
 }
 interface IPlayer {
     playerName: string,

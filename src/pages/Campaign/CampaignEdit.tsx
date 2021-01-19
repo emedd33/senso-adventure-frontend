@@ -26,6 +26,8 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     const sessionFile = useSelector((state: RootReducerProp) => state.selected.selectedSession?.session.story)
     const sessionsId = selectedSession ? selectedSession.id : null
+    const [sessionDay, setSessionDay] = useState<number | null>(selectedSession?.session.day)
+    const [sessionSubTitle, setSessionSubTitle] = useState<string | null>(selectedSession?.session.subtitle)
     const [sessionTitle, setSessionTitle] = useState<string | null>(selectedSession?.session.title)
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
     const [sessionStory, setSessionStory] = useState<string | null>("")
@@ -53,14 +55,14 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
         if (selectedCampaign?.id && sessionStory && sessionDate) {
             try {
                 if (sessionDate) {
-                    debugger
                     let sessionMDFile = sessionFile ? sessionFile : selectedCampaign.id + sessionTitle + sessionDate + ".md"
                     const toUpload = {
                         campaign: selectedCampaign.id,
                         date: sessionDate,
                         story: sessionMDFile,
                         title: sessionTitle,
-                        campaignTitle: selectedCampaign.campaignTitle
+                        campaignTitle: selectedCampaign.campaignTitle,
+                        sessionDay: sessionDay
                     }
                     if (sessionsId) {
                         campaignsRef.child(selectedCampaign.id).child("sessions").child(sessionsId).set(toUpload).then((e) => {
@@ -76,9 +78,9 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         contentType: 'markdown',
                         session: sessionsId,
                         campaign: selectedCampaign.id,
-                        date: sessionDate
+                        date: sessionDate,
+                        day: sessionDay
                     };
-                    console.log(file)
                     firebaseStorageRef.child("SessionStories").child(sessionMDFile).put(file, metadata)
                     history.push("/campaign/session")
                 }
@@ -101,16 +103,43 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     return (
         <div style={{ marginBottom: "10rem", width: "70%", backgroundColor: OLD_WHITE, height: "50rem", justifyContent: "center", display: "flex", padding: "1rem", flexDirection: "column", }}>
             <div style={{ justifyContent: "center", alignItems: "center", display: "flex", flexDirection: "column" }}>
-                <h2>Session title</h2>
+                <h1>Session title</h1>
 
                 <TextField
                     id="outlined-multiline-static"
                     placeholder="Write a fitting title"
-                    style={{ height: "100%", width: "100%" }}
+                    style={{ height: "100%", width: "50%" }}
                     variant="filled"
                     error={sessionTitleError}
                     value={sessionTitle}
                     onChange={(event) => setSessionTitle(event.target.value)}
+                />
+                <h2>Subtile</h2>
+                <TextField
+                    id="outlined-multiline-static"
+                    placeholder="Write a fitting subtitle"
+                    style={{ height: "100%", width: "50%" }}
+                    variant="filled"
+                    value={sessionSubTitle}
+                    onChange={(event) => setSessionSubTitle(event.target.value)}
+                />
+
+                <h2>Session number</h2>
+
+                <TextField
+                    id="outlined-number"
+                    label="Level"
+                    type="number"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    value={sessionDay}
+                    onChange={(event) => {
+                        let day = parseInt(event.target.value) < 0 ? 0 : parseInt(event.target.value)
+                        if (day) {
+                            setSessionDay(day)
+                        }
+                    }}
                 />
                 <h2>Session date</h2>
 
