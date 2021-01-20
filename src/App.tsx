@@ -9,7 +9,7 @@ import {
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css"
 import { fetchCampaigns } from "./store/campaign/campaignCreators";
-import Home from "./pages/Home";
+import HomeIndex from "./pages/Home/HomeIndex";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import { SET_AUTH_USER } from "./store/admin/adminActions";
 import CampaignIndex from "./pages/Campaign/CampaignIndex";
@@ -38,19 +38,17 @@ export default function App() {
       <Navbar />
       <div style={{}}>
         <AlertDialog />
-
         <Switch>
           <Route path="/campaign" >
             <CampaignIndex />
           </Route>
           <Route path="/login">
-
             {authUser ?
               <Redirect to="/" /> :
               <LoginIndex />}
           </Route>
           <Route path="/">
-            <Home />
+            <HomeIndex />
           </Route>
         </Switch>
       </div>

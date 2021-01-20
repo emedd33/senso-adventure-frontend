@@ -10,6 +10,7 @@ import MenuListComposition from '../MenuList/MenuList';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchSetSelectedCampaign } from '../../store/selected/selectedCreators';
 import { Backdrop, Breadcrumbs, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import useWindowSize from '../../store/hooks/useWindowSize';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,6 +32,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         urlPathArray.pop()
     }
     const campaign = useSelector((state: RootReducerProp) => state.campaigns)
+    const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
     const [sidebar, setSidebar] = useState(false);
     const [cosHover, setCosHover] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
@@ -111,6 +113,23 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                         </span>
                                     </Link>
                                 </NavBarItem>
+                                {authUser ?
+                                    <NavBarItem>
+
+                                        <Link to="/editcampaign" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: "none" }}>
+                                            <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", textTransform: "none" }}>
+                                                <AddIcon style={{ color: "black" }} />
+                                                <CampaignTitle>
+
+                                                    Add new
+                                            </CampaignTitle>
+                                            </span>
+                                        </Link>
+
+                                    </NavBarItem>
+                                    : null
+                                }
+
                             </div>
 
                         </ul>
@@ -135,6 +154,7 @@ margin-left:2vw;
     color: #ed1212;
     cursor: pointer;
 }
+color:black;
 `
 const NavBarHeader = styled.div`
     background-color: #AB9696;
