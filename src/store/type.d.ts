@@ -1,6 +1,6 @@
 
 type RootReducerProp = {
-    campaigns: CampaignState,
+    campaigns: ICampaign[],
     admin: AdminState,
     selected: SelectedState
 }

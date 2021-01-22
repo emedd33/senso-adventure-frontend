@@ -36,7 +36,7 @@ const Home: FunctionComponent<HomeProps> = () => {
 
                 story = story.length > 1000 ? story.substring(0, 1000).concat("...") : story
                 return <Scroll key={key} id={sessions[key]} title={sessions[key].title} content={story} date={sessions[key].date} storyImage={CosTitle} isFirstScroll={true} campaign={sessions[key].campaign} onClick={() => {
-                    dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
+                    // dispatch(dispatchSetSelectedCampaign(campaigns.curseOfStrahd.id))
                     dispatch(dispatchSetSelectedSession({ id: key, session: sessions[key] }))
                     history.push("/campaign/session")
                 }}

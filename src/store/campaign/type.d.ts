@@ -14,16 +14,17 @@ interface IPlayer {
     isDead: string,
 }
 interface ICampaign {
-    campaignTitle: any
+    title: string
+    campaignTitleFile: string
+    campaignBackgroundFile: string
+    campaignCrestFile: string
+    isNew: boolean
     id: string
     dungeonMaster: string
     sessions: ISession[],
     players: IPlayer[],
-    backgroundImage: string,
 }
-type CampaignState = {
-    curseOfStrahd: ICampaign,
-}
+
 
 type CampaignAction = {
     type: string,

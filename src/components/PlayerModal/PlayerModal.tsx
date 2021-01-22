@@ -48,7 +48,7 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
     )
   }
   const addNewPlayerToFirebase = async () => {
-    campaignsRef.child(selectedCampaign?.id).child("players").push({
+    campaignsRef.child(selectedCampaign.id).child("players").push({
       playerName: playerName,
       race: playerRace,
       class: playerClass,

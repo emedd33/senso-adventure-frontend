@@ -1,37 +1,76 @@
 import { Button, TextField } from "@material-ui/core";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/styles/colors";
-import ImageUploading, { ImageListType } from "react-images-uploading";
+import ImageUpload from "../../components/ImageUpload/ImageUpload";
+import { campaignsRef, firebaseAuth, firebaseStorageRef, storage } from "../../firebase";
+import { setError, setIsLoading } from "../../store/admin/adminCreator";
+import { dispatchSetSelectedCampaign, setSelectedCampaign } from "../../store/selected/selectedCreators";
 
 export interface HomeCampaignEditProps { }
 
 
 const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
+    const dispatch = useDispatch()
+    const history = useHistory()
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
-    const [campaignTitle, setCampaignTitle] = useState<string | null>(selectedCampaign?.campaignTitle)
+    const [campaignTitle, setCampaignTitle] = useState<string>(selectedCampaign.title)
+    const userName = useSelector((state: RootReducerProp) => state.admin.authUser?.username)
     const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false)
-    // State to store uploaded file
     const [backgroundImageFile, setBackgroundImageFile] = React.useState([]);
-    const maxNumber = 1;
+    const [campaignTitleImageFile, setCampaignTitleImageFile] = useState<string>(selectedCampaign.title)
+    const emptyFile = { file: { name: "" } }
+    const [campaignCrestFile, setCampaignCrestFile] = useState([])
 
 
     // const [campaignTitleImage,setCampaignTitleImage] = useState<string|null>(selectedCampaign?.titleImage)
     const submit = () => {
         if (!campaignTitle) {
             setCampaignTitleError(true)
+            return
         } else {
             setCampaignTitleError(false)
         }
+        dispatch(setIsLoading(true))
+        try {
 
+            const metadata = {
+                contentType: 'image',
+                campaign: selectedCampaign.id,
+            };
+            let backgroundImageFileToUpload: any = backgroundImageFile.length > 0 ? backgroundImageFile[0] : emptyFile
+            let campaignTitleImageFileToUpload: any = campaignTitleImageFile.length > 0 ? campaignTitleImageFile[0] : emptyFile
+            let campaignCrestFileToUpload: any = campaignCrestFile.length > 0 ? campaignCrestFile[0] : emptyFile
+            if (backgroundImageFileToUpload.file.name) {
+                firebaseStorageRef.child("Images/Background/" + backgroundImageFileToUpload.file.name).put(backgroundImageFileToUpload, metadata)
+            }
+            if (campaignCrestFileToUpload.file.name) {
+                firebaseStorageRef.child("Images/Crest/" + campaignCrestFileToUpload.file.name).put(campaignCrestFileToUpload, metadata)
+            }
+            if (campaignTitleImageFileToUpload.file.name) {
+                firebaseStorageRef.child("Images/CampaignTitle/" + campaignTitleImageFileToUpload.file.name).put(campaignTitleImageFileToUpload, metadata)
+            }
+            let newCampaign = {
+                campaignBackgroundImageFile: backgroundImageFileToUpload.file.name,
+                campaignTitleImageFile: campaignTitleImageFileToUpload.file.name,
+                dungeonMaster: userName,
+                campaignCrestFile: campaignCrestFileToUpload.file.name,
+                title: campaignTitle,
+            }
+
+            campaignsRef.push(newCampaign).then(snap => {
+                if (snap.key) {
+                    dispatch(dispatchSetSelectedCampaign(snap.key))
+                }
+            })
+            history.push("/campaign")
+        } catch (error) {
+            dispatch(setError(error))
+        }
+        dispatch(setIsLoading(false))
     }
-    const updateBackgroundImage = (
-        imageList: ImageListType,
-    ) => {
-        console.log(imageList)
-        setBackgroundImageFile(imageList as never[]);
-    };
     return (
         <Container>
             <h1 style={{ textAlign: "center" }}>Edit Campaign</h1>
@@ -45,46 +84,11 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
                 onChange={(event: any) => setCampaignTitle(event.target.value)}
             />
             <h2 style={{ textAlign: "center" }}> Choose background image</h2>
-            <ImageUploading
-                multiple
-                value={backgroundImageFile}
-                onChange={updateBackgroundImage}
-                maxNumber={maxNumber}
-            >
-                {({
-                    imageList,
-                    onImageUpload,
-                    onImageUpdate,
-                    onImageRemove,
-                    isDragging,
-                }) => (
-                    // write your building UI
-                    <div className="upload__image-wrapper" >
-                        {imageList.length === 0 ?
-                            <Button
-                                variant="contained"
-                                style={isDragging ? { color: "red" } : undefined}
-                                onClick={onImageUpload}
-
-                            >
-                                Click to upload picture
-                            </Button>
-                            : null}
-                        &nbsp;
-
-                        {imageList.map((image, index) => (
-                            <div key={index} style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
-                                <img src={image.dataURL} alt="" width="100" />
-                                <div className="image-item__btn-wrapper">
-                                    <Button variant="contained" onClick={() => onImageUpdate(index)}>Replace</Button>
-                                    <Button variant="contained" onClick={() => onImageRemove(index)}>Remove</Button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </ImageUploading>
-
+            <ImageUpload imageFile={backgroundImageFile} setImageFile={setBackgroundImageFile} />
+            <h2 style={{ textAlign: "center" }}> Choose Campaign crest</h2>
+            <ImageUpload imageFile={campaignCrestFile} setImageFile={setCampaignCrestFile} />
+            <h2 style={{ textAlign: "center" }}> Choose campaign title image</h2>
+            <ImageUpload imageFile={campaignTitleImageFile} setImageFile={setCampaignTitleImageFile} />
             <Button variant="contained" onClick={submit} style={{ marginTop: "1rem" }}>
                 Submit
             </Button>
@@ -96,7 +100,6 @@ margin-bottom: 10rem;
 margin-top:5rem;
 width: 70%;
 background-color: ${OLD_WHITE}; 
-height: 50rem; 
 align-items:center;
 justify-content: center;
 display: flex; 

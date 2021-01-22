@@ -61,7 +61,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         date: sessionDate,
                         story: sessionMDFile,
                         title: sessionTitle,
-                        campaignTitle: selectedCampaign.campaignTitle,
+                        campaignTitle: selectedCampaign.title,
                         sessionDay: sessionDay
                     }
                     if (sessionsId) {

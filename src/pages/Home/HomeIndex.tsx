@@ -5,11 +5,13 @@ import { storage } from "../../firebase";
 import Home from "./Home";
 import HomeCampaignEdit from "./HomeCampaignEdit";
 import { useSelector } from "react-redux";
+import IsLoading from "../../components/IsLoading/IsLoading";
 
 type HomeIndexProps = {}
 const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
     const [imageUrl, setImageUrl] = useState("")
     const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
+    const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
 
     useEffect(() => {
         storage.ref('Images/Background/dnd_background.jpg').getDownloadURL()
@@ -18,6 +20,13 @@ const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
     }, [])
     if (!authUser) {
         <Redirect to="/" />
+    }
+    if (isLoading) {
+        return (
+            <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+                <IsLoading />
+            </Container>
+        )
     }
     return (
         <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>

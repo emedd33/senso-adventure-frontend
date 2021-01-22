@@ -32,7 +32,6 @@ export default function App() {
       }
     });
   }, [dispatch])
-
   return (
     <Router>
       <Navbar />

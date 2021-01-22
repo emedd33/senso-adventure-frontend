@@ -1,20 +1,10 @@
 import * as actionTypes from "./campaignActions"
 
-const initialCampaignState: CampaignState = {
-    curseOfStrahd: {
-        sessions: [],
-        players: [],
-        dungeonMaster: "",
-        id: "curseOfStrahd",
-        backgroundImage: "",
-        campaignTitle: ""
-    },
-}
 
 const adventureReducer = (
-    state: CampaignState = initialCampaignState,
+    state: ICampaign[] = [],
     action: CampaignAction
-): CampaignState => {
+): ICampaign[] => {
     switch (action.type) {
         case actionTypes.SET_CAMPAIGNS:
             return { ...action.payload }

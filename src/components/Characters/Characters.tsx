@@ -8,6 +8,7 @@ import PlayerModal from "../PlayerModal/PlayerModal";
 import { Button } from '@material-ui/core';
 import { useDispatch, useSelector } from "react-redux";
 import { dispatchSetSelectedPlayer } from "../../store/selected/selectedCreators";
+import IsLoading from "../IsLoading/IsLoading";
 
 export interface CharactersProps {
 
@@ -20,7 +21,7 @@ const Characters: React.FC<CharactersProps> = () => {
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
         let username = state.admin.authUser?.username
         if (username) {
-            return state.campaigns.curseOfStrahd.dungeonMaster === username
+            return campaign.dungeonMaster === username
         }
         return false
     })
@@ -32,6 +33,7 @@ const Characters: React.FC<CharactersProps> = () => {
             }))
         setIsEditPlayerOpen(true)
     }
+
     const renderPlayers = () => {
         return (
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -51,7 +53,7 @@ const Characters: React.FC<CharactersProps> = () => {
                     <tbody>
 
                         {
-                            campaign ?
+                            campaign && campaign.players ?
                                 Object.keys(campaign.players).map((key: any, index: number) => {
                                     return (
                                         <tr id={index + "row"} >
@@ -78,6 +80,9 @@ const Characters: React.FC<CharactersProps> = () => {
                 </table>
             </div>
         )
+    }
+    if (!campaign) {
+        return <IsLoading />
     }
     return (<CharacterConatiner>
 

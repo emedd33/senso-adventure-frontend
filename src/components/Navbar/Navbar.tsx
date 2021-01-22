@@ -12,6 +12,7 @@ import { dispatchSetSelectedCampaign } from '../../store/selected/selectedCreato
 import { Backdrop, Breadcrumbs, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import useWindowSize from '../../store/hooks/useWindowSize';
+import IsLoading from '../IsLoading/IsLoading';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         backdrop: {
@@ -31,15 +32,18 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     if (urlPathArray.length === 2 && urlPathArray[0] === urlPathArray[1]) {
         urlPathArray.pop()
     }
-    const campaign = useSelector((state: RootReducerProp) => state.campaigns)
+    const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
     const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
     const [sidebar, setSidebar] = useState(false);
     const [cosHover, setCosHover] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
-    const toggleCosHover = () => setCosHover(!cosHover)
-    const toggleSetCampaign = (campaign: ICampaign) => {
-        dispatch(dispatchSetSelectedCampaign(campaign.id))
+    const toggleSetCampaign = (campaignId: string) => {
+        dispatch(dispatchSetSelectedCampaign(campaignId))
     }
+    if (!campaigns) {
+        return <IsLoading />
+    }
+    console.log(campaigns)
     return (
         <>
 
@@ -98,25 +102,34 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
                             <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
                                 <NavBarItem >
-                                    <Link to="/" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
+                                    <Link to="/" style={{ textDecoration: 'none', color: "black", width: "100%" }}>
                                         <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                             <img src={HomeCrest} alt={"Curse of strahd"} style={{ width: "3rem", height: "3rem" }} />
                                             <CampaignTitle>Home</CampaignTitle>
                                         </span>
                                     </Link>
-                                </NavBarItem>
-                                <NavBarItem >
-                                    <Link to="/campaign" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} onClick={() => toggleSetCampaign(campaign.curseOfStrahd)} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
-                                        <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                            <img src={CosCrest} alt={"Curse of strahd"} style={{ width: "3rem", height: "3rem" }} />
-                                            <CampaignTitle>Curse of Strahd</CampaignTitle>
-                                        </span>
-                                    </Link>
-                                </NavBarItem>
+                                </NavBarItem>{
+                                    Object.entries(campaigns).map(([id, campaign]) => {
+                                        console.log(campaign)
+                                        return (
+                                            <NavBarItem >
+                                                <Link to="/campaign" onClick={() => toggleSetCampaign(id)} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
+                                                    <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                                        <img src={CosCrest} alt={campaign.title} style={{ width: "3rem", height: "3rem" }} />
+                                                        <CampaignTitle>{campaign.title}</CampaignTitle>
+                                                    </span>
+                                                </Link>
+                                            </NavBarItem>
+
+                                        )
+                                    })
+
+                                }
+
                                 {authUser ?
                                     <NavBarItem>
 
-                                        <Link to="/editcampaign" onMouseEnter={toggleCosHover} onMouseLeave={toggleCosHover} style={{ textDecoration: "none" }}>
+                                        <Link to="/editcampaign" style={{ textDecoration: "none" }}>
                                             <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", textTransform: "none" }}>
                                                 <AddIcon style={{ color: "black" }} />
                                                 <CampaignTitle>

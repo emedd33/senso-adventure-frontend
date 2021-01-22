@@ -6,6 +6,7 @@ import { SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, SET_SELECTED_SESSION, UPDAT
 export const dispatchSetSelectedCampaign = (selectedCampaign: string) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true));
+        console.log(selectedCampaign)
         campaignsRef.child(selectedCampaign).once('value', (snapshot: any) => {
             let items = snapshot.val();
             dispatch(setSelectedCampaign(items))

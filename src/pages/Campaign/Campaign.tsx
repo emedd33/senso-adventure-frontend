@@ -15,7 +15,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
         let username = state.admin.authUser?.username
         if (username) {
-            return state.campaigns.curseOfStrahd.dungeonMaster === username
+            return selectedCampaign.dungeonMaster === username
         }
         return false
     })

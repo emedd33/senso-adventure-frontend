@@ -1,6 +1,9 @@
 import { SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, SET_SELECTED_SESSION, UPDATE_SELECTED_PLAYER } from "./selectedActions"
 
 const initialSelectedState: SelectedState = {
+    selectedSession: { id: "", session: [] },
+    selectedCampaign: { id: "", title: "", dungeonMaster: "", sessions: [], players: [], campaignBackgroundFile: "", isNew: true, campaignCrestFile: "", campaignTitleFile: "" },
+    selectedPlayer: { isNew: true, player: {} }
 }
 const selectedReducer = (
     state: SelectedState = initialSelectedState,

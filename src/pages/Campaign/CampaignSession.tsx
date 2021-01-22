@@ -18,10 +18,11 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const history = useHistory()
     const [sessionStory, setSessionStory] = useState("")
     const selectedSession = useSelector((state: RootReducerProp) => state.selected.selectedSession)
+    const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
         let username = state.admin.authUser?.username
         if (username) {
-            return state.campaigns.curseOfStrahd.dungeonMaster === username
+            return selectedCampaign.dungeonMaster === username
         }
         return false
     })
