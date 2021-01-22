@@ -14,14 +14,17 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     useEffect(() => {
-        if (selectedCampaign && selectedCampaign.campaignBackgroundFile) {
-            storage.ref('Images/Background/' + selectedCampaign.campaignBackgroundFile).getDownloadURL()
-                .then((url: string) => setImageUrl(url))
+        if (selectedCampaign && selectedCampaign.campaignBackgroundImageFile) {
+            storage.ref('Images/Background/' + selectedCampaign.campaignBackgroundImageFile).getDownloadURL()
+                .then((url: string) => {
+                    console.log("url", url)
+                    setImageUrl(url)
+                }
+                )
                 .catch(e => console.log("could not fetch background image"))
         }
     }, [selectedCampaign])
-    console.log(selectedCampaign)
-    console.log(imageUrl)
+    console.log("image", imageUrl)
     if (isLoading || !selectedCampaign) {
         return (
             <Container style={{ backgroundImage: "url(" + imageUrl + ")" }} >

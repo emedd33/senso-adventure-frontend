@@ -1,9 +1,9 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-import CosCrest from "../../assets/backgroundImage/CosCrest.png"
 import HomeCrest from "../../assets/backgroundImage/home_crest.png"
 import './Navbar.css';
+import Async from 'react-promise';
 import { IconContext } from 'react-icons';
 import styled from 'styled-components';
 import MenuListComposition from '../MenuList/MenuList';
@@ -13,6 +13,7 @@ import { Backdrop, Breadcrumbs, createStyles, makeStyles, Theme, Typography } fr
 import AddIcon from '@material-ui/icons/Add';
 import useWindowSize from '../../store/hooks/useWindowSize';
 import IsLoading from '../IsLoading/IsLoading';
+import { storage } from '../../firebase';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         backdrop: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+type CrestObjectType = {
+    title: string,
+    url: string
+}
 type NavbarProps = {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
     const classes = useStyles();
@@ -36,14 +41,36 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
     const [sidebar, setSidebar] = useState(false);
     const [cosHover, setCosHover] = useState(false);
+    const [campaignCrestFiles, setCampainCrestFiles] = useState<CrestObjectType[]>([])
     const showSidebar = () => setSidebar(!sidebar);
     const toggleSetCampaign = (campaignId: string) => {
         dispatch(dispatchSetSelectedCampaign(campaignId))
     }
+    useEffect(() => {
+        storage.ref("/Images/Crest/").listAll()
+            .then(crestFiles => {
+                crestFiles.items.map(crestFile => {
+                    crestFile.getDownloadURL().then(url => url).then(url => {
+                        console.log("URL", url)
+                        return url
+                    }).then(async (url) => {
+                        await crestFile.getMetadata().then(data => {
+                            if (data.customMetadata != undefined && data.customMetadata.campaignTitle != undefined) {
+                                setCampainCrestFiles([
+                                    ...campaignCrestFiles,
+                                    { title: data.customMetadata.campaignTitle, url: url }
+                                ])
+                            }
+                        })
+                    })
+                })
+            })
+            .catch(e => console.log(e))
+    }, [])
     if (!campaigns) {
         return <IsLoading />
     }
-    console.log(campaigns)
+    console.log(campaignCrestFiles)
     return (
         <>
 
@@ -110,12 +137,13 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                     </Link>
                                 </NavBarItem>{
                                     Object.entries(campaigns).map(([id, campaign]) => {
-                                        console.log(campaign)
+                                        const crestObject = Object.values(campaignCrestFiles).filter(file => file.title === campaign.title)
+                                        const crestObjectUrl = crestObject.length > 0 ? crestObject[0].url : ""
                                         return (
                                             <NavBarItem >
                                                 <Link to="/campaign" onClick={() => toggleSetCampaign(id)} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
                                                     <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                                        <img src={CosCrest} alt={campaign.title} style={{ width: "3rem", height: "3rem" }} />
+                                                        <img style={{ width: "3rem", height: "3rem" }} src={crestObjectUrl} />
                                                         <CampaignTitle>{campaign.title}</CampaignTitle>
                                                     </span>
                                                 </Link>

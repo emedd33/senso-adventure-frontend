@@ -82,7 +82,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         day: sessionDay
                     };
                     firebaseStorageRef.child("SessionStories").child(sessionMDFile).put(file, metadata)
-                    history.push("/campaign/session")
                 }
             } catch (error) {
                 throw error

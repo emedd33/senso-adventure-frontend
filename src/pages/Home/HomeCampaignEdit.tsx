@@ -1,4 +1,5 @@
 import { Button, TextField } from "@material-ui/core";
+import { EventType } from "@testing-library/react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -36,22 +37,9 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
         dispatch(setIsLoading(true))
         try {
 
-            const metadata = {
-                contentType: 'image',
-                campaign: selectedCampaign.id,
-            };
             let backgroundImageFileToUpload: any = backgroundImageFile.length > 0 ? backgroundImageFile[0] : emptyFile
             let campaignTitleImageFileToUpload: any = campaignTitleImageFile.length > 0 ? campaignTitleImageFile[0] : emptyFile
             let campaignCrestFileToUpload: any = campaignCrestFile.length > 0 ? campaignCrestFile[0] : emptyFile
-            if (backgroundImageFileToUpload.file.name) {
-                firebaseStorageRef.child("Images/Background/" + backgroundImageFileToUpload.file.name).put(backgroundImageFileToUpload, metadata)
-            }
-            if (campaignCrestFileToUpload.file.name) {
-                firebaseStorageRef.child("Images/Crest/" + campaignCrestFileToUpload.file.name).put(campaignCrestFileToUpload, metadata)
-            }
-            if (campaignTitleImageFileToUpload.file.name) {
-                firebaseStorageRef.child("Images/CampaignTitle/" + campaignTitleImageFileToUpload.file.name).put(campaignTitleImageFileToUpload, metadata)
-            }
             let newCampaign = {
                 campaignBackgroundImageFile: backgroundImageFileToUpload.file.name,
                 campaignTitleImageFile: campaignTitleImageFileToUpload.file.name,
@@ -59,13 +47,31 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
                 campaignCrestFile: campaignCrestFileToUpload.file.name,
                 title: campaignTitle,
             }
-
             campaignsRef.push(newCampaign).then(snap => {
-                if (snap.key) {
-                    dispatch(dispatchSetSelectedCampaign(snap.key))
-                }
+                snap.once('value', (snapshot: any) => {
+                    const metadata = {
+                        customMetadata: {
+                            contentType: 'image',
+                            campaignId: snapshot.kay,
+                            campaignTitle: snapshot.val().title
+                        },
+                    };
+                    if (backgroundImageFileToUpload.file.name) {
+                        firebaseStorageRef.child("Images/Background/" + backgroundImageFileToUpload.file.name).put(backgroundImageFileToUpload.file, metadata)
+                    }
+                    if (campaignCrestFileToUpload.file.name) {
+                        firebaseStorageRef.child("Images/Crest/" + campaignCrestFileToUpload.file.name).put(campaignCrestFileToUpload.file, metadata)
+                    }
+                    if (campaignTitleImageFileToUpload.file.name) {
+                        firebaseStorageRef.child("Images/CampaignTitle/" + campaignTitleImageFileToUpload.file.name).put(campaignTitleImageFileToUpload.file, metadata)
+                    }
+                    if (snap.key) {
+                        dispatch(dispatchSetSelectedCampaign(snap.key))
+                    }
+                    history.push("/campaign")
+                })
             })
-            history.push("/campaign")
+
         } catch (error) {
             dispatch(setError(error))
         }

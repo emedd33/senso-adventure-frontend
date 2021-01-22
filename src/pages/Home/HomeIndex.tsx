@@ -12,7 +12,7 @@ const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
     const [imageUrl, setImageUrl] = useState("")
     const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
-
+    console.log("imageUrl", imageUrl)
     useEffect(() => {
         storage.ref('Images/Background/dnd_background.jpg').getDownloadURL()
             .then((url: string) => setImageUrl(url))
