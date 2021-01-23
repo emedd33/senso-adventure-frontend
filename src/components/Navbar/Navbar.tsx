@@ -3,7 +3,6 @@ import * as FaIcons from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import HomeCrest from "../../assets/backgroundImage/home_crest.png"
 import './Navbar.css';
-import Async from 'react-promise';
 import { IconContext } from 'react-icons';
 import styled from 'styled-components';
 import MenuListComposition from '../MenuList/MenuList';
@@ -40,7 +39,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
     const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
     const [sidebar, setSidebar] = useState(false);
-    const [cosHover, setCosHover] = useState(false);
     const [campaignCrestFiles, setCampainCrestFiles] = useState<CrestObjectType[]>([])
     const showSidebar = () => setSidebar(!sidebar);
     const toggleSetCampaign = (campaignId: string) => {
@@ -50,23 +48,21 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         storage.ref("/Images/Crest/").listAll()
             .then(crestFiles => {
                 crestFiles.items.map(crestFile => {
-                    crestFile.getDownloadURL().then(url => url).then(url => {
-                        console.log("URL", url)
-                        return url
-                    }).then(async (url) => {
+                    return crestFile.getDownloadURL().then(url => url).then(url => url).then(async (url) => {
                         await crestFile.getMetadata().then(data => {
-                            if (data.customMetadata != undefined && data.customMetadata.campaignTitle != undefined) {
+                            if (data.customMetadata !== undefined && data.customMetadata.campaignTitle !== undefined) {
                                 setCampainCrestFiles([
                                     ...campaignCrestFiles,
                                     { title: data.customMetadata.campaignTitle, url: url }
                                 ])
                             }
+                            return
                         })
                     })
                 })
             })
             .catch(e => console.log(e))
-    }, [])
+    }, [campaignCrestFiles])
     if (!campaigns) {
         return <IsLoading />
     }
@@ -127,7 +123,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
                         <ul style={{ width: "100%", paddingLeft: "1rem" }} onClick={showSidebar}>
 
-                            <div className={cosHover ? 'cos-navbar-container active' : 'cos-navbar-container'}>
+                            <div className={'cos-navbar-container'}>
                                 <NavBarItem >
                                     <Link to="/" style={{ textDecoration: 'none', color: "black", width: "100%" }}>
                                         <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
@@ -143,7 +139,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                             <NavBarItem >
                                                 <Link to="/campaign" onClick={() => toggleSetCampaign(id)} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
                                                     <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                                        <img style={{ width: "3rem", height: "3rem" }} src={crestObjectUrl} />
+                                                        <img style={{ width: "3rem", height: "3rem" }} src={crestObjectUrl} alt="Crest symbol" />
                                                         <CampaignTitle>{campaign.title}</CampaignTitle>
                                                     </span>
                                                 </Link>

@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import React from "react";
-import ImageUploading, { ImageListType } from "react-images-uploading";
+import ImageUploading from "react-images-uploading";
 
 export interface ImageUoloadProps {
     imageFile: any

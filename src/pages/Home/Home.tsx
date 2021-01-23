@@ -7,11 +7,7 @@ import { dispatchSetSelectedCampaign, dispatchSetSelectedSession } from "../../s
 import Scroll from "../../components/Scroll/Scroll";
 import { storage } from "../../firebase";
 import { setIsLoading } from "../../store/admin/adminCreator";
-type HomeSessions = {
-    campaignId: string,
-    sessionId: string,
-    session: ISession
-}
+
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
     const [, setCampaingTitles] = useState({})
@@ -28,18 +24,20 @@ const Home: FunctionComponent<HomeProps> = () => {
                     }
                 })
             }
+            return null
         }).flat()
 
     })
     useEffect(() => {
+        dispatch(setIsLoading(true))
         storage.ref('Images/CampaignTitle').listAll()
             .then(res => {
                 res.items.forEach(item => {
                     item.getMetadata().then(data => setCampaingTitles((titles) => { return { ...titles, title: data } }))
                 })
             })
-            .catch(e => console.log(e))
-    }, [])
+            .catch(e => console.log(e)).finally(() => dispatch(setIsLoading(false)))
+    }, [dispatch])
 
     const renderScrolls = () => {
         sortByDateValue(sessions)
@@ -53,6 +51,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                 }}
                 />
             }
+            return null
 
         })
 

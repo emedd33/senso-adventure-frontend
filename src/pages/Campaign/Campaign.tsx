@@ -1,17 +1,19 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Characters from "../../components/Characters/Characters"
 import CosTitle from "../../assets/backgroundImage/CosTitle.png" // TODO: switch to firebase storrage 
 import SpeedDials from "../../components/SpeedDials/SpeedDials";
 import Scroll from "../../components/Scroll/Scroll";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
+import { storage } from "../../firebase";
 
 type CampaignProps = {}
 const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory()
     const dispatch = useDispatch()
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
+    const [campaignTitleImage, setCampaignTitleImage] = useState<string>("")
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
         let username = state.admin.authUser?.username
         if (username) {
@@ -19,6 +21,14 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         }
         return false
     })
+    useEffect(() => {
+        if (selectedCampaign && selectedCampaign.campaignBackgroundImageFile !== undefined) {
+            storage.ref('Images/CampaignTitle/' + selectedCampaign.campaignTitleImageFile).getDownloadURL().then(url => {
+                setCampaignTitleImage(url)
+            }).catch(e => console.log(e))
+        }
+
+    }, [selectedCampaign])
     const renderScrolls = () => {
         if (selectedCampaign?.sessions) {
             return (Object.keys(selectedCampaign.sessions).map((key: any) => {
@@ -55,7 +65,11 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             )
         }
     }
+    if (!selectedCampaign.title) {
+        return <Redirect to="/" />
+    }
     return (<>
+        {campaignTitleImage ? <img src={campaignTitleImage} alt="Campaign title" style={{ minWidth: "20rem", width: "40%", maxHeight: "30rem" }} /> : null}
         <Characters />
         {selectedCampaign ?
             renderScrolls()

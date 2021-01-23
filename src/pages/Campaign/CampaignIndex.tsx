@@ -17,14 +17,12 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         if (selectedCampaign && selectedCampaign.campaignBackgroundImageFile) {
             storage.ref('Images/Background/' + selectedCampaign.campaignBackgroundImageFile).getDownloadURL()
                 .then((url: string) => {
-                    console.log("url", url)
                     setImageUrl(url)
                 }
                 )
                 .catch(e => console.log("could not fetch background image"))
         }
     }, [selectedCampaign])
-    console.log("image", imageUrl)
     if (isLoading || !selectedCampaign) {
         return (
             <Container style={{ backgroundImage: "url(" + imageUrl + ")" }} >

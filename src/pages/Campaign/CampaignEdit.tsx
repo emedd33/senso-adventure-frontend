@@ -1,7 +1,7 @@
 import { Button, TextField } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Redirect, useHistory } from "react-router-dom"
+import { Redirect } from "react-router-dom"
 import { OLD_WHITE } from "../../assets/styles/colors"
 import IsLoading from "../../components/IsLoading/IsLoading"
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -11,7 +11,6 @@ import { campaignsRef, firebaseStorageRef, storage } from "../../firebase"
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators"
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
-// import style manually
 import 'react-markdown-editor-lite/lib/index.css';
 import { setIsLoading } from "../../store/admin/adminCreator"
 export interface CampaignEditProps {
@@ -21,7 +20,6 @@ export interface CampaignEditProps {
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const dispatch = useDispatch()
-    const history = useHistory()
     const selectedSession = useSelector((state: RootReducerProp) => state.selected.selectedSession)
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     const sessionFile = useSelector((state: RootReducerProp) => state.selected.selectedSession?.session.story)
@@ -36,7 +34,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     )
     useEffect(() => {
         dispatch(setIsLoading(true))
-        console.log(selectedSession)
         if (selectedSession) {
             storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
                 .then(url => fetch(url)

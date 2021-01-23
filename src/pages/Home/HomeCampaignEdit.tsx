@@ -1,14 +1,13 @@
 import { Button, TextField } from "@material-ui/core";
-import { EventType } from "@testing-library/react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/styles/colors";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
-import { campaignsRef, firebaseAuth, firebaseStorageRef, storage } from "../../firebase";
+import { campaignsRef, firebaseStorageRef } from "../../firebase";
 import { setError, setIsLoading } from "../../store/admin/adminCreator";
-import { dispatchSetSelectedCampaign, setSelectedCampaign } from "../../store/selected/selectedCreators";
+import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators";
 
 export interface HomeCampaignEditProps { }
 

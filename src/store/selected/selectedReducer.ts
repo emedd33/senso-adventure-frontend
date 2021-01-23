@@ -2,7 +2,7 @@ import { SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, SET_SELECTED_SESSION, UPDAT
 
 const initialSelectedState: SelectedState = {
     selectedSession: { id: "", session: [] },
-    selectedCampaign: { id: "", title: "", dungeonMaster: "", sessions: [], players: [], campaignBackgroundImageFile: "", isNew: true, campaignCrestFile: "", campaignTitleFile: "" },
+    selectedCampaign: { id: "", title: "", dungeonMaster: "", sessions: [], players: [], campaignBackgroundImageFile: "", isNew: true, campaignCrestImageFile: "", campaignTitleImageFile: "" },
     selectedPlayer: { isNew: true, player: {} }
 }
 const selectedReducer = (
