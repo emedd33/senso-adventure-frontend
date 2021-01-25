@@ -5,6 +5,7 @@ import { SET_IS_LOADING, SET_ERROR, SET_AUTH_USER } from "./adminActions";
 export const dispatchLogin = (payload: ILogin) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true));
+        console.log("dispatch login")
         await firebaseAuth.signInWithEmailAndPassword(payload.email, payload.password)
             .then((user) => {
                 dispatch(loginSuccess(user))

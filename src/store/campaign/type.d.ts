@@ -26,10 +26,5 @@ interface ICampaign {
 }
 
 
-type CampaignAction = {
-    type: string,
-    payload: any
-}
 
 
-type AdventureDispatchType = (args: CampaignAction) => CampaignAction 

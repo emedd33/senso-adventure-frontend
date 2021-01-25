@@ -82,6 +82,7 @@ const Characters: React.FC<CharactersProps> = () => {
         )
     }
     if (!campaign) {
+        console.log("character")
         return <IsLoading />
     }
     return (<CharacterConatiner>

@@ -3,6 +3,7 @@ type SelectedState = {
     selectedCampaign: ICampaign
     selectedSession: ISelectedSession
     selectedPlayer: ISelectedPlayer
+    backgroundImage?: string
 }
 
 type ISelectedSession = {

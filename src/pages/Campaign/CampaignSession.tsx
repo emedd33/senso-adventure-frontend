@@ -28,6 +28,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     })
     useEffect(() => {
         dispatch(setIsLoading(true))
+        console.log("useEffect campaignSessions")
         if (selectedSession) {
             storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
                 .then(url => fetch(url)

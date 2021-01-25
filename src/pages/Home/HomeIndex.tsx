@@ -1,40 +1,39 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
-import { storage } from "../../firebase";
 import Home from "./Home";
 import HomeCampaignEdit from "./HomeCampaignEdit";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import IsLoading from "../../components/IsLoading/IsLoading";
+import { setBackgroundImageFromFirebase } from "../../store/selected/selectedCreators";
 
 type HomeIndexProps = {}
 const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
-    const [imageUrl, setImageUrl] = useState("")
+    const dispatch = useDispatch()
+    const imageUrl = useSelector((state: RootReducerProp) => state.selected.backgroundImage)
     const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     useEffect(() => {
-        storage.ref('Images/Background/dnd_background.jpg').getDownloadURL()
-            .then((url: string) => setImageUrl(url))
-            .catch((e: any) => { console.log(e) })
-    }, [])
+        dispatch(setBackgroundImageFromFirebase("dnd_background.jpg"))
+    }, [dispatch])
     if (!authUser) {
         <Redirect to="/" />
     }
-    if (isLoading) {
-        return (
-            <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-                <IsLoading />
-            </Container>
-        )
-    }
     return (
         <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-            <Route exact path="/editcampaign">
-                <HomeCampaignEdit />
-            </Route>
-            <Route exact path="/">
-                <Home />
-            </Route>
+            {
+                isLoading ?
+                    <IsLoading />
+                    :
+                    <>
+                        <Route exact path="/editcampaign">
+                            <HomeCampaignEdit />
+                        </Route>
+                        <Route exact path="/">
+                            <Home />
+                        </Route>
+                    </>
+            }
 
         </Container >
     )

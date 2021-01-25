@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import HomeCrest from "../../assets/backgroundImage/home_crest.png"
@@ -7,12 +7,12 @@ import { IconContext } from 'react-icons';
 import styled from 'styled-components';
 import MenuListComposition from '../MenuList/MenuList';
 import { useDispatch, useSelector } from 'react-redux';
-import { dispatchSetSelectedCampaign } from '../../store/selected/selectedCreators';
+import { clearSelectedCampaign, dispatchSetSelectedCampaign } from '../../store/selected/selectedCreators';
 import { Backdrop, Breadcrumbs, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import useWindowSize from '../../store/hooks/useWindowSize';
 import IsLoading from '../IsLoading/IsLoading';
-import { storage } from '../../firebase';
+import { getCamapignCrestFiles } from '../../store/campaign/campaignSelectors';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         backdrop: {
@@ -22,10 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-type CrestObjectType = {
-    title: string,
-    url: string
-}
+
 type NavbarProps = {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
     const classes = useStyles();
@@ -36,37 +33,17 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     if (urlPathArray.length === 2 && urlPathArray[0] === urlPathArray[1]) {
         urlPathArray.pop()
     }
-    const campaigns = useSelector((state: RootReducerProp) => state.campaigns)
+    const rootCampaigns = useSelector((state: RootReducerProp) => state.rootCampaigns)
     const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
     const [sidebar, setSidebar] = useState(false);
-    const [campaignCrestFiles, setCampainCrestFiles] = useState<CrestObjectType[]>([])
+    const campaignCrestFiles = useSelector(getCamapignCrestFiles)
     const showSidebar = () => setSidebar(!sidebar);
     const toggleSetCampaign = (campaignId: string) => {
         dispatch(dispatchSetSelectedCampaign(campaignId))
     }
-    useEffect(() => {
-        storage.ref("/Images/Crest/").listAll()
-            .then(crestFiles => {
-                crestFiles.items.map(crestFile => {
-                    return crestFile.getDownloadURL().then(url => url).then(url => url).then(async (url) => {
-                        await crestFile.getMetadata().then(data => {
-                            if (data.customMetadata !== undefined && data.customMetadata.campaignTitle !== undefined) {
-                                setCampainCrestFiles([
-                                    ...campaignCrestFiles,
-                                    { title: data.customMetadata.campaignTitle, url: url }
-                                ])
-                            }
-                            return
-                        })
-                    })
-                })
-            })
-            .catch(e => console.log(e))
-    }, [campaignCrestFiles])
-    if (!campaigns) {
+    if (!rootCampaigns) {
         return <IsLoading />
     }
-    console.log(campaignCrestFiles)
     return (
         <>
 
@@ -132,20 +109,24 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                         </span>
                                     </Link>
                                 </NavBarItem>{
-                                    Object.entries(campaigns).map(([id, campaign]) => {
-                                        const crestObject = Object.values(campaignCrestFiles).filter(file => file.title === campaign.title)
-                                        const crestObjectUrl = crestObject.length > 0 ? crestObject[0].url : ""
-                                        return (
-                                            <NavBarItem >
-                                                <Link to="/campaign" onClick={() => toggleSetCampaign(id)} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
-                                                    <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                                        <img style={{ width: "3rem", height: "3rem" }} src={crestObjectUrl} alt="Crest symbol" />
-                                                        <CampaignTitle>{campaign.title}</CampaignTitle>
-                                                    </span>
-                                                </Link>
-                                            </NavBarItem>
+                                    Object.entries(rootCampaigns.campaigns).map(([id, campaign]) => {
+                                        if (campaignCrestFiles) {
 
-                                        )
+                                            const crestObject = Object.values(campaignCrestFiles).filter(file => file.title === campaign.title)
+                                            const crestObjectUrl = crestObject.length > 0 ? crestObject[0].url : ""
+                                            return (
+                                                <NavBarItem onClick={() => dispatch(clearSelectedCampaign)} >
+                                                    <Link to="/campaign" onClick={() => toggleSetCampaign(id)} style={{ textDecoration: 'none', color: "black", width: "100%" }}>
+                                                        <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                                            <img style={{ width: "3rem", height: "3rem" }} src={crestObjectUrl} alt="Crest symbol" />
+                                                            <CampaignTitle>{campaign.title}</CampaignTitle>
+                                                        </span>
+                                                    </Link>
+                                                </NavBarItem>
+
+                                            )
+                                        }
+                                        return <></>
                                     })
 
                                 }
@@ -153,7 +134,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                 {authUser ?
                                     <NavBarItem>
 
-                                        <Link to="/editcampaign" style={{ textDecoration: "none" }}>
+                                        <Link to="/editcampaign" style={{ textDecoration: "none" }} >
                                             <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", textTransform: "none" }}>
                                                 <AddIcon style={{ color: "black" }} />
                                                 <CampaignTitle>

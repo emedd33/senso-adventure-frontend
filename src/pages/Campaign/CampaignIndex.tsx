@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { Redirect, Route } from "react-router-dom";
-import { storage } from "../../firebase";
+import { BackgroundImageFileLocation, storage } from "../../firebase";
 import Campaign from "./Campaign";
 import CampaignEdit from "./CampaignEdit";
 import CampaignSession from "./CampaignSession";
@@ -15,7 +15,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     useEffect(() => {
         if (selectedCampaign && selectedCampaign.campaignBackgroundImageFile) {
-            storage.ref('Images/Background/' + selectedCampaign.campaignBackgroundImageFile).getDownloadURL()
+            storage.ref(BackgroundImageFileLocation + selectedCampaign.campaignBackgroundImageFile).getDownloadURL()
                 .then((url: string) => {
                     setImageUrl(url)
                 }
@@ -23,7 +23,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
                 .catch(e => console.log("could not fetch background image"))
         }
     }, [selectedCampaign])
-    if (isLoading || !selectedCampaign) {
+    if (isLoading) {
         return (
             <Container style={{ backgroundImage: "url(" + imageUrl + ")" }} >
                 <IsLoading />

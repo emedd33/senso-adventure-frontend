@@ -1,9 +1,11 @@
-import { SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, SET_SELECTED_SESSION, UPDATE_SELECTED_PLAYER } from "./selectedActions"
+import { SET_BACKGROUND_IMAGE, SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, SET_SELECTED_SESSION, UPDATE_SELECTED_PLAYER } from "./selectedActions"
 
+export const initialSelectedCampaignState = { id: "", title: "", dungeonMaster: "", sessions: [], players: [], campaignBackgroundImageFile: "", isNew: true, campaignCrestImageFile: "", campaignTitleImageFile: "" }
 const initialSelectedState: SelectedState = {
     selectedSession: { id: "", session: [] },
-    selectedCampaign: { id: "", title: "", dungeonMaster: "", sessions: [], players: [], campaignBackgroundImageFile: "", isNew: true, campaignCrestImageFile: "", campaignTitleImageFile: "" },
+    selectedCampaign: initialSelectedCampaignState,
     selectedPlayer: { isNew: true, player: {} }
+
 }
 const selectedReducer = (
     state: SelectedState = initialSelectedState,
@@ -26,6 +28,12 @@ const selectedReducer = (
         case SET_SELECTED_SESSION: {
             state.selectedSession = action.payload
             return state
+        }
+        case SET_BACKGROUND_IMAGE: {
+            return {
+                ...state,
+                backgroundImage: action.payload
+            }
         }
     }
     return state

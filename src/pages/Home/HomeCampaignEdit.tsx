@@ -7,11 +7,13 @@ import { OLD_WHITE } from "../../assets/styles/colors";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import { campaignsRef, firebaseStorageRef } from "../../firebase";
 import { setError, setIsLoading } from "../../store/admin/adminCreator";
+import { getCampaignCrestFromFirebase } from "../../store/campaign/campaignCreators";
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators";
 
 export interface HomeCampaignEditProps { }
 
 
+const emptyFile = { file: { name: "" } }
 const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
     const dispatch = useDispatch()
     const history = useHistory()
@@ -19,13 +21,11 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
     const [campaignTitle, setCampaignTitle] = useState<string>(selectedCampaign.title)
     const userName = useSelector((state: RootReducerProp) => state.admin.authUser?.username)
     const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false)
-    const [backgroundImageFile, setBackgroundImageFile] = React.useState([]);
-    const [campaignTitleImageFile, setCampaignTitleImageFile] = useState<string>(selectedCampaign.title)
-    const emptyFile = { file: { name: "" } }
+    const [backgroundImageFile, setBackgroundImageFile] = useState([]);
+    const [campaignTitleImageFile, setCampaignTitleImageFile] = useState([])
     const [campaignCrestFile, setCampaignCrestFile] = useState([])
 
 
-    // const [campaignTitleImage,setCampaignTitleImage] = useState<string|null>(selectedCampaign?.titleImage)
     const submit = () => {
         if (!campaignTitle) {
             setCampaignTitleError(true)
@@ -34,6 +34,7 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
             setCampaignTitleError(false)
         }
         dispatch(setIsLoading(true))
+
         try {
 
             let backgroundImageFileToUpload: any = backgroundImageFile.length > 0 ? backgroundImageFile[0] : emptyFile
@@ -67,6 +68,7 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
                     if (snap.key) {
                         dispatch(dispatchSetSelectedCampaign(snap.key))
                     }
+                    dispatch(getCampaignCrestFromFirebase)
                     history.push("/campaign")
                 })
             })
@@ -76,6 +78,9 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
         }
         dispatch(setIsLoading(false))
     }
+    console.log("backgroundImageFile", backgroundImageFile)
+    console.log("campaignCrestFile", campaignCrestFile)
+    console.log("campaignTitleImageFile", campaignTitleImageFile)
     return (
         <Container>
             <h1 style={{ textAlign: "center" }}>Edit Campaign</h1>

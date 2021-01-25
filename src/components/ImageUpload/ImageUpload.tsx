@@ -6,11 +6,11 @@ export interface ImageUoloadProps {
     imageFile: any
     setImageFile: any
 }
-
-const ImageUoload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile }) => {
+const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile }) => {
+    const imageFileArray = (!imageFile || imageFile[0] === "" || !imageFile[0]) ? [] : imageFile
     return (<ImageUploading
         multiple
-        value={imageFile}
+        value={imageFileArray}
         onChange={setImageFile}
         maxNumber={1}
     >
@@ -49,4 +49,4 @@ const ImageUoload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile }) =>
     );
 }
 
-export default ImageUoload;
+export default ImageUpload;
