@@ -7,6 +7,7 @@ import Scroll from "../../components/Scroll/Scroll";
 import { Redirect, useHistory } from "react-router-dom";
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import { storage } from "../../firebase";
+import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 
 type CampaignProps = {}
 const Campaign: FunctionComponent<CampaignProps> = () => {
@@ -14,38 +15,32 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const dispatch = useDispatch()
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     const [campaignTitleImage, setCampaignTitleImage] = useState<string>("")
-    const isDungeonMaster = useSelector((state: RootReducerProp) => {
-        let username = state.admin.authUser?.username
-        if (username) {
-            return selectedCampaign.dungeonMaster === username
-        }
-        return false
-    })
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
     useEffect(() => {
-        if (selectedCampaign && selectedCampaign.campaignBackgroundImageFile !== undefined) {
-            storage.ref('Images/CampaignTitle/' + selectedCampaign.campaignTitleImageFile).getDownloadURL().then(url => {
+        if (selectedCampaign && selectedCampaign.campaign.campaignBackgroundImageFile !== undefined) {
+            storage.ref('Images/CampaignTitle/' + selectedCampaign.campaign.campaignTitleImageFile).getDownloadURL().then(url => {
                 setCampaignTitleImage(url)
             }).catch(e => console.log(e))
         }
 
     }, [selectedCampaign])
     const renderScrolls = () => {
-        if (selectedCampaign?.sessions) {
-            return (Object.keys(selectedCampaign.sessions).map((key: any) => {
-                let story = selectedCampaign.sessions[key].story
+        if (selectedCampaign?.campaign.sessions) {
+            return (Object.keys(selectedCampaign.campaign.sessions).map((key: any) => {
+                let story = selectedCampaign.campaign.sessions[key].story
                 story = story.length > 500 ? story.substring(0, 1000).concat("...") : story
-                let title = selectedCampaign!.sessions[key].title
-                let date = selectedCampaign!.sessions[key].date
-                let campaign = selectedCampaign!.sessions[key].campaign
+                let title = selectedCampaign!.campaign.sessions[key].title
+                let date = selectedCampaign!.campaign.sessions[key].date
+                let campaign = selectedCampaign!.campaign.sessions[key].campaign
                 return (
                     <Scroll
                         id={key}
-                        title={selectedCampaign!.sessions[key].title}
+                        title={selectedCampaign!.campaign.sessions[key].title}
                         content={story}
-                        date={selectedCampaign!.sessions[key].date}
+                        date={selectedCampaign!.campaign.sessions[key].date}
                         storyImage={CosTitle}
                         isFirstScroll={true}
-                        campaign={selectedCampaign!.sessions[key].campaign}
+                        campaign={selectedCampaign!.campaign.sessions[key].campaign}
                         onClick={() => {
                             dispatch(dispatchSetSelectedSession({
                                 id: key,
@@ -65,7 +60,8 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             )
         }
     }
-    if (!selectedCampaign.title) {
+    // console.log(selectedCampaign)
+    if (!selectedCampaign.id) {
         return <Redirect to="/" />
     }
     return (<>

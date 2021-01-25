@@ -6,7 +6,6 @@ export interface IsLoadingProps {
 }
 
 const IsLoading: React.FC<IsLoadingProps> = () => {
-    console.log("isLoading")
 
     return (
         <div style={{ alignItems: "center", justifyContent: "center", display: "flex", height: "100vh" }}>

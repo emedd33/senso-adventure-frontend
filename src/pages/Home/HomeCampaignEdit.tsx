@@ -19,14 +19,13 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
     const dispatch = useDispatch()
     const history = useHistory()
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
-    const [campaignTitle, setCampaignTitle] = useState<string>(selectedCampaign.title)
+    const [campaignTitle, setCampaignTitle] = useState<string>(selectedCampaign.campaign.title)
     const userName = useSelector((state: RootReducerProp) => state.admin.authUser?.username)
     const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false)
-    const [backgroundImageFile, setBackgroundImageFile] = useImageFile(selectedCampaign.campaignBackgroundImageFile);
-    const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(selectedCampaign.campaignTitleImageFile)
-    const [campaignCrestFile, setCampaignCrestFile] = useImageFile(selectedCampaign.campaignCrestImageFile)
+    const [backgroundImageFile, setBackgroundImageFile] = useImageFile(selectedCampaign.campaign.campaignBackgroundImageFile);
+    const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(selectedCampaign.campaign.campaignTitleImageFile)
+    const [campaignCrestFile, setCampaignCrestFile] = useImageFile(selectedCampaign.campaign.campaignCrestImageFile)
 
-    console.log("bakcgroundImageFile", backgroundImageFile)
     const submit = () => {
         if (!campaignTitle) {
             setCampaignTitleError(true)
@@ -47,6 +46,8 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
                 dungeonMaster: userName,
                 campaignCrestFile: campaignCrestFileToUpload.file.name,
                 title: campaignTitle,
+                players: [],
+                sessions: []
             }
             campaignsRef.push(newCampaign).then(snap => {
                 snap.once('value', (snapshot: any) => {
@@ -79,12 +80,9 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
         }
         dispatch(setIsLoading(false))
     }
-    console.log("backgroundImageFile", backgroundImageFile)
-    console.log("campaignCrestFile", campaignCrestFile)
-    console.log("campaignTitleImageFile", campaignTitleImageFile)
     return (
         <Container>
-            <h1 style={{ textAlign: "center" }}>Edit Campaign</h1>
+            <h1 style={{ textAlign: "center", fontFamily: "serif" }}>Campaign Creator</h1>
             <TextField
                 id="outlined-multiline-static"
                 placeholder="Write a fitting title"
@@ -94,13 +92,40 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
                 value={campaignTitle}
                 onChange={(event: any) => setCampaignTitle(event.target.value)}
             />
-            <h2 style={{ textAlign: "center" }}> Choose background image</h2>
-            <ImageUpload imageFile={backgroundImageFile.file} setImageFile={setBackgroundImageFile} imageFileName={backgroundImageFile.name} />
-            <h2 style={{ textAlign: "center" }}> Choose Campaign crest</h2>
-            <ImageUpload imageFile={campaignCrestFile} setImageFile={setCampaignCrestFile} imageFileName={campaignCrestFile.name} />
-            <h2 style={{ textAlign: "center" }}> Choose campaign title image</h2>
-            <ImageUpload imageFile={campaignTitleImageFile} setImageFile={setCampaignTitleImageFile} imageFileName={campaignTitleImageFile.name} />
-            <Button variant="contained" onClick={submit} style={{ marginTop: "1rem" }}>
+            <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", margin: "1rem", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", margin: "1rem", width: "15rem" }}>
+                    <h3 style={{ fontFamily: "serif", textAlign: "center" }}> Background Image</h3>
+                </div>
+                <div style={{ display: "flex", width: "15rem" }}>
+
+                    <ImageUpload imageFile={backgroundImageFile.file} setImageFile={setBackgroundImageFile} imageFileName={backgroundImageFile.name} />
+                    {backgroundImageFile.imageFileName ? <h2 style={{ fontFamily: "monospace" }}>{backgroundImageFile.imageFileName}</h2> : null}
+                </div>
+            </div>
+            <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", margin: "1rem", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", margin: "1rem", width: "15rem" }}>
+
+                    <h3 style={{ textAlign: "left", fontFamily: "serif" }}> Campaign crest</h3>
+                </div>
+                <div style={{ display: "flex", width: "15rem" }}>
+
+                    <ImageUpload imageFile={campaignCrestFile.file} setImageFile={setCampaignCrestFile} imageFileName={campaignCrestFile.name} />
+                    {campaignCrestFile.imageFileName ? <h2 style={{ fontFamily: "monospace" }}>{campaignCrestFile.imageFileName}</h2> : null}
+                </div>
+            </div>
+
+            <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", margin: "1rem", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", margin: "1rem", width: "15rem" }}>
+
+                    <h3 style={{ fontFamily: "serif" }}> Choose campaign title image</h3>
+                </div>
+                <div style={{ display: "flex", width: "15rem" }}>
+
+                    <ImageUpload imageFile={campaignTitleImageFile.file} setImageFile={setCampaignTitleImageFile} imageFileName={campaignTitleImageFile.name} />
+                    {campaignCrestFile.imageFileName ? <h2 style={{ fontFamily: "monospace" }}>{campaignTitleImageFile.imageFileName}</h2> : null}
+                </div>
+            </div>
+            <Button variant="contained" onClick={submit} style={{ marginTop: "1rem" }} color="primary">
                 Submit
             </Button>
         </Container >

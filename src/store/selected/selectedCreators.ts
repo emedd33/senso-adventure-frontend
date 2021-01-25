@@ -7,10 +7,10 @@ import { initialSelectedCampaignState } from "./selectedReducer";
 export const dispatchSetSelectedCampaign = (selectedCampaign: string) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true));
-        console.log("dispatchSetselectedCampaign")
         campaignsRef.child(selectedCampaign).once('value', (snapshot: any) => {
-            let items = snapshot.val();
-            dispatch(setSelectedCampaign(items))
+            let campaign = snapshot.val();
+            let id = snapshot.key
+            dispatch(setSelectedCampaign(id, campaign))
         }).finally(() => dispatch(setIsLoading(false)))
     }
 }
@@ -18,7 +18,6 @@ export const dispatchSetSelectedCampaign = (selectedCampaign: string) => {
 export const dispatchSetSelectedPlayer = (selectedPlayer: ISelectedPlayer) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true));
-        console.log("dispatchSetSelectedPlayer")
         dispatch(setSelectedPlayer(selectedPlayer))
         dispatch(setIsLoading(false))
     }
@@ -27,7 +26,6 @@ export const dispatchSetSelectedPlayer = (selectedPlayer: ISelectedPlayer) => {
 export const dispatchSetSelectedSession = (selectedSession?: ISelectedSession) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true));
-        console.log("dispatchSetSelectedSession")
         dispatch(setSelectedSession(selectedSession))
         dispatch(setIsLoading(false))
     }
@@ -70,10 +68,10 @@ export const setSelectedPlayer = (selectedPlayer?: ISelectedPlayer) => {
         payload: selectedPlayer
     }
 }
-export const setSelectedCampaign = (selectedCampaign?: ICampaign) => {
+export const setSelectedCampaign = (id?: string, campaign?: ICampaign) => {
     return {
         type: SET_SELECTED_CAMPAIGN,
-        payload: selectedCampaign
+        payload: { id: id, campaign: campaign }
     }
 }
 export const setSelectedSession = (selectedSession?: ISelectedSession) => {

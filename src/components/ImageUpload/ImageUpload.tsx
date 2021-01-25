@@ -9,7 +9,6 @@ export interface ImageUoloadProps {
 }
 const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile, imageFileName }) => {
     const imageFileArray = (!imageFile || imageFile[0] === "" || !imageFile[0]) ? [] : imageFile
-    console.log("imageFileName", imageFileName)
     return (<ImageUploading
         multiple
         value={imageFileArray}
@@ -27,6 +26,7 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile, imag
                 {imageList.length === 0 ?
                     <Button
                         variant="contained"
+                        color="primary"
                         onClick={onImageUpload}
 
                     >
@@ -38,13 +38,12 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile, imag
                 {imageList.map((image, index) => (
                     <div key={index} style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
                         <img src={image.dataURL} alt="" width="100" />
-                        <div className="image-item__btn-wrapper">
-                            <Button variant="contained" onClick={() => onImageUpdate(index)}>Replace</Button>
-                            <Button variant="contained" onClick={() => onImageRemove(index)}>Remove</Button>
+                        <div className="image-item__btn-wrapper" style={{ display: "flex", flexDirection: "row" }}>
+                            <Button variant="contained" color="primary" onClick={() => onImageUpdate(index)} style={{ margin: "1rem" }}>Replace</Button>
+                            <Button variant="contained" color="secondary" onClick={() => onImageRemove(index)} style={{ margin: "1rem" }}>Remove</Button>
                         </div>
                     </div>
                 ))}
-                {imageFileName ? <h2>{imageFileName}</h2> : null}
             </div>
         )}
     </ImageUploading>

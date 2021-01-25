@@ -9,6 +9,7 @@ import { Button } from '@material-ui/core';
 import { useDispatch, useSelector } from "react-redux";
 import { dispatchSetSelectedPlayer } from "../../store/selected/selectedCreators";
 import IsLoading from "../IsLoading/IsLoading";
+import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 
 export interface CharactersProps {
 
@@ -18,13 +19,7 @@ const Characters: React.FC<CharactersProps> = () => {
     const [isEditPlayerOpen, setIsEditPlayerOpen] = useState(false)
     const dispatch = useDispatch()
     const campaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
-    const isDungeonMaster = useSelector((state: RootReducerProp) => {
-        let username = state.admin.authUser?.username
-        if (username) {
-            return campaign.dungeonMaster === username
-        }
-        return false
-    })
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const handleNewPlayer = () => {
         dispatch(dispatchSetSelectedPlayer(
             {
@@ -53,18 +48,18 @@ const Characters: React.FC<CharactersProps> = () => {
                     <tbody>
 
                         {
-                            campaign && campaign.players ?
-                                Object.keys(campaign.players).map((key: any, index: number) => {
+                            campaign && campaign.campaign.players ?
+                                Object.keys(campaign.campaign.players).map((key: any, index: number) => {
                                     return (
                                         <tr id={index + "row"} >
-                                            <td id={index + "dead"} style={{ textAlign: "center" }}>{campaign!.players[key].isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
-                                            <td id={index + "playerName"} >{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].playerName}</s> : campaign!.players[key].playerName}</td>
-                                            <td id={index + "characterName"}>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].characterName}</s> : campaign!.players[key].characterName}</td>
-                                            <td id={index + "race"}>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].race}</s> : campaign!.players[key].race}</td>
-                                            <td id={index + "class"}>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].class}</s> : campaign!.players[key].class}</td>
-                                            <td id={index + "level"}>{campaign!.players[key].isDead === "TRUE" ? <s>{campaign!.players[key].level}</s> : campaign!.players[key].level}</td>
+                                            <td id={index + "dead"} style={{ textAlign: "center" }}>{campaign!.campaign.players[key].isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
+                                            <td id={index + "playerName"} >{campaign!.campaign.players[key].isDead === "TRUE" ? <s>{campaign!.campaign.players[key].playerName}</s> : campaign!.campaign.players[key].playerName}</td>
+                                            <td id={index + "characterName"}>{campaign!.campaign.players[key].isDead === "TRUE" ? <s>{campaign!.campaign.players[key].characterName}</s> : campaign!.campaign.players[key].characterName}</td>
+                                            <td id={index + "race"}>{campaign!.campaign.players[key].isDead === "TRUE" ? <s>{campaign!.campaign.players[key].race}</s> : campaign!.campaign.players[key].race}</td>
+                                            <td id={index + "class"}>{campaign!.campaign.players[key].isDead === "TRUE" ? <s>{campaign!.campaign.players[key].class}</s> : campaign!.campaign.players[key].class}</td>
+                                            <td id={index + "level"}>{campaign!.campaign.players[key].isDead === "TRUE" ? <s>{campaign!.campaign.players[key].level}</s> : campaign!.campaign.players[key].level}</td>
                                             <td id={index + "edit"}> {isDungeonMaster ? <Button color="primary" onClick={() => {
-                                                dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.players[key].playerName, "characterName": campaign!.players[key].characterName, "race": campaign!.players[key].race, "class": campaign!.players[key].class, "level": campaign!.players[key].level, "isDead": campaign!.players[key].isDead } }))
+                                                dispatch(dispatchSetSelectedPlayer({ id: key, "isNew": false, "player": { "playerName": campaign!.campaign.players[key].playerName, "characterName": campaign!.campaign.players[key].characterName, "race": campaign!.campaign.players[key].race, "class": campaign!.campaign.players[key].class, "level": campaign!.campaign.players[key].level, "isDead": campaign!.campaign.players[key].isDead } }))
                                                 setIsEditPlayerOpen(true)
                                             }}>
 
@@ -82,7 +77,6 @@ const Characters: React.FC<CharactersProps> = () => {
         )
     }
     if (!campaign) {
-        console.log("character")
         return <IsLoading />
     }
     return (<CharacterConatiner>

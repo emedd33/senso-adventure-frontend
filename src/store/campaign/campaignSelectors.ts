@@ -22,3 +22,10 @@ export const getAllSessions = (state: RootReducerProp) => {
         }).flat().filter(e => e !== null)
     }
 }
+export const isDungeonMasterSelector = (state: RootReducerProp) => {
+    let username = state.admin.authUser?.username
+    if (username) {
+        return state.selected.selectedCampaign.campaign.dungeonMaster === username
+    }
+    return false
+}

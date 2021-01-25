@@ -22,13 +22,12 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const isDungeonMaster = useSelector((state: RootReducerProp) => {
         let username = state.admin.authUser?.username
         if (username) {
-            return selectedCampaign.dungeonMaster === username
+            return selectedCampaign.campaign.dungeonMaster === username
         }
         return false
     })
     useEffect(() => {
         dispatch(setIsLoading(true))
-        console.log("useEffect campaignSessions")
         if (selectedSession) {
             storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
                 .then(url => fetch(url)

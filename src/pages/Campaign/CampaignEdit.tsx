@@ -34,7 +34,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     )
     useEffect(() => {
         dispatch(setIsLoading(true))
-        console.log("useEffect campaignEdit")
         if (selectedSession) {
             storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
                 .then(url => fetch(url)
@@ -59,7 +58,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         date: sessionDate,
                         story: sessionMDFile,
                         title: sessionTitle,
-                        campaignTitle: selectedCampaign.title,
+                        campaignTitle: selectedCampaign.campaign.title,
                         sessionDay: sessionDay
                     }
                     if (sessionsId) {

@@ -1,6 +1,6 @@
 
 type SelectedState = {
-    selectedCampaign: ICampaign
+    selectedCampaign: { id: string, campaign: ICampaign }
     selectedSession: ISelectedSession
     selectedPlayer: ISelectedPlayer
     backgroundImage?: string

@@ -14,8 +14,8 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     useEffect(() => {
-        if (selectedCampaign && selectedCampaign.campaignBackgroundImageFile) {
-            storage.ref(BackgroundImageFileLocation + selectedCampaign.campaignBackgroundImageFile).getDownloadURL()
+        if (selectedCampaign && selectedCampaign.campaign.campaignBackgroundImageFile) {
+            storage.ref(BackgroundImageFileLocation + selectedCampaign.campaign.campaignBackgroundImageFile).getDownloadURL()
                 .then((url: string) => {
                     setImageUrl(url)
                 }
