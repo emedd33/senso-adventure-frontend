@@ -8,6 +8,7 @@ import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import { campaignsRef, firebaseStorageRef } from "../../firebase";
 import { setError, setIsLoading } from "../../store/admin/adminCreator";
 import { getCampaignCrestFromFirebase } from "../../store/campaign/campaignCreators";
+import { useImageFile } from "../../store/hooks/useImageFile";
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators";
 
 export interface HomeCampaignEditProps { }
@@ -21,11 +22,11 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
     const [campaignTitle, setCampaignTitle] = useState<string>(selectedCampaign.title)
     const userName = useSelector((state: RootReducerProp) => state.admin.authUser?.username)
     const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false)
-    const [backgroundImageFile, setBackgroundImageFile] = useState([]);
-    const [campaignTitleImageFile, setCampaignTitleImageFile] = useState([])
-    const [campaignCrestFile, setCampaignCrestFile] = useState([])
+    const [backgroundImageFile, setBackgroundImageFile] = useImageFile(selectedCampaign.campaignBackgroundImageFile);
+    const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(selectedCampaign.campaignTitleImageFile)
+    const [campaignCrestFile, setCampaignCrestFile] = useImageFile(selectedCampaign.campaignCrestImageFile)
 
-
+    console.log("bakcgroundImageFile", backgroundImageFile)
     const submit = () => {
         if (!campaignTitle) {
             setCampaignTitleError(true)
@@ -37,9 +38,9 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
 
         try {
 
-            let backgroundImageFileToUpload: any = backgroundImageFile.length > 0 ? backgroundImageFile[0] : emptyFile
-            let campaignTitleImageFileToUpload: any = campaignTitleImageFile.length > 0 ? campaignTitleImageFile[0] : emptyFile
-            let campaignCrestFileToUpload: any = campaignCrestFile.length > 0 ? campaignCrestFile[0] : emptyFile
+            let backgroundImageFileToUpload: any = backgroundImageFile.name.length > 0 ? backgroundImageFile.file[0] : emptyFile
+            let campaignTitleImageFileToUpload: any = campaignTitleImageFile.name.length > 0 ? campaignTitleImageFile.file[0] : emptyFile
+            let campaignCrestFileToUpload: any = campaignCrestFile.name.length > 0 ? campaignCrestFile.file[0] : emptyFile
             let newCampaign = {
                 campaignBackgroundImageFile: backgroundImageFileToUpload.file.name,
                 campaignTitleImageFile: campaignTitleImageFileToUpload.file.name,
@@ -94,11 +95,11 @@ const HomeCampaignEdit: React.FC<HomeCampaignEditProps> = () => {
                 onChange={(event: any) => setCampaignTitle(event.target.value)}
             />
             <h2 style={{ textAlign: "center" }}> Choose background image</h2>
-            <ImageUpload imageFile={backgroundImageFile} setImageFile={setBackgroundImageFile} />
+            <ImageUpload imageFile={backgroundImageFile.file} setImageFile={setBackgroundImageFile} imageFileName={backgroundImageFile.name} />
             <h2 style={{ textAlign: "center" }}> Choose Campaign crest</h2>
-            <ImageUpload imageFile={campaignCrestFile} setImageFile={setCampaignCrestFile} />
+            <ImageUpload imageFile={campaignCrestFile} setImageFile={setCampaignCrestFile} imageFileName={campaignCrestFile.name} />
             <h2 style={{ textAlign: "center" }}> Choose campaign title image</h2>
-            <ImageUpload imageFile={campaignTitleImageFile} setImageFile={setCampaignTitleImageFile} />
+            <ImageUpload imageFile={campaignTitleImageFile} setImageFile={setCampaignTitleImageFile} imageFileName={campaignTitleImageFile.name} />
             <Button variant="contained" onClick={submit} style={{ marginTop: "1rem" }}>
                 Submit
             </Button>

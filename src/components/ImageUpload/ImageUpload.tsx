@@ -5,9 +5,11 @@ import ImageUploading from "react-images-uploading";
 export interface ImageUoloadProps {
     imageFile: any
     setImageFile: any
+    imageFileName: string
 }
-const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile }) => {
+const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile, imageFileName }) => {
     const imageFileArray = (!imageFile || imageFile[0] === "" || !imageFile[0]) ? [] : imageFile
+    console.log("imageFileName", imageFileName)
     return (<ImageUploading
         multiple
         value={imageFileArray}
@@ -42,6 +44,7 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile }) =>
                         </div>
                     </div>
                 ))}
+                {imageFileName ? <h2>{imageFileName}</h2> : null}
             </div>
         )}
     </ImageUploading>
