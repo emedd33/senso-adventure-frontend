@@ -30,16 +30,14 @@ const Home: FunctionComponent<HomeProps> = () => {
 
             sortByDateValue(sessions)
             return sessions.map((session: any,) => {
-                if (session.length > 0) {
+                console.log(session)
 
-                    return <Scroll key={session.sessionId} id={session.sessionId} title={session.session.title} content="" date={session.session.date} storyImage={CosTitle} isFirstScroll={true} campaign={session.session.campaign} onClick={() => {
-                        dispatch(dispatchSetSelectedCampaign(session.campaignId))
-                        dispatch(dispatchSetSelectedSession({ id: session.sessionId, session: session.session }))
-                        history.push("/campaign/session")
-                    }}
-                    />
-                }
-                return null
+                return <Scroll key={session.session.sessionId} id={session.sessionId} title={session.session.title} content="" date={session.session.date} storyImage={CosTitle} isFirstScroll={true} campaign={session.campaignId} onClick={() => {
+                    dispatch(dispatchSetSelectedCampaign(session.campaignId))
+                    dispatch(dispatchSetSelectedSession({ id: session.sessionId, session: session.session }))
+                    history.push("/campaign/session")
+                }}
+                />
 
             })
 

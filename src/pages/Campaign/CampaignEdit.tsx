@@ -1,170 +1,147 @@
-import { Button, TextField } from "@material-ui/core"
-import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Redirect } from "react-router-dom"
-import { OLD_WHITE } from "../../assets/styles/colors"
-import IsLoading from "../../components/IsLoading/IsLoading"
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import { DatePicker } from "@material-ui/pickers";
-import { campaignsRef, firebaseStorageRef, storage } from "../../firebase"
-import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators"
-import MarkdownIt from 'markdown-it'
-import MdEditor from 'react-markdown-editor-lite'
-import 'react-markdown-editor-lite/lib/index.css';
-import { setIsLoading } from "../../store/admin/adminCreator"
-export interface CampaignEditProps {
+import { Button, TextField } from "@material-ui/core";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+import { OLD_WHITE } from "../../assets/styles/colors";
+import ImageUpload from "../../components/ImageUpload/ImageUpload";
+import { campaignsRef, firebaseStorageRef } from "../../firebase";
+import { setError, setIsLoading } from "../../store/admin/adminCreator";
+import { getCampaignCrestFromFirebase } from "../../store/campaign/campaignCreators";
+import { useImageFile } from "../../store/hooks/useImageFile";
+import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators";
 
-}
+export interface CampaignEditProps { }
 
-const mdParser = new MarkdownIt(/* Markdown-it options */);
+
+const emptyFile = { file: { name: "" } }
 const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const dispatch = useDispatch()
-    const selectedSession = useSelector((state: RootReducerProp) => state.selected.selectedSession)
+    const history = useHistory()
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
-    const sessionFile = useSelector((state: RootReducerProp) => state.selected.selectedSession?.session.story)
-    const sessionsId = selectedSession ? selectedSession.id : null
-    const [sessionDay, setSessionDay] = useState<number | null>(selectedSession?.session.day)
-    const [sessionSubTitle, setSessionSubTitle] = useState<string | null>(selectedSession?.session.subtitle)
-    const [sessionTitle, setSessionTitle] = useState<string | null>(selectedSession?.session.title)
-    const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
-    const [sessionStory, setSessionStory] = useState<string | null>("")
-    const [sessionDate, setSessionDate] = useState<Date | any>(
-        selectedSession?.session.date ? new Date(selectedSession.session.date) : new Date()
-    )
-    useEffect(() => {
+    const [campaignTitle, setCampaignTitle] = useState<string>(selectedCampaign.campaign.title)
+    const userName = useSelector((state: RootReducerProp) => state.admin.authUser?.username)
+    const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false)
+    const [backgroundImageFile, setBackgroundImageFile] = useImageFile(selectedCampaign.campaign.campaignBackgroundImageFile);
+    const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(selectedCampaign.campaign.campaignTitleImageFile)
+    const [campaignCrestFile, setCampaignCrestFile] = useImageFile(selectedCampaign.campaign.campaignCrestImageFile)
+
+    const submit = () => {
+        if (!campaignTitle) {
+            setCampaignTitleError(true)
+            dispatch(setError("Please fille out the Campaign Title"))
+            return
+        } else {
+            setCampaignTitleError(false)
+        }
         dispatch(setIsLoading(true))
-        if (selectedSession) {
-            storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
-                .then(url => fetch(url)
-                    .then(res => res.text())
-                    .then(res => setSessionStory(res))
-                )
-                .catch(e => console.log("error", e))
-            dispatch(setIsLoading(false))
-        }
-    }, [dispatch, selectedSession])
-    const submitSession = () => {
-        if (!sessionTitle) {
-            setSessionTitleError(true);
-            return;
-        }
-        if (selectedCampaign?.id && sessionStory && sessionDate) {
-            try {
-                if (sessionDate) {
-                    let sessionMDFile = sessionFile ? sessionFile : selectedCampaign.id + sessionTitle + sessionDate + ".md"
-                    const toUpload = {
-                        campaign: selectedCampaign.id,
-                        date: sessionDate,
-                        story: sessionMDFile,
-                        title: sessionTitle,
-                        campaignTitle: selectedCampaign.campaign.title,
-                        sessionDay: sessionDay
-                    }
-                    if (sessionsId) {
-                        campaignsRef.child(selectedCampaign.id).child("sessions").child(sessionsId).set(toUpload).then((e) => {
-                            dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
-                        })
-                    } else {
-                        campaignsRef.child(selectedCampaign.id).child("sessions").push(toUpload).then((e) => {
-                            dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
-                        })
-                    }
-                    var file = new File([sessionStory], sessionMDFile, { type: "text/plain;charset=utf-8" });
-                    var metadata = {
-                        contentType: 'markdown',
-                        session: sessionsId,
-                        campaign: selectedCampaign.id,
-                        date: sessionDate,
-                        day: sessionDay
-                    };
-                    firebaseStorageRef.child("SessionStories").child(sessionMDFile).put(file, metadata)
-                }
-            } catch (error) {
-                throw error
+
+        try {
+
+            let backgroundImageFileToUpload: any = backgroundImageFile.name.length > 0 ? backgroundImageFile.file[0] : emptyFile
+            let campaignTitleImageFileToUpload: any = campaignTitleImageFile.name.length > 0 ? campaignTitleImageFile.file[0] : emptyFile
+            let campaignCrestFileToUpload: any = campaignCrestFile.name.length > 0 ? campaignCrestFile.file[0] : emptyFile
+            let newCampaign = {
+                campaignBackgroundImageFile: backgroundImageFileToUpload.file.name,
+                campaignTitleImageFile: campaignTitleImageFileToUpload.file.name,
+                dungeonMaster: userName,
+                campaignCrestFile: campaignCrestFileToUpload.file.name,
+                title: campaignTitle,
+                players: [],
+                sessions: []
             }
+            campaignsRef.push(newCampaign).then(snap => {
+                snap.once('value', (snapshot: any) => {
+                    const metadata = {
+                        customMetadata: {
+                            contentType: 'image',
+                            campaignId: snapshot.kay,
+                            campaignTitle: snapshot.val().title
+                        },
+                    };
+                    if (backgroundImageFileToUpload.file.name) {
+                        firebaseStorageRef.child("Images/Background/" + backgroundImageFileToUpload.file.name).put(backgroundImageFileToUpload.file, metadata)
+                    }
+                    if (campaignCrestFileToUpload.file.name) {
+                        firebaseStorageRef.child("Images/Crest/" + campaignCrestFileToUpload.file.name).put(campaignCrestFileToUpload.file, metadata)
+                    }
+                    if (campaignTitleImageFileToUpload.file.name) {
+                        firebaseStorageRef.child("Images/CampaignTitle/" + campaignTitleImageFileToUpload.file.name).put(campaignTitleImageFileToUpload.file, metadata)
+                    }
+                    if (snap.key) {
+                        dispatch(dispatchSetSelectedCampaign(snap.key))
+                    }
+                    dispatch(getCampaignCrestFromFirebase)
+                    history.push("/")
+                })
+            })
+
+        } catch (error) {
+            dispatch(setError(error))
         }
-    }
-    function handleEditorChange(html: any) {
-        setSessionStory(html.text)
-    }
-    if (!selectedSession) {
-        return (<Redirect to="/" />)
-    }
-    if (!selectedSession) {
-        return (
-            <IsLoading />
-        )
+        dispatch(setIsLoading(false))
     }
     return (
-        <div style={{ marginBottom: "10rem", width: "70%", backgroundColor: OLD_WHITE, height: "50rem", justifyContent: "center", display: "flex", padding: "1rem", flexDirection: "column", }}>
-            <div style={{ justifyContent: "center", alignItems: "center", display: "flex", flexDirection: "column" }}>
-                <h1>Session title</h1>
-
-                <TextField
-                    id="outlined-multiline-static"
-                    placeholder="Write a fitting title"
-                    style={{ height: "100%", width: "50%" }}
-                    variant="filled"
-                    error={sessionTitleError}
-                    value={sessionTitle}
-                    onChange={(event) => setSessionTitle(event.target.value)}
-                />
-                <h2>Subtile</h2>
-                <TextField
-                    id="outlined-multiline-static"
-                    placeholder="Write a fitting subtitle"
-                    style={{ height: "100%", width: "50%" }}
-                    variant="filled"
-                    value={sessionSubTitle}
-                    onChange={(event) => setSessionSubTitle(event.target.value)}
-                />
-
-                <h2>Session number</h2>
-
-                <TextField
-                    id="outlined-number"
-                    label="Level"
-                    type="number"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    value={sessionDay}
-                    onChange={(event) => {
-                        let day = parseInt(event.target.value) < 0 ? 0 : parseInt(event.target.value)
-                        if (day) {
-                            setSessionDay(day)
-                        }
-                    }}
-                />
-                <h2>Session date</h2>
-
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DatePicker
-                        autoOk
-                        style={{ maxWidth: "20rem" }}
-                        clearable
-                        disableFuture
-                        value={sessionDate}
-                        onChange={(date) => {
-                            setSessionDate(date?.toDateString())
-                        }}
-                    />
-
-                </MuiPickersUtilsProvider>
-            </div>
-            <h3>The Story</h3>
-            <MdEditor
-                style={{ height: "500px" }}
-                renderHTML={(text) => mdParser.render(text)}
-                onChange={handleEditorChange}
-                value={sessionStory ? sessionStory : ""}
+        <Container>
+            <h1 style={{ textAlign: "center", fontFamily: "serif" }}>Campaign Creator</h1>
+            <TextField
+                id="outlined-multiline-static"
+                placeholder="Write a fitting title"
+                style={{ width: "50%", textAlign: "center" }}
+                variant="filled"
+                error={campaignTitleError}
+                value={campaignTitle}
+                onChange={(event: any) => setCampaignTitle(event.target.value)}
             />
-            <Button variant="contained" color="primary" onClick={submitSession}>
+            <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", margin: "1rem", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", margin: "1rem", width: "15rem" }}>
+                    <h3 style={{ fontFamily: "serif", textAlign: "center" }}> Background Image</h3>
+                </div>
+                <div style={{ display: "flex", width: "15rem" }}>
+
+                    <ImageUpload imageFile={backgroundImageFile.file} setImageFile={setBackgroundImageFile} imageFileName={backgroundImageFile.name} />
+                    {backgroundImageFile.imageFileName ? <h2 style={{ fontFamily: "monospace" }}>{backgroundImageFile.imageFileName}</h2> : null}
+                </div>
+            </div>
+            <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", margin: "1rem", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", margin: "1rem", width: "15rem" }}>
+
+                    <h3 style={{ textAlign: "left", fontFamily: "serif" }}> Campaign crest</h3>
+                </div>
+                <div style={{ display: "flex", width: "15rem" }}>
+
+                    <ImageUpload imageFile={campaignCrestFile.file} setImageFile={setCampaignCrestFile} imageFileName={campaignCrestFile.name} />
+                    {campaignCrestFile.imageFileName ? <h2 style={{ fontFamily: "monospace" }}>{campaignCrestFile.imageFileName}</h2> : null}
+                </div>
+            </div>
+
+            <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", margin: "1rem", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", margin: "1rem", width: "15rem" }}>
+
+                    <h3 style={{ fontFamily: "serif" }}> Choose campaign title image</h3>
+                </div>
+                <div style={{ display: "flex", width: "15rem" }}>
+
+                    <ImageUpload imageFile={campaignTitleImageFile.file} setImageFile={setCampaignTitleImageFile} imageFileName={campaignTitleImageFile.name} />
+                    {campaignCrestFile.imageFileName ? <h2 style={{ fontFamily: "monospace" }}>{campaignTitleImageFile.imageFileName}</h2> : null}
+                </div>
+            </div>
+            <Button variant="contained" onClick={submit} style={{ marginTop: "1rem" }} color="primary">
                 Submit
-                </Button>
-        </div>
-    )
+            </Button>
+        </Container >
+    );
 }
+const Container = styled.div`
+margin-bottom: 10rem; 
+margin-top:5rem;
+width: 70%;
+background-color: ${OLD_WHITE}; 
+align-items:center;
+justify-content: center;
+display: flex; 
+padding: 1rem; 
+flex-direction: column; 
+`
 
 export default CampaignEdit;

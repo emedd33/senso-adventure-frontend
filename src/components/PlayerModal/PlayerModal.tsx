@@ -81,8 +81,11 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
       setPlayerNameError(true)
       return
     }
+    // Ready for adding to firebase
     setPlayerNameError(false)
     setPlayerNameHelperText("")
+
+    // Checking if new or existing player
     if (selectedPlayer.isNew) {
       addNewPlayerToFirebase()
     } else {

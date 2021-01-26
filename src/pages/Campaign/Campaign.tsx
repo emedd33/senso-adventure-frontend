@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Characters from "../../components/Characters/Characters"
 import CosTitle from "../../assets/backgroundImage/CosTitle.png" // TODO: switch to firebase storrage 
@@ -6,7 +6,6 @@ import SpeedDials from "../../components/SpeedDials/SpeedDials";
 import Scroll from "../../components/Scroll/Scroll";
 import { Redirect, useHistory } from "react-router-dom";
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
-import { storage } from "../../firebase";
 import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 
 type CampaignProps = {}
@@ -14,16 +13,8 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory()
     const dispatch = useDispatch()
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
-    const [campaignTitleImage, setCampaignTitleImage] = useState<string>("")
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
-    useEffect(() => {
-        if (selectedCampaign && selectedCampaign.campaign.campaignBackgroundImageFile !== undefined) {
-            storage.ref('Images/CampaignTitle/' + selectedCampaign.campaign.campaignTitleImageFile).getDownloadURL().then(url => {
-                setCampaignTitleImage(url)
-            }).catch(e => console.log(e))
-        }
 
-    }, [selectedCampaign])
     const renderScrolls = () => {
         if (selectedCampaign?.campaign.sessions) {
             return (Object.keys(selectedCampaign.campaign.sessions).map((key: any) => {
@@ -65,7 +56,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         return <Redirect to="/" />
     }
     return (<>
-        {campaignTitleImage ? <img src={campaignTitleImage} alt="Campaign title" style={{ minWidth: "20rem", width: "40%", maxHeight: "30rem" }} /> : null}
         <Characters />
         {selectedCampaign ?
             renderScrolls()

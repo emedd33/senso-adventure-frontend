@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect } from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
 import Home from "./Home";
-import HomeCampaignEdit from "./HomeCampaignEdit";
+import CampaignEdit from "../Campaign/CampaignEdit";
 import { useDispatch, useSelector } from "react-redux";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { setBackgroundImageFromFirebase } from "../../store/selected/selectedCreators";
@@ -27,7 +27,7 @@ const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
                     :
                     <>
                         <Route exact path="/editcampaign">
-                            <HomeCampaignEdit />
+                            <CampaignEdit />
                         </Route>
                         <Route exact path="/">
                             <Home />
