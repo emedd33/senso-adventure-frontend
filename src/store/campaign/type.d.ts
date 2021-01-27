@@ -15,6 +15,7 @@ interface IPlayer {
 }
 interface ICampaign {
     title: string
+    subTitle: string
     campaignTitleImageFile: string
     campaignBackgroundImageFile: string
     campaignCrestImageFile: string

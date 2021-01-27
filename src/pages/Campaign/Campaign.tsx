@@ -27,7 +27,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                     <Scroll
                         id={key}
                         title={selectedCampaign!.campaign.sessions[key].title}
-                        content={story}
+                        subTitle={selectedCampaign!.campaign.subTitle}
                         date={selectedCampaign!.campaign.sessions[key].date}
                         storyImage={CosTitle}
                         isFirstScroll={true}
@@ -57,10 +57,13 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     }
     return (<>
         <Characters />
-        {selectedCampaign ?
-            renderScrolls()
-            : null
-        }
+        <div style={{ width: "50%" }}>
+
+            {selectedCampaign ?
+                renderScrolls()
+                : null
+            }
+        </div>
         {isDungeonMaster ?
             <SpeedDials />
             : null}

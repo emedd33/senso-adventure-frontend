@@ -67,6 +67,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
             <h2 style={{ fontSize: "3rem", textAlign: "center" }}>
                 {selectedSession?.session.title}
             </h2>
+            <h3>{selectedSession?.session.subTitle}</h3>
             <p style={{ fontSize: "2rem", textAlign: "center" }}>
                 {selectedSession?.session.date}
             </p>

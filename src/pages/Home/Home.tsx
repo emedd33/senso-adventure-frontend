@@ -30,9 +30,8 @@ const Home: FunctionComponent<HomeProps> = () => {
 
             sortByDateValue(sessions)
             return sessions.map((session: any,) => {
-                console.log(session)
 
-                return <Scroll key={session.session.sessionId} id={session.sessionId} title={session.session.title} content="" date={session.session.date} storyImage={CosTitle} isFirstScroll={true} campaign={session.campaignId} onClick={() => {
+                return <Scroll key={session.session.sessionId} id={session.sessionId} title={session.session.title} subTitle="" date={session.session.date} storyImage={CosTitle} isFirstScroll={true} campaign={session.campaignId} onClick={() => {
                     dispatch(dispatchSetSelectedCampaign(session.campaignId))
                     dispatch(dispatchSetSelectedSession({ id: session.sessionId, session: session.session }))
                     history.push("/campaign/session")
@@ -45,11 +44,13 @@ const Home: FunctionComponent<HomeProps> = () => {
 
     }
     return (
-        <>
+        <>  <div style={{ width: "70%" }}>
+
             {sessions ?
                 renderScrolls()
                 : null
             }
+        </div>
         </>
     )
 

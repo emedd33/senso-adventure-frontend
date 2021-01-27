@@ -7,7 +7,7 @@ import "./Scroll.scss"
 type ScrollProps = {
     id: any,
     title: string,
-    content: string,
+    subTitle: string,
     date: string,
     storyImage: string,
     isFirstScroll: boolean,
@@ -16,7 +16,7 @@ type ScrollProps = {
 }
 
 
-function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign, onClick }: ScrollProps): JSX.Element {
+function Scroll({ id, title, subTitle, date, storyImage, isFirstScroll, campaign, onClick }: ScrollProps): JSX.Element {
     return (<div style={{ zIndex: 20, width: "100%", justifyContent: "center", display: "flex", overflow: "hidden" }}>
         <ScrollContainer onClick={onClick} className={onClick ? "scroll-container-active" : "scroll-container"} >
 
@@ -34,6 +34,7 @@ function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign,
                         <ScrollTitle>
                             {title}
                         </ScrollTitle>
+                        <h3 style={{ color: "gray", textAlign: "center" }}>{subTitle}</h3>
                     </div>
                     :
                     null
@@ -47,8 +48,8 @@ function Scroll({ id, title, content, date, storyImage, isFirstScroll, campaign,
 }
 const StoryImage = styled.img`
 marginTop: -1rem;
-width: ${px2vw(500)};
 transition:200ms;
+width:70%;
 `
 const ScrollContent = styled.div`
 font-size: ${px2vw(20)};
@@ -59,13 +60,6 @@ padding-left:15%;
 margin-left:0;
 `
 
-const ScrollStory = styled.p`
-width:${px2vw(730)};
-text-align:left;
-font-size:1.5rem;
-margin-bottom:4rem;
-transition:200ms;
-`
 
 const ScrollTitle = styled.h1`
 text-align:center;
@@ -75,20 +69,12 @@ transition:200ms;
 
 const ScrollContainer = styled.div`
 margin: ${px2vw(22)};
-width:${px2vw(1000)};
+width:90%;
+min-width:30rem;
 background-image: url(${ScrollImage});
-&:hover {   
-    width:${px2vw(1100)};
-  }
-&:hover ${ScrollStory}{   
-    font-size:2rem;
-}
-&:hover ${StoryImage}{   
-width: ${px2vw(600)};
 
-}
-&:hover ${ScrollTitle}{   
-    font-size: ${px2vw(100)}; 
+&:hover ${StoryImage}{   
+    width:80%;
 }
 `
 

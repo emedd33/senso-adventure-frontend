@@ -52,7 +52,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             dispatch(setError("Please fille out the Session Title"))
             return;
         }
-        console.log(selectedCampaign)
         if (selectedCampaign?.id) {
             try {
                 if (sessionDate) {
@@ -71,7 +70,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                             dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
                         })
                     } else {
-                        console.log(toUpload)
                         campaignsRef.child(selectedCampaign.id).child("sessions").push(toUpload).then((e) => {
                             dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
                         })

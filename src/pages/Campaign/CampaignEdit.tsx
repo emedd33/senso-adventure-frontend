@@ -51,7 +51,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                 sessions: []
             }
             campaignsRef.push(newCampaign).then(snap => {
-                snap.once('value', (snapshot: any) => {
+                snap.once('value', async (snapshot: any) => {
                     const metadata = {
                         customMetadata: {
                             contentType: 'image',
@@ -59,20 +59,20 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                             campaignTitle: snapshot.val().title
                         },
                     };
-                    if (backgroundImageFileToUpload.file.name) {
-                        firebaseStorageRef.child("Images/Background/" + backgroundImageFileToUpload.file.name).put(backgroundImageFileToUpload.file, metadata)
-                    }
                     if (campaignCrestFileToUpload.file.name) {
-                        firebaseStorageRef.child("Images/Crest/" + campaignCrestFileToUpload.file.name).put(campaignCrestFileToUpload.file, metadata)
+                        await firebaseStorageRef.child("Images/Crest/" + campaignCrestFileToUpload.file.name).put(campaignCrestFileToUpload.file, metadata)
+                    }
+                    if (backgroundImageFileToUpload.file.name) {
+                        await firebaseStorageRef.child("Images/Background/" + backgroundImageFileToUpload.file.name).put(backgroundImageFileToUpload.file, metadata)
                     }
                     if (campaignTitleImageFileToUpload.file.name) {
-                        firebaseStorageRef.child("Images/CampaignTitle/" + campaignTitleImageFileToUpload.file.name).put(campaignTitleImageFileToUpload.file, metadata)
+                        await firebaseStorageRef.child("Images/CampaignTitle/" + campaignTitleImageFileToUpload.file.name).put(campaignTitleImageFileToUpload.file, metadata)
                     }
                     if (snap.key) {
                         dispatch(dispatchSetSelectedCampaign(snap.key))
                     }
                     dispatch(getCampaignCrestFromFirebase)
-                    history.push("/")
+                    history.push("/campaign")
                 })
             })
 
