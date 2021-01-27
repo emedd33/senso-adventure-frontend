@@ -55,8 +55,8 @@ export async function getSessionsFromCampaign(campaigns: ICampaign) {
     }
     return null
 }
+let campaignCrestFiles: CrestObjectType[] = []
 export const getCampaignCrestFromFirebase = async (dispatch: Dispatch) => {
-    let campaignCrestFiles: CrestObjectType[] = []
     await storage.ref(CrestImageFileLocation).listAll()
         .then(crestFiles => crestFiles.items
             .map(crestFile => crestFile.getDownloadURL()

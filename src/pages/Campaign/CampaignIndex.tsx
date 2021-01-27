@@ -32,6 +32,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     if (!selectedCampaign) {
         return (<Redirect to="/" />)
     }
+
     return (
         <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
             {campaignTitleImage ? <img src={campaignTitleImage} alt="Campaign title" style={{ minWidth: "20rem", width: "40%", maxHeight: "30rem", marginBottom: "1rem" }} /> : null}

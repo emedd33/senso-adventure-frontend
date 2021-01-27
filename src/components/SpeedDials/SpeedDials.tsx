@@ -56,6 +56,7 @@ export default function SpeedDials() {
                         tooltipTitle={"New Session"}
                         onClick={() => {
                             dispatch(dispatchSetSelectedSession({
+                                id: "",
                                 session: {
                                     title: "",
                                     subTitle: "",

@@ -5,7 +5,6 @@ import ImageUploading from "react-images-uploading";
 export interface ImageUoloadProps {
     imageFile: any
     setImageFile: any
-    imageFileName: string
 }
 const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile }) => {
     const imageFileArray = imageFile.dataURL ? [imageFile] : []

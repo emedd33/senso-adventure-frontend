@@ -8,7 +8,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from "@material-ui/pickers";
 import { campaignsRef, firebaseStorageRef, storage } from "../../firebase"
-import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators"
+import { dispatchSetSelectedCampaign, dispatchSetSelectedSession } from "../../store/selected/selectedCreators"
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css';
@@ -46,6 +46,20 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         }
         dispatch(setIsLoading(false))
     }, [dispatch, selectedSession])
+    const postProcessFiles = (session: ISelectedSession, sessionMDFile: string) => {
+        dispatch(dispatchSetSelectedSession(session))
+        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+        var file = new File([sessionStory], sessionMDFile, { type: "text/plain;charset=utf-8" });
+        var metadata = {
+            contentType: 'markdown',
+            session: session.id,
+            campaign: selectedCampaign.id,
+            date: sessionDate,
+            day: sessionDay
+        };
+        firebaseStorageRef.child("SessionStories").child(sessionMDFile).put(file, metadata)
+        history.push("/campaign/session")
+    }
     const submitSession = () => {
         if (!sessionTitle) {
             setSessionTitleError(true);
@@ -67,24 +81,19 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
 
                 if (sessionsId) {
                     campaignsRef.child(selectedCampaign.id).child("sessions/" + sessionsId).set(toUpload).then((e) => {
-                        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+                        postProcessFiles(selectedSession, sessionMDFile)
                     })
                 } else {
-                    campaignsRef.child(selectedCampaign.id).child("sessions").push(toUpload).then((e) => {
-                        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+                    campaignsRef.child(selectedCampaign.id).child("sessions").push(toUpload).then((snap) => {
+                        snap.once('value', async (snapshot: any) => {
+                            const session = { id: snapshot.key, session: snapshot.val() }
+                            postProcessFiles(session, sessionMDFile)
+                        }
+                        )
                     })
                 }
-                var file = new File([sessionStory], sessionMDFile, { type: "text/plain;charset=utf-8" });
-                var metadata = {
-                    contentType: 'markdown',
-                    session: sessionsId,
-                    campaign: selectedCampaign.id,
-                    date: sessionDate,
-                    day: sessionDay
-                };
-                firebaseStorageRef.child("SessionStories").child(sessionMDFile).put(file, metadata)
-                history.push("/campaign/session")
-            } catch (error) {
+            }
+            catch (error) {
                 throw error
             }
         }

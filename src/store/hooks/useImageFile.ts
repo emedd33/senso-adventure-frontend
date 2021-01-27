@@ -1,7 +1,7 @@
 import { useState } from "react"
 const emptyFile = { file: {}, name: "" }
 
-export const useImageFile = (newFileName: string = "") => {
+export const useImageFile = (newFileName: string = "", campaingTitle: string = "") => {
     const [fileName, setFileName] = useState<any>({ ...emptyFile, name: newFileName })
     const setImageFile = (file: any) => {
         if (file.length > 0) {
