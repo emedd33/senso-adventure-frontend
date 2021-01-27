@@ -46,8 +46,11 @@ export default function SpeedDials() {
                         dispatch(dispatchSetSelectedSession({
                             session: {
                                 title: "",
+                                subTitle: "",
                                 story: "",
                                 date: "",
+                                sessionDay: 1,
+                                sessionDate: new Date().toDateString(),
                                 campaign: selectedCampaign ? selectedCampaign.id : ""
                             }
                         }));

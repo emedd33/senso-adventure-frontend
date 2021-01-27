@@ -26,9 +26,9 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     const sessionFile = useSelector((state: RootReducerProp) => state.selected.selectedSession?.session.story)
     const sessionsId = selectedSession ? selectedSession.id : null
-    const [sessionDay, setSessionDay] = useState<number | null>(selectedSession?.session.day)
-    const [sessionSubTitle, setSessionSubTitle] = useState<string | null>(selectedSession?.session.subtitle)
-    const [sessionTitle, setSessionTitle] = useState<string | null>(selectedSession?.session.title)
+    const [sessionDay, setSessionDay] = useState<number>(selectedSession?.session.sessionDay)
+    const [sessionSubTitle, setSessionSubTitle] = useState<string>(selectedSession?.session.subTitle)
+    const [sessionTitle, setSessionTitle] = useState<string>(selectedSession?.session.title)
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
     const [sessionStory, setSessionStory] = useState<string>("")
     const [sessionDate, setSessionDate] = useState<string>(
@@ -54,37 +54,37 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         }
         if (selectedCampaign?.id) {
             try {
-                if (sessionDate) {
-                    let sessionMDFile = sessionFile ? sessionFile : sessionTitle + "_" + selectedCampaign.id + "_" + sessionDate + ".md"
-                    const toUpload = {
-                        campaign: selectedCampaign.id,
-                        date: sessionDate ? sessionDate : new Date().toDateString(),
-                        story: sessionMDFile,
-                        title: sessionTitle,
-                        campaignTitle: selectedCampaign.campaign.title,
-                        sessionDay: sessionDay
-                    }
-
-                    if (sessionsId) {
-                        campaignsRef.child(selectedCampaign.id).child("sessions").child(sessionsId).set(toUpload).then((e) => {
-                            dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
-                        })
-                    } else {
-                        campaignsRef.child(selectedCampaign.id).child("sessions").push(toUpload).then((e) => {
-                            dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
-                        })
-                    }
-                    var file = new File([sessionStory], sessionMDFile, { type: "text/plain;charset=utf-8" });
-                    var metadata = {
-                        contentType: 'markdown',
-                        session: sessionsId,
-                        campaign: selectedCampaign.id,
-                        date: sessionDate,
-                        day: sessionDay
-                    };
-                    firebaseStorageRef.child("SessionStories").child(sessionMDFile).put(file, metadata)
-                    history.push("/campaign/session")
+                let sessionMDFile = sessionFile ? sessionFile : sessionTitle + "_" + selectedCampaign.id + "_" + sessionDate + ".md"
+                const toUpload = {
+                    campaign: selectedCampaign.id,
+                    date: sessionDate ? sessionDate : new Date().toDateString(),
+                    story: sessionMDFile,
+                    title: sessionTitle,
+                    subTitle: sessionSubTitle ? sessionSubTitle : "",
+                    campaignTitle: selectedCampaign.campaign.title,
+                    sessionDay: sessionDay ? sessionDay : 1
                 }
+                console.log(toUpload)
+
+                if (sessionsId) {
+                    campaignsRef.child(selectedCampaign.id).child("sessions/" + sessionsId).set(toUpload).then((e) => {
+                        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+                    })
+                } else {
+                    campaignsRef.child(selectedCampaign.id).child("sessions").push(toUpload).then((e) => {
+                        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
+                    })
+                }
+                var file = new File([sessionStory], sessionMDFile, { type: "text/plain;charset=utf-8" });
+                var metadata = {
+                    contentType: 'markdown',
+                    session: sessionsId,
+                    campaign: selectedCampaign.id,
+                    date: sessionDate,
+                    day: sessionDay
+                };
+                firebaseStorageRef.child("SessionStories").child(sessionMDFile).put(file, metadata)
+                history.push("/campaign/session")
             } catch (error) {
                 throw error
             }
@@ -93,7 +93,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     function handleEditorChange(html: any) {
         setSessionStory(html.text)
     }
-    if (!selectedSession) {
+    if (!selectedSession.id) {
         return (<Redirect to="/" />)
     }
     if (!selectedSession) {

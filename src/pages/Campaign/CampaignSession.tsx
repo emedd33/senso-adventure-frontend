@@ -28,7 +28,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     })
     useEffect(() => {
         dispatch(setIsLoading(true))
-        if (selectedSession) {
+        if (selectedSession.session.story) {
             storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
                 .then(url => fetch(url)
                     .then(res => res.text())
@@ -47,16 +47,22 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
 
     return (<>
         <Container>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <p style={{ fontSize: "2rem", opacity: 0.5 }}>
+                    {selectedSession?.session.date}
+                </p>
                 {isDungeonMaster ?
-                    <Button onClick={() => {
+                    <Button color="primary" variant="contained" onClick={() => {
                         dispatch(dispatchSetSelectedSession({
                             id: selectedSession.id,
                             session: {
                                 title: selectedSession.session.title,
+                                subTitle: selectedSession.session.subTitle,
                                 story: selectedSession.session.story,
                                 date: selectedSession.session.date,
-                                campaign: selectedSession.session.campaign
+                                campaign: selectedSession.session.campaign,
+                                sessionDay: selectedSession.session.sessionDay
+
                             }
                         }))
                         history.push("/campaign/session/edit")
@@ -67,10 +73,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
             <h2 style={{ fontSize: "3rem", textAlign: "center" }}>
                 {selectedSession?.session.title}
             </h2>
-            <h3>{selectedSession?.session.subTitle}</h3>
-            <p style={{ fontSize: "2rem", textAlign: "center" }}>
-                {selectedSession?.session.date}
-            </p>
+            <h3 style={{ fontSize: "2rem", textAlign: "center", opacity: 0.5 }}>
+                {selectedSession?.session.subTitle}
+            </h3>
             <ReactMarkdown>
                 {sessionStory}
             </ReactMarkdown>

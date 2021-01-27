@@ -22,7 +22,9 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 story = story.length > 500 ? story.substring(0, 1000).concat("...") : story
                 let title = selectedCampaign!.campaign.sessions[key].title
                 let date = selectedCampaign!.campaign.sessions[key].date
+                let sessionDay = selectedCampaign!.campaign.sessions[key].sessionDay
                 let campaign = selectedCampaign!.campaign.sessions[key].campaign
+                let subTitle = selectedCampaign!.campaign.sessions[key].subtitle
                 return (
                     <Scroll
                         id={key}
@@ -37,9 +39,11 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                 id: key,
                                 session: {
                                     title: title,
+                                    subTitle: subTitle,
                                     story: story,
                                     date: date,
-                                    campaign: campaign
+                                    campaign: campaign,
+                                    sessionDay: sessionDay,
                                 }
                             }))
                             history.push("/campaign/session")

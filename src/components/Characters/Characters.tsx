@@ -20,6 +20,7 @@ const Characters: React.FC<CharactersProps> = () => {
     const dispatch = useDispatch()
     const campaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
+    const dungeonMaster = useSelector((state: RootReducerProp) => state.selected.selectedCampaign.campaign.dungeonMaster)
     const handleNewPlayer = () => {
         dispatch(dispatchSetSelectedPlayer(
             {
@@ -31,8 +32,8 @@ const Characters: React.FC<CharactersProps> = () => {
 
     const renderPlayers = () => {
         return (
-            <div style={{ display: "flex", justifyContent: "center" }}>
 
+            <div style={{ display: "flex", justifyContent: "center" }}>
                 <table style={{ width: "100%" }}>
                     <thead>
                         <tr>{isEditPlayerOpen ? <PlayerModal onClose={setIsEditPlayerOpen} /> : null}</tr>
@@ -81,14 +82,19 @@ const Characters: React.FC<CharactersProps> = () => {
     }
     return (<CharacterConatiner>
 
-        <div style={{ height: "20rem", zIndex: 200 }}>
-            {isDungeonMaster ?
-                <Button color="primary" onClick={handleNewPlayer}>
-                    <PersonAddIcon />
+        <div style={{ height: "20rem", zIndex: 200, display: "flex", justifyContent: "center", flexDirection: "column" }}>
 
-                </Button>
-                : null}
-            {renderPlayers()}
+            <h2 style={{ textAlign: "center", flex: 1 }}>Dungeon master: {dungeonMaster}</h2>
+            <div style={{ flex: 10 }}>
+
+                {isDungeonMaster ?
+                    <Button color="primary" onClick={handleNewPlayer}>
+                        <PersonAddIcon />
+
+                    </Button>
+                    : null}
+                {renderPlayers()}
+            </div>
 
 
         </div>
