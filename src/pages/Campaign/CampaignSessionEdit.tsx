@@ -1,7 +1,7 @@
 import { Button, TextField } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Redirect, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { OLD_WHITE } from "../../assets/styles/colors"
 import IsLoading from "../../components/IsLoading/IsLoading"
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -64,7 +64,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     campaignTitle: selectedCampaign.campaign.title,
                     sessionDay: sessionDay ? sessionDay : 1
                 }
-                console.log(toUpload)
 
                 if (sessionsId) {
                     campaignsRef.child(selectedCampaign.id).child("sessions/" + sessionsId).set(toUpload).then((e) => {
@@ -92,9 +91,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     }
     function handleEditorChange(html: any) {
         setSessionStory(html.text)
-    }
-    if (!selectedSession.id) {
-        return (<Redirect to="/" />)
     }
     if (!selectedSession) {
         return (

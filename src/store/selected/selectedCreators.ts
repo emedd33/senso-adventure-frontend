@@ -3,15 +3,21 @@ import { campaignsRef, storage } from "../../firebase";
 import { setIsLoading } from "../admin/adminCreator";
 import { SET_BACKGROUND_IMAGE, SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, SET_SELECTED_SESSION, UPDATE_SELECTED_PLAYER } from "./selectedActions";
 import { initialSelectedCampaignState } from "./selectedReducer";
+const EMPTY_CAMPAIGN = { id: "", sessions: [], players: [], subTitle: "", title: "", dungeonMaster: "", isNew: true, campaignTitleImageFile: "", campaignCrestImageFile: "", campaignBackgroundImageFile: "" }
+export const dispatchSetSelectedCampaign = (selectedCampaign?: string | undefined) => {
 
-export const dispatchSetSelectedCampaign = (selectedCampaign: string) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true));
-        campaignsRef.child(selectedCampaign).once('value', (snapshot: any) => {
-            let campaign = snapshot.val();
-            let id = snapshot.key
-            dispatch(setSelectedCampaign(id, campaign))
-        }).finally(() => dispatch(setIsLoading(false)))
+        if (selectedCampaign) {
+            campaignsRef.child(selectedCampaign).once('value', (snapshot: any) => {
+                let campaign = snapshot.val();
+                let id = snapshot.key
+                dispatch(setSelectedCampaign(id, campaign))
+            }).finally(() => dispatch(setIsLoading(false)))
+        } else {
+            dispatch(setSelectedCampaign("", EMPTY_CAMPAIGN))
+            dispatch(setIsLoading(false))
+        }
     }
 }
 
@@ -33,7 +39,6 @@ export const dispatchSetSelectedSession = (selectedSession?: ISelectedSession) =
 export const setBackgroundImageFromFirebase = (imageFile: string) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true))
-        console.log("setBackgroundImageFromFirebase")
         return storage.ref('Images/Background/dnd_background.jpg').getDownloadURL()
             .then((url: string) => dispatch(setBackgroundImage(url)))
             .catch((e) => { console.log("Could not fetch background image " + imageFile + " from Firebase: " + e); return null })

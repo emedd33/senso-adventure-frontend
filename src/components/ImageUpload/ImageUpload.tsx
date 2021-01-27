@@ -7,8 +7,8 @@ export interface ImageUoloadProps {
     setImageFile: any
     imageFileName: string
 }
-const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile, imageFileName }) => {
-    const imageFileArray = (!imageFile || imageFile[0] === "" || !imageFile[0]) ? [] : imageFile
+const ImageUpload: React.FC<ImageUoloadProps> = ({ imageFile, setImageFile }) => {
+    const imageFileArray = imageFile.dataURL ? [imageFile] : []
     return (<ImageUploading
         multiple
         value={imageFileArray}

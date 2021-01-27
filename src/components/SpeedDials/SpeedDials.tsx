@@ -1,10 +1,12 @@
 import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import SpeedDial from '@material-ui/lab/SpeedDial';
+import SpeedDial, { SpeedDialProps } from '@material-ui/lab/SpeedDial';
+import EditIcon from '@material-ui/icons/Edit';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchSetSelectedSession } from '../../store/selected/selectedCreators';
+import { SpeedDialAction } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,7 +35,8 @@ export default function SpeedDials() {
     const dispatch = useDispatch()
     const history = useHistory()
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
-
+    const [direction,] = React.useState<SpeedDialProps['direction']>('up');
+    const [open, setOpen] = React.useState(false);
     return (
         <div style={{ position: "fixed", bottom: "0", right: "0", zIndex: 400 }}>
             <div className={classes.exampleWrapper}>
@@ -41,24 +44,36 @@ export default function SpeedDials() {
                     ariaLabel="SpeedDial example"
                     className={classes.speedDial}
                     icon={<SpeedDialIcon />}
-                    open={false}
-                    onClick={() => {
-                        dispatch(dispatchSetSelectedSession({
-                            session: {
-                                title: "",
-                                subTitle: "",
-                                story: "",
-                                date: "",
-                                sessionDay: 1,
-                                sessionDate: new Date().toDateString(),
-                                campaign: selectedCampaign ? selectedCampaign.id : ""
-                            }
-                        }));
-                        history.push("/campaign/session/edit")
-                    }}
+                    open={open}
+                    onOpen={() => setOpen(true)}
+                    onClose={() => setOpen(false)}
+                    direction={direction}
+
                 >
 
-
+                    <SpeedDialAction
+                        icon={<SpeedDialIcon />}
+                        tooltipTitle={"New Session"}
+                        onClick={() => {
+                            dispatch(dispatchSetSelectedSession({
+                                session: {
+                                    title: "",
+                                    subTitle: "",
+                                    story: "",
+                                    date: "",
+                                    sessionDay: 1,
+                                    sessionDate: new Date().toDateString(),
+                                    campaign: selectedCampaign ? selectedCampaign.id : ""
+                                }
+                            }));
+                            history.push("/campaign/session/edit")
+                        }}
+                    />
+                    <SpeedDialAction
+                        icon={<EditIcon />}
+                        tooltipTitle={"Edit campaign"}
+                        onClick={() => history.push("/editcampaign")}
+                    />
                 </SpeedDial>
             </div>
         </div>

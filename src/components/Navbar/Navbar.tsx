@@ -111,7 +111,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                 </NavBarItem>{
                                     Object.entries(rootCampaigns.campaigns).map(([id, campaign]) => {
                                         if (campaignCrestFiles) {
-
                                             const crestObject = Object.values(campaignCrestFiles).filter(file => file.title === campaign.title)
                                             const crestObjectUrl = crestObject.length > 0 ? crestObject[0].url : ""
                                             return (
@@ -134,7 +133,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                 {authUser ?
                                     <NavBarItem>
 
-                                        <Link to="/editcampaign" style={{ textDecoration: "none" }} >
+                                        <Link to="/editcampaign" style={{ textDecoration: "none" }} onClick={() => dispatch(dispatchSetSelectedCampaign())}>
                                             <span style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", textTransform: "none" }}>
                                                 <AddIcon style={{ color: "black" }} />
                                                 <CampaignTitle>

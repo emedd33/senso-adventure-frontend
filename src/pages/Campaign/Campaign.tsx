@@ -55,7 +55,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             )
         }
     }
-    // console.log(selectedCampaign)
     if (!selectedCampaign.id) {
         return <Redirect to="/" />
     }

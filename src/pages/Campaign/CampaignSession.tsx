@@ -1,13 +1,11 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/styles/colors";
 import { Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import ReactMarkdown from 'react-markdown'
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
-import IsLoading from "../../components/IsLoading/IsLoading";
 import { Redirect, useHistory } from "react-router-dom";
 import { setIsLoading } from "../../store/admin/adminCreator";
 import { storage } from "../../firebase";
@@ -38,9 +36,6 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
             dispatch(setIsLoading(false))
         }
     }, [dispatch, selectedSession])
-    if (!selectedSession) {
-        return <IsLoading />
-    }
     if (!selectedSession.id) {
         return <Redirect to="/campaign" />
     }

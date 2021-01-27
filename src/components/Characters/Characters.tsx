@@ -36,14 +36,14 @@ const Characters: React.FC<CharactersProps> = () => {
             <div style={{ display: "flex", justifyContent: "center" }}>
                 <table style={{ width: "100%" }}>
                     <thead>
-                        <tr>{isEditPlayerOpen ? <PlayerModal onClose={setIsEditPlayerOpen} /> : null}</tr>
-                        <tr style={{}}>
+                        <tr style={{ textAlign: "center" }}>{isEditPlayerOpen ? <PlayerModal onClose={setIsEditPlayerOpen} /> : null}</tr>
+                        <tr style={{ textAlign: "center" }}>
                             <th></th>
-                            <th style={{ textAlign: "left" }}>Player</th>
-                            <th style={{ textAlign: "left" }}>Character</th>
-                            <th style={{ textAlign: "left" }}>Race</th>
-                            <th style={{ textAlign: "left" }}>Class</th>
-                            <th style={{ textAlign: "left" }}>Level</th>
+                            <th >Player</th>
+                            <th >Character</th>
+                            <th >Race</th>
+                            <th >Class</th>
+                            <th >Level</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,7 +52,7 @@ const Characters: React.FC<CharactersProps> = () => {
                             campaign && campaign.campaign.players ?
                                 Object.keys(campaign.campaign.players).map((key: any, index: number) => {
                                     return (
-                                        <tr id={index + "row"} >
+                                        <tr id={index + "row"} style={{ textAlign: "center" }} >
                                             <td id={index + "dead"} style={{ textAlign: "center" }}>{campaign!.campaign.players[key].isDead === "TRUE" ? <FaIcons.FaSkullCrossbones /> : null}</td>
                                             <td id={index + "playerName"} >{campaign!.campaign.players[key].isDead === "TRUE" ? <s>{campaign!.campaign.players[key].playerName}</s> : campaign!.campaign.players[key].playerName}</td>
                                             <td id={index + "characterName"}>{campaign!.campaign.players[key].isDead === "TRUE" ? <s>{campaign!.campaign.players[key].characterName}</s> : campaign!.campaign.players[key].characterName}</td>
@@ -85,7 +85,7 @@ const Characters: React.FC<CharactersProps> = () => {
         <div style={{ height: "20rem", zIndex: 200, display: "flex", justifyContent: "center", flexDirection: "column" }}>
 
             <h2 style={{ textAlign: "center", flex: 1 }}>Dungeon master: {dungeonMaster}</h2>
-            <div style={{ flex: 10 }}>
+            <div style={{ flex: 10, textAlign: "center" }}>
 
                 {isDungeonMaster ?
                     <Button color="primary" onClick={handleNewPlayer}>
