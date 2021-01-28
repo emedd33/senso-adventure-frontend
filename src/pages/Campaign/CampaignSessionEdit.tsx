@@ -1,5 +1,6 @@
-import { Button, TextField } from "@material-ui/core"
+import { Button, IconButton, TextField, Tooltip } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
+import HelpIcon from '@material-ui/icons/Help';
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 import { OLD_WHITE } from "../../assets/styles/colors"
@@ -31,6 +32,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const [sessionTitle, setSessionTitle] = useState<string>(selectedSession?.session.title)
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
     const [sessionStory, setSessionStory] = useState<string>("")
+
     const [sessionDate, setSessionDate] = useState<string>(
         selectedSession?.session.date ? new Date(selectedSession.session.date).toDateString() : new Date().toDateString()
     )
@@ -98,9 +100,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             }
         }
     }
-    function handleEditorChange(html: any) {
-        setSessionStory(html.text)
-    }
+
     if (!selectedSession) {
         return (
             <IsLoading />
@@ -164,15 +164,25 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
 
             </TitleContainer>
             <br />
-            <h3>The Story</h3>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+
+                <h3>The Story</h3>
+                <Tooltip title="The Story to be showcased for all players">
+                    <IconButton aria-label="help">
+                        <HelpIcon />
+                    </IconButton>
+                </Tooltip>
+            </div>
+            <p style={{ textAlign: "left", fontFamily: "sans-serif" }}>{"To add a secret note encapsulte the secret note with the '<secret> </secret>' tag"}</p>
             <MdEditor
                 style={{
                     height: "500px", width: "100%", margin: "1rem", marginTop: "0", fontFamily: "sans-serif"
                 }}
                 renderHTML={(text) => mdParser.render(text)}
-                onChange={handleEditorChange}
+                onChange={(html: any) => setSessionStory(html.text)}
                 value={sessionStory ? sessionStory : ""}
             />
+
             <Button variant="contained" color="primary" onClick={submitSession}>
                 Submit
                 </Button>

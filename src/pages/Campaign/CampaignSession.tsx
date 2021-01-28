@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/styles/colors";
@@ -9,7 +9,15 @@ import { dispatchSetSelectedSession } from "../../store/selected/selectedCreator
 import { Redirect, useHistory } from "react-router-dom";
 import { setIsLoading } from "../../store/admin/adminCreator";
 import { storage } from "../../firebase";
-
+import gfm from 'remark-gfm'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import IsLoading from "../../components/IsLoading/IsLoading";
+const renderers = {
+    code: function (obj: any) {
+        return <SyntaxHighlighter style={dark} language={obj.language} children={obj.value} />;
+    }
+}
 type CampaignSessionProps = {}
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const dispatch = useDispatch()
@@ -24,18 +32,40 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
         }
         return false
     })
+    const parseSessionStory = useCallback((text: string) => {
+        let secretStart = text.indexOf("<secret>")
+        let secretEnd = text.indexOf("</secret>")
+        while (secretStart !== -1) {
+            secretStart = text.indexOf("<secret>")
+            secretEnd = text.indexOf("</secret>")
+            if (secretEnd === -1) {
+                text = text.replace("<secret>", "")
+                continue
+            }
+            if (isDungeonMaster) {
+                text = text.replace("<secret>", "\n~~~~js \n")
+                text = text.replace("</secret>", "\n~~~~\n")
+            } else {
+                let secretMessage = text.slice(secretStart, secretEnd + 9)
+                text = text.replace(secretMessage, "")
+            }
+        }
+        setSessionStory(text)
+    }, [isDungeonMaster])
     useEffect(() => {
         dispatch(setIsLoading(true))
         if (selectedSession.session.story) {
             storage.ref().child("SessionStories").child(selectedSession.session.story).getDownloadURL()
                 .then(url => fetch(url)
                     .then(res => res.text())
-                    .then(res => setSessionStory(res))
+                    .then(res => {
+                        return parseSessionStory(res)
+                    })
                 )
                 .catch(e => console.log("error", e))
             dispatch(setIsLoading(false))
         }
-    }, [dispatch, selectedSession])
+    }, [dispatch, selectedSession, parseSessionStory])
     if (!selectedSession.id) {
         return <Redirect to="/campaign" />
     }
@@ -71,9 +101,14 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
             <h3 style={{ fontSize: "2rem", textAlign: "center", opacity: 0.5 }}>
                 {selectedSession?.session.subTitle}
             </h3>
-            <ReactMarkdown>
-                {sessionStory}
-            </ReactMarkdown>
+            <div style={{ fontFamily: "sans-serif" }}>
+                {sessionStory ?
+                    <ReactMarkdown plugins={[[gfm, { singleTilde: false }]]} renderers={renderers}>
+                        {sessionStory}
+
+                    </ReactMarkdown>
+                    : <IsLoading />}
+            </div>
         </Container>
     </>
     )

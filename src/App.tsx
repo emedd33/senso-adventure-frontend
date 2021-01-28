@@ -7,7 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import "./App.css"
+import "./App.scss"
 import { fetchFromFirebase } from "./store/campaign/campaignCreators";
 import HomeIndex from "./pages/Home/HomeIndex";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
