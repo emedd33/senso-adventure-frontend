@@ -1,7 +1,9 @@
 import { Dispatch } from "redux"
 import { campaignsRef, CrestImageFileLocation, firebaseAuth, storage } from "../../firebase"
 import { SET_AUTH_USER, SET_IS_LOADING } from "../admin/adminActions"
+import { setIsLoading } from "../admin/adminCreator"
 import { SET_CAMPAIGNS, SET_CAMPAIGN_CRESTS, SET_SESSIONS } from "./campaignActions"
+
 
 
 
@@ -55,6 +57,22 @@ export async function getSessionsFromCampaign(campaigns: ICampaign) {
     }
     return null
 }
+
+export const dispatchLevelUpCharacters = (selectedCampaign: any) => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setIsLoading(true))
+        Object.entries(selectedCampaign.campaign.players).forEach((elem: any) => {
+            let id = elem[0]
+            let player = elem[1]
+            let new_level = parseInt(player.level)
+            new_level += 1
+            player.level = new_level
+            campaignsRef.child(selectedCampaign.id + "/players/").child(id).set(player)
+        })
+        dispatch(setIsLoading(false))
+    }
+}
+
 let campaignCrestFiles: CrestObjectType[] = []
 export const getCampaignCrestFromFirebase = async (dispatch: Dispatch) => {
     await storage.ref(CrestImageFileLocation).listAll()

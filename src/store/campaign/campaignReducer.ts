@@ -27,6 +27,7 @@ const adventureReducer = (
                 campaignCrestFiles: action.payload
             }
 
+
     }
     return state
 }

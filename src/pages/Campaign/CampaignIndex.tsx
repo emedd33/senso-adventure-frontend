@@ -57,7 +57,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
                     </Route>
                 </>
             }
-            {selectedCampaign ?
+            {selectedCampaign && isDungeonMaster ?
                 <MiscBox />
                 : null}
         </Container>

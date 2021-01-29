@@ -48,11 +48,10 @@ function Scroll({ id, title, subTitle, date, storyImage, isFirstScroll, campaign
 }
 const StoryImage = styled.img`
 marginTop: -1rem;
-transition:200ms;
 width:70%;
 `
 const ScrollContent = styled.div`
-font-size: ${px2vw(20)};
+font-size: ${px2vw(20)}; 
 padding-top:30%;
 padding-bottom: 35%;
 padding-right:15%;
@@ -63,8 +62,8 @@ margin-left:0;
 
 const ScrollTitle = styled.h1`
 text-align:center;
-font-size:  ${px2vw(80)}; 
-transition:200ms;
+opacity:0.7;
+width:100%;
 `
 
 const ScrollContainer = styled.div`
@@ -73,8 +72,8 @@ width:90%;
 min-width:30rem;
 background-image: url(${ScrollImage});
 
-&:hover ${StoryImage}{   
-    width:80%;
+&:hover{   
+    width:100%;
 }
 `
 
