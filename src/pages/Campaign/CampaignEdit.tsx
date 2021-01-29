@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { OLD_WHITE } from "../../assets/styles/colors";
+import { OLD_WHITE } from "../../assets/constants/Constants";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { campaignsRef, firebaseStorageRef } from "../../firebase";

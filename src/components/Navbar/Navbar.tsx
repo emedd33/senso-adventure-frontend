@@ -13,6 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import useWindowSize from '../../store/hooks/useWindowSize';
 import IsLoading from '../IsLoading/IsLoading';
 import { getCamapignCrestFiles } from '../../store/campaign/campaignSelectors';
+import { LIGHT_PINK } from '../../assets/constants/Constants';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         backdrop: {
@@ -193,7 +194,7 @@ const NavBarOpenIcon = styled(Link)`
 
 
 const NavBarItem = styled.ul`
-    background-color:#AB9696;
+    background-color:${LIGHT_PINK};
   width: 100%;
   height: 80px;
   display: flex;

@@ -1,4 +1,4 @@
-import { OLD_WHITE } from "../../assets/styles/colors";
+import { OLD_WHITE } from "../../assets/constants/Constants";
 import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';

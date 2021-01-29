@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
-import { OLD_WHITE } from '../../assets/styles/colors';
+import { OLD_WHITE } from '../../assets/constants/Constants';
 import { Link } from 'react-router-dom';
 import { dispatchLogin } from '../../store/admin/adminCreator';
 import { useDispatch } from 'react-redux';

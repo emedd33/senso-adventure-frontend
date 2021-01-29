@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import HelpIcon from '@material-ui/icons/Help';
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
-import { OLD_WHITE } from "../../assets/styles/colors"
+import { OLD_WHITE } from "../../assets/constants/Constants"
 import IsLoading from "../../components/IsLoading/IsLoading"
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';

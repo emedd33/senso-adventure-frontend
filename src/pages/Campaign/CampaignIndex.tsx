@@ -67,6 +67,7 @@ flex-direction: column;
 padding-top:10rem;
 width:100%;
 height:100%;
+padding-bottom: 10rem;
 min-height:100vh;
 `
 export default CampaignIndex

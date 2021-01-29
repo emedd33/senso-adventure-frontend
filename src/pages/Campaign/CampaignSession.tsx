@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { OLD_WHITE } from "../../assets/styles/colors";
+import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import ReactMarkdown from 'react-markdown'

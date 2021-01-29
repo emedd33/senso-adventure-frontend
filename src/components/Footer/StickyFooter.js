@@ -3,7 +3,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import GithubIcon from "../../assets/icons/github.png"
+import GithubIcon from "../../assets/icons/github.png";
+import { LIGHT_PINK } from "../../assets/constants/Constants"
 const useStyles = makeStyles((theme) => ({
   main: {
     marginTop: theme.spacing(8),
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 'auto',
     color: "white",
     backgroundColor:
-      theme.palette.type === 'dark' ? theme.palette.grey[200] : theme.palette.grey[800],
+      LIGHT_PINK
   },
 }));
 

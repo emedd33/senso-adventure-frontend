@@ -7,7 +7,7 @@ import { dispatchSetSelectedCampaign, dispatchSetSelectedSession } from "../../s
 import Scroll from "../../components/Scroll/Scroll";
 import { CampaignTitleImageFileLocation, storage } from "../../firebase";
 import { getAllSessions } from "../../store/campaign/campaignSelectors";
-import { MAX_NUM_SCROLLS_HOMEPAGE } from "../../constants/Constants";
+import { MAX_NUM_SCROLLS_HOMEPAGE } from "../../assets/constants/Constants";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
