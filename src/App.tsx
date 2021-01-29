@@ -23,7 +23,8 @@ export default function App() {
   return (
     <Router>
       <Navbar />
-      <div style={{}}>
+
+      <>
         <AlertDialog />
         <Switch>
           <Route path="/campaign" >
@@ -39,7 +40,7 @@ export default function App() {
           </Route>
         </Switch>
         <StickyFooter />
-      </div>
+      </>
     </Router>
   );
 }

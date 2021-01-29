@@ -6,11 +6,13 @@ import CampaignEdit from "../Campaign/CampaignEdit";
 import { useDispatch, useSelector } from "react-redux";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { setBackgroundImageFromFirebase } from "../../store/selected/selectedCreators";
+import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 
 type HomeIndexProps = {}
 const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
     const dispatch = useDispatch()
     const imageUrl = useSelector((state: RootReducerProp) => state.selected.backgroundImage)
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     useEffect(() => {
@@ -27,7 +29,10 @@ const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
                     :
                     <>
                         <Route exact path="/editcampaign">
-                            <CampaignEdit />
+                            {isDungeonMaster ?
+                                <CampaignEdit />
+                                : <Redirect to={"/"} />
+                            }
                         </Route>
                         <Route exact path="/">
                             <Home />

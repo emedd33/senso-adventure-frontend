@@ -73,9 +73,15 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     return (<>
         <Container>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <p style={{ fontSize: "2rem", opacity: 0.5 }}>
-                    {selectedSession?.session.date}
-                </p>
+                <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexDirection: "column" }}>
+
+                    <p style={{ fontSize: "1.5rem", opacity: 0.8, textAlign: "left" }}>
+                        Day: {selectedSession?.session.sessionDay}
+                    </p>
+                    <p style={{ fontSize: "1rem", opacity: 0.5, textAlign: "left" }}>
+                        {selectedSession?.session.date}
+                    </p>
+                </div>
                 {isDungeonMaster ?
                     <Button color="primary" variant="contained" onClick={() => {
                         dispatch(dispatchSetSelectedSession({

@@ -177,7 +177,6 @@ color:black;
 const NavBarHeader = styled.div`
     background-color: #AB9696;
   width:100%;
-  box-shadow;
   height:5rem;
   display: flex;
   position: fixed;

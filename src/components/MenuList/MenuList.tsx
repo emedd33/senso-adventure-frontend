@@ -66,10 +66,9 @@ export default function MenuListComposition() {
         return (
 
             <div style={{ flex: "1", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "4rem" }}>
-                <AiIcons.AiFillCaretDown />
                 <Link to="/login" style={{ textDecoration: 'none', color: "black", textTransform: "none", fontSize: "1rem" }}>
                     <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <p style={{ margin: "0", paddingLeft: "1rem", fontFamily: "italianno, cursive", }}>Login</p>
+                        <h3 style={{ margin: "0", paddingLeft: "1rem", fontFamily: "italianno, cursive", }}>Login</h3>
                     </span>
                 </Link>
             </div>

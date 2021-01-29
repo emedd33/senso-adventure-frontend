@@ -7,12 +7,15 @@ import { BackgroundImageFileLocation, storage } from "../../firebase";
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSession from "./CampaignSession";
+import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
+import MiscBox from "../../components/MiscBox/MiscBox";
 
 type CampaignIndexProps = {}
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     const [imageUrl, setImageUrl] = useState("")
     const isLoading = useSelector((state: RootReducerProp) => state.admin.isLoading)
     const selectedCampaign = useSelector((state: RootReducerProp) => state.selected.selectedCampaign)
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const [campaignTitleImage, setCampaignTitleImage] = useState<string>("")
     useEffect(() => {
         if (selectedCampaign && selectedCampaign.campaign.campaignBackgroundImageFile) {
@@ -47,10 +50,16 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
                         <CampaignSession />
                     </Route>
                     <Route exact path="/campaign/session/edit">
-                        <CampaignSessionEdit />
+                        {isDungeonMaster ?
+                            <CampaignSessionEdit />
+                            : <Redirect to={"/"} />
+                        }
                     </Route>
                 </>
             }
+            {selectedCampaign ?
+                <MiscBox />
+                : null}
         </Container>
     )
 

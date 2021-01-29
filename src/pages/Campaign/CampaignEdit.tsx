@@ -27,7 +27,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const [campaignBackgroundImageFile, setCampaignBackgroundImageFile] = useImageFile(selectedCampaign.campaign.campaignBackgroundImageFile);
     const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(selectedCampaign.campaign.campaignTitleImageFile)
     const [campaignCrestImageFile, setCampaignCrestFile] = useImageFile(selectedCampaign.campaign.campaignCrestImageFile)
-
     const postProcssCampaign = async (key: string, title: string, backgroundImageFileToUpload: any, campaignTitleImageFileToUpload: any, campaignCrestImageFileToUpload: any) => {
 
         const metadata = {
