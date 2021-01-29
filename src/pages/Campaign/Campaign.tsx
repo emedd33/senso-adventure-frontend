@@ -24,7 +24,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 let date = selectedCampaign!.campaign.sessions[key].date
                 let sessionDay = selectedCampaign!.campaign.sessions[key].sessionDay
                 let campaign = selectedCampaign!.campaign.sessions[key].campaign
-                let subTitle = selectedCampaign!.campaign.sessions[key].subtitle
+                let subTitle = selectedCampaign!.campaign.sessions[key].subTitle
                 return (
                     <Scroll
                         id={key}

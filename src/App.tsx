@@ -13,6 +13,7 @@ import HomeIndex from "./pages/Home/HomeIndex";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import CampaignIndex from "./pages/Campaign/CampaignIndex";
 import LoginIndex from "./pages/Login/LoginIndex";
+import StickyFooter from "./components/Footer/StickyFooter";
 export default function App() {
   const dispatch = useDispatch()
   const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
@@ -37,6 +38,7 @@ export default function App() {
             <HomeIndex />
           </Route>
         </Switch>
+        <StickyFooter />
       </div>
     </Router>
   );

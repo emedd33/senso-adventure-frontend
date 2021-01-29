@@ -1,0 +1,1 @@
+export const MAX_NUM_SCROLLS_HOMEPAGE = 10

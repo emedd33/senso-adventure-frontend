@@ -36,6 +36,7 @@ export const dispatchSetSelectedSession = (selectedSession?: ISelectedSession) =
         dispatch(setIsLoading(false))
     }
 }
+
 export const setBackgroundImageFromFirebase = (imageFile: string) => {
     return async (dispatch: Dispatch) => {
         dispatch(setIsLoading(true))

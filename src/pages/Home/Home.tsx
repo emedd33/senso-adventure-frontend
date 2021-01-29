@@ -7,6 +7,7 @@ import { dispatchSetSelectedCampaign, dispatchSetSelectedSession } from "../../s
 import Scroll from "../../components/Scroll/Scroll";
 import { CampaignTitleImageFileLocation, storage } from "../../firebase";
 import { getAllSessions } from "../../store/campaign/campaignSelectors";
+import { MAX_NUM_SCROLLS_HOMEPAGE } from "../../constants/Constants";
 
 type HomeProps = {}
 const Home: FunctionComponent<HomeProps> = () => {
@@ -29,7 +30,7 @@ const Home: FunctionComponent<HomeProps> = () => {
         if (sessions) {
 
             sortByDateValue(sessions)
-            return sessions.map((session: any,) => {
+            return sessions.slice(0, MAX_NUM_SCROLLS_HOMEPAGE).map((session: any, index: number) => {
 
                 return <Scroll key={session.session.sessionId} id={session.sessionId} title={session.session.title} subTitle="" date={session.session.date} storyImage={CosTitle} isFirstScroll={true} campaign={session.campaignId} onClick={() => {
                     dispatch(dispatchSetSelectedCampaign(session.campaignId))

@@ -4,7 +4,8 @@ interface ISession {
     date: string
     campaign: any
     sessionDay: number
-    subtitle?: string
+    date: string
+    subTitle?: string
 }
 interface IPlayer {
     playerName: string,

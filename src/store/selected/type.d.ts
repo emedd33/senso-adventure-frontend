@@ -8,7 +8,7 @@ type SelectedState = {
 
 type ISelectedSession = {
     id?: string,
-    session: ISesson
+    session: ISession
 }
 type SelectedActions = {
     type: string,

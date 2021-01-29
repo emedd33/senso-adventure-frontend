@@ -61,9 +61,8 @@ export default function SpeedDials() {
                                     title: "",
                                     subTitle: "",
                                     story: "",
-                                    date: "",
                                     sessionDay: 1,
-                                    sessionDate: new Date().toDateString(),
+                                    date: new Date().toDateString(),
                                     campaign: selectedCampaign ? selectedCampaign.id : ""
                                 }
                             }));

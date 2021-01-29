@@ -1,8 +1,16 @@
 import { SET_BACKGROUND_IMAGE, SET_SELECTED_CAMPAIGN, SET_SELECTED_PLAYER, SET_SELECTED_SESSION, UPDATE_SELECTED_PLAYER } from "./selectedActions"
 
 export const initialSelectedCampaignState = { id: "", title: "", subTitle: "", dungeonMaster: "", sessions: [], players: [], campaignBackgroundImageFile: "", isNew: true, campaignCrestImageFile: "", campaignTitleImageFile: "" }
+export const initialSelectedSession = {
+    title: "",
+    subTitle: "",
+    story: "",
+    sessionDay: 1,
+    date: new Date().toDateString(),
+    campaign: ""
+}
 const initialSelectedState: SelectedState = {
-    selectedSession: { id: "", session: [] },
+    selectedSession: { id: "", session: initialSelectedSession },
     selectedCampaign: { id: "", campaign: initialSelectedCampaignState },
     selectedPlayer: { isNew: true, player: {} }
 

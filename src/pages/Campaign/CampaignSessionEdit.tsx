@@ -28,7 +28,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const sessionFile = useSelector((state: RootReducerProp) => state.selected.selectedSession?.session.story)
     const sessionsId = selectedSession ? selectedSession.id : null
     const [sessionDay, setSessionDay] = useState<number>(selectedSession?.session.sessionDay)
-    const [sessionSubTitle, setSessionSubTitle] = useState<string>(selectedSession?.session.subTitle)
+    const [sessionSubTitle, setSessionSubTitle] = useState<string | undefined>(selectedSession?.session.subTitle)
     const [sessionTitle, setSessionTitle] = useState<string>(selectedSession?.session.title)
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false)
     const [sessionStory, setSessionStory] = useState<string>("")
@@ -49,7 +49,16 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         dispatch(setIsLoading(false))
     }, [dispatch, selectedSession])
     const postProcessFiles = (session: ISelectedSession, sessionMDFile: string) => {
-        dispatch(dispatchSetSelectedSession(session))
+        dispatch(dispatchSetSelectedSession({
+            id: session.id, session: {
+                title: sessionTitle,
+                subTitle: sessionSubTitle,
+                date: sessionDate,
+                story: sessionMDFile,
+                sessionDay: sessionDay,
+                campaign: session.session.campaign
+            }
+        }))
         dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
         var file = new File([sessionStory], sessionMDFile, { type: "text/plain;charset=utf-8" });
         var metadata = {
@@ -80,6 +89,8 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     campaignTitle: selectedCampaign.campaign.title,
                     sessionDay: sessionDay ? sessionDay : 1
                 }
+                console.log("toUpload", toUpload)
+
 
                 if (sessionsId) {
                     campaignsRef.child(selectedCampaign.id).child("sessions/" + sessionsId).set(toUpload).then((e) => {
