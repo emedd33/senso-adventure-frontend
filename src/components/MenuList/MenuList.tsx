@@ -98,7 +98,11 @@ export default function MenuListComposition() {
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} >
                                             <MenuItem onClick={handleLogout} style={{ fontFamily: "italianno, cursive", fontSize: "1.5rem" }}>Logout</MenuItem>
+                                            <Link to="/profile" style={{ textDecoration: "none", color: "black" }}>
+                                                <MenuItem style={{ fontFamily: "italianno, cursive", fontSize: "1.5rem" }} onClick={() => setOpen(false)}>Profile</MenuItem>
+                                            </Link>
                                         </MenuList>
+
                                     </ClickAwayListener>
                                 </Paper>
                             </Grow>
