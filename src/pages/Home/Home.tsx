@@ -45,7 +45,7 @@ const Home: FunctionComponent<HomeProps> = () => {
 
     }
     return (
-        <>  <div style={{ width: "70%" }}>
+        <>  <div style={{ width: "50%", minWidth: "20rem" }}>
 
             {sessions ?
                 renderScrolls()

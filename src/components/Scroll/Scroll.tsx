@@ -49,6 +49,7 @@ function Scroll({ id, title, subTitle, date, storyImage, isFirstScroll, campaign
 const StoryImage = styled.img`
 marginTop: -1rem;
 width:70%;
+
 `
 const ScrollContent = styled.div`
 font-size: ${px2vw(20)}; 
@@ -69,7 +70,7 @@ width:100%;
 const ScrollContainer = styled.div`
 margin: ${px2vw(22)};
 width:90%;
-min-width:30rem;
+min-width:20rem;
 background-image: url(${ScrollImage});
 
 &:hover{   
