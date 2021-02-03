@@ -7,10 +7,9 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { dispatchLogout } from '../../store/admin/adminCreator';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,7 +27,6 @@ export default function MenuListComposition() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
-    const dispatch = useDispatch()
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
@@ -41,10 +39,6 @@ export default function MenuListComposition() {
 
         setOpen(false);
     };
-    const handleLogout = (event: React.MouseEvent<EventTarget>) => {
-        handleClose(event)
-        return dispatch(dispatchLogout())
-    }
     function handleListKeyDown(event: React.KeyboardEvent) {
         if (event.key === 'Tab') {
             event.preventDefault();
@@ -97,7 +91,6 @@ export default function MenuListComposition() {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} >
-                                            <MenuItem onClick={handleLogout} style={{ fontFamily: "italianno, cursive", fontSize: "1.5rem" }}>Logout</MenuItem>
                                             <Link to="/profile" style={{ textDecoration: "none", color: "black" }}>
                                                 <MenuItem style={{ fontFamily: "italianno, cursive", fontSize: "1.5rem" }} onClick={() => setOpen(false)}>Profile</MenuItem>
                                             </Link>

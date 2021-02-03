@@ -38,9 +38,9 @@ export default function App() {
           </Route>
           <Route path="/profile">
             {!authUser ?
-              <Redirect to="/" /> :
-              <LoginIndex />}
-            <ProfileIndex />
+              <Redirect to="/login" /> :
+              <ProfileIndex />
+            }
           </Route>
           <Route path="/">
             <HomeIndex />
