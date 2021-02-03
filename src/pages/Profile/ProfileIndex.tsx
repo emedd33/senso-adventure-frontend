@@ -106,7 +106,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                             }
 
                         </Button>
-                        <ChangePasswordContainer style={isChangingPassword ? { height: "20rem", borderStyle: "dotted" } : { height: "0rem", borderStyle: "none" }}>
+                        <ChangePasswordContainer style={isChangingPassword ? { height: "20rem", borderStyle: "dotted", overflow: "hidden" } : { height: "0rem" }}>
                             {isChangingPassword ?
                                 <div
                                     style={isChangingPassword ? { opacity: 1, padding: "1rem", display: "initial", transition: "200ms" } : { opacity: 0, padding: "0", display: "none", transition: "200ms" }}
@@ -161,7 +161,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                                 :
                                 null}
                         </ChangePasswordContainer>
-                        <h1>heei</h1>
+
 
                     </div>
                     <div style={{ flex: 1, width: "90%", justifyContent: "center", alignItems: "center", display: "flex" }}>
@@ -184,7 +184,7 @@ const ChangePasswordContainer = styled.div`
 
 `
 const ContentContainer = styled.div`
-min-height:50rem;
+min-height:30rem;
 min-width:15rem;
 width:50%;
 flex-direction:column;
