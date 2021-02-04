@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Route } from "react-router-dom";
 import styled from "styled-components";
+import ForgottenPasswordForm from "../../components/ForgottenPasswordForm/ForgottenPasswordForm";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import SignupForm from "../../components/SignupForm/SignupForm";
@@ -32,6 +33,9 @@ const LoginIndex: React.FC<LoginProps> = () => {
             </Route>
             <Route exact path="/login/signup">
                 <SignupForm />
+            </Route>
+            <Route exact path="/login/forgotten">
+                <ForgottenPasswordForm />
             </Route>
         </Container>
     );

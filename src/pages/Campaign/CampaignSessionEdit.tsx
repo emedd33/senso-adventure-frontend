@@ -13,7 +13,7 @@ import { dispatchSetSelectedCampaign, dispatchSetSelectedSession } from "../../s
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css';
-import { setError, setIsLoading } from "../../store/admin/adminCreator"
+import { setAlertDialog, setIsLoading } from "../../store/admin/adminCreator"
 import styled from "styled-components"
 export interface CampaignSessionEditProps {
 
@@ -74,7 +74,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const submitSession = () => {
         if (!sessionTitle) {
             setSessionTitleError(true);
-            dispatch(setError("Please fille out the Session Title"))
+            dispatch(setAlertDialog("Please fille out the Session Title", true, true))
             return;
         }
         if (selectedCampaign?.id) {

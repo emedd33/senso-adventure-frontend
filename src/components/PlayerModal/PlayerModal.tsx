@@ -10,7 +10,7 @@ import * as GiIcons from 'react-icons/gi';
 import { useDispatch, useSelector } from 'react-redux';
 import IsLoading from '../IsLoading/IsLoading';
 import { dispatchSetSelectedCampaign, updateSelectedPlayer } from '../../store/selected/selectedCreators';
-import { setError } from '../../store/admin/adminCreator';
+import { setAlertDialog } from '../../store/admin/adminCreator';
 
 
 interface SelectedPlayerProps {
@@ -59,7 +59,7 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
     }).then((e) => {
       dispatch(dispatchSetSelectedCampaign(selectedCampaign.id))
     }
-    ).catch(e => dispatch(setError("Could not create player")))
+    ).catch(e => dispatch(setAlertDialog("Could not create player", true, true)))
   }
   const updatePlayerInFirebase = async () => {
     if (selectedPlayer && selectedPlayer.id) {

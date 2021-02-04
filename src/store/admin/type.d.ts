@@ -7,8 +7,9 @@ interface IAuthUser {
     email: string
 }
 interface IError {
-    errorMessage: string,
-    isError: boolean
+    message: string,
+    isError: boolean,
+    isOpen: boolean
 }
 type AdminState = {
     isLoading: boolean

@@ -7,7 +7,7 @@ import { OLD_WHITE } from "../../assets/constants/Constants";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { campaignsRef, firebaseStorageRef } from "../../firebase";
-import { setError } from "../../store/admin/adminCreator";
+import { setAlertDialog } from "../../store/admin/adminCreator";
 import { getCampaignCrestFromFirebase } from "../../store/campaign/campaignCreators";
 import { useImageFile } from "../../store/hooks/useImageFile";
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators";
@@ -53,7 +53,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
         setIsLoading(true)
         if (!campaignTitle) {
             setCampaignTitleError(true)
-            dispatch(setError("Please fille out the Campaign Title"))
+            dispatch(setAlertDialog("Please fille out the Campaign Title", true, true))
             setIsLoading(false)
             return
         } else {
@@ -87,7 +87,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
 
         } catch (error) {
             setIsLoading(false)
-            dispatch(setError(error))
+            dispatch(setAlertDialog(error, true, true))
         }
 
     }

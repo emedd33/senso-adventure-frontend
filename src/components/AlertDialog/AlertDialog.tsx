@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_ERROR } from '../../store/admin/adminActions';
+import { setAlertDialog } from '../../store/admin/adminCreator';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children?: React.ReactElement<any, any> },
@@ -22,23 +22,26 @@ export default function AlertDialogSlide() {
     const dispatch = useDispatch()
 
     const handleClose = () => {
-        dispatch({ type: SET_ERROR, payload: false });
+        dispatch(setAlertDialog("", false, false));
     };
 
     return (
         <div style={{}}>
             <Dialog
-                open={error.isError}
+                open={error.isOpen}
                 TransitionComponent={Transition}
                 keepMounted
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">{"Error"}</DialogTitle>
+                {error.isError ?
+                    <DialogTitle id="alert-dialog-slide-title">{"Error"}</DialogTitle> :
+                    null
+                }
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        {error.errorMessage}
+                        {error.message}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

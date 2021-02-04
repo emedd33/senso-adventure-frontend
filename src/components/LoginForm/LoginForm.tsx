@@ -120,10 +120,16 @@ const LoginForm = () => {
             disabled={isButtonDisabled}>
             Login
           </Button>
+          <Link to={"/login/forgotten"} className={classes.link}>
+
+            <Button color="secondary" size="medium">
+              Forgotten password?
+            </Button>
+          </Link>
           <Link to={"/login/signup"} className={classes.link}>
 
             <Button color="secondary" size="medium">
-              Or sign up
+              Sign up
             </Button>
           </Link>
         </CardActions>

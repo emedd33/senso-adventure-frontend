@@ -6,7 +6,7 @@ import { Route } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { OLD_WHITE } from "../../assets/constants/Constants";
-import { dispatchLogout, setError } from "../../store/admin/adminCreator";
+import { dispatchLogout, setAlertDialog } from "../../store/admin/adminCreator";
 import TextField from '@material-ui/core/TextField';
 import firebase from "firebase";
 
@@ -29,15 +29,15 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
     const handleChangePassword = () => {
 
         if (!firstNewPassword || !secondNewPassword) {
-            dispatch(setError("Please Fill out the passwords"))
+            dispatch(setAlertDialog("Please Fill out the passwords", true, true))
             return
         }
         if (firstNewPassword !== secondNewPassword) {
-            dispatch(setError("Passwords are not equal"))
+            dispatch(setAlertDialog("Passwords are not equal", true, true))
             return
         }
         if (firstNewPassword.length < 6) {
-            dispatch(setError("Passwords must be at least 6 characters"))
+            dispatch(setAlertDialog("Passwords must be at least 6 characters", true, true))
             return
         }
         if (user) {
@@ -54,7 +54,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
 
                             user.updatePassword(firstNewPassword)
                                 .then(function () {
-                                    dispatch(setError("Password was changed"))
+                                    dispatch(setAlertDialog("Password was changed", false, true))
                                 })
                                 .catch(function (error) {
                                     console.log(
