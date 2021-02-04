@@ -29,7 +29,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       storage
         .ref(
           BackgroundImageFileLocation +
-            selectedCampaign.campaign.campaignBackgroundImageFile
+          selectedCampaign.campaign.campaignBackgroundImageFile
         )
         .getDownloadURL()
         .then((url: string) => {
@@ -39,7 +39,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       storage
         .ref(
           "Images/CampaignTitle/" +
-            selectedCampaign.campaign.campaignTitleImageFile
+          selectedCampaign.campaign.campaignTitleImageFile
         )
         .getDownloadURL()
         .then((url) => {
@@ -70,18 +70,18 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       {isLoading ? (
         <IsLoading />
       ) : (
-        <>
-          <Route exact path="/campaign">
-            <Campaign />
-          </Route>
-          <Route exact path="/campaign/session">
-            <CampaignSession />
-          </Route>
-          <Route exact path="/campaign/session/edit">
-            {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
-          </Route>
-        </>
-      )}
+          <>
+            <Route exact path="/campaign">
+              <Campaign />
+            </Route>
+            <Route exact path="/campaign/session">
+              <CampaignSession />
+            </Route>
+            <Route exact path="/campaign/session/edit">
+              {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
+            </Route>
+          </>
+        )}
       {selectedCampaign && isDungeonMaster ? <MiscBox /> : null}
     </Container>
   );
