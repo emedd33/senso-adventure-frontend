@@ -1,9 +1,13 @@
 type CrestObjectType = {
-    title: string,
-    url: string
-}
+  title: string;
+  url: string;
+};
 type RootReducerProp = {
-    rootCampaigns: { campaigns: ICampaign[], sessions: ISession[], campaignCrestFiles: CrestObjectType[] },
-    admin: AdminState,
-    selected: SelectedState
-}
+  rootCampaigns: {
+    campaigns: ICampaign[];
+    sessions: ISession[];
+    campaignCrestFiles: CrestObjectType[];
+  };
+  admin: AdminState;
+  selected: SelectedState;
+};

@@ -82,6 +82,7 @@
     "@types/react-syntax-highlighter": "^13.5.0",
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0",
-    "@types/styled-components": "^5.1.7"
+    "@types/styled-components": "^5.1.7",
+    "prettier": "2.2.1"
   }
 }

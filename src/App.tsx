@@ -7,7 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import "./App.scss"
+import "./App.scss";
 import { fetchFromFirebase } from "./store/campaign/campaignCreators";
 import HomeIndex from "./pages/Home/HomeIndex";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
@@ -16,11 +16,13 @@ import LoginIndex from "./pages/Login/LoginIndex";
 import StickyFooter from "./components/Footer/StickyFooter";
 import ProfileIndex from "./pages/Profile/ProfileIndex";
 export default function App() {
-  const dispatch = useDispatch()
-  const authUser = useSelector((state: RootReducerProp) => state.admin.authUser)
+  const dispatch = useDispatch();
+  const authUser = useSelector(
+    (state: RootReducerProp) => state.admin.authUser
+  );
   useEffect(() => {
-    dispatch(fetchFromFirebase)
-  }, [dispatch])
+    dispatch(fetchFromFirebase);
+  }, [dispatch]);
   return (
     <Router>
       <Navbar />
@@ -28,19 +30,14 @@ export default function App() {
       <>
         <AlertDialog />
         <Switch>
-          <Route path="/campaign" >
+          <Route path="/campaign">
             <CampaignIndex />
           </Route>
           <Route path="/login">
-            {authUser ?
-              <Redirect to="/" /> :
-              <LoginIndex />}
+            {authUser ? <Redirect to="/" /> : <LoginIndex />}
           </Route>
           <Route path="/profile">
-            {!authUser ?
-              <Redirect to="/login" /> :
-              <ProfileIndex />
-            }
+            {!authUser ? <Redirect to="/login" /> : <ProfileIndex />}
           </Route>
           <Route path="/">
             <HomeIndex />

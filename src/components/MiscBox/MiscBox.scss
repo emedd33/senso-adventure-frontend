@@ -1,16 +1,16 @@
 .misc-container {
-    width:10rem;
-height:1rem;
-position:fixed;
-bottom:0;
-right:0;
-padding-bottom: 3rem;
-border-radius: 2rem 2rem 0 0;
-box-shadow: 5px 0px 15px 2px #000000;
-transition:200ms;
-z-index: 400;
-  }
-  
+  width: 10rem;
+  height: 1rem;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding-bottom: 3rem;
+  border-radius: 2rem 2rem 0 0;
+  box-shadow: 5px 0px 15px 2px #000000;
+  transition: 200ms;
+  z-index: 400;
+}
+
 .misc-container.active {
-height:10rem
+  height: 10rem;
 }

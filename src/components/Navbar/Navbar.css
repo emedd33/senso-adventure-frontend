@@ -1,6 +1,5 @@
-
 .nav-menu {
-  background-color: #AB9696;
+  background-color: #ab9696;
   width: 40%;
   max-width: 40rem;
   min-width: 20rem;
@@ -14,8 +13,8 @@
   opacity: 0.95;
   transition: 350ms;
   z-index: 450;
-  -webkit-box-shadow: 5px 5px 15px 5px #000000; 
-box-shadow: 5px 0px 15px 2px #000000;
+  -webkit-box-shadow: 5px 5px 15px 5px #000000;
+  box-shadow: 5px 0px 15px 2px #000000;
 }
 
 .nav-menu.active {
@@ -23,21 +22,21 @@ box-shadow: 5px 0px 15px 2px #000000;
   transition: 350ms;
 }
 
-.opacity-container.active{
-background-color:black;
-opacity:0.8;
-transition: 350ms;
-z-index:400;
-display: flex;
+.opacity-container.active {
+  background-color: black;
+  opacity: 0.8;
+  transition: 350ms;
+  z-index: 400;
+  display: flex;
 }
-.opacity-container{
+.opacity-container {
   position: -webkit-sticky;
-position: fixed;
-top: 0rem;
-width:100%;
-height:100%;
-transition: 350ms;
-z-index: 0;
-background-color:transparent;
-opacity:1;
+  position: fixed;
+  top: 0rem;
+  width: 100%;
+  height: 100%;
+  transition: 350ms;
+  z-index: 0;
+  background-color: transparent;
+  opacity: 1;
 }
