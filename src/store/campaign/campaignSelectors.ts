@@ -29,3 +29,25 @@ export const isDungeonMasterSelector = (state: RootReducerProp) => {
     }
     return false
 }
+
+export const getNextSession = (state: RootReducerProp) => {
+    let selectedSessionIndex = state.selected.selectedSession.index
+    if (typeof (selectedSessionIndex) === "number") {
+        let session = Object.entries(state.selected.selectedCampaign.campaign.sessions)[selectedSessionIndex + 1]
+        if (session) {
+            return { id: session[0], session: session[1], index: selectedSessionIndex + 1 }
+
+        }
+    }
+    return null
+}
+export const getPreviousSession = (state: RootReducerProp) => {
+    let selectedSessionIndex = state.selected.selectedSession.index
+    if (typeof (selectedSessionIndex) === "number") {
+        let session = Object.entries(state.selected.selectedCampaign.campaign.sessions)[selectedSessionIndex - 1]
+        if (session) {
+            return { id: session[0], session: session[1], index: selectedSessionIndex + -1 }
+        }
+    }
+    return null
+}

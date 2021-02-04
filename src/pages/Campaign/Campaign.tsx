@@ -17,7 +17,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
     const renderScrolls = () => {
         if (selectedCampaign?.campaign.sessions) {
-            return (Object.keys(selectedCampaign.campaign.sessions).map((key: any) => {
+            return (Object.keys(selectedCampaign.campaign.sessions).map((key: any, index: number) => {
                 let story = selectedCampaign.campaign.sessions[key].story
                 story = story.length > 500 ? story.substring(0, 1000).concat("...") : story
                 let title = selectedCampaign!.campaign.sessions[key].title
@@ -37,6 +37,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                         onClick={() => {
                             dispatch(dispatchSetSelectedSession({
                                 id: key,
+                                index: index,
                                 session: {
                                     title: title,
                                     subTitle: subTitle,

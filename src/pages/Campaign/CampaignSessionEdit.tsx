@@ -57,7 +57,8 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 story: sessionMDFile,
                 sessionDay: sessionDay,
                 campaign: session.session.campaign
-            }
+            },
+            index: session.index
         }))
         dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id))
         var file = new File([sessionStory], sessionMDFile, { type: "text/plain;charset=utf-8" });

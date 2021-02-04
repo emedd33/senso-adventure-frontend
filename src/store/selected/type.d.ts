@@ -7,7 +7,8 @@ type SelectedState = {
 }
 
 type ISelectedSession = {
-    id?: string,
+    id: string,
+    index?: number,
     session: ISession
 }
 type SelectedActions = {

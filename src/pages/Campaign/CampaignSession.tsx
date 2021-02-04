@@ -5,7 +5,7 @@ import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import ReactMarkdown from 'react-markdown'
-import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
+import { dispatchSetSelectedSession, setSelectedSession } from "../../store/selected/selectedCreators";
 import { Redirect, useHistory } from "react-router-dom";
 import { setIsLoading } from "../../store/admin/adminCreator";
 import { storage } from "../../firebase";
@@ -14,7 +14,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { parseSessionStory } from "../../utils/paseSessionStory";
-import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
+import { getNextSession, getPreviousSession, isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 const renderers = {
     code: function (obj: any) {
         return <SyntaxHighlighter style={dark} language={obj.language} children={obj.value} />;
@@ -27,6 +27,13 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const [sessionStory, setSessionStory] = useState("")
     const selectedSession = useSelector((state: RootReducerProp) => state.selected.selectedSession)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
+    const nextSession = useSelector(getNextSession)
+    const previousSession = useSelector(getPreviousSession)
+    const changeSession = (session?: any) => {
+        if (session) {
+            dispatch(setSelectedSession(session))
+        }
+    }
     useEffect(() => {
         dispatch(setIsLoading(true))
         if (selectedSession.session.story) {
@@ -39,7 +46,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     })
                 )
                 .catch(e => console.log("error", e))
+
             dispatch(setIsLoading(false))
+
         }
     }, [dispatch, selectedSession, isDungeonMaster])
     if (!selectedSession.id) {
@@ -47,14 +56,25 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     }
 
     return (<>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", width: "50%" }}>
+
+            <ChangeSessionButton style={!previousSession ? { opacity: 0.6, cursor: "default" } : {}} onClick={() => changeSession(previousSession)}>
+                Previous
+                </ChangeSessionButton>
+            <ChangeSessionButton style={!nextSession ? { opacity: 0.6, cursor: "default" } : {}} onClick={() => changeSession(nextSession)}>
+
+                Next
+                </ChangeSessionButton>
+        </div>
         <Container>
+
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexDirection: "column" }}>
 
-                    <p style={{ fontSize: "1.5rem", opacity: 0.8, textAlign: "left" }}>
-                        Day: {selectedSession?.session.sessionDay}
+                    <p style={{ fontSize: "1.5rem", opacity: 0.8, textAlign: "left", margin: 0 }}>
+                        Session: {selectedSession?.session.sessionDay}
                     </p>
-                    <p style={{ fontSize: "1rem", opacity: 0.5, textAlign: "left" }}>
+                    <p style={{ fontSize: "1rem", opacity: 0.5, textAlign: "left", margin: 0 }}>
                         {selectedSession?.session.date}
                     </p>
                 </div>
@@ -69,8 +89,8 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                                 date: selectedSession.session.date,
                                 campaign: selectedSession.session.campaign,
                                 sessionDay: selectedSession.session.sessionDay
-
-                            }
+                            },
+                            index: selectedSession.index
                         }))
                         history.push("/campaign/session/edit")
                     }}>
@@ -103,5 +123,10 @@ padding:1rem;
 -webkit-box-shadow: 5px 5px 15px 5px #000000; 
 box-shadow: 5px 0px 15px 2px #000000;
 background-color: ${OLD_WHITE}
+`
+const ChangeSessionButton = styled.h4`
+color: white; 
+margin: 0;
+cursor: pointer;
 `
 export default CampaignSession

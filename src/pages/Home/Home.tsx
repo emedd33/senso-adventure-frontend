@@ -34,7 +34,7 @@ const Home: FunctionComponent<HomeProps> = () => {
 
                 return <Scroll key={session.session.sessionId} id={session.sessionId} title={session.session.title} subTitle="" date={session.session.date} storyImage={CosTitle} isFirstScroll={true} campaign={session.campaignId} onClick={() => {
                     dispatch(dispatchSetSelectedCampaign(session.campaignId))
-                    dispatch(dispatchSetSelectedSession({ id: session.sessionId, session: session.session }))
+                    dispatch(dispatchSetSelectedSession({ id: session.sessionId, session: session.session, index: index }))
                     history.push("/campaign/session")
                 }}
                 />
