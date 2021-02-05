@@ -9,7 +9,7 @@ export const parseSessionStory = (text: string, isDungeonMaster: boolean) => {
       continue;
     }
     if (isDungeonMaster) {
-      text = text.replace("<secret>", "\n~~~~js \n");
+      text = text.replace("<secret>", "\n~~~~ \n");
       text = text.replace("</secret>", "\n~~~~\n");
     } else {
       let secretMessage = text.slice(secretStart, secretEnd + 9);

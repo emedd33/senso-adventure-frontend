@@ -5,24 +5,22 @@ export const getCamapignCrestFiles = (state: RootReducerProp) => {
 };
 
 export const getAllSessions = (state: RootReducerProp) => {
+    let sessions: { campaignId: string, sessionId: string, session: ISession }[] = []
     if (state.rootCampaigns) {
-        return Object.entries(state.rootCampaigns.campaigns)
+        sessions = Object.entries(state.rootCampaigns.campaigns)
             .map(([campaignId, campaign]) => {
-                if (campaign.sessions) {
-                    return Object.entries(campaign.sessions).map(
-                        ([sessionId, session]) => {
-                            return {
-                                campaignId: campaignId,
-                                sessionId: sessionId,
-                                session: session,
-                            };
-                        }
-                    );
-                }
-            })
-            .flat()
-            .filter((e) => e !== null);
+                return Object.entries(campaign.sessions).map(
+                    ([sessionId, session]) => {
+                        return {
+                            campaignId: campaignId,
+                            sessionId: sessionId,
+                            session: session,
+                        };
+                    }
+                );
+            }).flat()
     }
+    return sessions
 };
 export const isDungeonMasterSelector = (state: RootReducerProp) => {
     let username = state.admin.authUser?.username;

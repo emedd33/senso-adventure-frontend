@@ -1,10 +1,8 @@
-const sortSessionsByDateValue = (array?: any) => {
-  console.log("array", array)
+const sortSessionsByDateValue = (array: any) => {
   if (array) {
     array = array.filter((e: any) => e !== undefined)
-    console.log("array", array)
     if (array.length > 1) {
-      array.sort(function (a: { session: { date: string | number | Date; }; }, b: { session: { date: string | number | Date; }; }) {
+      array = array.sort(function (a: any, b: any) {
         let last: any = new Date(b.session.date)
         let first: any = new Date(a.session.date);
         return last - first

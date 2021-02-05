@@ -7,7 +7,6 @@ import Scroll from "../../components/Scroll/Scroll";
 import { Redirect, useHistory } from "react-router-dom";
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
-import sortSessionsByDateValue from "../../utils/sortArrayDyDate";
 
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
@@ -20,9 +19,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
     const renderScrolls = () => {
         if (selectedCampaign?.campaign.sessions) {
-            // sortSessionsByDateValue(selectedCampaign.campaign.sessions);
             return Object.entries(selectedCampaign.campaign.sessions).map(([id, session], index) => {
-
                 return (
                     <Scroll
                         id={id}

@@ -36,8 +36,8 @@ const Home: FunctionComponent<HomeProps> = () => {
 
     const renderScrolls = () => {
         if (sessions) {
-            // sortSessionsByDateValue(sessions);
-            return sessions
+            let sortedSessions = sortSessionsByDateValue(sessions);
+            return sortedSessions
                 .slice(0, MAX_NUM_SCROLLS_HOMEPAGE)
                 .map((session: any, index: number) => {
                     return (

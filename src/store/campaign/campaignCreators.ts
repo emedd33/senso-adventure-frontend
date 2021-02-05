@@ -19,7 +19,7 @@ export async function fetchFromFirebase(dispatch: any) {
 
   // Database
   campaignsRef.on("value", (snapshot) => {
-    let campaigns = snapshot.val();
+    let campaigns = snapshot.val()
     if (campaigns) {
       dispatch({ type: SET_CAMPAIGNS, payload: campaigns });
 
