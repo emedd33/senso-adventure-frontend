@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import rootReducer from "./store/rootReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { Helmet } from "react-helmet";
 
 const store = createStore(
   rootReducer,
@@ -16,6 +17,11 @@ const store = createStore(
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Senso Adventure</title>
+        <link rel="icon" type="image/png" href="home_crest.png" sizes="16x16" />
+      </Helmet>
       <App />
     </Provider>
   </React.StrictMode>,

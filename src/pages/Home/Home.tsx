@@ -48,7 +48,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                             subTitle={session.session.subTitle}
                             date={session.session.date}
                             storyImage={CosTitle}
-                            isFirstScroll={true}
+                            sessionDay={session.session.sessionDay}
                             campaign={session.campaignId}
                             onClick={() => {
                                 dispatch(dispatchSetSelectedCampaign(session.campaignId));
@@ -56,7 +56,6 @@ const Home: FunctionComponent<HomeProps> = () => {
                                     dispatchSetSelectedSession({
                                         id: session.sessionId,
                                         session: session.session,
-                                        index: index,
                                     })
                                 );
                                 history.push("/campaign/session");

@@ -10,7 +10,7 @@ type ScrollProps = {
   subTitle: string;
   date: string;
   storyImage: string;
-  isFirstScroll: boolean;
+  sessionDay: number;
   campaign: ICampaign;
   onClick: any;
 };
@@ -21,8 +21,8 @@ function Scroll({
   subTitle,
   date,
   storyImage,
-  isFirstScroll,
   campaign,
+  sessionDay,
   onClick,
 }: ScrollProps): JSX.Element {
   return (
@@ -40,16 +40,23 @@ function Scroll({
         className={onClick ? "scroll-container-active" : "scroll-container"}
       >
         <ScrollContent>
-          <ScrollDate>{date}</ScrollDate>
-          {isFirstScroll ? (
-            <div>
-              <div style={{ justifyContent: "center", display: "flex" }}>
-                <StoryImage src={storyImage} alt="" />
-              </div>
-              <ScrollTitle>{title}</ScrollTitle>
-              <h3 style={{ color: "gray", textAlign: "center" }}>{subTitle}</h3>
+          <div>
+
+            <h1 style={{ margin: 0, opacity: 0.7 }}>
+              Session day: {sessionDay}
+
+            </h1>
+            <ScrollDate>
+              {date}
+            </ScrollDate>
+          </div>
+          <div>
+            <div style={{ justifyContent: "center", display: "flex" }}>
+              <StoryImage src={storyImage} alt="" />
             </div>
-          ) : null}
+            <ScrollTitle>{title}</ScrollTitle>
+            <h3 style={{ color: "black", textAlign: "center" }}>{subTitle}</h3>
+          </div>
         </ScrollContent>
       </ScrollContainer>
     </div>
@@ -87,5 +94,7 @@ const ScrollContainer = styled.div`
 
 const ScrollDate = styled.h2`
   margin-top: -${px2vw(4)};
+  margin-bottom:0;
+  opacity: 0.7;
 `;
 export default Scroll;

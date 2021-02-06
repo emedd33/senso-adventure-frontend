@@ -31,32 +31,34 @@ export const isDungeonMasterSelector = (state: RootReducerProp) => {
 };
 
 export const getNextSession = (state: RootReducerProp) => {
-    let selectedSessionIndex = state.selected.selectedSession.index;
-    if (typeof selectedSessionIndex === "number") {
-        let session = Object.entries(
+    let selectedSessionDay = state.selected.selectedSession.session.sessionDay;
+    if (typeof selectedSessionDay === "number") {
+        let nextSession = Object.entries(
             state.selected.selectedCampaign.campaign.sessions
-        )[selectedSessionIndex + 1];
-        if (session) {
+        ).filter(([id, session]) => {
+            return session.sessionDay === selectedSessionDay + 1
+        })
+        if (nextSession[0]) {
             return {
-                id: session[0],
-                session: session[1],
-                index: selectedSessionIndex + 1,
+                id: nextSession[0][0],
+                session: nextSession[0][1],
             };
         }
     }
     return null;
 };
 export const getPreviousSession = (state: RootReducerProp) => {
-    let selectedSessionIndex = state.selected.selectedSession.index;
-    if (typeof selectedSessionIndex === "number") {
-        let session = Object.entries(
+    let selectedSessionDay = state.selected.selectedSession.session.sessionDay;
+    if (typeof selectedSessionDay === "number") {
+        let previousSession = Object.entries(
             state.selected.selectedCampaign.campaign.sessions
-        )[selectedSessionIndex - 1];
-        if (session) {
+        ).filter(([id, session]) => {
+            return session.sessionDay === selectedSessionDay - 1
+        })
+        if (previousSession[0]) {
             return {
-                id: session[0],
-                session: session[1],
-                index: selectedSessionIndex + -1,
+                id: previousSession[0][0],
+                session: previousSession[0][1],
             };
         }
     }

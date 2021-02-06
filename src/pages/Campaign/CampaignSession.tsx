@@ -151,7 +151,6 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                                             campaign: selectedSession.session.campaign,
                                             sessionDay: selectedSession.session.sessionDay,
                                         },
-                                        index: selectedSession.index,
                                     })
                                 );
                                 history.push("/campaign/session/edit");

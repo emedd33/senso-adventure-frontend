@@ -27,13 +27,12 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                         subTitle={session.subTitle ? session.subTitle : ""}
                         date={session.date}
                         storyImage={CosTitle}
-                        isFirstScroll={true}
                         campaign={session.campaign}
+                        sessionDay={session.sessionDay}
                         onClick={() => {
                             dispatch(
                                 dispatchSetSelectedSession({
                                     id: id,
-                                    index: index,
                                     session: {
                                         title: session.title,
                                         subTitle: session.subTitle,
