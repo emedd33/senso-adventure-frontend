@@ -18,6 +18,8 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
 import styled from "styled-components";
+import ImageUpload from "../../components/ImageUpload/ImageUpload";
+import { useImageFile } from "../../store/hooks/useImageFile";
 export interface CampaignSessionEditProps { }
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
@@ -51,6 +53,10 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             ? new Date(selectedSession.session.date).toDateString()
             : new Date().toDateString()
     );
+    const [sessionImageFiles1, setSessionImage1Files] = useImageFile();
+    const [sessionImageFiles2, setSessionImage2Files] = useImageFile();
+    const [sessionImageFiles3, setSessionImage3Files] = useImageFile();
+
     useEffect(() => {
         dispatch(setIsLoading(true));
         if (selectedSession && selectedSession?.session.story) {
@@ -111,48 +117,49 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             return;
         }
         if (selectedCampaign?.id) {
-            try {
-                let sessionMDFile = sessionFile
-                    ? sessionFile
-                    : sessionTitle +
-                    "_" +
-                    selectedCampaign.id +
-                    "_" +
-                    sessionDate +
-                    ".md";
-                const toUpload = {
-                    campaign: selectedCampaign.id,
-                    date: sessionDate ? sessionDate : new Date().toDateString(),
-                    story: sessionMDFile,
-                    title: sessionTitle,
-                    subTitle: sessionSubTitle ? sessionSubTitle : "",
-                    campaignTitle: selectedCampaign.campaign.title,
-                    sessionDay: sessionDay ? sessionDay : 1,
-                };
-                console.log("toUpload", toUpload);
+            let sessionMDFile = sessionFile
+                ? sessionFile
+                : sessionTitle +
+                "_" +
+                selectedCampaign.id +
+                "_" +
+                sessionDate +
+                ".md";
+            const toUpload = {
+                campaign: selectedCampaign.id,
+                date: sessionDate ? sessionDate : new Date().toDateString(),
+                story: sessionMDFile,
+                title: sessionTitle,
+                subTitle: sessionSubTitle ? sessionSubTitle : "",
+                campaignTitle: selectedCampaign.campaign.title,
+                sessionDay: sessionDay ? sessionDay : 1,
+            };
+            if (Object.values(selectedCampaign.campaign.sessions).filter((session) => {
+                return session.sessionDay === sessionDay && session.title !== sessionTitle
+            }).length > 0) {
+                dispatch(setAlertDialog("Session day is invalid due to duplicated session days", true, true))
+                return
+            }
 
-                if (sessionsId) {
-                    campaignsRef
-                        .child(selectedCampaign.id)
-                        .child("sessions/" + sessionsId)
-                        .set(toUpload)
-                        .then((e) => {
-                            postProcessFiles(selectedSession, sessionMDFile);
+            if (sessionsId) {
+                campaignsRef
+                    .child(selectedCampaign.id)
+                    .child("sessions/" + sessionsId)
+                    .set(toUpload)
+                    .then((e) => {
+                        postProcessFiles(selectedSession, sessionMDFile);
+                    });
+            } else {
+                campaignsRef
+                    .child(selectedCampaign.id)
+                    .child("sessions")
+                    .push(toUpload)
+                    .then((snap) => {
+                        snap.once("value", async (snapshot: any) => {
+                            const session = { id: snapshot.key, session: snapshot.val() };
+                            postProcessFiles(session, sessionMDFile);
                         });
-                } else {
-                    campaignsRef
-                        .child(selectedCampaign.id)
-                        .child("sessions")
-                        .push(toUpload)
-                        .then((snap) => {
-                            snap.once("value", async (snapshot: any) => {
-                                const session = { id: snapshot.key, session: snapshot.val() };
-                                postProcessFiles(session, sessionMDFile);
-                            });
-                        });
-                }
-            } catch (error) {
-                throw error;
+                    });
             }
         }
     };
@@ -196,7 +203,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 />
                 <TextField
                     id="outlined-number"
-                    label="Session number"
+                    label="Session day"
                     placeholder="Which session is this?"
                     type="number"
                     InputLabelProps={{
@@ -256,8 +263,27 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 onChange={(html: any) => setSessionStory(html.text)}
                 value={sessionStory ? sessionStory : ""}
             />
+            <h3>Add pictures to session</h3>
+            <div style={{ display: "flex", flexDirection: "row" }}>
 
-            <Button variant="contained" color="primary" onClick={submitSession}>
+                <ImageUpload
+                    imageFile={sessionImageFiles1.file}
+                    setImageFile={setSessionImage1Files}
+                    maxFiles={3}
+                />
+                <ImageUpload
+                    imageFile={sessionImageFiles2.file}
+                    setImageFile={setSessionImage2Files}
+                    maxFiles={3}
+                />
+                <ImageUpload
+                    imageFile={sessionImageFiles3.file}
+                    setImageFile={setSessionImage3Files}
+                    maxFiles={3}
+                />
+            </div>
+
+            <Button variant="contained" color="primary" style={{ margin: "2rem" }} onClick={submitSession}>
                 Submit
       </Button>
         </div>

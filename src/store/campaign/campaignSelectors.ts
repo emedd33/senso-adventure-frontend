@@ -5,20 +5,26 @@ export const getCamapignCrestFiles = (state: RootReducerProp) => {
 };
 
 export const getAllSessions = (state: RootReducerProp) => {
-    let sessions: { campaignId: string, sessionId: string, session: ISession }[] = []
+    let sessions: ({ campaignId: string, sessionId: string, session: ISession } | undefined)[] = []
     if (state.rootCampaigns) {
         sessions = Object.entries(state.rootCampaigns.campaigns)
             .map(([campaignId, campaign]) => {
-                return Object.entries(campaign.sessions).map(
-                    ([sessionId, session]) => {
-                        return {
-                            campaignId: campaignId,
-                            sessionId: sessionId,
-                            session: session,
-                        };
-                    }
-                );
-            }).flat()
+                if (campaign.sessions) {
+
+                    return Object.entries(campaign.sessions).map(
+                        ([sessionId, session]) => {
+                            return {
+                                campaignId: campaignId,
+                                sessionId: sessionId,
+                                session: session,
+                            };
+                        }
+                    );
+                }
+                return undefined
+            })
+            .filter(Boolean)
+            .flat()
     }
     return sessions
 };
