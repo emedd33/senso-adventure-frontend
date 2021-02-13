@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import * as FaIcons from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import HomeCrest from "../../assets/backgroundImage/home_crest.png";
@@ -22,8 +22,8 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import useWindowSize from "../../store/hooks/useWindowSize";
 import IsLoading from "../IsLoading/IsLoading";
-import { getCamapignCrestFiles } from "../../store/campaign/campaignSelectors";
 import { LIGHT_PINK } from "../../assets/constants/Constants";
+import { storage } from "../../firebase";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     backdrop: {
@@ -49,12 +49,59 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   const authUser = useSelector(
     (state: RootReducerProp) => state.admin.authUser
   );
+  const [crestUrls, setCrestUrls] = useState<{ title: string, url: string }[]>([])
   const [sidebar, setSidebar] = useState(false);
-  const campaignCrestFiles = useSelector(getCamapignCrestFiles);
   const showSidebar = () => setSidebar(!sidebar);
   const toggleSetCampaign = (campaignId: string) => {
     dispatch(dispatchSetSelectedCampaign(campaignId));
   };
+  const getCrestUrl = (title: string) => {
+    let files = crestUrls.filter((crest: any) => crest.title === title)
+    console.log(files)
+    if (files.length > 0) {
+      return files[0].url
+    }
+    return ""
+  }
+  const getCrestImage = (title: string) => {
+    console.log(crestUrls)
+    if (getCrestUrl(title)) {
+
+      return (
+
+        <img
+          style={{ width: "3rem", height: "3rem" }}
+          src={""}
+          alt="Crest symbol"
+        />
+      )
+    }
+  }
+  const getCrestImageUrls = () => {
+    Object.values(rootCampaigns.campaigns).map((campaign: ICampaign) =>
+      storage.ref("Campaigns")
+        .child(campaign.title)
+        .child("CrestImage")
+        .getDownloadURL()
+        .then(url => {
+          setCrestUrls((crestUrls: any) => {
+            return [
+              ...crestUrls,
+              [{
+                title: campaign.title,
+                url: url
+              }]
+
+            ]
+          })
+        })
+        .catch(e => { console.log("could not get Crest image") })
+    )
+  }
+  useEffect(() => {
+    getCrestImageUrls()
+  }, [])
+  console.log(crestUrls)
   if (!rootCampaigns) {
     return <IsLoading />;
   }
@@ -178,46 +225,34 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 </NavBarItem>
                 {Object.entries(rootCampaigns.campaigns).map(
                   ([id, campaign]) => {
-                    if (campaignCrestFiles) {
-                      const crestObject = Object.values(
-                        campaignCrestFiles
-                      ).filter((file) => file.title === campaign.title);
-                      const crestObjectUrl =
-                        crestObject.length > 0 ? crestObject[0].url : "";
-                      return (
-                        <NavBarItem
-                          onClick={() => dispatch(clearSelectedCampaign)}
+                    return (
+                      <NavBarItem
+                        onClick={() => dispatch(clearSelectedCampaign)}
+                      >
+                        <Link
+                          to="/campaign"
+                          onClick={() => toggleSetCampaign(id)}
+                          style={{
+                            textDecoration: "none",
+                            color: "black",
+                            width: "100%",
+                          }}
                         >
-                          <Link
-                            to="/campaign"
-                            onClick={() => toggleSetCampaign(id)}
+                          <span
                             style={{
-                              textDecoration: "none",
-                              color: "black",
-                              width: "100%",
+                              padding: "1rem",
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "center",
+                              alignItems: "center",
                             }}
                           >
-                            <span
-                              style={{
-                                padding: "1rem",
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <img
-                                style={{ width: "3rem", height: "3rem" }}
-                                src={crestObjectUrl}
-                                alt="Crest symbol"
-                              />
-                              <CampaignTitle>{campaign.title}</CampaignTitle>
-                            </span>
-                          </Link>
-                        </NavBarItem>
-                      );
-                    }
-                    return <></>;
+                            {getCrestImage(campaign.title)}
+                            <CampaignTitle>{campaign.title}</CampaignTitle>
+                          </span>
+                        </Link>
+                      </NavBarItem>
+                    );
                   }
                 )}
 

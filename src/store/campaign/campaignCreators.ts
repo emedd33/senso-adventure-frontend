@@ -1,9 +1,7 @@
 import { Dispatch } from "redux";
 import {
   campaignsRef,
-  CrestImageFileLocation,
   firebaseAuth,
-  storage,
 } from "../../firebase";
 import { SET_AUTH_USER, SET_IS_LOADING } from "../admin/adminActions";
 import { setIsLoading } from "../admin/adminCreator";
@@ -28,8 +26,6 @@ export async function fetchFromFirebase(dispatch: any) {
       dispatch({ type: SET_SESSIONS, payload: sessions });
     }
   });
-  // Storage
-  dispatch(getCampaignCrestFromFirebase);
 
   // Auth
   firebaseAuth.onAuthStateChanged(function (user) {
@@ -85,35 +81,35 @@ export const dispatchLevelUpCharacters = (selectedCampaign: any) => {
   };
 };
 
-let campaignCrestFiles: CrestObjectType[] = [];
-export const getCampaignCrestFromFirebase = async (dispatch: Dispatch) => {
-  await storage
-    .ref(CrestImageFileLocation)
-    .listAll()
-    .then((crestFiles) =>
-      crestFiles.items.map((crestFile) =>
-        crestFile
-          .getDownloadURL()
-          .then((url) => url)
-          .then(async (url) =>
-            crestFile.getMetadata().then((data) => {
-              if (
-                data.customMetadata !== undefined &&
-                data.customMetadata.campaignTitle !== undefined
-              ) {
-                campaignCrestFiles.push({
-                  title: data.customMetadata.campaignTitle,
-                  url: url,
-                });
-              }
-              return campaignCrestFiles;
-            })
-          )
-          .then((crestFiles) => dispatch(setCampaignCrestImageUrl(crestFiles)))
-      )
-    )
-    .catch((e) => console.log(e));
-};
+// let campaignCrestFiles: CrestObjectType[] = [];
+// export const getCampaignCrestFromFirebase = async (dispatch: Dispatch) => {
+//   await storage
+//     .ref(CrestImageFileLocation)
+//     .listAll()
+//     .then((crestFiles) =>
+//       crestFiles.items.map((crestFile) =>
+//         crestFile
+//           .getDownloadURL()
+//           .then((url) => url)
+//           .then(async (url) =>
+//             crestFile.getMetadata().then((data) => {
+//               if (
+//                 data.customMetadata !== undefined &&
+//                 data.customMetadata.campaignTitle !== undefined
+//               ) {
+//                 campaignCrestFiles.push({
+//                   title: data.customMetadata.campaignTitle,
+//                   url: url,
+//                 });
+//               }
+//               return campaignCrestFiles;
+//             })
+//           )
+//           .then((crestFiles) => dispatch(setCampaignCrestImageUrl(crestFiles)))
+//       )
+//     )
+//     .catch((e) => console.log(e));
+// };
 
 export const setCampaignCrestImageUrl = (crestFiles: CrestObjectType[]) => {
   return {

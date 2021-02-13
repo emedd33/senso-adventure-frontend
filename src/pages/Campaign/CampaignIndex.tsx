@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { Redirect, Route } from "react-router-dom";
-import { BackgroundImageFileLocation, storage } from "../../firebase";
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSession from "./CampaignSession";
 import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 import MiscBox from "../../components/MiscBox/MiscBox";
+import { storage } from "../../firebase";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
@@ -23,24 +23,22 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
   useEffect(() => {
     if (
-      selectedCampaign &&
-      selectedCampaign.campaign.campaignBackgroundImageFile
+      selectedCampaign
     ) {
       storage
-        .ref(
-          BackgroundImageFileLocation +
-          selectedCampaign.campaign.campaignBackgroundImageFile
-        )
+        .ref("Campaigns")
+        .child(selectedCampaign.campaign.title)
+        .child("BackgroundImage")
         .getDownloadURL()
         .then((url: string) => {
+          console.log(url)
           setImageUrl(url);
         })
         .catch((e) => console.log("could not fetch background image"));
       storage
-        .ref(
-          "Images/CampaignTitle/" +
-          selectedCampaign.campaign.campaignTitleImageFile
-        )
+        .ref("Campaigns")
+        .child(selectedCampaign.campaign.title)
+        .child("TitleImage")
         .getDownloadURL()
         .then((url) => {
           setCampaignTitleImage(url);

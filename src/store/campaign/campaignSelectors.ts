@@ -1,8 +1,4 @@
-export const getCamapignCrestFiles = (state: RootReducerProp) => {
-    if (state.rootCampaigns) {
-        return state.rootCampaigns.campaignCrestFiles;
-    }
-};
+
 
 export const getAllSessions = (state: RootReducerProp) => {
     let sessions: ({ campaignId: string, sessionId: string, session: ISession } | undefined)[] = []

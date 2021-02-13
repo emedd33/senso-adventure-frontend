@@ -8,7 +8,6 @@ import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { campaignsRef, firebaseStorageRef } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
-import { getCampaignCrestFromFirebase } from "../../store/campaign/campaignCreators";
 import { useImageFile } from "../../store/hooks/useImageFile";
 import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators";
 import { isValidImageFile } from "../../utils/isValidImageFile";
@@ -32,51 +31,42 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const [
         campaignBackgroundImageFile,
         setCampaignBackgroundImageFile,
-    ] = useImageFile(selectedCampaign.campaign.campaignBackgroundImageFile);
-    const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(
-        selectedCampaign.campaign.campaignTitleImageFile
+    ] = useImageFile("BackgroundImage");
+    const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile("TitleImage"
     );
     const [campaignCrestImageFile, setCampaignCrestFile] = useImageFile(
-        selectedCampaign.campaign.campaignCrestImageFile
+        "CrestImage"
     );
-    const postProcssCampaign = async (
-        key: string,
-        title: string,
-        backgroundImageFileToUpload: any,
-        campaignTitleImageFileToUpload: any,
-        campaignCrestImageFileToUpload: any
-    ) => {
+    const postProcssCampaign = async (key: string) => {
         const metadata = {
             customMetadata: {
                 contentType: "image",
                 campaignId: key,
-                campaignTitle: title,
+                campaignTitle: campaignTitle,
             },
         };
-        if (isValidImageFile(campaignCrestImageFileToUpload)) {
+        if (isValidImageFile(campaignCrestImageFile)) {
             await firebaseStorageRef
-                .child("Images/Crest/" + campaignCrestImageFileToUpload.file.file.name)
-                .put(campaignCrestImageFileToUpload.file.file, metadata);
+                .child("Campaigns")
+                .child(campaignTitle)
+                .child("CrestImage")
+                .put(campaignCrestImageFile.file.file, metadata);
         }
-        if (isValidImageFile(backgroundImageFileToUpload)) {
+        if (isValidImageFile(campaignBackgroundImageFile)) {
             await firebaseStorageRef
-                .child(
-                    "Images/Background/" +
-                    backgroundImageFileToUpload.file.file.name +
-                    "_" +
-                    backgroundImageFileToUpload.file.file.lastModified
-                )
-                .put(backgroundImageFileToUpload.file.file, metadata);
+                .child("Campaigns")
+                .child(campaignTitle)
+                .child("BackgroundImage")
+                .put(campaignBackgroundImageFile.file.file, metadata);
         }
-        if (isValidImageFile(campaignTitleImageFileToUpload)) {
+        if (isValidImageFile(campaignTitleImageFile)) {
             await firebaseStorageRef
-                .child(
-                    "Images/CampaignTitle/" + campaignTitleImageFileToUpload.file.name
-                )
-                .put(campaignTitleImageFileToUpload.file.file, metadata);
+                .child("Campaigns")
+                .child(campaignTitle)
+                .child("TitleImage")
+                .put(campaignTitleImageFile.file.file, metadata);
         }
         dispatch(dispatchSetSelectedCampaign(key));
-        dispatch(getCampaignCrestFromFirebase);
         history.push("/campaign");
     };
     const submit = () => {
@@ -94,10 +84,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
 
         try {
             let newCampaign = {
-                campaignBackgroundImageFile: campaignBackgroundImageFile.name,
-                campaignTitleImageFile: campaignTitleImageFile.name,
                 dungeonMaster: userName,
-                campaignCrestImageFile: campaignCrestImageFile.name,
                 title: campaignTitle,
             };
             if (selectedCampaign.campaign.isNew) {
@@ -107,13 +94,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                         snap.once("value", async (snapshot: any) => {
                             let key = snapshot.key;
                             if (key) {
-                                postProcssCampaign(
-                                    key,
-                                    newCampaign.title,
-                                    campaignBackgroundImageFile,
-                                    campaignTitleImageFile,
-                                    campaignCrestImageFile
-                                );
+                                postProcssCampaign(key);
                             }
                         });
                     })
@@ -123,13 +104,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                     .child(selectedCampaign.id)
                     .set(newCampaign)
                     .then(() => {
-                        postProcssCampaign(
-                            selectedCampaign.id,
-                            newCampaign.title,
-                            campaignBackgroundImageFile,
-                            campaignTitleImageFile,
-                            campaignCrestImageFile
-                        );
+                        postProcssCampaign(selectedCampaign.id);
                     })
                     .catch((e) => console.log("Could not update campaing " + e));
             }

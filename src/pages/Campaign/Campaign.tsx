@@ -49,45 +49,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 );
             })
 
-            // return Object.keys(selectedCampaign.campaign.sessions).map(
-            //     (key: any, index: number) => {
-            //         let story = selectedCampaign.campaign.sessions[key].story;
-            //         story =
-            //             story.length > 500 ? story.substring(0, 1000).concat("...") : story;
-            //         let title = selectedCampaign!.campaign.sessions[key].title;
-            //         let date = selectedCampaign!.campaign.sessions[key].date;
-            //         let sessionDay = selectedCampaign!.campaign.sessions[key].sessionDay;
-            //         let campaign = selectedCampaign!.campaign.sessions[key].campaign;
-            //         let subTitle = selectedCampaign!.campaign.sessions[key].subTitle;
-            //         return (
-            //             <Scroll
-            //                 id={key}
-            //                 title={selectedCampaign!.campaign.sessions[key].title}
-            //                 subTitle={selectedCampaign!.campaign.subTitle}
-            //                 date={selectedCampaign!.campaign.sessions[key].date}
-            //                 storyImage={CosTitle}
-            //                 isFirstScroll={true}
-            //                 campaign={selectedCampaign!.campaign.sessions[key].campaign}
-            //                 onClick={() => {
-            //                     dispatch(
-            //                         dispatchSetSelectedSession({
-            //                             id: key,
-            //                             index: index,
-            //                             session: {
-            //                                 title: title,
-            //                                 subTitle: subTitle,
-            //                                 story: story,
-            //                                 date: date,
-            //                                 campaign: campaign,
-            //                                 sessionDay: sessionDay,
-            //                             },
-            //                         })
-            //                     );
-            //                     history.push("/campaign/session");
-            //                 }}
-            //             />
-            //         );
-            //     });
         }
     };
     if (!selectedCampaign.id) {
