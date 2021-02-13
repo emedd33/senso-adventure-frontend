@@ -17,9 +17,6 @@ const EMPTY_CAMPAIGN = {
   title: "",
   dungeonMaster: "",
   isNew: true,
-  campaignTitleImageFile: "",
-  campaignCrestImageFile: "",
-  campaignBackgroundImageFile: "",
 };
 export const dispatchSetSelectedCampaign = (
   selectedCampaign?: string | undefined
@@ -70,9 +67,9 @@ export const setBackgroundImageFromFirebase = (imageFile: string) => {
       .catch((e) => {
         console.log(
           "Could not fetch background image " +
-            imageFile +
-            " from Firebase: " +
-            e
+          imageFile +
+          " from Firebase: " +
+          e
         );
         return null;
       })

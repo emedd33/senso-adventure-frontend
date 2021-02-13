@@ -13,10 +13,7 @@ export const initialSelectedCampaignState = {
   dungeonMaster: "",
   sessions: [],
   players: [],
-  campaignBackgroundImageFile: "",
   isNew: true,
-  campaignCrestImageFile: "",
-  campaignTitleImageFile: "",
 };
 export const initialSelectedSession = {
   title: "",

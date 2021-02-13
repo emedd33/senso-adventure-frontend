@@ -81,39 +81,3 @@ export const dispatchLevelUpCharacters = (selectedCampaign: any) => {
   };
 };
 
-// let campaignCrestFiles: CrestObjectType[] = [];
-// export const getCampaignCrestFromFirebase = async (dispatch: Dispatch) => {
-//   await storage
-//     .ref(CrestImageFileLocation)
-//     .listAll()
-//     .then((crestFiles) =>
-//       crestFiles.items.map((crestFile) =>
-//         crestFile
-//           .getDownloadURL()
-//           .then((url) => url)
-//           .then(async (url) =>
-//             crestFile.getMetadata().then((data) => {
-//               if (
-//                 data.customMetadata !== undefined &&
-//                 data.customMetadata.campaignTitle !== undefined
-//               ) {
-//                 campaignCrestFiles.push({
-//                   title: data.customMetadata.campaignTitle,
-//                   url: url,
-//                 });
-//               }
-//               return campaignCrestFiles;
-//             })
-//           )
-//           .then((crestFiles) => dispatch(setCampaignCrestImageUrl(crestFiles)))
-//       )
-//     )
-//     .catch((e) => console.log(e));
-// };
-
-export const setCampaignCrestImageUrl = (crestFiles: CrestObjectType[]) => {
-  return {
-    type: SET_CAMPAIGN_CRESTS,
-    payload: crestFiles,
-  };
-};

@@ -3,7 +3,6 @@ import "firebase/storage";
 import "firebase/database";
 import "firebase/auth";
 
-export const CrestImageFileLocation = "/Images/Crest/";
 export const BackgroundImageFileLocation = "/Images/Background/";
 export const CampaignTitleImageFileLocation = "/Images/CampaignTitle/";
 

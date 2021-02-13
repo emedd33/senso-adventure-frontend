@@ -3,13 +3,11 @@ import * as actionTypes from "./campaignActions";
 type ICampaignState = {
   sessions: ISession[];
   campaigns: ICampaign[];
-  campaignCrestFiles: string[];
 };
 const adventureReducer = (
   state: ICampaignState = {
     campaigns: [],
     sessions: [],
-    campaignCrestFiles: [],
   },
   action: any
 ): ICampaignState => {
@@ -23,11 +21,6 @@ const adventureReducer = (
       return {
         ...state,
         sessions: action.payload,
-      };
-    case actionTypes.SET_CAMPAIGN_CRESTS:
-      return {
-        ...state,
-        campaignCrestFiles: action.payload,
       };
   }
   return state;

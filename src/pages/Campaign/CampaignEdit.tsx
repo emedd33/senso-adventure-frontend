@@ -34,9 +34,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     ] = useImageFile("BackgroundImage");
     const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile("TitleImage"
     );
-    const [campaignCrestImageFile, setCampaignCrestFile] = useImageFile(
-        "CrestImage"
-    );
     const postProcssCampaign = async (key: string) => {
         const metadata = {
             customMetadata: {
@@ -45,13 +42,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                 campaignTitle: campaignTitle,
             },
         };
-        if (isValidImageFile(campaignCrestImageFile)) {
-            await firebaseStorageRef
-                .child("Campaigns")
-                .child(campaignTitle)
-                .child("CrestImage")
-                .put(campaignCrestImageFile.file.file, metadata);
-        }
         if (isValidImageFile(campaignBackgroundImageFile)) {
             await firebaseStorageRef
                 .child("Campaigns")
@@ -172,51 +162,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                                 <ImageUpload
                                     imageFile={campaignBackgroundImageFile.file}
                                     setImageFile={setCampaignBackgroundImageFile}
-                                    maxFiles={1}
-                                />
-                            </div>
-                        </div>
-                        <div
-                            style={{
-                                display: "flex",
-                                width: "100%",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                margin: "1rem",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "flex-start",
-                                    margin: "1rem",
-                                    width: "15rem",
-                                }}
-                            >
-                                <h3 style={{ textAlign: "left", fontFamily: "serif" }}>
-                                    {" "}
-                Campaign crest
-              </h3>
-                            </div>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    width: "15rem",
-                                    flexDirection: "column",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                {campaignCrestImageFile.name ? (
-                                    <h4 style={{ fontFamily: "sans-serif" }}>
-                                        {campaignCrestImageFile.name}
-                                    </h4>
-                                ) : null}
-                                <ImageUpload
-                                    imageFile={campaignCrestImageFile.file}
-                                    setImageFile={setCampaignCrestFile}
                                     maxFiles={1}
                                 />
                             </div>

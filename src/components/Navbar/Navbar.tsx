@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import * as FaIcons from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import HomeCrest from "../../assets/backgroundImage/home_crest.png";
@@ -6,6 +6,7 @@ import "./Navbar.css";
 import { IconContext } from "react-icons";
 import styled from "styled-components";
 import MenuListComposition from "../MenuList/MenuList";
+import CampaignCrest from "../../assets/icons/CampaignCrest.png"
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearSelectedCampaign,
@@ -23,7 +24,6 @@ import AddIcon from "@material-ui/icons/Add";
 import useWindowSize from "../../store/hooks/useWindowSize";
 import IsLoading from "../IsLoading/IsLoading";
 import { LIGHT_PINK } from "../../assets/constants/Constants";
-import { storage } from "../../firebase";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     backdrop: {
@@ -49,59 +49,11 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   const authUser = useSelector(
     (state: RootReducerProp) => state.admin.authUser
   );
-  const [crestUrls, setCrestUrls] = useState<{ title: string, url: string }[]>([])
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
   const toggleSetCampaign = (campaignId: string) => {
     dispatch(dispatchSetSelectedCampaign(campaignId));
   };
-  const getCrestUrl = (title: string) => {
-    let files = crestUrls.filter((crest: any) => crest.title === title)
-    console.log(files)
-    if (files.length > 0) {
-      return files[0].url
-    }
-    return ""
-  }
-  const getCrestImage = (title: string) => {
-    console.log(crestUrls)
-    if (getCrestUrl(title)) {
-
-      return (
-
-        <img
-          style={{ width: "3rem", height: "3rem" }}
-          src={""}
-          alt="Crest symbol"
-        />
-      )
-    }
-  }
-  const getCrestImageUrls = () => {
-    Object.values(rootCampaigns.campaigns).map((campaign: ICampaign) =>
-      storage.ref("Campaigns")
-        .child(campaign.title)
-        .child("CrestImage")
-        .getDownloadURL()
-        .then(url => {
-          setCrestUrls((crestUrls: any) => {
-            return [
-              ...crestUrls,
-              [{
-                title: campaign.title,
-                url: url
-              }]
-
-            ]
-          })
-        })
-        .catch(e => { console.log("could not get Crest image") })
-    )
-  }
-  useEffect(() => {
-    getCrestImageUrls()
-  }, [])
-  console.log(crestUrls)
   if (!rootCampaigns) {
     return <IsLoading />;
   }
@@ -247,7 +199,11 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                               alignItems: "center",
                             }}
                           >
-                            {getCrestImage(campaign.title)}
+                            <img
+                              style={{ width: "3rem", height: "2rem" }}
+                              src={CampaignCrest}
+                              alt="Crest symbol"
+                            />
                             <CampaignTitle>{campaign.title}</CampaignTitle>
                           </span>
                         </Link>
