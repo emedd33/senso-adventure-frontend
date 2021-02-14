@@ -7,7 +7,6 @@ import { SET_AUTH_USER, SET_IS_LOADING } from "../admin/adminActions";
 import { setIsLoading } from "../admin/adminCreator";
 import {
   SET_CAMPAIGNS,
-  SET_CAMPAIGN_CRESTS,
   SET_SESSIONS,
 } from "./campaignActions";
 
