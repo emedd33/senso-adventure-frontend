@@ -38,6 +38,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [sessionStory, setSessionStory] = useState("");
+    const [sessionImage1, setSessionImage1] = useState()
+    const [sessionImage2, setSessionImage2] = useState()
+    const [sessionImage3, setSessionImage3] = useState()
     const selectedSession = useSelector(
         (state: RootReducerProp) => state.selected.selectedSession
     );
@@ -55,13 +58,14 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     };
     useEffect(() => {
         dispatch(setIsLoading(true));
-        if (selectedSession.session.story) {
-            storage
-                .ref()
+        if (selectedSession.session) {
+            let storageRef = storage.ref()
                 .child("Campaigns")
                 .child(selectedCampaign.campaign.title)
                 .child("Sessions")
                 .child(selectedSession.session.title)
+
+            storageRef
                 .child(selectedSession.session.story)
                 .getDownloadURL()
                 .then((url) =>
@@ -69,13 +73,27 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                         .then((res) => res.text())
                         .then((res) => {
                             const text = parseSessionStory(res, isDungeonMaster);
-                            setSessionStory(text);
+                            setSessionStory(text ? text : "new story");
                         })
                 )
                 .catch((e) => console.log("error", e));
-
-            dispatch(setIsLoading(false));
+            storageRef
+                .child("SessionImageFile1")
+                .getDownloadURL()
+                .then((url) => setSessionImage1(url))
+                .catch(() => console.log("could not get session image 1"))
+            storageRef
+                .child("SessionImageFile2")
+                .getDownloadURL()
+                .then((url) => setSessionImage2(url))
+                .catch(() => console.log("could not get session image 2"))
+            storageRef
+                .child("SessionImageFile3")
+                .getDownloadURL()
+                .then((url) => setSessionImage3(url))
+                .catch(() => console.log("could not get session image 3"))
         }
+        dispatch(setIsLoading(false));
     }, [dispatch, selectedSession, isDungeonMaster, selectedCampaign]);
     if (!selectedSession.id) {
         return <Redirect to="/campaign" />;
@@ -185,6 +203,24 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                         )}
                 </div>
             </Container>
+            {sessionImage1 ?
+                <SessionImage
+                    src={sessionImage1}
+                />
+                : null}
+            {sessionImage2 ?
+
+                <SessionImage
+                    src={sessionImage2}
+                />
+                : null}
+            {sessionImage3 ?
+
+                <SessionImage
+                    src={sessionImage3}
+                />
+                : null}
+
         </>
     );
 };
@@ -202,4 +238,10 @@ const ChangeSessionButton = styled.h4`
   margin: 0;
   cursor: pointer;
 `;
+const SessionImage = styled.img`
+width: 50%;
+margin: 2rem;
+-webkit-box-shadow: 5px 5px 15px 5px #000000;
+  box-shadow: 5px 0px 15px 2px #000000;
+`
 export default CampaignSession;
