@@ -98,10 +98,11 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         }
         dispatch(setIsLoading(false));
     }, [dispatch, selectedSession, selectedCampaign]);
-    const postProcessFiles = (
+    const postProcessFiles = async (
         session: ISelectedSession,
         sessionMDFile: string
     ) => {
+        dispatch(setIsLoading(true));
         dispatch(
             dispatchSetSelectedSession({
                 id: session.id,
@@ -132,26 +133,32 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             date: sessionDate,
             day: sessionDay,
         };
-        sessionStorragePath.child(sessionMDFile).put(file, markdownMetadata);
+        await sessionStorragePath.child(sessionMDFile).put(file, markdownMetadata)
 
         let imageMetadata = {
             ...markdownMetadata,
             contentType: "image/png",
         };
 
-        if (isValidImageFile(sessionImageFiles1))
-            sessionStorragePath
+        if (isValidImageFile(sessionImageFiles1)) {
+            await sessionStorragePath
                 .child("SessionImageFile1")
-                .put(sessionImageFiles1.file.file, imageMetadata);
-        if (isValidImageFile(sessionImageFiles2))
-            sessionStorragePath
+                .put(sessionImageFiles1.file.file, imageMetadata)
+        }
+        if (isValidImageFile(sessionImageFiles2)) {
+            await sessionStorragePath
                 .child("SessionImageFile2")
-                .put(sessionImageFiles2.file.file, imageMetadata);
-        if (isValidImageFile(sessionImageFiles3))
-            sessionStorragePath
+                .put(sessionImageFiles2.file.file, imageMetadata)
+        }
+        if (isValidImageFile(sessionImageFiles3)) {
+            await sessionStorragePath
                 .child("SessionImageFile3")
-                .put(sessionImageFiles3.file.file, imageMetadata);
-        history.push("/campaign");
+                .put(sessionImageFiles3.file.file, imageMetadata)
+
+        }
+
+        history.push("/campaign/session");
+        dispatch(setIsLoading(false));
     };
     const submitSession = () => {
         if (!sessionTitle) {

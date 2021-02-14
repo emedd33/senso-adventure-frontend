@@ -19,7 +19,7 @@ import {
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
 
-export interface MiscBoxProps {}
+export interface MiscBoxProps { }
 
 const MiscBox: React.FC<MiscBoxProps> = () => {
   const history = useHistory();
@@ -87,7 +87,7 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
                       story: "",
                       sessionDay: selectedCampaign.campaign.sessions
                         ? Object.values(selectedCampaign.campaign.sessions)
-                            .length + 1
+                          .length + 1
                         : 1,
                       date: new Date().toDateString(),
                       campaign: selectedCampaign ? selectedCampaign.id : "",
@@ -128,6 +128,7 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
             <IconButton
               onClick={async () => {
                 victoryAudio.play();
+                setClicked(false)
               }}
             >
               <img
