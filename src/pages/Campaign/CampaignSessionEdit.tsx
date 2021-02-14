@@ -57,15 +57,20 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const [sessionImageFiles1, setSessionImage1Files] = useImageFile();
     const [sessionImageFiles2, setSessionImage2Files] = useImageFile();
     const [sessionImageFiles3, setSessionImage3Files] = useImageFile();
+    const [sessionImage1, setSessionImage1] = useState()
+    const [sessionImage2, setSessionImage2] = useState()
+    const [sessionImage3, setSessionImage3] = useState()
 
     useEffect(() => {
         dispatch(setIsLoading(true));
         if (selectedSession && selectedSession?.session.story) {
-            storage
-                .ref()
+            let storageRef = storage.ref()
                 .child("Campaigns")
                 .child(selectedCampaign.campaign.title)
-                .child("SessionStories")
+                .child("Sessions")
+                .child(selectedSession.session.title)
+
+            storageRef
                 .child(selectedSession.session.story)
                 .getDownloadURL()
                 .then((url) =>
@@ -74,6 +79,21 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                         .then((res) => setSessionStory(res))
                 )
                 .catch((e) => console.log("error", e));
+            storageRef
+                .child("SessionImageFile1")
+                .getDownloadURL()
+                .then((url) => setSessionImage1(url))
+                .catch(() => console.log("could not get session image 1"))
+            storageRef
+                .child("SessionImageFile2")
+                .getDownloadURL()
+                .then((url) => setSessionImage2(url))
+                .catch(() => console.log("could not get session image 2"))
+            storageRef
+                .child("SessionImageFile3")
+                .getDownloadURL()
+                .then((url) => setSessionImage3(url))
+                .catch(() => console.log("could not get session image 3"))
         }
         dispatch(setIsLoading(false));
     }, [dispatch, selectedSession, selectedCampaign]);
@@ -132,7 +152,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             sessionStorragePath
                 .child("SessionImageFile3")
                 .put(sessionImageFiles3.file.file, imageMetadata);
-        history.push("/campaign/session");
+        history.push("/campaign");
     };
     const submitSession = () => {
         if (!sessionTitle) {
@@ -291,24 +311,61 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 onChange={(html: any) => setSessionStory(html.text)}
                 value={sessionStory ? sessionStory : ""}
             />
-            <h3>Add pictures to session</h3>
+            <h3>Add uo to 3 pictures to the session</h3>
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", maxWidth: "100%" }}>
+                <div style={{ display: "flex", flexDirection: "column", maxWidth: "100%" }}>
 
-                <ImageUpload
-                    imageFile={sessionImageFiles1.file}
-                    setImageFile={setSessionImage1Files}
-                    maxFiles={1}
-                />
-                <ImageUpload
-                    imageFile={sessionImageFiles2.file}
-                    setImageFile={setSessionImage2Files}
-                    maxFiles={1}
-                />
-                <ImageUpload
-                    imageFile={sessionImageFiles3.file}
-                    setImageFile={setSessionImage3Files}
-                    maxFiles={1}
-                />
+                    <ImageUpload
+                        imageFile={sessionImageFiles1.file}
+                        setImageFile={setSessionImage1Files}
+                        maxFiles={1}
+                    />
+
+                    {sessionImage1 ?
+                        <>
+                            <h2 style={{ textAlign: "center" }}>Current first image</h2>
+                            <SessionImage
+                                src={sessionImage1}
+                            />
+                        </>
+                        : null}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", maxWidth: "100%" }}>
+
+                    <ImageUpload
+                        imageFile={sessionImageFiles2.file}
+                        setImageFile={setSessionImage2Files}
+                        maxFiles={1}
+                    />
+                    {sessionImage2 ?
+                        <>
+
+                            <h2 style={{ textAlign: "center" }}>Current second image</h2>
+
+                            <SessionImage
+                                src={sessionImage2}
+                            />
+                        </>
+                        : null}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", maxWidth: "100%" }}>
+
+                    <ImageUpload
+
+                        imageFile={sessionImageFiles3.file}
+                        setImageFile={setSessionImage3Files}
+                        maxFiles={1}
+                    />
+                    {sessionImage3 ?
+                        <>
+                            <h2 style={{ textAlign: "center" }}>Current third image</h2>
+
+                            <SessionImage
+                                src={sessionImage3}
+                            />
+                        </>
+                        : null}
+                </div>
             </div>
 
             <Button variant="contained" color="primary" style={{ margin: "2rem" }} onClick={submitSession}>
@@ -330,4 +387,10 @@ const TitleContainer = styled.div`
   moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
   box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
 `;
+const SessionImage = styled.img`
+width: 10rem;
+margin: 2rem;
+-webkit-box-shadow: 5px 5px 15px 5px #000000;
+  box-shadow: 5px 0px 15px 2px #000000;
+`
 export default CampaignSessionEdit;
