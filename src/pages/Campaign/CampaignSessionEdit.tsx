@@ -62,6 +62,8 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         if (selectedSession && selectedSession?.session.story) {
             storage
                 .ref()
+                .child("Campaigns")
+                .child(selectedCampaign.campaign.title)
                 .child("SessionStories")
                 .child(selectedSession.session.story)
                 .getDownloadURL()
@@ -73,7 +75,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 .catch((e) => console.log("error", e));
         }
         dispatch(setIsLoading(false));
-    }, [dispatch, selectedSession]);
+    }, [dispatch, selectedSession, selectedCampaign]);
     const postProcessFiles = (
         session: ISelectedSession,
         sessionMDFile: string
@@ -103,9 +105,12 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             day: sessionDay,
         };
         firebaseStorageRef
+            .child("Campaigns")
+            .child(selectedCampaign.campaign.title)
             .child("SessionStories")
             .child(sessionMDFile)
             .put(file, metadata);
+
         history.push("/campaign/session");
     };
     const submitSession = () => {
@@ -134,9 +139,10 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 campaignTitle: selectedCampaign.campaign.title,
                 sessionDay: sessionDay ? sessionDay : 1,
             };
-            if (Object.values(selectedCampaign.campaign.sessions).filter((session) => {
-                return session.sessionDay === sessionDay && session.title !== sessionTitle
-            }).length > 0) {
+            if (selectedCampaign.campaign.sessions &&
+                Object.values(selectedCampaign.campaign.sessions).filter((session) => {
+                    return session.sessionDay === sessionDay && session.title !== sessionTitle
+                }).length > 0) {
                 dispatch(setAlertDialog("Session day is invalid due to duplicated session days", true, true))
                 return
             }

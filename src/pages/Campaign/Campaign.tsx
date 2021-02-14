@@ -2,11 +2,9 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Characters from "../../components/Characters/Characters";
 import CosTitle from "../../assets/backgroundImage/CosTitle.png"; // TODO: switch to firebase storrage
-import SpeedDials from "../../components/SpeedDials/SpeedDials";
 import Scroll from "../../components/Scroll/Scroll";
 import { Redirect, useHistory } from "react-router-dom";
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
-import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
@@ -15,7 +13,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const selectedCampaign = useSelector(
         (state: RootReducerProp) => state.selected.selectedCampaign
     );
-    const isDungeonMaster = useSelector(isDungeonMasterSelector);
 
     const renderScrolls = () => {
         if (selectedCampaign?.campaign.sessions) {
@@ -60,7 +57,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             <div style={{ width: "50%" }}>
                 {selectedCampaign ? renderScrolls() : null}
             </div>
-            {isDungeonMaster ? <SpeedDials /> : null}
         </>
     );
 };

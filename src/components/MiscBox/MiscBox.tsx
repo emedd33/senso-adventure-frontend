@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import LevelUp from "../../assets/icons/level_up.png";
+import CampaignCrest from "../../assets/icons/CampaignCrest.png";
 import Victory from "../../assets/icons/victory.png";
 import "./MiscBox.scss";
 import { OLD_WHITE } from "../../assets/constants/Constants";
@@ -15,10 +16,13 @@ import {
   dispatchLevelUpCharacters,
   fetchFromFirebase,
 } from "../../store/campaign/campaignCreators";
+import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
+import { useHistory } from "react-router-dom";
 
-export interface MiscBoxProps {}
+export interface MiscBoxProps { }
 
 const MiscBox: React.FC<MiscBoxProps> = () => {
+  const history = useHistory()
   const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
   const [isLevelUpDialogOpen, setIsLevelUpDialogOpen] = useState(false);
@@ -69,6 +73,36 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
             flexDirection: "column",
           }}
         >
+          <Tooltip title="New Session" aria-label="add">
+            <IconButton
+              color="primary"
+              style={{ width: "3rem", height: "3rem" }}
+              onClick={() => {
+                dispatch(
+                  dispatchSetSelectedSession({
+                    id: "",
+                    session: {
+                      title: "",
+                      subTitle: "",
+                      story: "",
+                      sessionDay: 1,
+                      date: new Date().toDateString(),
+                      campaign: selectedCampaign ? selectedCampaign.id : "",
+                    },
+                  })
+                );
+                history.push("/campaign/session/edit");
+              }}
+            >
+              <img
+                src={CampaignCrest}
+                alt={"New session"}
+                style={{ width: "4rem", height: "3rem" }}
+              />
+
+            </IconButton>
+          </Tooltip>
+
           <Tooltip title="Level up" aria-label="add">
             <IconButton onClick={() => setIsLevelUpDialogOpen(true)}>
               <img
@@ -100,7 +134,9 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
               />
             </IconButton>
           </Tooltip>
+
         </div>
+
       ) : null}
       <ConfirmDialog
         title={"Congratulation your characters have leveled up!"}

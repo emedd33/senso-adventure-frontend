@@ -41,6 +41,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const selectedSession = useSelector(
         (state: RootReducerProp) => state.selected.selectedSession
     );
+    const selectedCampaign = useSelector(
+        (state: RootReducerProp) => state.selected.selectedCampaign
+    );
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const nextSession = useSelector(getNextSession);
     const previousSession = useSelector(getPreviousSession);
@@ -55,6 +58,8 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
         if (selectedSession.session.story) {
             storage
                 .ref()
+                .child("Campaigns")
+                .child(selectedCampaign.campaign.title)
                 .child("SessionStories")
                 .child(selectedSession.session.story)
                 .getDownloadURL()
@@ -70,7 +75,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
 
             dispatch(setIsLoading(false));
         }
-    }, [dispatch, selectedSession, isDungeonMaster]);
+    }, [dispatch, selectedSession, isDungeonMaster, selectedCampaign]);
     if (!selectedSession.id) {
         return <Redirect to="/campaign" />;
     }
