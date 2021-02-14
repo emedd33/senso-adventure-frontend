@@ -26,7 +26,7 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({
 
           {imageList.length === 0 ? (
             <Button variant="contained" color="primary" onClick={onImageUpload} style={{ height: "3rem" }}>
-              Click to upload picture
+              Upload picture
             </Button>
 
           ) : null}

@@ -85,12 +85,13 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
                       title: "",
                       subTitle: "",
                       story: "",
-                      sessionDay: 1,
+                      sessionDay: selectedCampaign.campaign.sessions ? Object.values(selectedCampaign.campaign.sessions).length + 1 : 1,
                       date: new Date().toDateString(),
                       campaign: selectedCampaign ? selectedCampaign.id : "",
                     },
                   })
                 );
+                setClicked(false);
                 history.push("/campaign/session/edit");
               }}
             >

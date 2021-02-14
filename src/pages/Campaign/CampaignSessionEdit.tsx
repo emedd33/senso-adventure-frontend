@@ -20,6 +20,7 @@ import { setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
 import styled from "styled-components";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import { useImageFile } from "../../store/hooks/useImageFile";
+import { isValidImageFile } from "../../utils/isValidImageFile";
 export interface CampaignSessionEditProps { }
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
@@ -97,20 +98,40 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         var file = new File([sessionStory], sessionMDFile, {
             type: "text/plain;charset=utf-8",
         });
-        var metadata = {
+        let sessionStorragePath = firebaseStorageRef
+            .child("Campaigns")
+            .child(selectedCampaign.campaign.title)
+            .child("Sessions")
+            .child(sessionTitle)
+
+        let markdownMetadata = {
             contentType: "markdown",
             session: session.id,
             campaign: selectedCampaign.id,
             date: sessionDate,
             day: sessionDay,
         };
-        firebaseStorageRef
-            .child("Campaigns")
-            .child(selectedCampaign.campaign.title)
-            .child("SessionStories")
+        sessionStorragePath
             .child(sessionMDFile)
-            .put(file, metadata);
+            .put(file, markdownMetadata);
 
+        let imageMetadata = {
+            ...markdownMetadata,
+            contentType: "image/png"
+        }
+
+        if (isValidImageFile(sessionImageFiles1))
+            sessionStorragePath
+                .child("SessionImageFile1")
+                .put(sessionImageFiles1.file.file, imageMetadata);
+        if (isValidImageFile(sessionImageFiles2))
+            sessionStorragePath
+                .child("SessionImageFile2")
+                .put(sessionImageFiles2.file.file, imageMetadata);
+        if (isValidImageFile(sessionImageFiles3))
+            sessionStorragePath
+                .child("SessionImageFile3")
+                .put(sessionImageFiles3.file.file, imageMetadata);
         history.push("/campaign/session");
     };
     const submitSession = () => {
@@ -191,6 +212,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     id="outlined-multiline-static"
                     placeholder="Write a fitting title"
                     variant="filled"
+                    disabled={selectedSession.session.title ? true : false}
                     style={{ width: "90%", margin: "1rem" }}
                     label="Session title"
                     error={sessionTitleError}
@@ -270,22 +292,22 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 value={sessionStory ? sessionStory : ""}
             />
             <h3>Add pictures to session</h3>
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", maxWidth: "100%" }}>
 
                 <ImageUpload
                     imageFile={sessionImageFiles1.file}
                     setImageFile={setSessionImage1Files}
-                    maxFiles={3}
+                    maxFiles={1}
                 />
                 <ImageUpload
                     imageFile={sessionImageFiles2.file}
                     setImageFile={setSessionImage2Files}
-                    maxFiles={3}
+                    maxFiles={1}
                 />
                 <ImageUpload
                     imageFile={sessionImageFiles3.file}
                     setImageFile={setSessionImage3Files}
-                    maxFiles={3}
+                    maxFiles={1}
                 />
             </div>
 

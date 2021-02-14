@@ -60,7 +60,8 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 .ref()
                 .child("Campaigns")
                 .child(selectedCampaign.campaign.title)
-                .child("SessionStories")
+                .child("Sessions")
+                .child(selectedSession.session.title)
                 .child(selectedSession.session.story)
                 .getDownloadURL()
                 .then((url) =>
