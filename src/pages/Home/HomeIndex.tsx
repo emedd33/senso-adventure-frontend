@@ -33,15 +33,15 @@ const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
       {isLoading ? (
         <IsLoading />
       ) : (
-          <>
-            <Route exact path="/editcampaign">
-              <CampaignEdit />
-            </Route>
-            <Route exact path="/">
-              <Home />
-            </Route>
-          </>
-        )}
+        <>
+          <Route exact path="/editcampaign">
+            <CampaignEdit />
+          </Route>
+          <Route exact path="/">
+            <Home />
+          </Route>
+        </>
+      )}
     </Container>
   );
 };
@@ -62,19 +62,19 @@ const Container = styled.div`
 `;
 
 const LeftGradientDiv = styled.div`
-background: linear-gradient(to right,#000, transparent);
-width: 10vw;
-height:100%;
-position: fixed; 
-top: 0; 
-backgroundColor:black;
-`
+  background: linear-gradient(to right, #000, transparent);
+  width: 10vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  backgroundcolor: black;
+`;
 const RightGradientDiv = styled.div`
-background: linear-gradient(to left,#000, transparent);
-width: 10vw;
-height:100%;
-position: fixed; 
-top: 0; 
-backgroundColor:black;
-`
+  background: linear-gradient(to left, #000, transparent);
+  width: 10vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  backgroundcolor: black;
+`;
 export default HomeIndex;

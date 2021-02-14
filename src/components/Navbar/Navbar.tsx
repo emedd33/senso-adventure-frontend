@@ -6,7 +6,7 @@ import "./Navbar.css";
 import { IconContext } from "react-icons";
 import styled from "styled-components";
 import MenuListComposition from "../MenuList/MenuList";
-import CampaignCrest from "../../assets/icons/CampaignCrest.png"
+import CampaignCrest from "../../assets/icons/CampaignCrest.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearSelectedCampaign,

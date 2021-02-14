@@ -8,7 +8,7 @@ import LoginForm from "../../components/LoginForm/LoginForm";
 import SignupForm from "../../components/SignupForm/SignupForm";
 import { storage } from "../../firebase";
 
-export interface LoginProps { }
+export interface LoginProps {}
 
 const LoginIndex: React.FC<LoginProps> = () => {
   const isLoading = useSelector(
@@ -65,19 +65,19 @@ const Container = styled.div`
   margin: auto;
 `;
 const LeftGradientDiv = styled.div`
-background: linear-gradient(to right,#000, transparent);
-width: 10vw;
-height:100%; 
-position: fixed; 
-top: 0; 
-backgroundColor:black;
-`
+  background: linear-gradient(to right, #000, transparent);
+  width: 10vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  backgroundcolor: black;
+`;
 const RightGradientDiv = styled.div`
-background: linear-gradient(to left,#000, transparent);
-width: 10vw;
-height:100%;
-position: fixed; 
-top: 0; 
-backgroundColor:black;
-`
+  background: linear-gradient(to left, #000, transparent);
+  width: 10vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  backgroundcolor: black;
+`;
 export default LoginIndex;

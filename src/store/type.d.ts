@@ -1,4 +1,3 @@
-
 type RootReducerProp = {
   rootCampaigns: {
     campaigns: ICampaign[];

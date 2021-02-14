@@ -8,57 +8,58 @@ import { dispatchSetSelectedSession } from "../../store/selected/selectedCreator
 
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
-    const history = useHistory();
-    const dispatch = useDispatch();
-    const selectedCampaign = useSelector(
-        (state: RootReducerProp) => state.selected.selectedCampaign
-    );
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const selectedCampaign = useSelector(
+    (state: RootReducerProp) => state.selected.selectedCampaign
+  );
 
-    const renderScrolls = () => {
-        if (selectedCampaign?.campaign.sessions) {
-            return Object.entries(selectedCampaign.campaign.sessions).map(([id, session], index) => {
-                return (
-                    <Scroll
-                        id={id}
-                        title={session.title}
-                        subTitle={session.subTitle ? session.subTitle : ""}
-                        date={session.date}
-                        storyImage={CosTitle}
-                        campaign={session.campaign}
-                        sessionDay={session.sessionDay}
-                        onClick={() => {
-                            dispatch(
-                                dispatchSetSelectedSession({
-                                    id: id,
-                                    session: {
-                                        title: session.title,
-                                        subTitle: session.subTitle,
-                                        story: session.story,
-                                        date: session.date,
-                                        campaign: session.campaign,
-                                        sessionDay: session.sessionDay,
-                                    },
-                                })
-                            );
-                            history.push("/campaign/session");
-                        }}
-                    />
+  const renderScrolls = () => {
+    if (selectedCampaign?.campaign.sessions) {
+      return Object.entries(selectedCampaign.campaign.sessions).map(
+        ([id, session], index) => {
+          return (
+            <Scroll
+              id={id}
+              title={session.title}
+              subTitle={session.subTitle ? session.subTitle : ""}
+              date={session.date}
+              storyImage={CosTitle}
+              campaign={session.campaign}
+              sessionDay={session.sessionDay}
+              onClick={() => {
+                dispatch(
+                  dispatchSetSelectedSession({
+                    id: id,
+                    session: {
+                      title: session.title,
+                      subTitle: session.subTitle,
+                      story: session.story,
+                      date: session.date,
+                      campaign: session.campaign,
+                      sessionDay: session.sessionDay,
+                    },
+                  })
                 );
-            })
-
+                history.push("/campaign/session");
+              }}
+            />
+          );
         }
-    };
-    if (!selectedCampaign.id) {
-        return <Redirect to="/" />;
+      );
     }
-    return (
-        <>
-            <Characters />
-            <div style={{ width: "50%" }}>
-                {selectedCampaign ? renderScrolls() : null}
-            </div>
-        </>
-    );
+  };
+  if (!selectedCampaign.id) {
+    return <Redirect to="/" />;
+  }
+  return (
+    <>
+      <Characters />
+      <div style={{ width: "50%" }}>
+        {selectedCampaign ? renderScrolls() : null}
+      </div>
+    </>
+  );
 };
 
 export default Campaign;

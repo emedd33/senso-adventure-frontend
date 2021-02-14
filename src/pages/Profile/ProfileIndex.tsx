@@ -10,265 +10,265 @@ import { dispatchLogout, setAlertDialog } from "../../store/admin/adminCreator";
 import TextField from "@material-ui/core/TextField";
 import firebase from "firebase";
 
-export interface ProfileIndexProps { }
+export interface ProfileIndexProps {}
 
 const ProfileIndex: React.FC<ProfileIndexProps> = () => {
-    const dispatch = useDispatch();
-    const isLoading = useSelector(
-        (state: RootReducerProp) => state.admin.isLoading
-    );
-    const [imageUrl, setImageUrl] = useState("");
-    const [isChangingPassword, setIsChangingPassword] = useState(false);
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [firstNewPassword, setFirstNewPassword] = useState("");
-    const [secondNewPassword, setSecondNewPassword] = useState("");
-    const username = useSelector(
-        (state: RootReducerProp) => state.admin.authUser?.username
-    );
-    const email = useSelector(
-        (state: RootReducerProp) => state.admin.authUser?.email
-    );
-    var user = firebaseAuth.currentUser;
+  const dispatch = useDispatch();
+  const isLoading = useSelector(
+    (state: RootReducerProp) => state.admin.isLoading
+  );
+  const [imageUrl, setImageUrl] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [firstNewPassword, setFirstNewPassword] = useState("");
+  const [secondNewPassword, setSecondNewPassword] = useState("");
+  const username = useSelector(
+    (state: RootReducerProp) => state.admin.authUser?.username
+  );
+  const email = useSelector(
+    (state: RootReducerProp) => state.admin.authUser?.email
+  );
+  var user = firebaseAuth.currentUser;
 
-    const handleChangePassword = () => {
-        if (!firstNewPassword || !secondNewPassword) {
-            dispatch(setAlertDialog("Please Fill out the passwords", true, true));
-            return;
-        }
-        if (firstNewPassword !== secondNewPassword) {
-            dispatch(setAlertDialog("Passwords are not equal", true, true));
-            return;
-        }
-        if (firstNewPassword.length < 6) {
-            dispatch(
-                setAlertDialog("Passwords must be at least 6 characters", true, true)
-            );
-            return;
-        }
-        if (user) {
-            if (email) {
-                var credential = firebase.auth.EmailAuthProvider.credential(
-                    email, // references the user's email address
-                    currentPassword
-                );
-                user
-                    .reauthenticateWithCredential(credential)
-                    .then(function () {
-                        // User re-authenticated.
-                        if (user) {
-                            user
-                                .updatePassword(firstNewPassword)
-                                .then(function () {
-                                    dispatch(setAlertDialog("Password was changed", false, true));
-                                })
-                                .catch(function (error) {
-                                    console.log(
-                                        "An error occurred while changing the password:",
-                                        error
-                                    );
-                                });
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log("Some kinda bug: ", error);
-                        // An error happened.
-                    });
-            }
-        }
-    };
-    useEffect(() => {
-        storage
-            .ref("Images/Background/dnd_login.jpg")
-            .getDownloadURL()
-            .then((url: string) => setImageUrl(url));
-    }, []);
-
-    if (isLoading) {
-        return (
-            <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-                <LeftGradientDiv style={{ left: 0 }} />
-                <RightGradientDiv style={{ right: 0 }} />
-
-                <IsLoading />
-            </Container>
-        );
+  const handleChangePassword = () => {
+    if (!firstNewPassword || !secondNewPassword) {
+      dispatch(setAlertDialog("Please Fill out the passwords", true, true));
+      return;
     }
+    if (firstNewPassword !== secondNewPassword) {
+      dispatch(setAlertDialog("Passwords are not equal", true, true));
+      return;
+    }
+    if (firstNewPassword.length < 6) {
+      dispatch(
+        setAlertDialog("Passwords must be at least 6 characters", true, true)
+      );
+      return;
+    }
+    if (user) {
+      if (email) {
+        var credential = firebase.auth.EmailAuthProvider.credential(
+          email, // references the user's email address
+          currentPassword
+        );
+        user
+          .reauthenticateWithCredential(credential)
+          .then(function () {
+            // User re-authenticated.
+            if (user) {
+              user
+                .updatePassword(firstNewPassword)
+                .then(function () {
+                  dispatch(setAlertDialog("Password was changed", false, true));
+                })
+                .catch(function (error) {
+                  console.log(
+                    "An error occurred while changing the password:",
+                    error
+                  );
+                });
+            }
+          })
+          .catch(function (error) {
+            console.log("Some kinda bug: ", error);
+            // An error happened.
+          });
+      }
+    }
+  };
+  useEffect(() => {
+    storage
+      .ref("Images/Background/dnd_login.jpg")
+      .getDownloadURL()
+      .then((url: string) => setImageUrl(url));
+  }, []);
 
+  if (isLoading) {
     return (
-        <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-            <LeftGradientDiv style={{ left: 0 }} />
-            <RightGradientDiv style={{ right: 0 }} />
+      <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+        <LeftGradientDiv style={{ left: 0 }} />
+        <RightGradientDiv style={{ right: 0 }} />
 
-            <Route exact path="/profile">
-                <ContentContainer>
-                    <h1>My Profile</h1>
-                    <div style={{ flex: 8, width: "90%" }}>
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                            }}
-                        >
-                            <ProfileRowString>Username: </ProfileRowString>
-                            <p>{username}</p>
-                        </div>
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                            }}
-                        >
-                            <ProfileRowString>Email: </ProfileRowString>
-                            <p>{email}</p>
-                        </div>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => setIsChangingPassword(!isChangingPassword)}
-                        >
-                            {isChangingPassword ? "Close window" : "Change password"}
-                        </Button>
-                        <ChangePasswordContainer
-                            style={
-                                isChangingPassword
-                                    ? {
-                                        height: "20rem",
-                                        borderStyle: "dotted",
-                                        overflow: "hidden",
-                                    }
-                                    : { height: "0rem" }
-                            }
-                        >
-                            {isChangingPassword ? (
-                                <div
-                                    style={
-                                        isChangingPassword
-                                            ? {
-                                                opacity: 1,
-                                                padding: "1rem",
-                                                display: "initial",
-                                                transition: "200ms",
-                                            }
-                                            : {
-                                                opacity: 0,
-                                                padding: "0",
-                                                display: "none",
-                                                transition: "200ms",
-                                            }
-                                    }
-                                >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            flex: 1,
-                                        }}
-                                    >
-                                        <TextField
-                                            fullWidth
-                                            id="current password"
-                                            type="password"
-                                            color="secondary"
-                                            label="Current password"
-                                            placeholder="Write your current password"
-                                            margin="normal"
-                                            style={{ width: "90%" }}
-                                            onChange={(event) =>
-                                                setCurrentPassword(event.target.value)
-                                            }
-                                        />
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            flex: 1,
-                                        }}
-                                    >
-                                        <TextField
-                                            fullWidth
-                                            id="second password"
-                                            type="password"
-                                            color="secondary"
-                                            label="New password"
-                                            placeholder="Write your new password"
-                                            margin="normal"
-                                            style={{ width: "90%" }}
-                                            onChange={(event) =>
-                                                setFirstNewPassword(event.target.value)
-                                            }
-                                        />
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            flex: 1,
-                                        }}
-                                    >
-                                        <TextField
-                                            fullWidth
-                                            id="second password"
-                                            type="password"
-                                            color="secondary"
-                                            label="New password"
-                                            placeholder="Write your new password"
-                                            margin="normal"
-                                            style={{ width: "90%" }}
-                                            onChange={(event) =>
-                                                setSecondNewPassword(event.target.value)
-                                            }
-                                        />
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            flex: 1,
-                                            margin: "1rem",
-                                        }}
-                                    >
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => handleChangePassword()}
-                                        >
-                                            Change password
-                    </Button>
-                                    </div>
-                                </div>
-                            ) : null}
-                        </ChangePasswordContainer>
-                    </div>
-                    <div
-                        style={{
-                            flex: 1,
-                            width: "90%",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            display: "flex",
-                        }}
+        <IsLoading />
+      </Container>
+    );
+  }
+
+  return (
+    <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+      <LeftGradientDiv style={{ left: 0 }} />
+      <RightGradientDiv style={{ right: 0 }} />
+
+      <Route exact path="/profile">
+        <ContentContainer>
+          <h1>My Profile</h1>
+          <div style={{ flex: 8, width: "90%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <ProfileRowString>Username: </ProfileRowString>
+              <p>{username}</p>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <ProfileRowString>Email: </ProfileRowString>
+              <p>{email}</p>
+            </div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsChangingPassword(!isChangingPassword)}
+            >
+              {isChangingPassword ? "Close window" : "Change password"}
+            </Button>
+            <ChangePasswordContainer
+              style={
+                isChangingPassword
+                  ? {
+                      height: "20rem",
+                      borderStyle: "dotted",
+                      overflow: "hidden",
+                    }
+                  : { height: "0rem" }
+              }
+            >
+              {isChangingPassword ? (
+                <div
+                  style={
+                    isChangingPassword
+                      ? {
+                          opacity: 1,
+                          padding: "1rem",
+                          display: "initial",
+                          transition: "200ms",
+                        }
+                      : {
+                          opacity: 0,
+                          padding: "0",
+                          display: "none",
+                          transition: "200ms",
+                        }
+                  }
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flex: 1,
+                    }}
+                  >
+                    <TextField
+                      fullWidth
+                      id="current password"
+                      type="password"
+                      color="secondary"
+                      label="Current password"
+                      placeholder="Write your current password"
+                      margin="normal"
+                      style={{ width: "90%" }}
+                      onChange={(event) =>
+                        setCurrentPassword(event.target.value)
+                      }
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flex: 1,
+                    }}
+                  >
+                    <TextField
+                      fullWidth
+                      id="second password"
+                      type="password"
+                      color="secondary"
+                      label="New password"
+                      placeholder="Write your new password"
+                      margin="normal"
+                      style={{ width: "90%" }}
+                      onChange={(event) =>
+                        setFirstNewPassword(event.target.value)
+                      }
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flex: 1,
+                    }}
+                  >
+                    <TextField
+                      fullWidth
+                      id="second password"
+                      type="password"
+                      color="secondary"
+                      label="New password"
+                      placeholder="Write your new password"
+                      margin="normal"
+                      style={{ width: "90%" }}
+                      onChange={(event) =>
+                        setSecondNewPassword(event.target.value)
+                      }
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flex: 1,
+                      margin: "1rem",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleChangePassword()}
                     >
-                        <Button
-                            onClick={() => dispatch(dispatchLogout())}
-                            variant="contained"
-                            color="secondary"
-                            style={{ width: "90%" }}
-                        >
-                            {" "}
+                      Change password
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
+            </ChangePasswordContainer>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              width: "90%",
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+            }}
+          >
+            <Button
+              onClick={() => dispatch(dispatchLogout())}
+              variant="contained"
+              color="secondary"
+              style={{ width: "90%" }}
+            >
+              {" "}
               Log out
             </Button>
-                    </div>
-                </ContentContainer>
-            </Route>
-        </Container>
-    );
+          </div>
+        </ContentContainer>
+      </Route>
+    </Container>
+  );
 };
 
 const ProfileRowString = styled.h2`
@@ -309,19 +309,19 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 const LeftGradientDiv = styled.div`
-background: linear-gradient(to right,#000, transparent);
-width: 10vw;
-height:100%; 
-position: fixed; 
-top: 0; 
-backgroundColor:black;
-`
+  background: linear-gradient(to right, #000, transparent);
+  width: 10vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  backgroundcolor: black;
+`;
 const RightGradientDiv = styled.div`
-background: linear-gradient(to left,#000, transparent);
-width: 10vw;
-height:100%;
-position: fixed; 
-top: 0; 
-backgroundColor:black;
-`
+  background: linear-gradient(to left, #000, transparent);
+  width: 10vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  backgroundcolor: black;
+`;
 export default ProfileIndex;

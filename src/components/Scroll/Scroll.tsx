@@ -41,14 +41,10 @@ function Scroll({
       >
         <ScrollContent>
           <div>
-
             <h1 style={{ margin: 0, opacity: 0.7 }}>
               Session day: {sessionDay}
-
             </h1>
-            <ScrollDate>
-              {date}
-            </ScrollDate>
+            <ScrollDate>{date}</ScrollDate>
           </div>
           <div>
             <div style={{ justifyContent: "center", display: "flex" }}>
@@ -94,7 +90,7 @@ const ScrollContainer = styled.div`
 
 const ScrollDate = styled.h2`
   margin-top: -${px2vw(4)};
-  margin-bottom:0;
+  margin-bottom: 0;
   opacity: 0.7;
 `;
 export default Scroll;

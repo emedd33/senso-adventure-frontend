@@ -67,9 +67,9 @@ export const setBackgroundImageFromFirebase = (imageFile: string) => {
       .catch((e) => {
         console.log(
           "Could not fetch background image " +
-          imageFile +
-          " from Firebase: " +
-          e
+            imageFile +
+            " from Firebase: " +
+            e
         );
         return null;
       })

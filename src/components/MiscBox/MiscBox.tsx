@@ -19,10 +19,10 @@ import {
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
 
-export interface MiscBoxProps { }
+export interface MiscBoxProps {}
 
 const MiscBox: React.FC<MiscBoxProps> = () => {
-  const history = useHistory()
+  const history = useHistory();
   const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
   const [isLevelUpDialogOpen, setIsLevelUpDialogOpen] = useState(false);
@@ -85,7 +85,10 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
                       title: "",
                       subTitle: "",
                       story: "",
-                      sessionDay: selectedCampaign.campaign.sessions ? Object.values(selectedCampaign.campaign.sessions).length + 1 : 1,
+                      sessionDay: selectedCampaign.campaign.sessions
+                        ? Object.values(selectedCampaign.campaign.sessions)
+                            .length + 1
+                        : 1,
                       date: new Date().toDateString(),
                       campaign: selectedCampaign ? selectedCampaign.id : "",
                     },
@@ -100,7 +103,6 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
                 alt={"New session"}
                 style={{ width: "4rem", height: "3rem" }}
               />
-
             </IconButton>
           </Tooltip>
 
@@ -135,9 +137,7 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
               />
             </IconButton>
           </Tooltip>
-
         </div>
-
       ) : null}
       <ConfirmDialog
         title={"Congratulation your characters have leveled up!"}

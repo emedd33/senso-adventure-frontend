@@ -22,16 +22,14 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
   const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
   useEffect(() => {
-    if (
-      selectedCampaign
-    ) {
+    if (selectedCampaign) {
       storage
         .ref("Campaigns")
         .child(selectedCampaign.campaign.title)
         .child("BackgroundImage")
         .getDownloadURL()
         .then((url: string) => {
-          console.log(url)
+          console.log(url);
           setImageUrl(url);
         })
         .catch((e) => console.log("could not fetch background image"));
@@ -65,27 +63,25 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             width: "40%",
             maxHeight: "30rem",
             marginBottom: "1rem",
-
           }}
         />
       ) : null}
       {isLoading ? (
         <IsLoading />
       ) : (
-          <>
-            <Route exact path="/campaign">
-              <Campaign />
-            </Route>
-            <Route exact path="/campaign/session">
-              <CampaignSession />
-            </Route>
-            <Route exact path="/campaign/session/edit">
-              {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
-            </Route>
-          </>
-        )}
+        <>
+          <Route exact path="/campaign">
+            <Campaign />
+          </Route>
+          <Route exact path="/campaign/session">
+            <CampaignSession />
+          </Route>
+          <Route exact path="/campaign/session/edit">
+            {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
+          </Route>
+        </>
+      )}
       {selectedCampaign && isDungeonMaster ? <MiscBox /> : null}
-
     </Container>
   );
 };
@@ -104,19 +100,19 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 const LeftGradientDiv = styled.div`
-background: linear-gradient(to right,#000, transparent);
-width: 10vw;
-height:100%;
-position: fixed; 
-top: 0; 
-backgroundColor:black;
-`
+  background: linear-gradient(to right, #000, transparent);
+  width: 10vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  backgroundcolor: black;
+`;
 const RightGradientDiv = styled.div`
-background: linear-gradient(to left,#000, transparent);
-width: 10vw;
-height:100%;
-position: fixed; 
-top: 0; 
-backgroundColor:black;
-`
+  background: linear-gradient(to left, #000, transparent);
+  width: 10vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  backgroundcolor: black;
+`;
 export default CampaignIndex;

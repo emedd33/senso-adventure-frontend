@@ -5,12 +5,12 @@ import ImageUploading from "react-images-uploading";
 export interface ImageUoloadProps {
   imageFile: any;
   setImageFile: any;
-  maxFiles: number
+  maxFiles: number;
 }
 const ImageUpload: React.FC<ImageUoloadProps> = ({
   imageFile,
   setImageFile,
-  maxFiles
+  maxFiles,
 }) => {
   const imageFileArray = imageFile.dataURL ? [imageFile] : [];
   return (
@@ -22,15 +22,20 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({
     >
       {({ imageList, onImageUpload, onImageUpdate, onImageRemove }) => (
         // write your building UI
-        <div className="upload__image-wrapper" style={{ display: "flex", justifyContent: "center", margin: "1rem" }}>
-
+        <div
+          className="upload__image-wrapper"
+          style={{ display: "flex", justifyContent: "center", margin: "1rem" }}
+        >
           {imageList.length === 0 ? (
-            <Button variant="contained" color="primary" onClick={onImageUpload} style={{ height: "3rem" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onImageUpload}
+              style={{ height: "3rem" }}
+            >
               Upload picture
             </Button>
-
           ) : null}
-
           &nbsp;
           {imageList.map((image, index) => (
             <div
