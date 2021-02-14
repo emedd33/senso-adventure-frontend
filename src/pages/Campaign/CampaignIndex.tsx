@@ -53,6 +53,9 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
 
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+      <LeftGradientDiv style={{ left: 0 }} />
+      <RightGradientDiv style={{ right: 0 }} />
+
       {campaignTitleImage ? (
         <img
           src={campaignTitleImage}
@@ -62,6 +65,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             width: "40%",
             maxHeight: "30rem",
             marginBottom: "1rem",
+
           }}
         />
       ) : null}
@@ -81,6 +85,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           </>
         )}
       {selectedCampaign && isDungeonMaster ? <MiscBox /> : null}
+
     </Container>
   );
 };
@@ -98,4 +103,20 @@ const Container = styled.div`
   padding-bottom: 10rem;
   min-height: 100vh;
 `;
+const LeftGradientDiv = styled.div`
+background: linear-gradient(to right,#000, transparent);
+width: 10vw;
+height:100%;
+position: fixed; 
+top: 0; 
+backgroundColor:black;
+`
+const RightGradientDiv = styled.div`
+background: linear-gradient(to left,#000, transparent);
+width: 10vw;
+height:100%;
+position: fixed; 
+top: 0; 
+backgroundColor:black;
+`
 export default CampaignIndex;

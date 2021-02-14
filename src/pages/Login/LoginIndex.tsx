@@ -8,7 +8,7 @@ import LoginForm from "../../components/LoginForm/LoginForm";
 import SignupForm from "../../components/SignupForm/SignupForm";
 import { storage } from "../../firebase";
 
-export interface LoginProps {}
+export interface LoginProps { }
 
 const LoginIndex: React.FC<LoginProps> = () => {
   const isLoading = useSelector(
@@ -25,12 +25,18 @@ const LoginIndex: React.FC<LoginProps> = () => {
   if (isLoading) {
     return (
       <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+        <LeftGradientDiv style={{ left: 0 }} />
+        <RightGradientDiv style={{ right: 0 }} />
+
         <IsLoading />
       </Container>
     );
   }
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+      <LeftGradientDiv style={{ left: 0 }} />
+      <RightGradientDiv style={{ right: 0 }} />
+
       <Route exact path="/login">
         <LoginForm />
       </Route>
@@ -58,4 +64,20 @@ const Container = styled.div`
   min-height: 100vh;
   margin: auto;
 `;
+const LeftGradientDiv = styled.div`
+background: linear-gradient(to right,#000, transparent);
+width: 10vw;
+height:100%; 
+position: fixed; 
+top: 0; 
+backgroundColor:black;
+`
+const RightGradientDiv = styled.div`
+background: linear-gradient(to left,#000, transparent);
+width: 10vw;
+height:100%;
+position: fixed; 
+top: 0; 
+backgroundColor:black;
+`
 export default LoginIndex;

@@ -27,6 +27,9 @@ const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
   }
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+      <LeftGradientDiv style={{ left: 0 }} />
+      <RightGradientDiv style={{ right: 0 }} />
+
       {isLoading ? (
         <IsLoading />
       ) : (
@@ -57,4 +60,21 @@ const Container = styled.div`
   height: 100%;
   min-height: 100vh;
 `;
+
+const LeftGradientDiv = styled.div`
+background: linear-gradient(to right,#000, transparent);
+width: 10vw;
+height:100%;
+position: fixed; 
+top: 0; 
+backgroundColor:black;
+`
+const RightGradientDiv = styled.div`
+background: linear-gradient(to left,#000, transparent);
+width: 10vw;
+height:100%;
+position: fixed; 
+top: 0; 
+backgroundColor:black;
+`
 export default HomeIndex;

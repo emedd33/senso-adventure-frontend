@@ -86,6 +86,9 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
     if (isLoading) {
         return (
             <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+                <LeftGradientDiv style={{ left: 0 }} />
+                <RightGradientDiv style={{ right: 0 }} />
+
                 <IsLoading />
             </Container>
         );
@@ -93,6 +96,9 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
 
     return (
         <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+            <LeftGradientDiv style={{ left: 0 }} />
+            <RightGradientDiv style={{ right: 0 }} />
+
             <Route exact path="/profile">
                 <ContentContainer>
                     <h1>My Profile</h1>
@@ -302,4 +308,20 @@ const Container = styled.div`
   padding-bottom: 10rem;
   min-height: 100vh;
 `;
+const LeftGradientDiv = styled.div`
+background: linear-gradient(to right,#000, transparent);
+width: 10vw;
+height:100%; 
+position: fixed; 
+top: 0; 
+backgroundColor:black;
+`
+const RightGradientDiv = styled.div`
+background: linear-gradient(to left,#000, transparent);
+width: 10vw;
+height:100%;
+position: fixed; 
+top: 0; 
+backgroundColor:black;
+`
 export default ProfileIndex;
