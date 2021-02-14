@@ -142,7 +142,7 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
       ) : null}
       <ConfirmDialog
         title={"Congratulation your characters have leveled up!"}
-        content={"Characters level"}
+        content={""}
         handleConfirm={() => setIsCongratulationOpen(false)}
         open={isCongratulationOpen}
         handleClose={() => setIsCongratulationOpen(false)}

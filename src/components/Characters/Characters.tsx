@@ -11,7 +11,7 @@ import { dispatchSetSelectedPlayer } from "../../store/selected/selectedCreators
 import IsLoading from "../IsLoading/IsLoading";
 import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 
-export interface CharactersProps {}
+export interface CharactersProps { }
 
 const Characters: React.FC<CharactersProps> = () => {
   const [isEditPlayerOpen, setIsEditPlayerOpen] = useState(false);
@@ -63,90 +63,90 @@ const Characters: React.FC<CharactersProps> = () => {
           <tbody>
             {campaign && campaign.campaign.players
               ? Object.keys(campaign.campaign.players).map(
-                  (key: any, index: number) => {
-                    return (
-                      <tr id={index + "row"} style={{ textAlign: "center" }}>
-                        <td id={index + "dead"} style={{ textAlign: "center" }}>
-                          {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                            <FaIcons.FaSkullCrossbones />
-                          ) : null}
-                        </td>
-                        <td id={index + "playerName"}>
-                          {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                            <s>{campaign!.campaign.players[key].playerName}</s>
-                          ) : (
+                (key: any, index: number) => {
+                  return (
+                    <tr id={index + "row"} style={{ textAlign: "center" }}>
+                      <td id={index + "dead"} style={{ textAlign: "center" }}>
+                        {campaign!.campaign.players[key].isDead === "TRUE" ? (
+                          <FaIcons.FaSkullCrossbones />
+                        ) : null}
+                      </td>
+                      <td id={index + "playerName"}>
+                        {campaign!.campaign.players[key].isDead === "TRUE" ? (
+                          <s>{campaign!.campaign.players[key].playerName}</s>
+                        ) : (
                             campaign!.campaign.players[key].playerName
                           )}
-                        </td>
-                        <td id={index + "characterName"}>
-                          {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                            <s>
-                              {campaign!.campaign.players[key].characterName}
-                            </s>
-                          ) : (
+                      </td>
+                      <td id={index + "characterName"}>
+                        {campaign!.campaign.players[key].isDead === "TRUE" ? (
+                          <s>
+                            {campaign!.campaign.players[key].characterName}
+                          </s>
+                        ) : (
                             campaign!.campaign.players[key].characterName
                           )}
-                        </td>
-                        <td id={index + "race"}>
-                          {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                            <s>{campaign!.campaign.players[key].race}</s>
-                          ) : (
+                      </td>
+                      <td id={index + "race"}>
+                        {campaign!.campaign.players[key].isDead === "TRUE" ? (
+                          <s>{campaign!.campaign.players[key].race}</s>
+                        ) : (
                             campaign!.campaign.players[key].race
                           )}
-                        </td>
-                        <td id={index + "class"}>
-                          {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                            <s>{campaign!.campaign.players[key].class}</s>
-                          ) : (
+                      </td>
+                      <td id={index + "class"}>
+                        {campaign!.campaign.players[key].isDead === "TRUE" ? (
+                          <s>{campaign!.campaign.players[key].class}</s>
+                        ) : (
                             campaign!.campaign.players[key].class
                           )}
-                        </td>
-                        <td id={index + "level"}>
-                          {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                            <s>{campaign!.campaign.players[key].level}</s>
-                          ) : (
+                      </td>
+                      <td id={index + "level"}>
+                        {campaign!.campaign.players[key].isDead === "TRUE" ? (
+                          <s>{campaign!.campaign.players[key].level}</s>
+                        ) : (
                             campaign!.campaign.players[key].level
                           )}
-                        </td>
-                        <td id={index + "edit"}>
-                          {" "}
-                          {isDungeonMaster ? (
-                            <Button
-                              color="primary"
-                              onClick={() => {
-                                dispatch(
-                                  dispatchSetSelectedPlayer({
-                                    id: key,
-                                    isNew: false,
-                                    player: {
-                                      playerName: campaign!.campaign.players[
-                                        key
-                                      ].playerName,
-                                      characterName: campaign!.campaign.players[
-                                        key
-                                      ].characterName,
-                                      race: campaign!.campaign.players[key]
-                                        .race,
-                                      class: campaign!.campaign.players[key]
-                                        .class,
-                                      level: campaign!.campaign.players[key]
-                                        .level,
-                                      isDead: campaign!.campaign.players[key]
-                                        .isDead,
-                                    },
-                                  })
-                                );
-                                setIsEditPlayerOpen(true);
-                              }}
-                            >
-                              <EditIcon />
-                            </Button>
-                          ) : null}
-                        </td>
-                      </tr>
-                    );
-                  }
-                )
+                      </td>
+                      <td id={index + "edit"}>
+                        {" "}
+                        {isDungeonMaster ? (
+                          <Button
+                            color="primary"
+                            onClick={() => {
+                              dispatch(
+                                dispatchSetSelectedPlayer({
+                                  id: key,
+                                  isNew: false,
+                                  player: {
+                                    playerName: campaign!.campaign.players[
+                                      key
+                                    ].playerName,
+                                    characterName: campaign!.campaign.players[
+                                      key
+                                    ].characterName,
+                                    race: campaign!.campaign.players[key]
+                                      .race,
+                                    class: campaign!.campaign.players[key]
+                                      .class,
+                                    level: campaign!.campaign.players[key]
+                                      .level,
+                                    isDead: campaign!.campaign.players[key]
+                                      .isDead,
+                                  },
+                                })
+                              );
+                              setIsEditPlayerOpen(true);
+                            }}
+                          >
+                            <EditIcon />
+                          </Button>
+                        ) : null}
+                      </td>
+                    </tr>
+                  );
+                }
+              )
               : null}
           </tbody>
         </table>
@@ -160,7 +160,8 @@ const Characters: React.FC<CharactersProps> = () => {
     <CharacterConatiner>
       <div
         style={{
-          height: "20rem",
+          minHeight: "20rem",
+          padding: "2rem",
           zIndex: 200,
           display: "flex",
           justifyContent: "center",
@@ -192,7 +193,6 @@ background-repeat: no-repeat;
 background-size: 100% 100%;
 margin: 5rem; 
 min-width:15rem;
-padding
 margin-top: 10rem;
 z-index: 300; 
 `;

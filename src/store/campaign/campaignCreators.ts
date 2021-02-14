@@ -62,13 +62,15 @@ export const dispatchLevelUpCharacters = (selectedCampaign: any) => {
     Object.entries(selectedCampaign.campaign.players).forEach((elem: any) => {
       let id = elem[0];
       let player = elem[1];
-      let new_level = parseInt(player.level);
-      new_level += 1;
-      player.level = new_level;
-      campaignsRef
-        .child(selectedCampaign.id + "/players/")
-        .child(id)
-        .set(player);
+      if (player.isDead === "FALSE") {
+        let new_level = parseInt(player.level);
+        new_level += 1;
+        player.level = new_level;
+        campaignsRef
+          .child(selectedCampaign.id + "/players/")
+          .child(id)
+          .set(player);
+      }
     });
     dispatch(setIsLoading(false));
   };
