@@ -73,39 +73,46 @@ const Characters: React.FC<CharactersProps> = () => {
                       </td>
                       <td id={index + "playerName"}>
                         {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                          <s>{campaign!.campaign.players[key].playerName}</s>
+                          <p style={{ textDecoration: "line-through" }}>{campaign!.campaign.players[key].playerName}</p>
                         ) : (
-                            campaign!.campaign.players[key].playerName
+                            <p>{campaign!.campaign.players[key].playerName}</p>
                           )}
                       </td>
                       <td id={index + "characterName"}>
                         {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                          <s>
+                          <p style={{ textDecoration: "line-through" }}>
                             {campaign!.campaign.players[key].characterName}
-                          </s>
+                          </p>
                         ) : (
-                            campaign!.campaign.players[key].characterName
+                            <p>{campaign!.campaign.players[key].characterName}</p>
                           )}
                       </td>
                       <td id={index + "race"}>
                         {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                          <s>{campaign!.campaign.players[key].race}</s>
+                          <p style={{ textDecoration: "line-through" }}>{campaign!.campaign.players[key].race}</p>
                         ) : (
-                            campaign!.campaign.players[key].race
+                            <p>
+                              {campaign!.campaign.players[key].race}
+                            </p>
                           )}
                       </td>
                       <td id={index + "class"}>
                         {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                          <s>{campaign!.campaign.players[key].class}</s>
+                          <p style={{ textDecoration: "line-through" }}>{campaign!.campaign.players[key].class}</p>
                         ) : (
-                            campaign!.campaign.players[key].class
+                            <p>
+                              {campaign!.campaign.players[key].class}
+                            </p>
                           )}
                       </td>
                       <td id={index + "level"}>
                         {campaign!.campaign.players[key].isDead === "TRUE" ? (
-                          <s>{campaign!.campaign.players[key].level}</s>
+                          <p style={{ textDecoration: "line-through" }}>{campaign!.campaign.players[key].level}</p>
                         ) : (
-                            campaign!.campaign.players[key].level
+                            <p>
+
+                              {campaign!.campaign.players[key].level}
+                            </p>
                           )}
                       </td>
                       <td id={index + "edit"}>
@@ -168,9 +175,12 @@ const Characters: React.FC<CharactersProps> = () => {
           flexDirection: "column",
         }}
       >
-        <h2 style={{ textAlign: "center", flex: 1 }}>
-          Dungeon master: {dungeonMaster}
+        <h2 style={{ textAlign: "center", flex: 1, marginBottom: "0rem" }}>
+          Dungeon master:
         </h2>
+        <p style={{ textAlign: "center", flex: 1 }}>
+          {dungeonMaster}
+        </p>
         <div style={{ flex: 10, textAlign: "center" }}>
           {isDungeonMaster ? (
             <Button color="primary" onClick={handleNewPlayer}>
@@ -186,12 +196,13 @@ const Characters: React.FC<CharactersProps> = () => {
 
 const CharacterConatiner = styled.div`
 width: 60%;  
-min-height:10rem;
-padding:11%;
+min-height:13rem;
+padding:13%;
+padding-bottom:10rem;
 background-image: url(${OldFrame});
 background-repeat: no-repeat;
 background-size: 100% 100%;
-margin: 5rem; 
+margin: 2rem; 
 min-width:15rem;
 margin-top: 10rem;
 z-index: 300; 
