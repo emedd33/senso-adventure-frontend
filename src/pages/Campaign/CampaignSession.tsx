@@ -96,6 +96,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
         dispatch(setIsLoading(false));
         return () => {
             setSessionStory("")
+            setSessionImage1(undefined)
+            setSessionImage2(undefined)
+            setSessionImage3(undefined)
         }
     }, [dispatch, selectedSession, isDungeonMaster, selectedCampaign]);
     if (!selectedSession.id) {
