@@ -21,6 +21,7 @@ import styled from "styled-components";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import { useImageFile } from "../../store/hooks/useImageFile";
 import { isValidImageFile } from "../../utils/isValidImageFile";
+import EditMultilineTextField from "../../components/EditMultilineTextField/EditMultilineTextField";
 export interface CampaignSessionEditProps { }
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
@@ -381,7 +382,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     ) : null}
                 </div>
             </div>
-
+            <EditMultilineTextField />
             <Button
                 variant="contained"
                 color="primary"
