@@ -1,27 +1,49 @@
 import { useEffect, useState } from "react"
 import Button from '@material-ui/core/Button';
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { storage } from "../../firebase";
+import { setAlertDialog } from "../../store/admin/adminCreator";
+import useInterval from "../../store/hooks/useIntervak";
 export interface EditMultilineTextFieldProps {
 
 }
 
 const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
     const [isBold, setIsBold] = useState(false)
-    const [text, setText] = useState("This is text")
+    const [text, setText] = useState("this is start")
+    const selectedCampaign = useSelector(
+        (state: RootReducerProp) => state.selected.selectedCampaign
+    );
+    const selectedSession = useSelector(
+        (state: RootReducerProp) => state.selected.selectedSession
+    );
+    let storageRef = storage
+        .ref()
+        .child("Campaigns")
+        .child(selectedCampaign.campaign.title)
+        .child("Sessions")
+        .child(selectedSession.session.title)
     const handleSetIsBold = () => {
         setIsBold(!isBold)
         document.execCommand('bold')
     }
-    const handleTextChange = (text: any) => {
-        var target = document.getElementById('editContainer');
-        var wrap = document.createElement('div');
-        if (target) {
-            wrap.appendChild(target.cloneNode(true));
-            setText(wrap.innerHTML);
+    useInterval(() => {    // Your custom logic here 
+        if (text) {
+            var task = storageRef
+                .child("SesionStory.html")
+                .putString(text)
         }
+    },
+        10000)
+    const handleTextChange = (text: any) => {
+        console.log(text)
+        setText(text.innerHTML);
+
     }
     useEffect(() => {
         var target = document.getElementById('edit-multiline-view')
+        console.log(target)
         if (target) {
             target.outerHTML = text;
         }
@@ -34,7 +56,7 @@ const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
 
                 <Button onClick={handleSetIsBold} variant="contained" size="small" disableElevation={isBold ? false : true}>Bold</Button >
             </HeaderContainer>
-            <EditContainer contentEditable="true" onInput={e => handleTextChange(e.currentTarget)} id={"editContainer"}>
+            <EditContainer contentEditable="true" onInput={e => handleTextChange(e.currentTarget)} id={"editContainer"} suppressContentEditableWarning={true}>
                 <div id="edit-multiline-view"></div>
 
             </EditContainer>
