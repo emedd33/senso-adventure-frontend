@@ -13,8 +13,6 @@ import {
     dispatchSetSelectedCampaign,
     dispatchSetSelectedSession,
 } from "../../store/selected/selectedCreators";
-import MarkdownIt from "markdown-it";
-import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
 import styled from "styled-components";
@@ -24,7 +22,6 @@ import { isValidImageFile } from "../../utils/isValidImageFile";
 import EditMultilineTextField from "../../components/EditMultilineTextField/EditMultilineTextField";
 export interface CampaignSessionEditProps { }
 
-const mdParser = new MarkdownIt(/* Markdown-it options */);
 const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -48,7 +45,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         selectedSession?.session.title
     );
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false);
-    const [sessionStory, setSessionStory] = useState<string>("");
 
     const [sessionDate, setSessionDate] = useState<string>(
         selectedSession?.session.date
@@ -72,15 +68,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 .child("Sessions")
                 .child(selectedSession.session.title);
 
-            storageRef
-                .child(selectedSession.session.story)
-                .getDownloadURL()
-                .then((url) =>
-                    fetch(url)
-                        .then((res) => res.text())
-                        .then((res) => setSessionStory(res))
-                )
-                .catch((e) => console.log("error", e));
             storageRef
                 .child("SessionImageFile1")
                 .getDownloadURL()
@@ -118,26 +105,18 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             })
         );
         dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id));
-        var file = new File([sessionStory], sessionMDFile, {
-            type: "text/plain;charset=utf-8",
-        });
         let sessionStorragePath = firebaseStorageRef
             .child("Campaigns")
             .child(selectedCampaign.campaign.title)
             .child("Sessions")
             .child(sessionTitle);
 
-        let markdownMetadata = {
-            contentType: "markdown",
+
+        let imageMetadata = {
             session: session.id,
             campaign: selectedCampaign.id,
             date: sessionDate,
             day: sessionDay,
-        };
-        await sessionStorragePath.child(sessionMDFile).put(file, markdownMetadata)
-
-        let imageMetadata = {
-            ...markdownMetadata,
             contentType: "image/png",
         };
 
@@ -311,18 +290,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     "To add a secret note encapsulte the secret note with the '<secret> </secret>' tag"
                 }
             </p>
-            <MdEditor
-                style={{
-                    height: "500px",
-                    width: "100%",
-                    margin: "1rem",
-                    marginTop: "0",
-                    fontFamily: "sans-serif",
-                }}
-                renderHTML={(text) => mdParser.render(text)}
-                onChange={(html: any) => setSessionStory(html.text)}
-                value={sessionStory ? sessionStory : ""}
-            />
+            <EditMultilineTextField />
             <h3>Add uo to 3 pictures to the session</h3>
             <div
                 style={{
@@ -382,7 +350,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     ) : null}
                 </div>
             </div>
-            <EditMultilineTextField />
+
             <Button
                 variant="contained"
                 color="primary"

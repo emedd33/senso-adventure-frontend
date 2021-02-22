@@ -1,20 +1,24 @@
-import { useEffect, useState } from "react"
-import Button from '@material-ui/core/Button';
+import React, { useEffect, useState } from "react"
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import FormatBoldIcon from '@material-ui/icons/FormatBold';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import { storage } from "../../firebase";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import useInterval from "../../store/hooks/useIntervak";
+import useInterval from "../../store/hooks/useInterval";
+import IconButton from '@material-ui/core/IconButton';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import { parseSessionStory } from "../../utils/paseSessionStory";
 export interface EditMultilineTextFieldProps {
 
 }
 
 const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
     const [isUploading, setIsUploading] = useState(false)
-    const [isBold, setIsBold] = useState(false)
-    const [isItalic, setIsItalic] = useState(false)
-    const [text, setText] = useState("this is start")
-    const [editedText, setEditedText] = useState("This is start")
+    const [text, setText] = useState<undefined | string>()
+    const [editedText, setEditedText] = useState<undefined | string>()
+
     const selectedCampaign = useSelector(
         (state: RootReducerProp) => state.selected.selectedCampaign
     );
@@ -28,24 +32,49 @@ const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
         .child("Sessions")
         .child(selectedSession.session.title)
     const handleSetIsBold = () => {
-        setIsBold(!isBold)
         document.execCommand('bold')
     }
     const handleSetIsItalic = () => {
-        setIsItalic(!isItalic)
         document.execCommand('italic')
+    }
+    const handleAddBullet = () => {
+        var target = document.getElementById('edit-multiline-view')
+        var parentContainer = document.createElement("div");
+        var parentNode = document.createElement("ul");                 // Create a <li> node
+        var node = document.createElement("li");                 // Create a <li> node
+        parentNode.appendChild(node);
+        parentContainer.appendChild(parentNode)                         // Append the text to <li>
+        target?.appendChild(parentNode);
+    }
+    const handleAddSecret = () => {
+        let text = ""
+        var parent = document.getElementById('edit-multiline-view')
+        if (window.getSelection()?.toString()) {
+            text = window.getSelection()!.toString();
+        }
+        let secretNode = "<secret>" + text + "</secret>"
+        var node = document.createElement("p");
+        node.textContent = secretNode
+        parent?.appendChild(node)
+
+
+        // var parentNode = document.createElement("ul");                 // Create a <li> node
+        // parentNode.appendChild(node);
+        // parentContainer.appendChild(parentNode)                         // Append the text to <li>
+        // target?.appendChild(parentNode);
     }
     function sleep(time: number) {
         return new Promise((resolve) => setTimeout(resolve, time));
     }
     useInterval(async () => {    // Your custom logic here 
-        if (editedText && text !== editedText) {
+        console.log(text)
+        if (editedText !== undefined && text !== editedText) {
             console.log("uploading")
+            setText(editedText)
             setIsUploading(true)
             storageRef
-                .child("SesionStory.html")
-                .putString(text)
-            setText(editedText)
+                .child("SessionStory.html")
+                .putString(editedText!)
             sleep(1000).then(() => {
                 setIsUploading(false)
             });
@@ -55,28 +84,47 @@ const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
     },
         5000)
     const handleTextChange = (text: any) => {
-        console.log(text)
         setEditedText(text.innerHTML);
-
     }
     useEffect(() => {
-        var target = document.getElementById('edit-multiline-view')
-        console.log(target)
-        if (target) {
-            target.outerHTML = text;
-        }
-
-    }, [text])
+        storageRef.child("SessionStory.html")
+            .getDownloadURL()
+            .then((url) => fetch(url))
+            .then(res => res.text())
+            .then(res => {
+                setText(res!);
+                var target = document.getElementById('edit-multiline-view')
+                if (target) {
+                    target.innerHTML = parseSessionStory(res, true);
+                }
+            })
+            .catch(e => console.log(e))
+    }
+        , [])
 
     return (
         <Container id="cont">
-            {isUploading ? <CircularProgress size="1rem" /> : "Saved"}
             <HeaderContainer>
-                <Button onClick={handleSetIsBold} variant="contained" size="small" >Bold</Button >
-                <Button onClick={handleSetIsItalic} variant="contained" size="small" disableElevation={isItalic ? true : false}>Italic</Button >
+                <div style={{ display: "flex", justifyContent: "flex-start", alignContent: "center" }}>
+                    <IconButton aria-label="Bold">
+                        <FormatBoldIcon onClick={handleSetIsBold} />
+                    </IconButton>
+                    <IconButton aria-label="Italic" onClick={handleSetIsItalic}>
+                        <FormatItalicIcon />
+                    </IconButton>
+                    <IconButton aria-label="Bullets" onClick={handleAddBullet}>
+                        <FormatListBulletedIcon />
+                    </IconButton>
+                    <IconButton aria-label="Bullets" onClick={handleAddSecret}>
+                        <VpnKeyIcon />
+                    </IconButton>
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end", alignContent: "center", paddingRight: "1rem" }}>
+                    {isUploading ? <CircularProgress size="1rem" /> : " "}
+                </div>
             </HeaderContainer>
             <EditContainer contentEditable="true" onInput={e => handleTextChange(e.currentTarget)} id={"editContainer"} suppressContentEditableWarning={true}>
-                <div id="edit-multiline-view"></div>
+                <div id="edit-multiline-view" ></div>
 
             </EditContainer>
         </Container >
@@ -84,18 +132,24 @@ const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
 }
 
 const Container = styled.div`
-    background-color:white;
-    width:100%;
+width:100%;
+font-family:sans-serif;
+min-height:20rem;
 
 `
 const HeaderContainer = styled.div`
-padding:1rem;
-justify-content:flex-start;
-display:flex
+justify-content:space-between;
+align-items: center;
+display:flex;
+background-color:lightgray;
 `
 const EditContainer = styled.div`
-width:100%;
-min-height20rem:
+margin:1rem;
+min-height:20rem;
+background-color:white;
+border-style: inset;
+padding:1rem;
+font-family:sans-serif;
 
 `
 

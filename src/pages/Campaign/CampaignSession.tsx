@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
-import ReactMarkdown from "react-markdown";
 import {
     dispatchSetSelectedSession,
     setSelectedSession,
@@ -22,17 +21,9 @@ import {
     getPreviousSession,
     isDungeonMasterSelector,
 } from "../../store/campaign/campaignSelectors";
-const renderers = {
-    code: function (obj: any) {
-        return (
-            <SyntaxHighlighter
-                style={dark}
-                language={obj.language}
-                children={obj.value}
-            />
-        );
-    },
-};
+
+import parse from 'html-react-parser';
+
 type CampaignSessionProps = {};
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const dispatch = useDispatch();
@@ -66,13 +57,14 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 .child(selectedSession.session.title);
 
             storageRef
-                .child(selectedSession.session.story)
+                .child("SessionStory.html")
                 .getDownloadURL()
                 .then((url) =>
                     fetch(url)
                         .then((res) => res.text())
                         .then((res) => {
                             const text = parseSessionStory(res, isDungeonMaster);
+                            console.log(text)
                             setSessionStory(text ? text : "new story");
                         })
                 )
@@ -197,13 +189,8 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     {selectedSession?.session.subTitle}
                 </h3>
                 <div style={{ fontFamily: "sans-serif" }}>
-                    {sessionStory ? (
-                        <ReactMarkdown
-                            plugins={[[gfm, { singleTilde: false }]]}
-                            renderers={renderers}
-                        >
-                            {sessionStory}
-                        </ReactMarkdown>
+                    {sessionStory ? parse(
+                        sessionStory
                     ) : (
                             <IsLoading />
                         )}
