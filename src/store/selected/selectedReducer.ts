@@ -23,7 +23,7 @@ export const initialSelectedSession = {
   slug: "",
   sessionDay: 1,
   date: new Date().toDateString(),
-  campaign: "",
+  campaign: initialSelectedCampaignState,
 };
 const initialSelectedState: SelectedState = {
   selectedSession: { id: "", session: initialSelectedSession },

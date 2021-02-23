@@ -64,13 +64,3 @@ export const getPreviousSession = (state: RootReducerProp) => {
   return null;
 };
 
-export const getCampaignByPathname = (state: RootReducerProp, pathname: string) => {
-  let campaignSlug = pathname.split("/")[1]
-  let selectedCampaign = Object.entries(state.rootCampaigns.campaigns).filter(campaign => campaign[1].slug === campaignSlug)
-  if (selectedCampaign.length > 0) {
-    return { campaign: selectedCampaign[0][1], id: selectedCampaign[0][0] }
-  }
-
-
-
-}

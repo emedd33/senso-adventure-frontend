@@ -16,10 +16,8 @@ import {
   dispatchLevelUpCharacters,
   fetchFromFirebase,
 } from "../../store/campaign/campaignCreators";
-import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
 import { getSelectedCampaign, getSelectedSession } from "../../store/selected/selectedSelectors";
-import { initialSelectedSession } from "../../store/selected/selectedReducer";
 
 export interface MiscBoxProps { }
 
@@ -80,20 +78,6 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
               color="primary"
               style={{ width: "3rem", height: "3rem" }}
               onClick={() => {
-                dispatch(
-                  dispatchSetSelectedSession({
-                    id: "",
-                    session: {
-                      ...initialSelectedSession,
-                      sessionDay: selectedCampaign.campaign.sessions
-                        ? Object.values(selectedCampaign.campaign.sessions)
-                          .length + 1
-                        : 1,
-                      date: new Date().toDateString(),
-                      campaign: selectedCampaign ? selectedCampaign.id : "",
-                    },
-                  })
-                );
                 setClicked(false);
                 history.push(`/${selectedCampaign.campaign.slug}/${selectedSession.session.slug}/edit`);
               }}

@@ -22,11 +22,14 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
 
   useEffect(() => {
     let pathArray = location.pathname.split("/")
-    if (pathArray.length >= 1) {
+    if (pathArray.length >= 2) {
+      console.log(campaigns)
       let filteredCampaign = Object.entries(campaigns)
-        .filter(([, campaign]: [string, ICampaign]) => campaign.slug === pathArray[1])
+        .filter(([, campaign]: [string, ICampaign]) => {
+          return campaign.slug === pathArray[1]
+        })
         .map(([id, campaign]: [string, ICampaign]) => { return { id: id, campaign: campaign } })
-      if (filteredCampaign.length >= 2) {
+      if (filteredCampaign.length >= 1) {
         let campaign = { id: filteredCampaign[0].id, campaign: filteredCampaign[0].campaign }
         if (campaign.id !== selectedCampaign.id) {
           dispatch(setSelectedCampaign(campaign.id, campaign.campaign))
@@ -35,8 +38,10 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           let filteredSession = Object.entries(campaign.campaign.sessions)
             .filter(([, session]: [string, ISession]) => session.slug === pathArray[2])
             .map(([id, session]: [string, ISession]) => { return { id: id, session: session } })
-          let session = { id: filteredSession[0].id, session: filteredSession[0].session }
-          dispatch(setSelectedSession(session))
+          if (filteredSession.length >= 1) {
+            let session = { id: filteredSession[0].id, session: filteredSession[0].session }
+            dispatch(setSelectedSession(session))
+          }
         }
       }
     }

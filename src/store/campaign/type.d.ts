@@ -2,7 +2,7 @@ interface ISession {
   title: string;
   story: string;
   date: string;
-  campaign: any;
+  campaign: ICampaign;
   sessionDay: number;
   date: string;
   subTitle?: string;
@@ -17,7 +17,7 @@ interface IPlayer {
   isDead: string;
 }
 interface ICampaign {
-  slug: unknown;
+  slug: string;
   title: string;
   subTitle: string;
   slug: string;
