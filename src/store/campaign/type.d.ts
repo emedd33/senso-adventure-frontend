@@ -16,6 +16,7 @@ interface IPlayer {
   isDead: string;
 }
 interface ICampaign {
+  slug: unknown;
   title: string;
   subTitle: string;
   slug: string;

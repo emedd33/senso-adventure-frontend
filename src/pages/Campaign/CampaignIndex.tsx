@@ -1,62 +1,65 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import IsLoading from "../../components/IsLoading/IsLoading";
-import { Redirect, Route, useHistory, useLocation } from "react-router-dom";
+import { Redirect, Route, useLocation } from "react-router-dom";
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSession from "./CampaignSession";
-import { getCampaignByPathname, isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
+import { getSelectedCampaign, isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
 import MiscBox from "../../components/MiscBox/MiscBox";
 import { storage } from "../../firebase";
-import { dispatchSelectedByLocation, setSelectedCampaign } from "../../store/selected/selectedCreators";
+import { cleanSelectedCampaign, setSelectedCampaign } from "../../store/selected/selectedCreators";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
-  const history = useHistory()
   const location = useLocation();
   const dispatch = useDispatch()
   const [imageUrl, setImageUrl] = useState("");
-  const isLoading = useSelector(
-    (state: RootReducerProp) => state.admin.isLoading
-  );
-  const selectedCampaign = useSelector((state: RootReducerProp) => getCampaignByPathname(state, history.location.pathname));
-  const isDungeonMaster = useSelector(isDungeonMasterSelector);
   const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
+  const campaigns = useSelector((state: RootReducerProp) => state.rootCampaigns.campaigns)
+  const selectedCampaign = useSelector(getSelectedCampaign);
+  const isDungeonMaster = useSelector(isDungeonMasterSelector);
   useEffect(() => {
-    dispatch(dispatchSelectedByLocation(location.pathname))
-  }, [location])
+    let campaignRef = storage
+      .ref("Campaigns")
+      .child(selectedCampaign.campaign.title);
 
+    // Fetching BackgroundImage
+    campaignRef
+      .child("BackgroundImage")
+      .getDownloadURL()
+      .then((url: string) => {
+        console.log(url);
+        setImageUrl(url);
+      })
+      .catch((e) => console.log("could not fetch background image"));
+    // Fetching Title Image
+    campaignRef
+      .child("TitleImage")
+      .getDownloadURL()
+      .then((url) => {
+        setCampaignTitleImage(url);
+      })
+      .catch((e) => console.log("Could not fetch Campaign image"));
+  },
+    [selectedCampaign])
   useEffect(() => {
-    if (selectedCampaign) {
-      dispatch(setSelectedCampaign(selectedCampaign.id, selectedCampaign.campaign))
-      storage
-        .ref("Campaigns")
-        .child(selectedCampaign.campaign.title)
-        .child("BackgroundImage")
-        .getDownloadURL()
-        .then((url: string) => {
-          console.log(url);
-          setImageUrl(url);
-        })
-        .catch((e) => console.log("could not fetch background image"));
-      storage
-        .ref("Campaigns")
-        .child(selectedCampaign.campaign.title)
-        .child("TitleImage")
-        .getDownloadURL()
-        .then((url) => {
-          setCampaignTitleImage(url);
-        })
-        .catch((e) => console.log("Could not fetch Campaign image"));
+    let filteredCampaign = Object.entries(campaigns)
+      .filter(([, campaign]: [string, ICampaign]) => campaign.slug === location.pathname.split("/")[1])
+      .map(([id, campaign]: [string, ICampaign]) => { return { id: id, campaign: campaign } })
+
+    if (filteredCampaign.length > 0) {
+      let campaign = { id: filteredCampaign[0].id, campaign: filteredCampaign[0].campaign }
+      if (campaign.id !== selectedCampaign.id) {
+        dispatch(setSelectedCampaign(campaign.id, campaign.campaign))
+      }
     }
-  }, [history.location.pathname, dispatch])
-
+    return () => {
+      dispatch(cleanSelectedCampaign)
+    }
+  }, [location, campaigns, dispatch, selectedCampaign])
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      <LeftGradientDiv style={{ left: 0 }} />
-      <RightGradientDiv style={{ right: 0 }} />
-
       {campaignTitleImage ? (
         <img
           src={campaignTitleImage}
@@ -69,21 +72,17 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           }}
         />
       ) : null}
-      {isLoading ? (
-        <IsLoading />
-      ) : (
-          <>
-            <Route exact path="/campaign/session">
-              <CampaignSession />
-            </Route>
-            <Route exact path="/campaign/session/edit">
-              {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
-            </Route>
-            <Route exact path="/:id">
-              <Campaign />
-            </Route>
-          </>
-        )}
+      <>
+        <Route exact path="/campaign/session">
+          <CampaignSession />
+        </Route>
+        <Route exact path="/campaign/session/edit">
+          {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
+        </Route>
+        <Route exact path="/:id">
+          <Campaign />
+        </Route>
+      </>
       {selectedCampaign && isDungeonMaster ? <MiscBox /> : null}
     </Container>
   );
@@ -102,20 +101,5 @@ const Container = styled.div`
   padding-bottom: 10rem;
   min-height: 100vh;
 `;
-const LeftGradientDiv = styled.div`
-  background: linear-gradient(to right, #000, transparent);
-  width: 10vw;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  backgroundcolor: black;
-`;
-const RightGradientDiv = styled.div`
-  background: linear-gradient(to left, #000, transparent);
-  width: 10vw;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  backgroundcolor: black;
-`;
+
 export default CampaignIndex;

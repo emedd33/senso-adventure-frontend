@@ -63,7 +63,6 @@ const selectedReducer = (
       };
     }
     case SET_SELECTED_CAMPAIGN_BY_SLUG: {
-      debugger
       return state
     }
   }

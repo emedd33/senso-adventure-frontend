@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Characters from "../../components/Characters/Characters";
 import CosTitle from "../../assets/backgroundImage/CosTitle.png"; // TODO: switch to firebase storrage
 import Scroll from "../../components/Scroll/Scroll";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 
 type CampaignProps = {};

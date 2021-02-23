@@ -9,12 +9,13 @@ import {
 import Navbar from "./components/Navbar/Navbar";
 import "./App.scss";
 import { fetchFromFirebase } from "./store/campaign/campaignCreators";
-import HomeIndex from "./pages/Home/HomeIndex";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import CampaignIndex from "./pages/Campaign/CampaignIndex";
 import LoginIndex from "./pages/Login/LoginIndex";
 import StickyFooter from "./components/Footer/StickyFooter";
 import ProfileIndex from "./pages/Profile/ProfileIndex";
+import CampaignEdit from "./pages/Campaign/CampaignEdit";
+import Home from "./pages/Home/Home";
 export default function App() {
   const dispatch = useDispatch();
   const authUser = useSelector(
@@ -36,11 +37,14 @@ export default function App() {
           <Route exact path="/profile">
             {!authUser ? <Redirect to="/login" /> : <ProfileIndex />}
           </Route>
-          <Route exact path="/">
-            <HomeIndex />
+          <Route exact path="/editcampaign">
+            <CampaignEdit />
           </Route>
           <Route path="/:id">
             <CampaignIndex />
+          </Route>
+          <Route path="/">
+            <Home />
           </Route>
         </Switch>
         <StickyFooter />

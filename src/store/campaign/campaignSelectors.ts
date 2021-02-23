@@ -1,4 +1,17 @@
 
+export const getSelectedCampaign = (state: RootReducerProp) => {
+  return state.selected.selectedCampaign
+}
+
+
+export const isDungeonMasterSelector = (state: RootReducerProp) => {
+  let username = state.admin.authUser?.username;
+  if (username) {
+    return state.selected.selectedCampaign.campaign.dungeonMaster === username;
+  }
+  return false;
+};
+
 export const getAllSessions = (state: RootReducerProp) => {
   let sessions: (
     | { campaignId: string; sessionId: string; session: ISession }
@@ -24,13 +37,6 @@ export const getAllSessions = (state: RootReducerProp) => {
       .flat();
   }
   return sessions;
-};
-export const isDungeonMasterSelector = (state: RootReducerProp) => {
-  let username = state.admin.authUser?.username;
-  if (username) {
-    return state.selected.selectedCampaign.campaign.dungeonMaster === username;
-  }
-  return false;
 };
 
 export const getNextSession = (state: RootReducerProp) => {

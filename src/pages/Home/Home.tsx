@@ -6,11 +6,13 @@ import { useHistory } from "react-router-dom";
 import {
   dispatchSetSelectedCampaign,
   dispatchSetSelectedSession,
+  setBackgroundImageFromFirebase,
 } from "../../store/selected/selectedCreators";
 import Scroll from "../../components/Scroll/Scroll";
 import { CampaignTitleImageFileLocation, storage } from "../../firebase";
 import { getAllSessions } from "../../store/campaign/campaignSelectors";
 import { MAX_NUM_SCROLLS_HOMEPAGE } from "../../assets/constants/Constants";
+import styled from "styled-components";
 
 type HomeProps = {};
 const Home: FunctionComponent<HomeProps> = () => {
@@ -18,6 +20,9 @@ const Home: FunctionComponent<HomeProps> = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const sessions = useSelector(getAllSessions);
+  const imageUrl = useSelector(
+    (state: RootReducerProp) => state.selected.backgroundImage
+  );
   useEffect(() => {
     storage
       .ref(CampaignTitleImageFileLocation)
@@ -34,6 +39,9 @@ const Home: FunctionComponent<HomeProps> = () => {
       .catch((e) => console.log(e));
   }, []);
 
+  useEffect(() => {
+    dispatch(setBackgroundImageFromFirebase("dnd_background.jpg"));
+  }, [dispatch]);
   const renderScrolls = () => {
     if (sessions) {
       let sortedSessions = sortSessionsByDateValue(sessions);
@@ -66,13 +74,28 @@ const Home: FunctionComponent<HomeProps> = () => {
     }
   };
   return (
-    <>
+    <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
       {" "}
       <div style={{ width: "50%", minWidth: "20rem" }}>
         {sessions ? renderScrolls() : null}
       </div>
-    </>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  z-index: 300;
+  display: flex;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5vh;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+`;
 
 export default Home;

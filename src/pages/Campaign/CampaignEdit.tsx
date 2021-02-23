@@ -1,5 +1,5 @@
 import { Button, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import IsLoading from "../../components/IsLoading/IsLoading";
 import { campaignsRef, firebaseStorageRef } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import { useImageFile } from "../../store/hooks/useImageFile";
-import { dispatchSetSelectedCampaign } from "../../store/selected/selectedCreators";
+import { dispatchSetSelectedCampaign, setBackgroundImageFromFirebase } from "../../store/selected/selectedCreators";
 import { isValidImageFile } from "../../utils/isValidImageFile";
 
 export interface CampaignEditProps { }
@@ -17,6 +17,12 @@ export interface CampaignEditProps { }
 const CampaignEdit: React.FC<CampaignEditProps> = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const imageUrl = useSelector(
+    (state: RootReducerProp) => state.selected.backgroundImage
+  );
+  useEffect(() => {
+    dispatch(setBackgroundImageFromFirebase("dnd_background.jpg"));
+  }, [dispatch]);
   const [isLoading, setIsLoading] = useState(false);
   const selectedCampaign = useSelector(
     (state: RootReducerProp) => state.selected.selectedCampaign
@@ -107,127 +113,144 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     }
   };
   return (
-    <Container>
-      {isLoading ? (
-        <IsLoading />
-      ) : (
-          <>
-            <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
-              Campaign Creator
+    <ParentContainer style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+
+      <Container>
+        {isLoading ? (
+          <IsLoading />
+        ) : (
+            <>
+              <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
+                Campaign Creator
           </h1>
-            <TextField
-              id="outlined-multiline-static"
-              placeholder="Write a fitting title"
-              style={{ width: "50%", textAlign: "center" }}
-              variant="filled"
-              error={campaignTitleError}
-              value={campaignTitle}
-              onChange={(event: any) => setCampaignTitle(event.target.value)}
-            />
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "1rem",
-                flexWrap: "wrap",
-              }}
-            >
+              <TextField
+                id="outlined-multiline-static"
+                placeholder="Write a fitting title"
+                style={{ width: "50%", textAlign: "center" }}
+                variant="filled"
+                error={campaignTitleError}
+                value={campaignTitle}
+                onChange={(event: any) => setCampaignTitle(event.target.value)}
+              />
               <div
                 style={{
                   display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
                   alignItems: "center",
-                  justifyContent: "flex-start",
                   margin: "1rem",
-                  width: "15rem",
+                  flexWrap: "wrap",
                 }}
               >
-                <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
-                  {" "}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    margin: "1rem",
+                    width: "15rem",
+                  }}
+                >
+                  <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
+                    {" "}
                 Background Image
               </h3>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "15rem",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {campaignBackgroundImageFile.name ? (
+                    <h4 style={{ fontFamily: "sans-serif" }}>
+                      {campaignBackgroundImageFile.name}
+                    </h4>
+                  ) : null}
+                  <ImageUpload
+                    imageFile={campaignBackgroundImageFile.file}
+                    setImageFile={setCampaignBackgroundImageFile}
+                    maxFiles={1}
+                  />
+                </div>
               </div>
+
               <div
                 style={{
                   display: "flex",
-                  width: "15rem",
-                  flexDirection: "column",
+                  width: "100%",
                   justifyContent: "center",
                   alignItems: "center",
-                }}
-              >
-                {campaignBackgroundImageFile.name ? (
-                  <h4 style={{ fontFamily: "sans-serif" }}>
-                    {campaignBackgroundImageFile.name}
-                  </h4>
-                ) : null}
-                <ImageUpload
-                  imageFile={campaignBackgroundImageFile.file}
-                  setImageFile={setCampaignBackgroundImageFile}
-                  maxFiles={1}
-                />
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "1rem",
-                flexWrap: "wrap",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
                   margin: "1rem",
-                  width: "15rem",
+                  flexWrap: "wrap",
                 }}
               >
-                <h3 style={{ fontFamily: "serif" }}>
-                  {" "}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    margin: "1rem",
+                    width: "15rem",
+                  }}
+                >
+                  <h3 style={{ fontFamily: "serif" }}>
+                    {" "}
                 Choose campaign title image
               </h3>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "15rem",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {campaignTitleImageFile.name ? (
+                    <h4 style={{ fontFamily: "sans-serif" }}>
+                      {campaignTitleImageFile.name}
+                    </h4>
+                  ) : null}
+                  <ImageUpload
+                    imageFile={campaignTitleImageFile.file}
+                    setImageFile={setCampaignTitleImageFile}
+                    maxFiles={1}
+                  />
+                </div>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  width: "15rem",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+              <Button
+                variant="contained"
+                onClick={submit}
+                style={{ marginTop: "1rem" }}
+                color="primary"
               >
-                {campaignTitleImageFile.name ? (
-                  <h4 style={{ fontFamily: "sans-serif" }}>
-                    {campaignTitleImageFile.name}
-                  </h4>
-                ) : null}
-                <ImageUpload
-                  imageFile={campaignTitleImageFile.file}
-                  setImageFile={setCampaignTitleImageFile}
-                  maxFiles={1}
-                />
-              </div>
-            </div>
-            <Button
-              variant="contained"
-              onClick={submit}
-              style={{ marginTop: "1rem" }}
-              color="primary"
-            >
-              Submit
+                Submit
           </Button>
-          </>
-        )}
-    </Container>
+            </>
+          )}
+      </Container>
+    </ParentContainer>
   );
 };
+const ParentContainer = styled.div`
+  z-index: 300;
+  display: flex;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5vh;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+`;
 const Container = styled.div`
   margin-bottom: 10rem;
   margin-top: 5rem;

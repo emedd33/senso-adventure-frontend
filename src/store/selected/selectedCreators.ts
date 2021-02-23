@@ -4,22 +4,16 @@ import { setIsLoading } from "../admin/adminCreator";
 import {
   SET_BACKGROUND_IMAGE,
   SET_SELECTED_CAMPAIGN,
-  SET_SELECTED_CAMPAIGN_BY_SLUG,
   SET_SELECTED_PLAYER,
   SET_SELECTED_SESSION,
   UPDATE_SELECTED_PLAYER,
 } from "./selectedActions";
 import { initialSelectedCampaignState } from "./selectedReducer";
-export const dispatchSelectedByLocation = (pathname: string) => {
-  return async (dispatch: Dispatch) => {
-    dispatch(setIsLoading(true));
-    let pathArray = pathname.split("/")
-    if (pathArray.length > 1) {
-      dispatch(setSelectedCampaignBySlug(pathArray[1]))
-    }
-    debugger
-    dispatch(setIsLoading(false));
 
+
+export const cleanSelectedCampaign = () => {
+  return async (dispatch: Dispatch) => {
+    dispatch(setSelectedCampaign());
   }
 }
 
@@ -113,12 +107,7 @@ export const setSelectedCampaign = (id?: string, campaign?: ICampaign) => {
     payload: { id: id, campaign: campaign },
   };
 };
-export const setSelectedCampaignBySlug = (slug: string) => {
-  return {
-    type: SET_SELECTED_CAMPAIGN_BY_SLUG,
-    payload: { slug: slug },
-  };
-};
+
 export const setSelectedSession = (selectedSession?: ISelectedSession) => {
   return {
     type: SET_SELECTED_SESSION,

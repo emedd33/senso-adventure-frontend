@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect } from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
-import Home from "./Home";
 import CampaignEdit from "../Campaign/CampaignEdit";
 import { useDispatch, useSelector } from "react-redux";
 import IsLoading from "../../components/IsLoading/IsLoading";
@@ -33,15 +32,13 @@ const HomeIndex: FunctionComponent<HomeIndexProps> = () => {
       {isLoading ? (
         <IsLoading />
       ) : (
-        <>
-          <Route exact path="/editcampaign">
-            <CampaignEdit />
-          </Route>
-          <Route exact path="/">
-            <Home />
-          </Route>
-        </>
-      )}
+          <>
+            <Route exact path="/editcampaign">
+              <CampaignEdit />
+            </Route>
+
+          </>
+        )}
     </Container>
   );
 };
