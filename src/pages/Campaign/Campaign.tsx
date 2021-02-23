@@ -49,9 +49,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             );
         }
     };
-    if (!selectedCampaign.id) {
-        return <Redirect to="/" />;
-    }
     return (
         <>
             <Characters />

@@ -18,6 +18,7 @@ interface IPlayer {
 interface ICampaign {
   title: string;
   subTitle: string;
+  slug: string;
   isNew: boolean;
   id: string;
   dungeonMaster: string;

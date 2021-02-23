@@ -54,6 +54,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   const toggleSetCampaign = (campaignId: string) => {
     dispatch(dispatchSetSelectedCampaign(campaignId));
   };
+
   if (!rootCampaigns) {
     return <IsLoading />;
   }
@@ -182,7 +183,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                         onClick={() => dispatch(clearSelectedCampaign)}
                       >
                         <Link
-                          to="/campaign"
+                          to={`/${campaign.slug}`}
                           onClick={() => toggleSetCampaign(id)}
                           style={{
                             textDecoration: "none",

@@ -30,17 +30,17 @@ export default function App() {
       <>
         <AlertDialog />
         <Switch>
-          <Route path="/campaign">
-            <CampaignIndex />
-          </Route>
-          <Route path="/login">
+          <Route exact path="/login">
             {authUser ? <Redirect to="/" /> : <LoginIndex />}
           </Route>
-          <Route path="/profile">
+          <Route exact path="/profile">
             {!authUser ? <Redirect to="/login" /> : <ProfileIndex />}
           </Route>
-          <Route path="/">
+          <Route exact path="/">
             <HomeIndex />
+          </Route>
+          <Route path="/:id">
+            <CampaignIndex />
           </Route>
         </Switch>
         <StickyFooter />
