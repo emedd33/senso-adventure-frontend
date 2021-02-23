@@ -11,10 +11,10 @@ export const dispatchLogin = (payload: ILogin) => {
     dispatch(setIsLoading(true));
     await firebaseAuth
       .signInWithEmailAndPassword(payload.email, payload.password)
-      .then((user) => {
+      .then((user: any) => {
         dispatch(loginSuccess(user));
       })
-      .catch((error) => {
+      .catch((error: { code: any; }) => {
         let errorMessage = "An error has occured";
 
         switch (error.code) {

@@ -9,7 +9,7 @@ import IsLoading from "../../components/IsLoading/IsLoading";
 import { campaignsRef, firebaseStorageRef } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import { useImageFile } from "../../store/hooks/useImageFile";
-import { dispatchSetSelectedCampaign, setBackgroundImageFromFirebase } from "../../store/selected/selectedCreators";
+import { setBackgroundImageFromFirebase } from "../../store/selected/selectedCreators";
 import { isValidImageFile } from "../../utils/isValidImageFile";
 
 export interface CampaignEditProps { }
@@ -63,8 +63,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
         .child("TitleImage")
         .put(campaignTitleImageFile.file.file, metadata);
     }
-    dispatch(dispatchSetSelectedCampaign(key));
-    history.push("/campaign");
+    history.push(`/${campaignTitle}`);
   };
   const submit = () => {
     setIsLoading(true);

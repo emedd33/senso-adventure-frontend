@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { campaignsRef, storage } from "../../firebase";
+import { storage } from "../../firebase";
 import { setIsLoading } from "../admin/adminCreator";
 import {
   SET_BACKGROUND_IMAGE,
@@ -16,27 +16,6 @@ export const cleanSelectedCampaign = () => {
     dispatch(setSelectedCampaign());
   }
 }
-
-export const dispatchSetSelectedCampaign = (
-  selectedCampaign?: string | undefined
-) => {
-  return async (dispatch: Dispatch) => {
-    dispatch(setIsLoading(true));
-    if (selectedCampaign) {
-      campaignsRef
-        .child(selectedCampaign)
-        .once("value", (snapshot: any) => {
-          let campaign = snapshot.val();
-          let id = snapshot.key;
-          dispatch(setSelectedCampaign(id, campaign));
-        })
-        .finally(() => dispatch(setIsLoading(false)));
-    } else {
-      dispatch(setSelectedCampaign("", initialSelectedCampaignState));
-      dispatch(setIsLoading(false));
-    }
-  };
-};
 
 export const dispatchSetSelectedPlayer = (selectedPlayer: ISelectedPlayer) => {
   return async (dispatch: Dispatch) => {

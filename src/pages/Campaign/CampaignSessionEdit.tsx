@@ -9,10 +9,7 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker } from "@material-ui/pickers";
 import { campaignsRef, firebaseStorageRef, storage } from "../../firebase";
-import {
-    dispatchSetSelectedCampaign,
-    dispatchSetSelectedSession,
-} from "../../store/selected/selectedCreators";
+
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -103,20 +100,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         sessionMDFile: string
     ) => {
         dispatch(setIsLoading(true));
-        dispatch(
-            dispatchSetSelectedSession({
-                id: session.id,
-                session: {
-                    title: sessionTitle,
-                    subTitle: sessionSubTitle,
-                    date: sessionDate,
-                    story: sessionMDFile,
-                    sessionDay: sessionDay,
-                    campaign: session.session.campaign,
-                },
-            })
-        );
-        dispatch(dispatchSetSelectedCampaign(selectedCampaign!.id));
         var file = new File([sessionStory], sessionMDFile, {
             type: "text/plain;charset=utf-8",
         });
@@ -157,7 +140,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
 
         }
 
-        history.push("/campaign/session");
         dispatch(setIsLoading(false));
     };
     const submitSession = () => {
@@ -180,6 +162,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 subTitle: sessionSubTitle ? sessionSubTitle : "",
                 campaignTitle: selectedCampaign.campaign.title,
                 sessionDay: sessionDay ? sessionDay : 1,
+                slug: sessionTitle.replace(/\s/g, '')
             };
             if (
                 selectedCampaign.campaign.sessions &&
@@ -206,6 +189,8 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     .set(toUpload)
                     .then((e) => {
                         postProcessFiles(selectedSession, sessionMDFile);
+                        history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}`);
+
                     });
             } else {
                 campaignsRef
@@ -216,6 +201,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                         snap.once("value", async (snapshot: any) => {
                             const session = { id: snapshot.key, session: snapshot.val() };
                             postProcessFiles(session, sessionMDFile);
+                            history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}`);
                         });
                     });
             }

@@ -1,7 +1,6 @@
 import {
   SET_BACKGROUND_IMAGE,
   SET_SELECTED_CAMPAIGN,
-  SET_SELECTED_CAMPAIGN_BY_SLUG,
   SET_SELECTED_PLAYER,
   SET_SELECTED_SESSION,
   UPDATE_SELECTED_PLAYER,
@@ -21,6 +20,7 @@ export const initialSelectedSession = {
   title: "",
   subTitle: "",
   story: "",
+  slug: "",
   sessionDay: 1,
   date: new Date().toDateString(),
   campaign: "",
@@ -62,9 +62,7 @@ const selectedReducer = (
         backgroundImage: action.payload,
       };
     }
-    case SET_SELECTED_CAMPAIGN_BY_SLUG: {
-      return state
-    }
+
   }
   return state;
 };

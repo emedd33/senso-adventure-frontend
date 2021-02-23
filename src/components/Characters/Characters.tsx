@@ -9,7 +9,7 @@ import { Button } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { dispatchSetSelectedPlayer } from "../../store/selected/selectedCreators";
 import IsLoading from "../IsLoading/IsLoading";
-import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
+import { isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 
 export interface CharactersProps { }
 

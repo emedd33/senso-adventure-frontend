@@ -6,6 +6,7 @@ interface ISession {
   sessionDay: number;
   date: string;
   subTitle?: string;
+  slug: string;
 }
 interface IPlayer {
   playerName: string;

@@ -5,11 +5,7 @@ import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import ReactMarkdown from "react-markdown";
-import {
-    dispatchSetSelectedSession,
-    setSelectedSession,
-} from "../../store/selected/selectedCreators";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { setIsLoading } from "../../store/admin/adminCreator";
 import { storage } from "../../firebase";
 import gfm from "remark-gfm";
@@ -20,8 +16,9 @@ import { parseSessionStory } from "../../utils/paseSessionStory";
 import {
     getNextSession,
     getPreviousSession,
-    isDungeonMasterSelector,
 } from "../../store/campaign/campaignSelectors";
+import { getSelectedCampaign, getSelectedSession, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
+
 const renderers = {
     code: function (obj: any) {
         return (
@@ -41,20 +38,11 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const [sessionImage1, setSessionImage1] = useState();
     const [sessionImage2, setSessionImage2] = useState();
     const [sessionImage3, setSessionImage3] = useState();
-    const selectedSession = useSelector(
-        (state: RootReducerProp) => state.selected.selectedSession
-    );
-    const selectedCampaign = useSelector(
-        (state: RootReducerProp) => state.selected.selectedCampaign
-    );
+    const selectedSession = useSelector(getSelectedSession);
+    const selectedCampaign = useSelector(getSelectedCampaign);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const nextSession = useSelector(getNextSession);
     const previousSession = useSelector(getPreviousSession);
-    const changeSession = (session?: any) => {
-        if (session) {
-            dispatch(setSelectedSession(session));
-        }
-    };
     useEffect(() => {
         dispatch(setIsLoading(true));
         if (selectedSession.session) {
@@ -101,9 +89,6 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
             setSessionImage3(undefined)
         }
     }, [dispatch, selectedSession, isDungeonMaster, selectedCampaign]);
-    if (!selectedSession.id) {
-        return <Redirect to="/campaign" />;
-    }
 
     return (
         <>
@@ -118,13 +103,13 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 >
                     <ChangeSessionButton
                         style={!previousSession ? { opacity: 0.6, cursor: "default" } : {}}
-                        onClick={() => changeSession(previousSession)}
+                        onClick={() => history.push(`${selectedCampaign.campaign.slug}/${previousSession?.session.slug}`)}
                     >
                         Previous
           </ChangeSessionButton>
                     <ChangeSessionButton
                         style={!nextSession ? { opacity: 0.6, cursor: "default" } : {}}
-                        onClick={() => changeSession(nextSession)}
+                        onClick={() => history.push(`${selectedCampaign.campaign.slug}/${nextSession?.session.slug}`)}
                     >
                         Next
           </ChangeSessionButton>
@@ -170,20 +155,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                             color="primary"
                             variant="contained"
                             onClick={() => {
-                                dispatch(
-                                    dispatchSetSelectedSession({
-                                        id: selectedSession.id,
-                                        session: {
-                                            title: selectedSession.session.title,
-                                            subTitle: selectedSession.session.subTitle,
-                                            story: selectedSession.session.story,
-                                            date: selectedSession.session.date,
-                                            campaign: selectedSession.session.campaign,
-                                            sessionDay: selectedSession.session.sessionDay,
-                                        },
-                                    })
-                                );
-                                history.push("/campaign/session/edit");
+                                history.push(`/${selectedCampaign.campaign.slug}/${selectedSession.session.slug}/edit`);
                             }}
                         >
                             <EditIcon />

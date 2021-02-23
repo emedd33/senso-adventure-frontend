@@ -5,20 +5,46 @@ import { Redirect, Route, useLocation } from "react-router-dom";
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSession from "./CampaignSession";
-import { getSelectedCampaign, isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
+import { getSelectedCampaign, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 import MiscBox from "../../components/MiscBox/MiscBox";
 import { storage } from "../../firebase";
-import { cleanSelectedCampaign, setSelectedCampaign } from "../../store/selected/selectedCreators";
+import { cleanSelectedCampaign, setSelectedCampaign, setSelectedSession } from "../../store/selected/selectedCreators";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
   const dispatch = useDispatch()
-  const [imageUrl, setImageUrl] = useState("");
-  const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
   const campaigns = useSelector((state: RootReducerProp) => state.rootCampaigns.campaigns)
   const selectedCampaign = useSelector(getSelectedCampaign);
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
+  const [imageUrl, setImageUrl] = useState("");
+  const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
+
+  useEffect(() => {
+    let pathArray = location.pathname.split("/")
+    if (pathArray.length >= 1) {
+      let filteredCampaign = Object.entries(campaigns)
+        .filter(([, campaign]: [string, ICampaign]) => campaign.slug === pathArray[1])
+        .map(([id, campaign]: [string, ICampaign]) => { return { id: id, campaign: campaign } })
+      if (filteredCampaign.length >= 2) {
+        let campaign = { id: filteredCampaign[0].id, campaign: filteredCampaign[0].campaign }
+        if (campaign.id !== selectedCampaign.id) {
+          dispatch(setSelectedCampaign(campaign.id, campaign.campaign))
+        }
+        if (pathArray.length >= 3) {
+          let filteredSession = Object.entries(campaign.campaign.sessions)
+            .filter(([, session]: [string, ISession]) => session.slug === pathArray[2])
+            .map(([id, session]: [string, ISession]) => { return { id: id, session: session } })
+          let session = { id: filteredSession[0].id, session: filteredSession[0].session }
+          dispatch(setSelectedSession(session))
+        }
+      }
+    }
+    return () => {
+      dispatch(cleanSelectedCampaign)
+    }
+  }, [location, campaigns, dispatch, selectedCampaign])
+
   useEffect(() => {
     let campaignRef = storage
       .ref("Campaigns")
@@ -43,21 +69,6 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       .catch((e) => console.log("Could not fetch Campaign image"));
   },
     [selectedCampaign])
-  useEffect(() => {
-    let filteredCampaign = Object.entries(campaigns)
-      .filter(([, campaign]: [string, ICampaign]) => campaign.slug === location.pathname.split("/")[1])
-      .map(([id, campaign]: [string, ICampaign]) => { return { id: id, campaign: campaign } })
-
-    if (filteredCampaign.length > 0) {
-      let campaign = { id: filteredCampaign[0].id, campaign: filteredCampaign[0].campaign }
-      if (campaign.id !== selectedCampaign.id) {
-        dispatch(setSelectedCampaign(campaign.id, campaign.campaign))
-      }
-    }
-    return () => {
-      dispatch(cleanSelectedCampaign)
-    }
-  }, [location, campaigns, dispatch, selectedCampaign])
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
       {campaignTitleImage ? (
@@ -73,13 +84,13 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         />
       ) : null}
       <>
-        <Route exact path="/campaign/session">
+        <Route exact path="/:campaignSlug/:sessionSlug">
           <CampaignSession />
         </Route>
-        <Route exact path="/campaign/session/edit">
+        <Route exact path="/:campaignSlug/:sessionSlug/edit">
           {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
         </Route>
-        <Route exact path="/:id">
+        <Route exact path="/:campaignSlug">
           <Campaign />
         </Route>
       </>

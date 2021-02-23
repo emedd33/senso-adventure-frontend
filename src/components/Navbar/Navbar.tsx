@@ -9,8 +9,7 @@ import MenuListComposition from "../MenuList/MenuList";
 import CampaignCrest from "../../assets/icons/CampaignCrest.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearSelectedCampaign,
-  dispatchSetSelectedCampaign,
+  clearSelectedCampaign
 } from "../../store/selected/selectedCreators";
 import {
   Backdrop,
@@ -51,9 +50,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   );
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
-  const toggleSetCampaign = (campaignId: string) => {
-    dispatch(dispatchSetSelectedCampaign(campaignId));
-  };
 
   if (!rootCampaigns) {
     return <IsLoading />;
@@ -184,7 +180,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                       >
                         <Link
                           to={`/${campaign.slug}`}
-                          onClick={() => toggleSetCampaign(id)}
                           style={{
                             textDecoration: "none",
                             color: "black",
@@ -218,7 +213,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     <Link
                       to="/editcampaign"
                       style={{ textDecoration: "none" }}
-                      onClick={() => dispatch(dispatchSetSelectedCampaign())}
                     >
                       <span
                         style={{

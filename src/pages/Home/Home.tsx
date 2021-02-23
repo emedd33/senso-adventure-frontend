@@ -4,8 +4,6 @@ import CosTitle from "../../assets/backgroundImage/CosTitle.png";
 import sortSessionsByDateValue from "../../utils/sortArrayDyDate";
 import { useHistory } from "react-router-dom";
 import {
-  dispatchSetSelectedCampaign,
-  dispatchSetSelectedSession,
   setBackgroundImageFromFirebase,
 } from "../../store/selected/selectedCreators";
 import Scroll from "../../components/Scroll/Scroll";
@@ -59,14 +57,7 @@ const Home: FunctionComponent<HomeProps> = () => {
               sessionDay={session.session.sessionDay}
               campaign={session.campaignId}
               onClick={() => {
-                dispatch(dispatchSetSelectedCampaign(session.campaignId));
-                dispatch(
-                  dispatchSetSelectedSession({
-                    id: session.sessionId,
-                    session: session.session,
-                  })
-                );
-                history.push("/campaign/session");
+                history.push(`${session.session.campaignTitle.replace(/\s/g, '')}/${session.session.slug}`);
               }}
             />
           );

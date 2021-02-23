@@ -18,6 +18,8 @@ import {
 } from "../../store/campaign/campaignCreators";
 import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
+import { getSelectedCampaign, getSelectedSession } from "../../store/selected/selectedSelectors";
+import { initialSelectedSession } from "../../store/selected/selectedReducer";
 
 export interface MiscBoxProps { }
 
@@ -25,11 +27,11 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
   const history = useHistory();
   const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
+  const selectedCampaign = useSelector(getSelectedCampaign);
+  const selectedSession = useSelector(getSelectedSession)
+
   const [isLevelUpDialogOpen, setIsLevelUpDialogOpen] = useState(false);
   const [isCongratulationOpen, setIsCongratulationOpen] = useState(false);
-  const selectedCampaign = useSelector(
-    (state: RootReducerProp) => state.selected.selectedCampaign
-  );
   const [levelUpAudio] = useState(new Audio(levelUpSound));
   const [victoryAudio] = useState(new Audio(victorySound));
 
@@ -82,9 +84,7 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
                   dispatchSetSelectedSession({
                     id: "",
                     session: {
-                      title: "",
-                      subTitle: "",
-                      story: "",
+                      ...initialSelectedSession,
                       sessionDay: selectedCampaign.campaign.sessions
                         ? Object.values(selectedCampaign.campaign.sessions)
                           .length + 1
@@ -95,7 +95,7 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
                   })
                 );
                 setClicked(false);
-                history.push("/campaign/session/edit");
+                history.push(`/${selectedCampaign.campaign.slug}/${selectedSession.session.slug}/edit`);
               }}
             >
               <img
