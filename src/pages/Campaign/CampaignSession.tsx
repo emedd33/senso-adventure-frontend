@@ -11,9 +11,6 @@ import {
 import { Redirect, useHistory } from "react-router-dom";
 import { setIsLoading } from "../../store/admin/adminCreator";
 import { storage } from "../../firebase";
-import gfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { parseSessionStory } from "../../utils/paseSessionStory";
 import {

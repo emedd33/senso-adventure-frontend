@@ -49,19 +49,18 @@ const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
     const handleAddSecret = () => {
         let text = ""
         var parent = document.getElementById('edit-multiline-view')
-        if (window.getSelection()?.toString()) {
-            text = window.getSelection()!.toString();
+        if (parent) {
+
+            if (window.getSelection()?.toString()) {
+                text = window.getSelection()!.toString();
+            }
+            let secretNode = "<secret>" + text + "</secret>"
+            var node = document.createElement("p");
+            node.textContent = secretNode
+            parent?.appendChild(node)
+            parent.innerHTML = parseSessionStory(parent?.innerHTML, true);
         }
-        let secretNode = "<secret>" + text + "</secret>"
-        var node = document.createElement("p");
-        node.textContent = secretNode
-        parent?.appendChild(node)
 
-
-        // var parentNode = document.createElement("ul");                 // Create a <li> node
-        // parentNode.appendChild(node);
-        // parentContainer.appendChild(parentNode)                         // Append the text to <li>
-        // target?.appendChild(parentNode);
     }
     function sleep(time: number) {
         return new Promise((resolve) => setTimeout(resolve, time));
@@ -100,7 +99,7 @@ const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
             })
             .catch(e => console.log(e))
     }
-        , [])
+        , [storageRef])
 
     return (
         <Container id="cont">
