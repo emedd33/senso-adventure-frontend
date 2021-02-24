@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ScrollImage from "../../assets/backgroundImage/scroll.png";
+import { storage } from "../../firebase";
 import px2vw from "../../utils/px2vw";
 
 import "./Scroll.scss";
@@ -9,9 +10,8 @@ type ScrollProps = {
   title: string;
   subTitle: string;
   date: string;
-  storyImage: string;
   sessionDay: number;
-  campaign: ICampaign;
+  campaignTitle: string;
   onClick: any;
 };
 
@@ -20,11 +20,21 @@ function Scroll({
   title,
   subTitle,
   date,
-  storyImage,
-  campaign,
   sessionDay,
+  campaignTitle,
   onClick,
 }: ScrollProps): JSX.Element {
+  const [imageUrl, setImageUrl] = useState("")
+  useEffect(() => {
+    console.log("campaignTitle", campaignTitle)
+    storage.ref()
+      .child("Campaigns")
+      .child(campaignTitle)
+      .child("TitleImage")
+      .getDownloadURL()
+      .then(url => setImageUrl(url))
+      .catch(e => console.log("could not fetch TitleImage for scroll"))
+  }, [campaignTitle])
   return (
     <div
       style={{
@@ -48,7 +58,7 @@ function Scroll({
           </div>
           <div>
             <div style={{ justifyContent: "center", display: "flex" }}>
-              <StoryImage src={storyImage} alt="" />
+              <StoryImage src={imageUrl} alt="" />
             </div>
             <ScrollTitle>{title}</ScrollTitle>
             <h3 style={{ color: "black", textAlign: "center" }}>{subTitle}</h3>

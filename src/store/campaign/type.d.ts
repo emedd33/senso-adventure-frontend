@@ -2,7 +2,7 @@ interface ISession {
   title: string;
   story: string;
   date: string;
-  campaign: ICampaign;
+  campaignTitle: string;
   sessionDay: number;
   date: string;
   subTitle?: string;

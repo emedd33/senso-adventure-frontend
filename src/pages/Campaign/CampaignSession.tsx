@@ -103,13 +103,13 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 >
                     <ChangeSessionButton
                         style={!previousSession ? { opacity: 0.6, cursor: "default" } : {}}
-                        onClick={() => history.push(`${selectedCampaign.campaign.slug}/${previousSession?.session.slug}`)}
+                        onClick={() => history.push(`${previousSession?.session.slug}`)}
                     >
                         Previous
           </ChangeSessionButton>
                     <ChangeSessionButton
                         style={!nextSession ? { opacity: 0.6, cursor: "default" } : {}}
-                        onClick={() => history.push(`${selectedCampaign.campaign.slug}/${nextSession?.session.slug}`)}
+                        onClick={() => history.push(`${nextSession?.session.slug}`)}
                     >
                         Next
           </ChangeSessionButton>

@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import CosTitle from "../../assets/backgroundImage/CosTitle.png"; // TODO: switch to firebase storrage
 import Scroll from "../../components/Scroll/Scroll";
 import { useHistory } from "react-router-dom";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
@@ -23,8 +22,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                     title={session.title}
                                     subTitle={session.subTitle ? session.subTitle : ""}
                                     date={session.date}
-                                    storyImage={CosTitle}
-                                    campaign={session.campaign}
+                                    campaignTitle={session.campaignTitle}
                                     sessionDay={session.sessionDay}
                                     onClick={() => {
                                         history.push(`/${selectedCampaign.campaign.slug}/${session.slug}`);
