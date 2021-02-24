@@ -16,9 +16,9 @@ import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import { useImageFile } from "../../store/hooks/useImageFile";
 import { isValidImageFile } from "../../utils/isValidImageFile";
 import EditMultilineTextField from "../../components/EditMultilineTextField/EditMultilineTextField";
-export interface CampaignSessionEditProps { isNew: boolean }
+export interface CampaignSessionEditProps { }
 
-const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = ({ isNew }) => {
+const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const selectedSession = useSelector(
@@ -28,32 +28,21 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = ({ isNew }) => {
         (state: RootReducerProp) => state.selected.selectedCampaign
     );
 
-    const sessionsId = selectedSession ? selectedSession.id : null;
-    const [sessionDay, setSessionDay] = useState<number>(
-        selectedSession?.session.sessionDay
-    );
-    const [sessionSubTitle, setSessionSubTitle] = useState<string | undefined>(
-        selectedSession?.session.subTitle
-    );
-    const [sessionTitle, setSessionTitle] = useState<string>(
-        selectedSession?.session.title
-    );
+    const [sessionDay, setSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
+    const [sessionSubTitle, setSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
+
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false);
 
-    const [sessionDate, setSessionDate] = useState<string>(
-        selectedSession?.session.date
-            ? new Date(selectedSession.session.date).toDateString()
-            : new Date().toDateString()
-    );
+    const [sessionDate, setSessionDate] = useState<string>(new Date(selectedSession.session.date).toDateString())
     const [sessionImageFiles1, setSessionImage1Files] = useImageFile();
     const [sessionImageFiles2, setSessionImage2Files] = useImageFile();
     const [sessionImageFiles3, setSessionImage3Files] = useImageFile();
     const [sessionImage1, setSessionImage1] = useState();
     const [sessionImage2, setSessionImage2] = useState();
     const [sessionImage3, setSessionImage3] = useState();
+    console.log(selectedSession)
 
     useEffect(() => {
-        dispatch(setIsLoading(true));
         if (selectedSession && selectedSession?.session.story) {
             let storageRef = storage
                 .ref()
@@ -78,33 +67,21 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = ({ isNew }) => {
                 .then((url) => setSessionImage3(url))
                 .catch(() => console.log("could not get session image 3"));
         }
-        dispatch(setIsLoading(false));
     }, [dispatch, selectedSession, selectedCampaign]);
 
 
     const submitSession = () => {
-        if (!sessionTitle) {
-            setSessionTitleError(true);
-            dispatch(
-                setAlertDialog("Please fille out the Session Title", true, true)
-            );
-            return;
-        }
-
         const toUpload = {
-            campaign: selectedCampaign.id,
-            date: sessionDate ? sessionDate : new Date().toDateString(),
-            title: sessionTitle,
+            date: sessionDate,
             subTitle: sessionSubTitle ? sessionSubTitle : "",
             campaignTitle: selectedCampaign.campaign.title,
             sessionDay: sessionDay ? sessionDay : 1,
-            slug: sessionTitle.replace(/\s/g, '')
         };
         if (
             selectedCampaign.campaign.sessions &&
             Object.values(selectedCampaign.campaign.sessions).filter((session) => {
                 return (
-                    session.sessionDay === sessionDay && session.title !== sessionTitle
+                    session.sessionDay === sessionDay && session.title !== selectedSession.session.title
                 );
             }).length > 0
         ) {
@@ -117,31 +94,15 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = ({ isNew }) => {
             );
             return;
         }
-
-        if (isNew) {
-            campaignsRef
-                .child(selectedCampaign.id)
-                .child("sessions")
-                .push(toUpload)
-                .then((snap) => {
-                    snap.once("value", async (snapshot: any) => {
-                        const session = { id: snapshot.key, session: snapshot.val() };
-                        await postProcessFiles(session);
-                        history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}`);
-                    });
-                });
-        } else {
-            campaignsRef
-                .child(selectedCampaign.id)
-                .child("sessions/" + sessionsId)
-                .set(toUpload)
-                .then(async (e) => {
-                    await postProcessFiles(selectedSession);
-                    history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}`);
-
-                });
-        }
-    };
+        campaignsRef
+            .child(selectedCampaign.id)
+            .child("sessions/" + selectedSession.id)
+            .set(toUpload)
+            .then(async (e) => {
+                await postProcessFiles(selectedSession);
+                history.push(`/${selectedCampaign.campaign.slug}/${selectedSession.session.slug}`);
+            });
+    }
     const postProcessFiles = async (
         session: ISelectedSession,
     ) => {
@@ -151,7 +112,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = ({ isNew }) => {
             .child("Campaigns")
             .child(selectedCampaign.campaign.title)
             .child("Sessions")
-            .child(sessionTitle);
+            .child(selectedSession.session.title);
 
 
         let imageMetadata = {
@@ -204,12 +165,11 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = ({ isNew }) => {
                     id="outlined-multiline-static"
                     placeholder="Write a fitting title"
                     variant="filled"
-                    disabled={isNew ? false : true}
+                    disabled={true}
                     style={{ width: "90%", margin: "1rem" }}
                     label="Session title"
                     error={sessionTitleError}
-                    value={sessionTitle}
-                    onChange={(event) => setSessionTitle(event.target.value)}
+                    value={selectedSession.session.title}
                 />
 
                 <TextField

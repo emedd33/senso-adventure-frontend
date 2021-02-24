@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
-import ReactMarkdown from "react-markdown";
 import { useHistory } from "react-router-dom";
 import { storage } from "../../firebase";
 import IsLoading from "../../components/IsLoading/IsLoading";

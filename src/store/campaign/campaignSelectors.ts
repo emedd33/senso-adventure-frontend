@@ -2,6 +2,14 @@
 
 
 
+export const getNewSessionDay = (state: RootReducerProp) => {
+  console.log(state)
+  if (state.selected.selectedCampaign.campaign.sessions) {
+    return Object.keys(state.selected.selectedCampaign.campaign.sessions).length + 1
+  }
+  return 1
+}
+
 export const getAllSessions = (state: RootReducerProp) => {
   let sessions: (
     | { campaignId: string; sessionId: string; session: ISession }

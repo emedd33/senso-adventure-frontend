@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
+import CampaignSessionNew from "./CampaignSessionNew";
 import CampaignSession from "./CampaignSession";
 import { getSelectedCampaign, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 import MiscBox from "../../components/MiscBox/MiscBox";
@@ -91,14 +92,14 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       <>
         <Switch>
           <Route exact path="/:campaignSlug/new">
-            {isDungeonMaster ? <CampaignSessionEdit isNew={true} /> : <Redirect to={"/"} />}
+            {isDungeonMaster ? <CampaignSessionNew /> : <Redirect to={"/"} />}
           </Route>
           <Route exact path="/:campaignSlug/:sessionSlug">
             <CampaignSession />
           </Route>
         </Switch>
         <Route exact path="/:campaignSlug/:sessionSlug/edit">
-          {isDungeonMaster ? <CampaignSessionEdit isNew={false} /> : <Redirect to={"/"} />}
+          {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
         </Route>
         <Route exact path="/:campaignSlug">
           <Campaign />
