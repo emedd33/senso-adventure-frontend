@@ -26,7 +26,6 @@ function Scroll({
 }: ScrollProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState("")
   useEffect(() => {
-    console.log("campaignTitle", campaignTitle)
     storage.ref()
       .child("Campaigns")
       .child(campaignTitle)

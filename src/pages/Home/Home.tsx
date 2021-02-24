@@ -1,28 +1,26 @@
-import React, { FunctionComponent, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import sortSessionsByDateValue from "../../utils/sortArrayDyDate";
 import { useHistory } from "react-router-dom";
-import {
-  setBackgroundImageFromFirebase,
-} from "../../store/selected/selectedCreators";
+
 import Scroll from "../../components/Scroll/Scroll";
 import { getAllSessions } from "../../store/campaign/campaignSelectors";
 import { MAX_NUM_SCROLLS_HOMEPAGE } from "../../assets/constants/Constants";
 import styled from "styled-components";
+import { storage } from "../../firebase";
 
 type HomeProps = {};
 const Home: FunctionComponent<HomeProps> = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
   const sessions = useSelector(getAllSessions);
-  const imageUrl = useSelector(
-    (state: RootReducerProp) => state.selected.backgroundImage
-  );
-
+  const [imageUrl, setImageUrl] = useState("")
 
   useEffect(() => {
-    dispatch(setBackgroundImageFromFirebase("dnd_background.jpg"));
-  }, [dispatch]);
+    storage
+      .ref("Images/Background/dnd_background.jpg")
+      .getDownloadURL()
+      .then((url: string) => setImageUrl(url))
+  }, []);
   const renderScrolls = () => {
     if (sessions) {
       let sortedSessions = sortSessionsByDateValue(sessions);

@@ -38,8 +38,8 @@ export default function App() {
           <Route exact path="/profile">
             {!authUser ? <Redirect to="/login" /> : <ProfileIndex />}
           </Route>
-          <Route exact path="/editcampaign">
-            <CampaignEdit />
+          <Route exact path="/newcampaign">
+            <CampaignEdit isNew={true} />
           </Route>
           <Route path="/:id">
             <CampaignIndex />

@@ -17,7 +17,9 @@ import {
   fetchFromFirebase,
 } from "../../store/campaign/campaignCreators";
 import { useHistory } from "react-router-dom";
-import { getSelectedCampaign, getSelectedSession } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign, } from "../../store/selected/selectedSelectors";
+import { initialSelectedSessionState } from "../../store/selected/selectedReducer";
+import { setSelectedSession } from "../../store/selected/selectedCreators";
 
 export interface MiscBoxProps { }
 
@@ -26,7 +28,6 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
   const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
   const selectedCampaign = useSelector(getSelectedCampaign);
-  const selectedSession = useSelector(getSelectedSession)
 
   const [isLevelUpDialogOpen, setIsLevelUpDialogOpen] = useState(false);
   const [isCongratulationOpen, setIsCongratulationOpen] = useState(false);
@@ -79,7 +80,8 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
               style={{ width: "3rem", height: "3rem" }}
               onClick={() => {
                 setClicked(false);
-                history.push(`/${selectedCampaign.campaign.slug}/${selectedSession.session.slug}/edit`);
+                dispatch(setSelectedSession({ id: "", session: initialSelectedSessionState }))
+                history.push(`/${selectedCampaign.campaign.slug}/new`);
               }}
             >
               <img

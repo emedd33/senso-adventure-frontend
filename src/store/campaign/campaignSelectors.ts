@@ -31,7 +31,7 @@ export const getAllSessions = (state: RootReducerProp) => {
 
 export const getNextSession = (state: RootReducerProp) => {
   let selectedSessionDay = state.selected.selectedSession.session.sessionDay;
-  if (typeof selectedSessionDay === "number") {
+  if (typeof selectedSessionDay === "number" && state.selected.selectedCampaign.campaign.sessions) {
     let nextSession = Object.entries(
       state.selected.selectedCampaign.campaign.sessions
     ).filter(([id, session]) => {
@@ -48,7 +48,7 @@ export const getNextSession = (state: RootReducerProp) => {
 };
 export const getPreviousSession = (state: RootReducerProp) => {
   let selectedSessionDay = state.selected.selectedSession.session.sessionDay;
-  if (typeof selectedSessionDay === "number") {
+  if (typeof selectedSessionDay === "number" && state.selected.selectedCampaign.campaign.sessions) {
     let previousSession = Object.entries(
       state.selected.selectedCampaign.campaign.sessions
     ).filter(([id, session]) => {

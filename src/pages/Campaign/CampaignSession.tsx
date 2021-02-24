@@ -6,7 +6,6 @@ import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import ReactMarkdown from "react-markdown";
 import { useHistory } from "react-router-dom";
-import { setIsLoading } from "../../store/admin/adminCreator";
 import { storage } from "../../firebase";
 import gfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -44,27 +43,26 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const nextSession = useSelector(getNextSession);
     const previousSession = useSelector(getPreviousSession);
     useEffect(() => {
-        dispatch(setIsLoading(true));
-        if (selectedSession.session) {
+        if (selectedSession.session && selectedSession.id) {
             let storageRef = storage
                 .ref()
                 .child("Campaigns")
                 .child(selectedCampaign.campaign.title)
                 .child("Sessions")
                 .child(selectedSession.session.title);
-
             storageRef
-                .child(selectedSession.session.story)
+                .child("SessionStory.md")
                 .getDownloadURL()
-                .then((url) =>
+                .then((url) => {
                     fetch(url)
                         .then((res) => res.text())
                         .then((res) => {
+                            console.log(res)
                             const text = parseSessionStory(res, isDungeonMaster);
                             setSessionStory(text ? text : "new story");
                         })
-                )
-                .catch((e) => console.log("error", e));
+                }).catch(e => { console.log("Could not fetch session story") })
+
             storageRef
                 .child("SessionImageFile1")
                 .getDownloadURL()
@@ -81,7 +79,6 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 .then((url) => setSessionImage3(url))
                 .catch(() => console.log("could not get session image 3"));
         }
-        dispatch(setIsLoading(false));
         return () => {
             setSessionStory("")
             setSessionImage1(undefined)

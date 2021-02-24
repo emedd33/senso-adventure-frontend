@@ -6,23 +6,25 @@ import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import IsLoading from "../../components/IsLoading/IsLoading";
-import { campaignsRef, firebaseStorageRef } from "../../firebase";
+import { campaignsRef, firebaseStorageRef, storage } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import { useImageFile } from "../../store/hooks/useImageFile";
-import { setBackgroundImageFromFirebase } from "../../store/selected/selectedCreators";
 import { isValidImageFile } from "../../utils/isValidImageFile";
 
-export interface CampaignEditProps { }
+export interface CampaignEditProps { isNew: boolean }
 
-const CampaignEdit: React.FC<CampaignEditProps> = () => {
+const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const imageUrl = useSelector(
-    (state: RootReducerProp) => state.selected.backgroundImage
-  );
+  const [imageUrl, setImageUrl] = useState("")
+
   useEffect(() => {
-    dispatch(setBackgroundImageFromFirebase("dnd_background.jpg"));
-  }, [dispatch]);
+    storage
+      .ref("Images/Background/dnd_background.jpg")
+      .getDownloadURL()
+      .then((url: string) => setImageUrl(url))
+  }, []);
+
   const [isLoading, setIsLoading] = useState(false);
   const selectedCampaign = useSelector(
     (state: RootReducerProp) => state.selected.selectedCampaign
@@ -41,14 +43,44 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
   const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(
     "TitleImage"
   );
-  const postProcssCampaign = async (key: string) => {
+
+  const submit = async () => {
+    setIsLoading(true);
+    if (!campaignTitle) {
+      setCampaignTitleError(true);
+      dispatch(
+        setAlertDialog("Please fille out the Campaign Title", true, true)
+      );
+      setIsLoading(false);
+      return;
+    } else {
+      setCampaignTitleError(false);
+    }
+
+    let slug = campaignTitle.replace(/\s/g, '')
+    let newCampaign = {
+      dungeonMaster: userName,
+      title: campaignTitle,
+      slug: slug
+    };
+    if (isNew) {
+      await campaignsRef
+        .push(newCampaign)
+        .catch((e) => console.log("Could not update campaing "));
+    } else {
+      await campaignsRef
+        .child(selectedCampaign.id)
+        .set(newCampaign)
+        .catch((e) => console.log("Could not update campaing " + e));
+    }
+
     const metadata = {
       customMetadata: {
         contentType: "image",
-        campaignId: key,
         campaignTitle: campaignTitle,
       },
     };
+
     if (isValidImageFile(campaignBackgroundImageFile)) {
       await firebaseStorageRef
         .child("Campaigns")
@@ -63,61 +95,16 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
         .child("TitleImage")
         .put(campaignTitleImageFile.file.file, metadata);
     }
-    history.push(`/${campaignTitle}`);
-  };
-  const submit = () => {
-    setIsLoading(true);
-    if (!campaignTitle) {
-      setCampaignTitleError(true);
-      dispatch(
-        setAlertDialog("Please fille out the Campaign Title", true, true)
-      );
-      setIsLoading(false);
-      return;
-    } else {
-      setCampaignTitleError(false);
-    }
+    history.push(`/${slug}`);
+  }
 
-    try {
-      let slug = campaignTitle.replace(/\s/g, '')
-      let newCampaign = {
-        dungeonMaster: userName,
-        title: campaignTitle,
-        slug: slug
-      };
-      if (selectedCampaign.campaign.isNew) {
-        campaignsRef
-          .push(newCampaign)
-          .then((snap) => {
-            snap.once("value", async (snapshot: any) => {
-              let key = snapshot.key;
-              if (key) {
-                postProcssCampaign(key);
-              }
-            });
-          })
-          .catch((e) => console.log("Could not update campaing "));
-      } else {
-        campaignsRef
-          .child(selectedCampaign.id)
-          .set(newCampaign)
-          .then(() => {
-            postProcssCampaign(selectedCampaign.id);
-          })
-          .catch((e) => console.log("Could not update campaing " + e));
-      }
-    } catch (error) {
-      setIsLoading(false);
-      dispatch(setAlertDialog(error, true, true));
-    }
-  };
   return (
     <ParentContainer style={{ backgroundImage: "url(" + imageUrl + ")" }}>
 
-      <Container>
-        {isLoading ? (
-          <IsLoading />
-        ) : (
+      {isLoading ? (
+        <IsLoading />
+      ) : (
+          <Container>
             <>
               <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
                 Campaign Creator
@@ -231,8 +218,8 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
                 Submit
           </Button>
             </>
-          )}
-      </Container>
+          </Container>
+        )}
     </ParentContainer>
   );
 };

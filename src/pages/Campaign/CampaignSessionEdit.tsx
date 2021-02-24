@@ -18,10 +18,10 @@ import styled from "styled-components";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import { useImageFile } from "../../store/hooks/useImageFile";
 import { isValidImageFile } from "../../utils/isValidImageFile";
-export interface CampaignSessionEditProps { }
+export interface CampaignSessionEditProps { isNew: boolean }
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
-const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
+const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = ({ isNew }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const selectedSession = useSelector(
@@ -30,9 +30,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const selectedCampaign = useSelector(
         (state: RootReducerProp) => state.selected.selectedCampaign
     );
-    const sessionFile = useSelector(
-        (state: RootReducerProp) => state.selected.selectedSession?.session.story
-    );
+
     const sessionsId = selectedSession ? selectedSession.id : null;
     const [sessionDay, setSessionDay] = useState<number>(
         selectedSession?.session.sessionDay
@@ -95,12 +93,73 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         }
         dispatch(setIsLoading(false));
     }, [dispatch, selectedSession, selectedCampaign]);
+
+
+    const submitSession = () => {
+        if (!sessionTitle) {
+            setSessionTitleError(true);
+            dispatch(
+                setAlertDialog("Please fille out the Session Title", true, true)
+            );
+            return;
+        }
+
+        const toUpload = {
+            campaign: selectedCampaign.id,
+            date: sessionDate ? sessionDate : new Date().toDateString(),
+            title: sessionTitle,
+            subTitle: sessionSubTitle ? sessionSubTitle : "",
+            campaignTitle: selectedCampaign.campaign.title,
+            sessionDay: sessionDay ? sessionDay : 1,
+            slug: sessionTitle.replace(/\s/g, '')
+        };
+        if (
+            selectedCampaign.campaign.sessions &&
+            Object.values(selectedCampaign.campaign.sessions).filter((session) => {
+                return (
+                    session.sessionDay === sessionDay && session.title !== sessionTitle
+                );
+            }).length > 0
+        ) {
+            dispatch(
+                setAlertDialog(
+                    "Session day is invalid due to duplicated session days",
+                    true,
+                    true
+                )
+            );
+            return;
+        }
+
+        if (isNew) {
+            campaignsRef
+                .child(selectedCampaign.id)
+                .child("sessions")
+                .push(toUpload)
+                .then((snap) => {
+                    snap.once("value", async (snapshot: any) => {
+                        const session = { id: snapshot.key, session: snapshot.val() };
+                        await postProcessFiles(session);
+                        history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}`);
+                    });
+                });
+        } else {
+            campaignsRef
+                .child(selectedCampaign.id)
+                .child("sessions/" + sessionsId)
+                .set(toUpload)
+                .then(async (e) => {
+                    await postProcessFiles(selectedSession);
+                    history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}`);
+
+                });
+        }
+    };
     const postProcessFiles = async (
         session: ISelectedSession,
-        sessionMDFile: string
     ) => {
         dispatch(setIsLoading(true));
-        var file = new File([sessionStory], sessionMDFile, {
+        var file = new File([sessionStory], "SessionStory.md", {
             type: "text/plain;charset=utf-8",
         });
         let sessionStorragePath = firebaseStorageRef
@@ -116,7 +175,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             date: sessionDate,
             day: sessionDay,
         };
-        await sessionStorragePath.child(sessionMDFile).put(file, markdownMetadata)
+        await sessionStorragePath.child("SessionStory.md").put(file, markdownMetadata)
 
         let imageMetadata = {
             ...markdownMetadata,
@@ -142,71 +201,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
 
         dispatch(setIsLoading(false));
     };
-    const submitSession = () => {
-        if (!sessionTitle) {
-            setSessionTitleError(true);
-            dispatch(
-                setAlertDialog("Please fille out the Session Title", true, true)
-            );
-            return;
-        }
-        if (selectedCampaign?.id) {
-            let sessionMDFile = sessionFile
-                ? sessionFile
-                : sessionTitle + "_" + selectedCampaign.id + "_" + sessionDate + ".md";
-            const toUpload = {
-                campaign: selectedCampaign.id,
-                date: sessionDate ? sessionDate : new Date().toDateString(),
-                story: sessionMDFile,
-                title: sessionTitle,
-                subTitle: sessionSubTitle ? sessionSubTitle : "",
-                campaignTitle: selectedCampaign.campaign.title,
-                sessionDay: sessionDay ? sessionDay : 1,
-                slug: sessionTitle.replace(/\s/g, '')
-            };
-            if (
-                selectedCampaign.campaign.sessions &&
-                Object.values(selectedCampaign.campaign.sessions).filter((session) => {
-                    return (
-                        session.sessionDay === sessionDay && session.title !== sessionTitle
-                    );
-                }).length > 0
-            ) {
-                dispatch(
-                    setAlertDialog(
-                        "Session day is invalid due to duplicated session days",
-                        true,
-                        true
-                    )
-                );
-                return;
-            }
 
-            if (sessionsId) {
-                campaignsRef
-                    .child(selectedCampaign.id)
-                    .child("sessions/" + sessionsId)
-                    .set(toUpload)
-                    .then((e) => {
-                        postProcessFiles(selectedSession, sessionMDFile);
-                        history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}`);
-
-                    });
-            } else {
-                campaignsRef
-                    .child(selectedCampaign.id)
-                    .child("sessions")
-                    .push(toUpload)
-                    .then((snap) => {
-                        snap.once("value", async (snapshot: any) => {
-                            const session = { id: snapshot.key, session: snapshot.val() };
-                            postProcessFiles(session, sessionMDFile);
-                            history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}`);
-                        });
-                    });
-            }
-        }
-    };
 
     if (!selectedSession) {
         return <IsLoading />;
@@ -229,7 +224,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     id="outlined-multiline-static"
                     placeholder="Write a fitting title"
                     variant="filled"
-                    disabled={selectedSession.session.title ? true : false}
+                    disabled={isNew ? false : true}
                     style={{ width: "90%", margin: "1rem" }}
                     label="Session title"
                     error={sessionTitleError}

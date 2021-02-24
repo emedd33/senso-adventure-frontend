@@ -8,7 +8,7 @@ type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
     const selectedCampaign = useSelector(getSelectedCampaign);
-
+    console.log("selectedCampaign", selectedCampaign)
     return (
         <>
             {/* <Characters /> */}

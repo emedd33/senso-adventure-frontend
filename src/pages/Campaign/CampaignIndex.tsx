@@ -1,14 +1,16 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { Redirect, Route, useLocation } from "react-router-dom";
+import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSession from "./CampaignSession";
 import { getSelectedCampaign, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 import MiscBox from "../../components/MiscBox/MiscBox";
 import { storage } from "../../firebase";
-import { cleanSelectedCampaign, setSelectedCampaign, setSelectedSession } from "../../store/selected/selectedCreators";
+import { setSelectedCampaign, setSelectedSession } from "../../store/selected/selectedCreators";
+import isValidSessionSlug from "../../utils/isValidSessionslug"
+import { initialSelectedCampaignState, initialSelectedSessionState } from "../../store/selected/selectedReducer";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
@@ -23,7 +25,6 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   useEffect(() => {
     let pathArray = location.pathname.split("/")
     if (pathArray.length >= 2) {
-      console.log(campaigns)
       let filteredCampaign = Object.entries(campaigns)
         .filter(([, campaign]: [string, ICampaign]) => {
           return campaign.slug === pathArray[1]
@@ -32,9 +33,9 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       if (filteredCampaign.length >= 1) {
         let campaign = { id: filteredCampaign[0].id, campaign: filteredCampaign[0].campaign }
         if (campaign.id !== selectedCampaign.id) {
-          dispatch(setSelectedCampaign(campaign.id, campaign.campaign))
+          dispatch(setSelectedCampaign(campaign))
         }
-        if (pathArray.length >= 3) {
+        if (pathArray.length >= 3 && isValidSessionSlug(pathArray[2])) {
           let filteredSession = Object.entries(campaign.campaign.sessions)
             .filter(([, session]: [string, ISession]) => session.slug === pathArray[2])
             .map(([id, session]: [string, ISession]) => { return { id: id, session: session } })
@@ -42,11 +43,10 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             let session = { id: filteredSession[0].id, session: filteredSession[0].session }
             dispatch(setSelectedSession(session))
           }
+        } else {
         }
+      } else {
       }
-    }
-    return () => {
-      dispatch(cleanSelectedCampaign)
     }
   }, [location, campaigns, dispatch, selectedCampaign])
 
@@ -89,11 +89,16 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         />
       ) : null}
       <>
-        <Route exact path="/:campaignSlug/:sessionSlug">
-          <CampaignSession />
-        </Route>
+        <Switch>
+          <Route exact path="/:campaignSlug/new">
+            {isDungeonMaster ? <CampaignSessionEdit isNew={true} /> : <Redirect to={"/"} />}
+          </Route>
+          <Route exact path="/:campaignSlug/:sessionSlug">
+            <CampaignSession />
+          </Route>
+        </Switch>
         <Route exact path="/:campaignSlug/:sessionSlug/edit">
-          {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
+          {isDungeonMaster ? <CampaignSessionEdit isNew={false} /> : <Redirect to={"/"} />}
         </Route>
         <Route exact path="/:campaignSlug">
           <Campaign />
