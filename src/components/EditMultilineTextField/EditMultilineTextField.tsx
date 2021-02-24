@@ -65,41 +65,42 @@ const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
     function sleep(time: number) {
         return new Promise((resolve) => setTimeout(resolve, time));
     }
-    useInterval(async () => {    // Your custom logic here 
-        console.log(text)
-        if (editedText !== undefined && text !== editedText) {
-            console.log("uploading")
-            setText(editedText)
-            setIsUploading(true)
-            storageRef
-                .child("SessionStory.html")
-                .putString(editedText!)
-            sleep(1000).then(() => {
-                setIsUploading(false)
-            });
+    // useInterval(async () => {    // Your custom logic here 
+    //     console.log(text)
+    //     if (editedText !== undefined && text !== editedText) {
+    //         console.log("uploading")
+    //         setText(editedText)
+    //         setIsUploading(true)
+    //         storageRef
+    //             .child("SessionStory.html")
+    //             .putString(editedText!)
+    //         sleep(1000).then(() => {
+    //             setIsUploading(false)
+    //         });
 
 
-        }
-    },
-        5000)
-    const handleTextChange = (text: any) => {
-        setEditedText(text.innerHTML);
+    //     }
+    // },
+    //     5000)
+    const handleTextChange = (event: any) => {
+        console.log(event)
+        // setEditedText(textinnerHTML);
     }
-    useEffect(() => {
-        storageRef.child("SessionStory.html")
-            .getDownloadURL()
-            .then((url) => fetch(url))
-            .then(res => res.text())
-            .then(res => {
-                setText(res!);
-                var target = document.getElementById('edit-multiline-view')
-                if (target) {
-                    target.innerHTML = parseSessionStory(res, true);
-                }
-            })
-            .catch(e => console.log(e))
-    }
-        , [storageRef])
+    // useEffect(() => {
+    //     storageRef.child("SessionStory.html")
+    //         .getDownloadURL()
+    //         .then((url) => fetch(url))
+    //         .then(res => res.text())
+    //         .then(res => {
+    //             setText(res!);
+    //             var target = document.getElementById('edit-multiline-view')
+    //             if (target) {
+    //                 target.innerHTML = parseSessionStory(res, true);
+    //             }
+    //         })
+    //         .catch(e => console.log(e))
+    // }
+    //     , [storageRef])
 
     return (
         <Container id="cont">
@@ -122,14 +123,19 @@ const EditMultilineTextField: React.FC<EditMultilineTextFieldProps> = () => {
                     {isUploading ? <CircularProgress size="1rem" /> : " "}
                 </div>
             </HeaderContainer>
-            <EditContainer contentEditable="true" onInput={e => handleTextChange(e.currentTarget)} id={"editContainer"} suppressContentEditableWarning={true}>
-                <div id="edit-multiline-view" ></div>
+            <EditContainer >
+                <TextEditView id="edit-view" name="edit-view" rows={20} cols={50} onChange={handleTextChange}>
+                </TextEditView>
 
             </EditContainer>
         </Container >
     );
 }
 
+const TextEditView = styled.textarea`
+width:100%
+
+`
 const Container = styled.div`
 width:100%;
 font-family:sans-serif;

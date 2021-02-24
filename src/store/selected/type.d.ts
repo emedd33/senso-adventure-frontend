@@ -5,6 +5,10 @@ type SelectedState = {
   backgroundImage?: string;
 };
 
+type ISelectedCampaign = {
+  id: string;
+  campaign: ICampaign;
+};
 type ISelectedSession = {
   id: string;
   session: ISession;

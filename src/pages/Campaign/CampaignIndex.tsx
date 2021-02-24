@@ -1,59 +1,81 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import IsLoading from "../../components/IsLoading/IsLoading";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSession from "./CampaignSession";
-import { isDungeonMasterSelector } from "../../store/campaign/campaignSelectors";
+import { getSelectedCampaign, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 import MiscBox from "../../components/MiscBox/MiscBox";
 import { storage } from "../../firebase";
+import { setSelectedCampaign, setSelectedSession } from "../../store/selected/selectedCreators";
+import isValidSessionSlug from "../../utils/isValidSessionslug"
+import { initialSelectedCampaignState, initialSelectedSessionState } from "../../store/selected/selectedReducer";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
-  const [imageUrl, setImageUrl] = useState("");
-  const isLoading = useSelector(
-    (state: RootReducerProp) => state.admin.isLoading
-  );
-  const selectedCampaign = useSelector(
-    (state: RootReducerProp) => state.selected.selectedCampaign
-  );
+  const location = useLocation();
+  const dispatch = useDispatch()
+  const campaigns = useSelector((state: RootReducerProp) => state.rootCampaigns.campaigns)
+  const selectedCampaign = useSelector(getSelectedCampaign);
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
+  const [imageUrl, setImageUrl] = useState("");
   const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
+
   useEffect(() => {
-    if (selectedCampaign) {
-      storage
-        .ref("Campaigns")
-        .child(selectedCampaign.campaign.title)
-        .child("BackgroundImage")
-        .getDownloadURL()
-        .then((url: string) => {
-          console.log(url);
-          setImageUrl(url);
+    let pathArray = location.pathname.split("/")
+    if (pathArray.length >= 2) {
+      let filteredCampaign = Object.entries(campaigns)
+        .filter(([, campaign]: [string, ICampaign]) => {
+          return campaign.slug === pathArray[1]
         })
-        .catch((e) => console.log("could not fetch background image"));
-      storage
-        .ref("Campaigns")
-        .child(selectedCampaign.campaign.title)
-        .child("TitleImage")
-        .getDownloadURL()
-        .then((url) => {
-          setCampaignTitleImage(url);
-        })
-        .catch((e) => console.log("Could not fetch Campaign image"));
+        .map(([id, campaign]: [string, ICampaign]) => { return { id: id, campaign: campaign } })
+      if (filteredCampaign.length >= 1) {
+        let campaign = { id: filteredCampaign[0].id, campaign: filteredCampaign[0].campaign }
+        if (campaign.id !== selectedCampaign.id) {
+          dispatch(setSelectedCampaign(campaign))
+        }
+        if (pathArray.length >= 3 && isValidSessionSlug(pathArray[2])) {
+          let filteredSession = Object.entries(campaign.campaign.sessions)
+            .filter(([, session]: [string, ISession]) => session.slug === pathArray[2])
+            .map(([id, session]: [string, ISession]) => { return { id: id, session: session } })
+          if (filteredSession.length >= 1) {
+            let session = { id: filteredSession[0].id, session: filteredSession[0].session }
+            dispatch(setSelectedSession(session))
+          }
+        } else {
+        }
+      } else {
+      }
     }
-  }, [selectedCampaign]);
+  }, [location, campaigns, dispatch, selectedCampaign])
 
-  if (!selectedCampaign) {
-    return <Redirect to="/" />;
-  }
+  useEffect(() => {
+    let campaignRef = storage
+      .ref("Campaigns")
+      .child(selectedCampaign.campaign.title);
 
+    // Fetching BackgroundImage
+    campaignRef
+      .child("BackgroundImage")
+      .getDownloadURL()
+      .then((url: string) => {
+        console.log(url);
+        setImageUrl(url);
+      })
+      .catch((e) => console.log("could not fetch background image"));
+    // Fetching Title Image
+    campaignRef
+      .child("TitleImage")
+      .getDownloadURL()
+      .then((url) => {
+        setCampaignTitleImage(url);
+      })
+      .catch((e) => console.log("Could not fetch Campaign image"));
+  },
+    [selectedCampaign])
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      <LeftGradientDiv style={{ left: 0 }} />
-      <RightGradientDiv style={{ right: 0 }} />
-
       {campaignTitleImage ? (
         <img
           src={campaignTitleImage}
@@ -66,21 +88,22 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           }}
         />
       ) : null}
-      {isLoading ? (
-        <IsLoading />
-      ) : (
-        <>
-          <Route exact path="/campaign">
-            <Campaign />
+      <>
+        <Switch>
+          <Route exact path="/:campaignSlug/new">
+            {isDungeonMaster ? <CampaignSessionEdit isNew={true} /> : <Redirect to={"/"} />}
           </Route>
-          <Route exact path="/campaign/session">
+          <Route exact path="/:campaignSlug/:sessionSlug">
             <CampaignSession />
           </Route>
-          <Route exact path="/campaign/session/edit">
-            {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
-          </Route>
-        </>
-      )}
+        </Switch>
+        <Route exact path="/:campaignSlug/:sessionSlug/edit">
+          {isDungeonMaster ? <CampaignSessionEdit isNew={false} /> : <Redirect to={"/"} />}
+        </Route>
+        <Route exact path="/:campaignSlug">
+          <Campaign />
+        </Route>
+      </>
       {selectedCampaign && isDungeonMaster ? <MiscBox /> : null}
     </Container>
   );
@@ -99,20 +122,5 @@ const Container = styled.div`
   padding-bottom: 10rem;
   min-height: 100vh;
 `;
-const LeftGradientDiv = styled.div`
-  background: linear-gradient(to right, #000, transparent);
-  width: 10vw;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  backgroundcolor: black;
-`;
-const RightGradientDiv = styled.div`
-  background: linear-gradient(to left, #000, transparent);
-  width: 10vw;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  backgroundcolor: black;
-`;
+
 export default CampaignIndex;

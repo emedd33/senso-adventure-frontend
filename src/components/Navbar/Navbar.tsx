@@ -9,8 +9,7 @@ import MenuListComposition from "../MenuList/MenuList";
 import CampaignCrest from "../../assets/icons/CampaignCrest.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearSelectedCampaign,
-  dispatchSetSelectedCampaign,
+  clearSelectedCampaign, setSelectedCampaign
 } from "../../store/selected/selectedCreators";
 import {
   Backdrop,
@@ -24,6 +23,7 @@ import AddIcon from "@material-ui/icons/Add";
 import useWindowSize from "../../store/hooks/useWindowSize";
 import IsLoading from "../IsLoading/IsLoading";
 import { LIGHT_PINK } from "../../assets/constants/Constants";
+import { initialSelectedCampaignState } from "../../store/selected/selectedReducer";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     backdrop: {
@@ -51,9 +51,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   );
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
-  const toggleSetCampaign = (campaignId: string) => {
-    dispatch(dispatchSetSelectedCampaign(campaignId));
-  };
+
   if (!rootCampaigns) {
     return <IsLoading />;
   }
@@ -179,11 +177,10 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   ([id, campaign]) => {
                     return (
                       <NavBarItem
-                        onClick={() => dispatch(clearSelectedCampaign)}
+                        onClick={() => dispatch(setSelectedCampaign({ id: "", campaign: initialSelectedCampaignState }))}
                       >
                         <Link
-                          to="/campaign"
-                          onClick={() => toggleSetCampaign(id)}
+                          to={`/${campaign.slug}`}
                           style={{
                             textDecoration: "none",
                             color: "black",
@@ -215,9 +212,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 {authUser ? (
                   <NavBarItem>
                     <Link
-                      to="/editcampaign"
+                      to="/newcampaign"
+                      onClick={() => dispatch(clearSelectedCampaign())}
                       style={{ textDecoration: "none" }}
-                      onClick={() => dispatch(dispatchSetSelectedCampaign())}
                     >
                       <span
                         style={{

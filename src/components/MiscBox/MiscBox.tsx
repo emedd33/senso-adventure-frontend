@@ -16,8 +16,10 @@ import {
   dispatchLevelUpCharacters,
   fetchFromFirebase,
 } from "../../store/campaign/campaignCreators";
-import { dispatchSetSelectedSession } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
+import { getSelectedCampaign, } from "../../store/selected/selectedSelectors";
+import { initialSelectedSessionState } from "../../store/selected/selectedReducer";
+import { setSelectedSession } from "../../store/selected/selectedCreators";
 
 export interface MiscBoxProps { }
 
@@ -25,11 +27,10 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
   const history = useHistory();
   const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
+  const selectedCampaign = useSelector(getSelectedCampaign);
+
   const [isLevelUpDialogOpen, setIsLevelUpDialogOpen] = useState(false);
   const [isCongratulationOpen, setIsCongratulationOpen] = useState(false);
-  const selectedCampaign = useSelector(
-    (state: RootReducerProp) => state.selected.selectedCampaign
-  );
   const [levelUpAudio] = useState(new Audio(levelUpSound));
   const [victoryAudio] = useState(new Audio(victorySound));
 
@@ -78,24 +79,9 @@ const MiscBox: React.FC<MiscBoxProps> = () => {
               color="primary"
               style={{ width: "3rem", height: "3rem" }}
               onClick={() => {
-                dispatch(
-                  dispatchSetSelectedSession({
-                    id: "",
-                    session: {
-                      title: "",
-                      subTitle: "",
-                      story: "",
-                      sessionDay: selectedCampaign.campaign.sessions
-                        ? Object.values(selectedCampaign.campaign.sessions)
-                          .length + 1
-                        : 1,
-                      date: new Date().toDateString(),
-                      campaign: selectedCampaign ? selectedCampaign.id : "",
-                    },
-                  })
-                );
                 setClicked(false);
-                history.push("/campaign/session/edit");
+                dispatch(setSelectedSession({ id: "", session: initialSelectedSessionState }))
+                history.push(`/${selectedCampaign.campaign.slug}/new`);
               }}
             >
               <img

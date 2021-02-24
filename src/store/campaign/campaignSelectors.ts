@@ -1,3 +1,7 @@
+
+
+
+
 export const getAllSessions = (state: RootReducerProp) => {
   let sessions: (
     | { campaignId: string; sessionId: string; session: ISession }
@@ -24,17 +28,10 @@ export const getAllSessions = (state: RootReducerProp) => {
   }
   return sessions;
 };
-export const isDungeonMasterSelector = (state: RootReducerProp) => {
-  let username = state.admin.authUser?.username;
-  if (username) {
-    return state.selected.selectedCampaign.campaign.dungeonMaster === username;
-  }
-  return false;
-};
 
 export const getNextSession = (state: RootReducerProp) => {
   let selectedSessionDay = state.selected.selectedSession.session.sessionDay;
-  if (typeof selectedSessionDay === "number") {
+  if (typeof selectedSessionDay === "number" && state.selected.selectedCampaign.campaign.sessions) {
     let nextSession = Object.entries(
       state.selected.selectedCampaign.campaign.sessions
     ).filter(([id, session]) => {
@@ -51,7 +48,7 @@ export const getNextSession = (state: RootReducerProp) => {
 };
 export const getPreviousSession = (state: RootReducerProp) => {
   let selectedSessionDay = state.selected.selectedSession.session.sessionDay;
-  if (typeof selectedSessionDay === "number") {
+  if (typeof selectedSessionDay === "number" && state.selected.selectedCampaign.campaign.sessions) {
     let previousSession = Object.entries(
       state.selected.selectedCampaign.campaign.sessions
     ).filter(([id, session]) => {
@@ -66,3 +63,4 @@ export const getPreviousSession = (state: RootReducerProp) => {
   }
   return null;
 };
+

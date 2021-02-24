@@ -10,7 +10,6 @@ import * as GiIcons from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import IsLoading from "../IsLoading/IsLoading";
 import {
-  dispatchSetSelectedCampaign,
   updateSelectedPlayer,
 } from "../../store/selected/selectedCreators";
 import { setAlertDialog } from "../../store/admin/adminCreator";
@@ -61,9 +60,6 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
         characterName: characterName,
         isDead: selectedPlayer.player.isDead,
       })
-      .then((e) => {
-        dispatch(dispatchSetSelectedCampaign(selectedCampaign.id));
-      })
       .catch((e) =>
         dispatch(setAlertDialog("Could not create player", true, true))
       );
@@ -82,9 +78,6 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
           characterName: characterName,
           isDead: selectedPlayer.player.isDead,
         })
-        .then((e) => {
-          dispatch(dispatchSetSelectedCampaign(selectedCampaign.id));
-        });
     }
   };
   const handleSubmit = () => {
@@ -112,9 +105,6 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
         .child("players")
         .child(selectedPlayer.id)
         .set(null)
-        .then((e) => {
-          dispatch(dispatchSetSelectedCampaign(selectedCampaign.id));
-        });
     }
     handleClose();
   };
@@ -136,9 +126,6 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
           characterName: characterName,
           isDead: isDeadVariable,
         })
-        .then((e) => {
-          dispatch(dispatchSetSelectedCampaign(selectedCampaign.id));
-        });
     }
     handleClose();
   };
@@ -307,8 +294,8 @@ const PlayerModal: React.FC<SelectedPlayerProps> = ({ onClose }) => {
                 selectedPlayer.player.isDead === "TRUE" ? (
                   <GiIcons.GiHealthPotion />
                 ) : (
-                  <FaIcons.FaSkullCrossbones />
-                )
+                    <FaIcons.FaSkullCrossbones />
+                  )
               }
               severity={selectedPlayer.isNew ? "info" : "warning"}
             >

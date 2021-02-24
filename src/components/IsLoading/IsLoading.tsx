@@ -2,7 +2,7 @@ import { CircularProgress } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-export interface IsLoadingProps {}
+export interface IsLoadingProps { }
 
 const IsLoading: React.FC<IsLoadingProps> = () => {
   const history = useHistory();
@@ -19,7 +19,10 @@ const IsLoading: React.FC<IsLoadingProps> = () => {
         alignItems: "center",
         justifyContent: "center",
         display: "flex",
-        height: "100vh",
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        backgroundColor: "transparent"
       }}
     >
       <CircularProgress color="secondary" />

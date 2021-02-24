@@ -2,10 +2,11 @@ interface ISession {
   title: string;
   story: string;
   date: string;
-  campaign: any;
+  campaignTitle: string;
   sessionDay: number;
   date: string;
   subTitle?: string;
+  slug: string;
 }
 interface IPlayer {
   playerName: string;
@@ -16,8 +17,10 @@ interface IPlayer {
   isDead: string;
 }
 interface ICampaign {
+  slug: string;
   title: string;
   subTitle: string;
+  slug: string;
   isNew: boolean;
   id: string;
   dungeonMaster: string;
