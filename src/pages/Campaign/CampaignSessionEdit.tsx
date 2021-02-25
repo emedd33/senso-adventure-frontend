@@ -1,4 +1,4 @@
-import { Button, IconButton, TextField } from "@material-ui/core";
+import { Button, CardActionArea, CardMedia, IconButton, makeStyles, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { OLD_WHITE } from "../../assets/constants/Constants";
@@ -6,19 +6,46 @@ import IsLoading from "../../components/IsLoading/IsLoading";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker } from "@material-ui/pickers";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import "react-markdown-editor-lite/lib/index.css";
 import styled from "styled-components";
 import ImageUploader from 'react-images-upload';
 import sleep from "../../utils/sleep"
-import FormatItalicIcon from '@material-ui/icons/FormatItalic';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import FormatBoldIcon from '@material-ui/icons/FormatBold';
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import ClearIcon from '@material-ui/icons/Clear';
 import useInterval from "../../store/hooks/useInterval";
 import { getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
+const modules = {
+    toolbar: [
+        [{ 'header': [1, 2, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+        ['link'],
+        ['clean']
+    ],
+}
+
+const formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link',
+]
+const useStyles = makeStyles({
+    root: {
+        maxWidth: 345,
+        margin: "1rem",
+        padding: "0.5rem"
+    },
+    media: {
+        height: "10rem",
+        width: "10rem"
+    },
+});
+
 export interface CampaignSessionEditProps { }
 
 const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
@@ -46,20 +73,22 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
 
     const [newSessionImages, setNewSessionImages] = useState<any[]>([]);
     const [ImageUploaderKey, setImageUploaderKey] = useState(0);
-    const [existingSessionImageUrl, setExistingSessionImageUrl] = useState<any[]>([]);
-
+    const [existingSessionImages, setExistingSessionImages] = useState<any[]>([]);
+    const classes = useStyles();
     useEffect(() => {
         storageRef
             .child("SessionImages").listAll()
             .then((res) => {
                 res.items.forEach((itemRef) => {
+                    let name = itemRef.name
+                    console.log(name)
                     itemRef.getDownloadURL()
                         .then(url => {
-                            setExistingSessionImageUrl(urls => {
-                                if (!urls.includes(url)) {
-                                    return [...urls, url]
+                            setExistingSessionImages(images => {
+                                if (!images.map(img => img.name).includes(name)) {
+                                    return [...images, { url: url, name: name }]
                                 }
-                                return urls
+                                return images
                             })
                         })
                         .catch(e => console.log("Could not connect to firebase", e))
@@ -68,38 +97,53 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             }).catch((error) => {
                 console.log("Error fetching session images", error)
             });
+        storageRef.child("SessionStory.html")
+            .getDownloadURL()
+            .then(url =>
+                fetch(url)
+                    .then(res => res.text())
+                    .then(resText => { setText(resText); setSavedText(resText) })
+                    .catch((e) => console.log("Could not fetch sessionstory", e))
+            )
+            .catch((e) => console.log("Could not connect to firebase for sessionstory", e))
+
         return (() => {
             setNewSessionImages([])
-            setExistingSessionImageUrl([])
+            setExistingSessionImages([])
         })
     }, [storageRef])
 
     useInterval(async () => {    // Your custom logic here 
-        setIsUploading(true)
         if (text !== undefined && text !== savedText) {
+            setIsUploading(true)
+            console.log("Uploading: ", text)
             setSavedText(text)
             storageRef
                 .child("SessionStory.html")
-                .putString(savedText).catch(e => console.log("Could not update session story", e))
+                .putString(text)
+                .catch(e => console.log("Could not update session story", e))
         }
         if (sessionSubTitle !== SavedSessionSubTitle) {
+            setIsUploading(true)
             databaseRef.child("subTitle").set(sessionSubTitle)
             setSavedSessionSubTitle(sessionSubTitle)
         }
         if (sessionDate !== savedSessionDate) {
+            setIsUploading(true)
             databaseRef.child("date").set(sessionDate)
             setSavedSessionDate(sessionDate)
         }
 
         if (sessionDay !== savedSessionDay) {
+            setIsUploading(true)
             databaseRef.child("sessionDay").set(sessionDay)
             setSavedSessionDay(sessionDay)
         }
-        sleep(5000).then(() => {
+        sleep(2000).then(() => {
             setIsUploading(false)
         });
     },
-        5000)
+        3000)
 
     const submitImages = async () => {
         setIsUploadingImages(true)
@@ -116,8 +160,9 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                         console.log(`Could not upload ${newImage.name}`, error)
                     },
                     () => {
+                        let name = uploadTask.snapshot.ref.name
                         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                            setExistingSessionImageUrl((urls) => [...urls, downloadURL])
+                            setExistingSessionImages((images) => [...images, { name: name, url: downloadURL }])
                             return downloadURL
                         });
                     }
@@ -127,6 +172,14 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 setImageUploaderKey(ImageUploaderKey + 1);
                 setIsUploadingImages(false)
             })
+    }
+    const removeImage = (deleteImage: any) => {
+        storageRef
+            .child("SessionImages")
+            .child(deleteImage.name)
+            .delete()
+            .then(() => setExistingSessionImages(existingSessionImages.filter(existingImg => existingImg !== deleteImage)))
+            .catch(e => console.log("Could not remove image file", e))
     }
     if (!selectedSession) {
         return <IsLoading />;
@@ -192,50 +245,63 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     />
                 </MuiPickersUtilsProvider>
             </TitleContainer>
-            <EditContainer >
+            <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center", width: "100%" }}>
+                <h1 style={{ flex: 2, textAlign: "right" }}>Session story</h1>
+                <div style={{ flex: 1, margin: "1rem" }}>
+                    {isUploading ? <CircularProgress /> : null}
+                </div>
+            </div>
+            <EditContainer>
 
-                <EditContainerHeader>
-                    <div style={{ display: "flex", justifyContent: "flex-start", alignContent: "center" }}>
-                        <IconButton aria-label="Bold">
-                            <FormatBoldIcon />
-                        </IconButton>
-                        <IconButton aria-label="Italic" >
-                            <FormatItalicIcon />
-                        </IconButton>
-                        <IconButton aria-label="Bullets" >
-                            <FormatListBulletedIcon />
-                        </IconButton>
-                        <IconButton aria-label="Bullets" >
-                            <VpnKeyIcon />
-                        </IconButton>
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "flex-end", alignContent: "center", paddingRight: "1rem" }}>
-                        {isUploading ? <CircularProgress size="1rem" /> : " "}
-                    </div>
-                </EditContainerHeader>
-                <EditContainerBody contentEditable="true" onInput={e => setText(e.currentTarget.innerHTML)} id={"editContainer"} suppressContentEditableWarning={true}>
-
-                </EditContainerBody>
+                <ReactQuill theme="snow" value={text} onChange={setText} modules={modules} style={{ border: "none", backgroundColor: "white" }}
+                    formats={formats} />
             </EditContainer>
+
+            <h1>Session Images</h1>
 
             {isUploadingImages ?
                 <div style={{ minHeight: "10rem", display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <CircularProgress />
                 </div>
                 : <>
-                    {existingSessionImageUrl.map((url) => <img src={url} alt="SessionImage" style={{ width: "10rem", height: "10rem" }} />)}
                     <ImageUploader
                         key={ImageUploaderKey}
                         withIcon={true}
+                        label="Max file size: 10mb, accepted: jpg|gif|png"
                         buttonText='Choose images'
                         onChange={(newImages: any) => setNewSessionImages([...newSessionImages, ...newImages])}
-                        imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                        maxFileSize={5242880}
+                        imgExtension={['.jpg', '.gif', '.png']}
+                        maxFileSize={10485760}
                         withPreview={true}
                     />
                     <Button variant="contained" onClick={submitImages}>
                         Upload Pictures
-            </Button>
+                    </Button>
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "1rem" }}>
+
+
+                        {existingSessionImages.map((img) => {
+                            console.log(img)
+                            return (
+
+                                <Card className={classes.root}>
+                                    <CardActionArea>
+                                        <CardActions style={{ display: "flex", justifyContent: "center", height: "2rem" }}>
+                                            <IconButton aria-label="delete" onClick={() => removeImage(img)}>
+                                                <ClearIcon color="secondary" />
+                                            </IconButton>
+                                        </CardActions>
+                                        <CardMedia
+                                            className={classes.media}
+                                            image={img.url}
+                                            title="Contemplative Reptile"
+                                        />
+                                    </CardActionArea>
+                                </Card>
+                            )
+                        })
+                        }
+                    </div>
                 </>
             }
 
@@ -257,19 +323,6 @@ const TitleContainer = styled.div`
   box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
 `;
 
-const EditContainerBody = styled.div`
-min-height:20rem;
-background-color:white;
-padding:1rem;
-border-style: inset;
-font-family:sans-serif;
-`
-const EditContainerHeader = styled.div`
-justify-content:space-between;
-align-items: center;
-display:flex;
-background-color:lightgray;
-`
 const EditContainer = styled.div`
 width:90%;
 `

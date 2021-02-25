@@ -162,7 +162,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     );
 };
 const Container = styled.div`
-  min-height: 50rem;
+  min-height: 20rem;
   min-width: 15rem;
   width: 50%;
   padding: 1rem;
