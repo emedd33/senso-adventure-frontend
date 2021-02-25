@@ -5,7 +5,6 @@ import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useHistory } from "react-router-dom";
-import { storage } from "../../firebase";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { parseSessionStory } from "../../utils/paseSessionStory";
 import {
@@ -14,29 +13,23 @@ import {
 } from "../../store/campaign/campaignSelectors";
 
 import parse from 'html-react-parser';
-import { getSelectedCampaign, getSelectedSession, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign, getSelectedSession, getSelectedSessionStorageRef, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 
 type CampaignSessionProps = {};
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [sessionStory, setSessionStory] = useState("");
-    const [sessionImage1, setSessionImage1] = useState();
-    const [sessionImage2, setSessionImage2] = useState();
-    const [sessionImage3, setSessionImage3] = useState();
+    const [sessionImages, setSessionImages] = useState<string[]>([]);
+
     const selectedSession = useSelector(getSelectedSession);
     const selectedCampaign = useSelector(getSelectedCampaign);
+    const storageRef = useSelector(getSelectedSessionStorageRef)
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const nextSession = useSelector(getNextSession);
     const previousSession = useSelector(getPreviousSession);
     useEffect(() => {
         if (selectedSession.session && selectedSession.id) {
-            let storageRef = storage
-                .ref()
-                .child("Campaigns")
-                .child(selectedCampaign.campaign.title)
-                .child("Sessions")
-                .child(selectedSession.session.title);
             storageRef
                 .child("SessionStory.html")
                 .getDownloadURL()
@@ -44,36 +37,37 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     fetch(url)
                         .then((res) => res.text())
                         .then((res) => {
-                            console.log(res)
                             const text = parseSessionStory(res, isDungeonMaster);
-                            console.log(text)
                             setSessionStory(text ? text : "new story");
                         })
                 }).catch(e => { console.log("Could not fetch session story") })
 
             storageRef
-                .child("SessionImageFile1")
-                .getDownloadURL()
-                .then((url) => setSessionImage1(url))
-                .catch(() => console.log("could not get session image 1"));
-            storageRef
-                .child("SessionImageFile2")
-                .getDownloadURL()
-                .then((url) => setSessionImage2(url))
-                .catch(() => console.log("could not get session image 2"));
-            storageRef
-                .child("SessionImageFile3")
-                .getDownloadURL()
-                .then((url) => setSessionImage3(url))
-                .catch(() => console.log("could not get session image 3"));
+                .child("SessionImages").listAll()
+                .then((res) => {
+                    res.items.forEach((itemRef) => {
+                        itemRef.getDownloadURL()
+                            .then(url => {
+                                setSessionImages(urls => {
+                                    if (!urls.includes(url)) {
+                                        return [...urls, url]
+                                    }
+                                    return urls
+                                })
+                            })
+                            .catch(e => console.log("Could not connect to firebase", e))
+                    });
+
+                }).catch((error) => {
+                    console.log("Error fetching session images", error)
+                });
+
         }
         return () => {
             setSessionStory("")
-            setSessionImage1(undefined)
-            setSessionImage2(undefined)
-            setSessionImage3(undefined)
+            setSessionImages([])
         }
-    }, [dispatch, selectedSession, isDungeonMaster, selectedCampaign]);
+    }, [dispatch, selectedSession, isDungeonMaster, selectedCampaign, storageRef]);
 
     return (
         <>
@@ -161,9 +155,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                         )}
                 </div>
             </Container>
-            {sessionImage1 ? <SessionImage src={sessionImage1} /> : null}
-            {sessionImage2 ? <SessionImage src={sessionImage2} /> : null}
-            {sessionImage3 ? <SessionImage src={sessionImage3} /> : null}
+
+            {sessionImages ? sessionImages.map((url) => <img src={url} alt="SessionImage" style={{ width: "10rem", height: "10rem" }} />) : null}
+
         </>
     );
 };
@@ -180,11 +174,5 @@ const ChangeSessionButton = styled.h4`
   color: black;
   margin: 0;
   cursor: pointer;
-`;
-const SessionImage = styled.img`
-  width: 50%;
-  margin: 2rem;
-  -webkit-box-shadow: 5px 5px 15px 5px #000000;
-  box-shadow: 5px 0px 15px 2px #000000;
 `;
 export default CampaignSession;

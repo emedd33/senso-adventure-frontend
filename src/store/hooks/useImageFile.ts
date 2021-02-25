@@ -9,7 +9,6 @@ export const useImageFile = (
     ...emptyFile,
     name: newFileName,
   });
-  debugger
   const setImageFile = (file: any) => {
     if (file.length > 0) {
       return setFileName({ file: file[0], name: file[0].file.name });

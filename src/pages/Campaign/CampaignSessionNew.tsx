@@ -11,6 +11,7 @@ import { campaignsRef } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import styled from "styled-components";
 import { getNewSessionDay } from "../../store/campaign/campaignSelectors";
+import { setSelectedSession } from "../../store/selected/selectedCreators";
 export interface CampaignSessionNewProps { }
 
 const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
@@ -54,6 +55,7 @@ const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
             .push(toUpload)
             .then((snap) => {
                 snap.once("value", async (snapshot: any) => {
+                    dispatch(setSelectedSession({ id: snapshot.key, session: snapshot.val() }))
                     history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}/edit`);
                 });
             });

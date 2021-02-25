@@ -6,7 +6,6 @@ import IsLoading from "../../components/IsLoading/IsLoading";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker } from "@material-ui/pickers";
-import { campaignsRef, storage } from "../../firebase";
 import "react-markdown-editor-lite/lib/index.css";
 import styled from "styled-components";
 import ImageUploader from 'react-images-upload';
@@ -19,6 +18,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 import useInterval from "../../store/hooks/useInterval";
+import { getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
 export interface CampaignSessionEditProps { }
 
 const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
@@ -26,9 +26,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const selectedSession = useSelector(
         (state: RootReducerProp) => state.selected.selectedSession
     );
-    const selectedCampaign = useSelector(
-        (state: RootReducerProp) => state.selected.selectedCampaign
-    );
+
     const [isUploading, setIsUploading] = useState(false)
     const [isUploadingImages, setIsUploadingImages] = useState(false)
 
@@ -40,6 +38,8 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
 
     const [sessionSubTitle, setSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
     const [SavedSessionSubTitle, setSavedSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
+    const storageRef = useSelector(getSelectedSessionStorageRef)
+    const databaseRef = useSelector(getSelectedSessionDatabaseRef)
 
     const [sessionDay, setSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
     const [savedSessionDay, setSavedSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
@@ -47,43 +47,33 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const [newSessionImages, setNewSessionImages] = useState<any[]>([]);
     const [ImageUploaderKey, setImageUploaderKey] = useState(0);
     const [existingSessionImageUrl, setExistingSessionImageUrl] = useState<any[]>([]);
-    const [refreshImages, setRefreshImages] = useState(true)
-
-
-    const storageRef = storage
-        .ref()
-        .child("Campaigns")
-        .child(selectedCampaign.campaign.title)
-        .child("Sessions")
-        .child(selectedSession.session.title)
-    const databaseRef = campaignsRef
-        .child(selectedCampaign.id)
-        .child("sessions")
-        .child(selectedSession.id)
 
     useEffect(() => {
-        if (refreshImages) {
-            storageRef
-                .child("SessionImages").listAll()
-                .then((res) => {
-                    res.items.forEach((itemRef) => {
-                        itemRef.getDownloadURL()
-                            .then(url => {
-                                setExistingSessionImageUrl(urls => [...urls, url])
+        storageRef
+            .child("SessionImages").listAll()
+            .then((res) => {
+                res.items.forEach((itemRef) => {
+                    itemRef.getDownloadURL()
+                        .then(url => {
+                            setExistingSessionImageUrl(urls => {
+                                if (!urls.includes(url)) {
+                                    return [...urls, url]
+                                }
+                                return urls
                             })
-                            .catch(e => console.log("Could not connect to firebase", e))
-                    });
-
-                }).catch((error) => {
-                    console.log("Error fetching session images", error)
+                        })
+                        .catch(e => console.log("Could not connect to firebase", e))
                 });
-            setRefreshImages(false)
-        }
+
+            }).catch((error) => {
+                console.log("Error fetching session images", error)
+            });
         return (() => {
             setNewSessionImages([])
             setExistingSessionImageUrl([])
         })
-    }, [refreshImages, storageRef])
+    }, [storageRef])
+
     useInterval(async () => {    // Your custom logic here 
         setIsUploading(true)
         if (text !== undefined && text !== savedText) {
@@ -110,10 +100,9 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
         });
     },
         5000)
-    console.log(existingSessionImageUrl)
+
     const submitImages = async () => {
         setIsUploadingImages(true)
-        await sleep
         await Promise.all(newSessionImages.map(
             newImage => {
                 let uploadTask =
@@ -129,7 +118,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     () => {
                         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                             setExistingSessionImageUrl((urls) => [...urls, downloadURL])
-                            setRefreshImages(true)
                             return downloadURL
                         });
                     }
