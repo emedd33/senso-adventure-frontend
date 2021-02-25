@@ -1,149 +1,145 @@
-import { Button, IconButton, TextField, Tooltip } from "@material-ui/core";
+import { Button, IconButton, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import HelpIcon from "@material-ui/icons/Help";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker } from "@material-ui/pickers";
-import { campaignsRef, firebaseStorageRef, storage } from "../../firebase";
+import { campaignsRef, storage } from "../../firebase";
 import "react-markdown-editor-lite/lib/index.css";
-import { setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
 import styled from "styled-components";
-import ImageUpload from "../../components/ImageUpload/ImageUpload";
-import { useImageFile } from "../../store/hooks/useImageFile";
-import { isValidImageFile } from "../../utils/isValidImageFile";
-import EditMultilineTextField from "../../components/EditMultilineTextField/EditMultilineTextField";
+import ImageUploader from 'react-images-upload';
+import sleep from "../../utils/sleep"
+import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import FormatBoldIcon from '@material-ui/icons/FormatBold';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+
+import useInterval from "../../store/hooks/useInterval";
 export interface CampaignSessionEditProps { }
 
 const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
-    const dispatch = useDispatch();
-    const history = useHistory();
+
     const selectedSession = useSelector(
         (state: RootReducerProp) => state.selected.selectedSession
     );
     const selectedCampaign = useSelector(
         (state: RootReducerProp) => state.selected.selectedCampaign
     );
+    const [isUploading, setIsUploading] = useState(false)
+    const [isUploadingImages, setIsUploadingImages] = useState(false)
 
-    const [sessionDay, setSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
-    const [sessionSubTitle, setSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
-
-    const [sessionTitleError, setSessionTitleError] = useState<boolean>(false);
+    const [text, setText] = useState<string>("")
+    const [savedText, setSavedText] = useState<string>("")
 
     const [sessionDate, setSessionDate] = useState<string>(new Date(selectedSession.session.date).toDateString())
-    const [sessionImageFiles1, setSessionImage1Files] = useImageFile();
-    const [sessionImageFiles2, setSessionImage2Files] = useImageFile();
-    const [sessionImageFiles3, setSessionImage3Files] = useImageFile();
-    const [sessionImage1, setSessionImage1] = useState();
-    const [sessionImage2, setSessionImage2] = useState();
-    const [sessionImage3, setSessionImage3] = useState();
-    console.log(selectedSession)
+    const [savedSessionDate, setSavedSessionDate] = useState<string>(new Date(selectedSession.session.date).toDateString())
+
+    const [sessionSubTitle, setSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
+    const [SavedSessionSubTitle, setSavedSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
+
+    const [sessionDay, setSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
+    const [savedSessionDay, setSavedSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
+
+    const [newSessionImages, setNewSessionImages] = useState<any[]>([]);
+    const [ImageUploaderKey, setImageUploaderKey] = useState(0);
+    const [existingSessionImageUrl, setExistingSessionImageUrl] = useState<any[]>([]);
+    const [refreshImages, setRefreshImages] = useState(true)
+
+
+    const storageRef = storage
+        .ref()
+        .child("Campaigns")
+        .child(selectedCampaign.campaign.title)
+        .child("Sessions")
+        .child(selectedSession.session.title)
+    const databaseRef = campaignsRef
+        .child(selectedCampaign.id)
+        .child("sessions")
+        .child(selectedSession.id)
 
     useEffect(() => {
-        if (selectedSession && selectedSession?.session.story) {
-            let storageRef = storage
-                .ref()
-                .child("Campaigns")
-                .child(selectedCampaign.campaign.title)
-                .child("Sessions")
-                .child(selectedSession.session.title);
+        if (refreshImages) {
+            storageRef
+                .child("SessionImages").listAll()
+                .then((res) => {
+                    res.items.forEach((itemRef) => {
+                        itemRef.getDownloadURL()
+                            .then(url => {
+                                setExistingSessionImageUrl(urls => [...urls, url])
+                            })
+                            .catch(e => console.log("Could not connect to firebase", e))
+                    });
 
-            storageRef
-                .child("SessionImageFile1")
-                .getDownloadURL()
-                .then((url) => setSessionImage1(url))
-                .catch(() => console.log("could not get session image 1"));
-            storageRef
-                .child("SessionImageFile2")
-                .getDownloadURL()
-                .then((url) => setSessionImage2(url))
-                .catch(() => console.log("could not get session image 2"));
-            storageRef
-                .child("SessionImageFile3")
-                .getDownloadURL()
-                .then((url) => setSessionImage3(url))
-                .catch(() => console.log("could not get session image 3"));
+                }).catch((error) => {
+                    console.log("Error fetching session images", error)
+                });
+            setRefreshImages(false)
         }
-    }, [dispatch, selectedSession, selectedCampaign]);
+        return (() => {
+            setNewSessionImages([])
+            setExistingSessionImageUrl([])
+        })
+    }, [refreshImages, storageRef])
+    useInterval(async () => {    // Your custom logic here 
+        setIsUploading(true)
+        if (text !== undefined && text !== savedText) {
+            setSavedText(text)
+            storageRef
+                .child("SessionStory.html")
+                .putString(savedText).catch(e => console.log("Could not update session story", e))
+        }
+        if (sessionSubTitle !== SavedSessionSubTitle) {
+            databaseRef.child("subTitle").set(sessionSubTitle)
+            setSavedSessionSubTitle(sessionSubTitle)
+        }
+        if (sessionDate !== savedSessionDate) {
+            databaseRef.child("date").set(sessionDate)
+            setSavedSessionDate(sessionDate)
+        }
 
-
-    const submitSession = () => {
-        const toUpload = {
-            date: sessionDate,
-            subTitle: sessionSubTitle ? sessionSubTitle : "",
-            campaignTitle: selectedCampaign.campaign.title,
-            sessionDay: sessionDay ? sessionDay : 1,
-        };
-        if (
-            selectedCampaign.campaign.sessions &&
-            Object.values(selectedCampaign.campaign.sessions).filter((session) => {
-                return (
-                    session.sessionDay === sessionDay && session.title !== selectedSession.session.title
+        if (sessionDay !== savedSessionDay) {
+            databaseRef.child("sessionDay").set(sessionDay)
+            setSavedSessionDay(sessionDay)
+        }
+        sleep(5000).then(() => {
+            setIsUploading(false)
+        });
+    },
+        5000)
+    console.log(existingSessionImageUrl)
+    const submitImages = async () => {
+        setIsUploadingImages(true)
+        await sleep
+        await Promise.all(newSessionImages.map(
+            newImage => {
+                let uploadTask =
+                    storageRef
+                        .child("SessionImages")
+                        .child(newImage.name)
+                        .put(newImage)
+                return uploadTask.on('state_changed',
+                    () => { },
+                    (error) => {
+                        console.log(`Could not upload ${newImage.name}`, error)
+                    },
+                    () => {
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            setExistingSessionImageUrl((urls) => [...urls, downloadURL])
+                            setRefreshImages(true)
+                            return downloadURL
+                        });
+                    }
                 );
-            }).length > 0
-        ) {
-            dispatch(
-                setAlertDialog(
-                    "Session day is invalid due to duplicated session days",
-                    true,
-                    true
-                )
-            );
-            return;
-        }
-        campaignsRef
-            .child(selectedCampaign.id)
-            .child("sessions/" + selectedSession.id)
-            .set(toUpload)
-            .then(async (e) => {
-                await postProcessFiles(selectedSession);
-                history.push(`/${selectedCampaign.campaign.slug}/${selectedSession.session.slug}`);
-            });
+            })).then((res) => {
+                setNewSessionImages([])
+                setImageUploaderKey(ImageUploaderKey + 1);
+                setIsUploadingImages(false)
+            })
     }
-    const postProcessFiles = async (
-        session: ISelectedSession,
-    ) => {
-        dispatch(setIsLoading(true));
-
-        let sessionStorragePath = firebaseStorageRef
-            .child("Campaigns")
-            .child(selectedCampaign.campaign.title)
-            .child("Sessions")
-            .child(selectedSession.session.title);
-
-
-        let imageMetadata = {
-            session: session.id,
-            campaign: selectedCampaign.id,
-            date: sessionDate,
-            day: sessionDay,
-            contentType: "image/png",
-        };
-
-        if (isValidImageFile(sessionImageFiles1)) {
-            await sessionStorragePath
-                .child("SessionImageFile1")
-                .put(sessionImageFiles1.file.file, imageMetadata)
-        }
-        if (isValidImageFile(sessionImageFiles2)) {
-            await sessionStorragePath
-                .child("SessionImageFile2")
-                .put(sessionImageFiles2.file.file, imageMetadata)
-        }
-        if (isValidImageFile(sessionImageFiles3)) {
-            await sessionStorragePath
-                .child("SessionImageFile3")
-                .put(sessionImageFiles3.file.file, imageMetadata)
-
-        }
-
-        dispatch(setIsLoading(false));
-    };
-
-
     if (!selectedSession) {
         return <IsLoading />;
     }
@@ -161,16 +157,7 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             }}
         >
             <TitleContainer>
-                <TextField
-                    id="outlined-multiline-static"
-                    placeholder="Write a fitting title"
-                    variant="filled"
-                    disabled={true}
-                    style={{ width: "90%", margin: "1rem" }}
-                    label="Session title"
-                    error={sessionTitleError}
-                    value={selectedSession.session.title}
-                />
+                <h2>{selectedSession.session.title}</h2>
 
                 <TextField
                     id="outlined-multiline-static"
@@ -217,90 +204,54 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                     />
                 </MuiPickersUtilsProvider>
             </TitleContainer>
-            <br />
-            <div style={{ display: "flex", flexDirection: "row" }}>
-                <h3>The Story</h3>
-                <Tooltip title="The Story to be showcased for all players">
-                    <IconButton aria-label="help">
-                        <HelpIcon />
-                    </IconButton>
-                </Tooltip>
-            </div>
-            <p style={{ textAlign: "left", fontFamily: "sans-serif" }}>
-                {
-                    "To add a secret note encapsulte the secret note with the '<secret> </secret>' tag"
-                }
-            </p>
-            <EditMultilineTextField />
-            <h3>Add uo to 3 pictures to the session</h3>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    maxWidth: "100%",
-                    justifyContent: "center"
-                }}
-            >
-                <div
-                    style={{ display: "flex", flexDirection: "column", maxWidth: "100%" }}
-                >
-                    <ImageUpload
-                        imageFile={sessionImageFiles1.file}
-                        setImageFile={setSessionImage1Files}
-                        maxFiles={1}
-                    />
+            <EditContainer >
 
-                    {sessionImage1 ? (
-                        <>
-                            <h2 style={{ textAlign: "center" }}>Current first image</h2>
-                            <SessionImage src={sessionImage1} />
-                        </>
-                    ) : null}
+                <EditContainerHeader>
+                    <div style={{ display: "flex", justifyContent: "flex-start", alignContent: "center" }}>
+                        <IconButton aria-label="Bold">
+                            <FormatBoldIcon />
+                        </IconButton>
+                        <IconButton aria-label="Italic" >
+                            <FormatItalicIcon />
+                        </IconButton>
+                        <IconButton aria-label="Bullets" >
+                            <FormatListBulletedIcon />
+                        </IconButton>
+                        <IconButton aria-label="Bullets" >
+                            <VpnKeyIcon />
+                        </IconButton>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "flex-end", alignContent: "center", paddingRight: "1rem" }}>
+                        {isUploading ? <CircularProgress size="1rem" /> : " "}
+                    </div>
+                </EditContainerHeader>
+                <EditContainerBody contentEditable="true" onInput={e => setText(e.currentTarget.innerHTML)} id={"editContainer"} suppressContentEditableWarning={true}>
+
+                </EditContainerBody>
+            </EditContainer>
+
+            {isUploadingImages ?
+                <div style={{ minHeight: "10rem", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <CircularProgress />
                 </div>
-                <div
-                    style={{ display: "flex", flexDirection: "column", maxWidth: "100%" }}
-                >
-                    <ImageUpload
-                        imageFile={sessionImageFiles2.file}
-                        setImageFile={setSessionImage2Files}
-                        maxFiles={1}
+                : <>
+                    {existingSessionImageUrl.map((url) => <img src={url} alt="SessionImage" style={{ width: "10rem", height: "10rem" }} />)}
+                    <ImageUploader
+                        key={ImageUploaderKey}
+                        withIcon={true}
+                        buttonText='Choose images'
+                        onChange={(newImages: any) => setNewSessionImages([...newSessionImages, ...newImages])}
+                        imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                        maxFileSize={5242880}
+                        withPreview={true}
                     />
-                    {sessionImage2 ? (
-                        <>
-                            <h2 style={{ textAlign: "center" }}>Current second image</h2>
+                    <Button variant="contained" onClick={submitImages}>
+                        Upload Pictures
+            </Button>
+                </>
+            }
 
-                            <SessionImage src={sessionImage2} />
-                        </>
-                    ) : null}
-                </div>
-                <div
-                    style={{ display: "flex", flexDirection: "column", maxWidth: "100%" }}
-                >
-                    <ImageUpload
-                        imageFile={sessionImageFiles3.file}
-                        setImageFile={setSessionImage3Files}
-                        maxFiles={1}
-                    />
-                    {sessionImage3 ? (
-                        <>
-                            <h2 style={{ textAlign: "center" }}>Current third image</h2>
-
-                            <SessionImage src={sessionImage3} />
-                        </>
-                    ) : null}
-                </div>
-            </div>
-
-            <Button
-                variant="contained"
-                color="primary"
-                style={{ margin: "2rem" }}
-                onClick={submitSession}
-            >
-                Submit
-      </Button>
-        </div>
+        </div >
     );
 };
 
@@ -317,10 +268,23 @@ const TitleContainer = styled.div`
   moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
   box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
 `;
-const SessionImage = styled.img`
-  width: 10rem;
-  margin: 2rem;
-  -webkit-box-shadow: 5px 5px 15px 5px #000000;
-  box-shadow: 5px 0px 15px 2px #000000;
-`;
+
+const EditContainerBody = styled.div`
+min-height:20rem;
+background-color:white;
+padding:1rem;
+border-style: inset;
+font-family:sans-serif;
+`
+const EditContainerHeader = styled.div`
+justify-content:space-between;
+align-items: center;
+display:flex;
+background-color:lightgray;
+`
+const EditContainer = styled.div`
+width:90%;
+`
+
+
 export default CampaignSessionEdit;

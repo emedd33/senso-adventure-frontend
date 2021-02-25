@@ -11,7 +11,6 @@ import MiscBox from "../../components/MiscBox/MiscBox";
 import { storage } from "../../firebase";
 import { setSelectedCampaign, setSelectedSession } from "../../store/selected/selectedCreators";
 import isValidSessionSlug from "../../utils/isValidSessionslug"
-import { initialSelectedCampaignState, initialSelectedSessionState } from "../../store/selected/selectedReducer";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
