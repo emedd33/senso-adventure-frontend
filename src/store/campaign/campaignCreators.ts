@@ -33,7 +33,6 @@ export async function fetchFromFirebase(dispatch: any) {
       });
     }
   });
-  dispatch({ type: SET_IS_LOADING, payload: false });
 }
 export async function getSessionsFromCampaign(campaigns: ICampaign) {
   const sessions = Object.entries(campaigns)

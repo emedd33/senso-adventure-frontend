@@ -11,11 +11,15 @@ import MiscBox from "../../components/MiscBox/MiscBox";
 import { storage } from "../../firebase";
 import { setSelectedCampaign, setSelectedSession } from "../../store/selected/selectedCreators";
 import isValidSessionSlug from "../../utils/isValidSessionslug"
+import { setIsLoading } from "../../store/admin/adminCreator";
+import IsLoading from "../../components/IsLoading/IsLoading";
+import { getIsLoading } from "../../store/admin/adminSelectors";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
   const dispatch = useDispatch()
+  const isLoading = useSelector(getIsLoading)
   const campaigns = useSelector((state: RootReducerProp) => state.rootCampaigns.campaigns)
   const selectedCampaign = useSelector(getSelectedCampaign);
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
@@ -49,7 +53,6 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       }
     }
   }, [location, campaigns, dispatch, selectedCampaign])
-
   useEffect(() => {
     let campaignRef = storage
       .ref("Campaigns")
@@ -63,17 +66,25 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         console.log(url);
         setImageUrl(url);
       })
-      .catch((e) => console.log("could not fetch background image"));
+      .catch((e) => console.log("could not fetch background image"))
     // Fetching Title Image
+    dispatch(setIsLoading(true))
     campaignRef
       .child("TitleImage")
       .getDownloadURL()
       .then((url) => {
         setCampaignTitleImage(url);
       })
-      .catch((e) => console.log("Could not fetch Campaign image"));
+      .catch((e) => console.log("Could not fetch Campaign image"))
+      .finally(() => dispatch(setIsLoading(false)));
   },
-    [selectedCampaign])
+    [selectedCampaign, dispatch])
+  if (isLoading) {
+    return <IsLoading />
+  }
+  if (!isLoading && !selectedCampaign.id) {
+    return <Redirect to="/" />
+  }
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
       {campaignTitleImage ? (
@@ -103,8 +114,8 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         <Route exact path="/:campaignSlug">
           <Campaign />
         </Route>
+        {selectedCampaign && isDungeonMaster ? <MiscBox /> : null}
       </>
-      {selectedCampaign && isDungeonMaster ? <MiscBox /> : null}
     </Container>
   );
 };
