@@ -29,4 +29,14 @@ export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
         .child("sessions")
         .child(state.selected?.selectedSession?.id)
 
-} 
+}
+
+export const getPlayerCharacter = (state: RootReducerProp) => {
+    let players = state.selected.selectedCampaign.campaign.characters?.filter((character: ICharacter) => character.isPlayer === "TRUE")
+    return players ? players : []
+}
+export const getNpc = (state: RootReducerProp) => {
+    let npc = state.selected.selectedCampaign.campaign.characters?.filter((character: ICharacter) => character.isUnique === "TRUE")
+    return npc ? npc : []
+
+}

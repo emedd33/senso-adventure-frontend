@@ -44,6 +44,7 @@
     "react-scripts": "4.0.1",
     "react-scroll-parallax": "^2.3.5",
     "react-syntax-highlighter": "^15.4.3",
+    "react-tiny-fab": "^4.0.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",

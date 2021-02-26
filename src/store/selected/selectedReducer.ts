@@ -14,7 +14,7 @@ export const initialSelectedCampaignState = {
   slug: "",
   dungeonMaster: "",
   sessions: [],
-  players: [],
+  characters: [],
   isNew: true,
 };
 export const initialSelectedSessionState = {

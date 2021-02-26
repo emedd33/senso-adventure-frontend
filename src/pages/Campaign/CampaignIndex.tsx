@@ -1,23 +1,28 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSessionNew from "./CampaignSessionNew";
 import CampaignSession from "./CampaignSession";
 import { getSelectedCampaign, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
-import MiscBox from "../../components/MiscBox/MiscBox";
 import { storage } from "../../firebase";
 import { setSelectedCampaign, setSelectedSession } from "../../store/selected/selectedCreators";
 import isValidSessionSlug from "../../utils/isValidSessionslug"
 import { setIsLoading } from "../../store/admin/adminCreator";
+import AddIcon from '@material-ui/icons/Add';
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { getIsLoading } from "../../store/admin/adminSelectors";
+import { Fab, Action } from 'react-tiny-fab';
+import 'react-tiny-fab/dist/styles.css';
+import { initialSelectedSessionState } from "../../store/selected/selectedReducer";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
+  const history = useHistory();
+
   const dispatch = useDispatch()
   const isLoading = useSelector(getIsLoading)
   const campaigns = useSelector((state: RootReducerProp) => state.rootCampaigns.campaigns)
@@ -39,7 +44,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         if (campaign.id !== selectedCampaign.id) {
           dispatch(setSelectedCampaign(campaign))
         }
-        if (pathArray.length >= 3 && isValidSessionSlug(pathArray[2])) {
+        if (pathArray.length >= 3 && isValidSessionSlug(pathArray[2]) && campaign.campaign.sessions) {
           let filteredSession = Object.entries(campaign.campaign.sessions)
             .filter(([, session]: [string, ISession]) => session.slug === pathArray[2])
             .map(([id, session]: [string, ISession]) => { return { id: id, session: session } })
@@ -111,9 +116,35 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         <Route exact path="/:campaignSlug">
           <Campaign />
         </Route>
-        {selectedCampaign && isDungeonMaster ? <MiscBox /> : null}
       </>
-    </Container>
+      {isDungeonMaster ?
+        <Fab
+          icon={<AddIcon />}
+          alwaysShowTitle={true}
+          onClick={() => console.log("clicked")}
+        >
+          <Action
+            text="New session"
+            onClick={() => {
+              dispatch(setSelectedSession({ id: "", session: initialSelectedSessionState }))
+              history.push(`/${selectedCampaign.campaign.slug}/new`);
+            }}
+          ></Action>
+          <Action
+            text="New Character"
+            onClick={() => console.log("clicked h")}
+          >
+            <i className="fa fa-help" />
+          </Action>
+          <Action
+            text="New Place"
+            onClick={() => console.log("clicked h")}
+          >
+            <i className="fa fa-help" />
+          </Action>
+        </Fab> : null
+      }
+    </Container >
   );
 };
 const Container = styled.div`
