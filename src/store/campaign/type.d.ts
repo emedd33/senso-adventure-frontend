@@ -27,6 +27,8 @@ interface ICampaign {
 }
 interface ICharacter {
   name: string;
+  summary: string;
+  slug: string;
   isPlayer: string;
   race: string;
   alignment: string;
@@ -44,23 +46,55 @@ interface ICharacter {
   Inventory?: string;
 }
 interface IStats {
-  armorClass: string;
-  speed: string;
-  hitPoints: string;
-  proficiency: string;
+  armorClass: number;
+  speed: number;
+  hitPoints: number;
+  tempHitPoints?: number;
+  proficiency: number;
+  passivePerception: number;
+  inspiration?: string;
   strength: number;
   dexterity: number;
   wisdom: number;
   constitution: number;
   intelligence: number;
   charisma: number;
-  savingThrows: ISavingThrows
+  savingThrows: ISavingThrows;
+  skills: ISkills;
 }
 interface ISavingThrows {
-  strength: number;
-  dexterity: number;
-  wisdom: number;
-  constitution: number;
-  intelligence: number;
-  charisma: number;
+  strength: ISavingThrowsInfo;
+  dexterity: ISavingThrowsInfo;
+  wisdom: ISavingThrowsInfo;
+  constitution: ISavingThrowsInfo;
+  intelligence: ISavingThrowsInfo;
+  charisma: ISavingThrowsInfo;
+}
+interface ISkills {
+  athletics: ISkillInfo;
+  acrobatics: ISkillInfo;
+  sleightOfHand: ISkillInfo;
+  stealth: ISkillInfo;
+  arcana: ISkillInfo;
+  history: ISkillInfo;
+  investigation: ISkillInfo;
+  nature: ISkillInfo;
+  religion: ISkillInfo;
+  animalHandling: ISkillInfo;
+  insight: ISkillInfo;
+  medicine: numISkillInfober;
+  perception: ISkillInfo;
+  survival: ISkillInfo;
+  deception: ISkillInfo;
+  intimidation: ISkillInfo;
+  performance: ISkillInfo;
+  persuasion: ISkillInfo;
+}
+interface ISavingThrowsInfo {
+  value: number;
+  proficient: string;
+}
+interface ISkillInfo {
+  value: number;
+  proficient: string;
 }

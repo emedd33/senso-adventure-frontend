@@ -5,6 +5,9 @@ export const getSelectedSession = (state: RootReducerProp) => state.selected.sel
 export const getSelectedCampaign = (state: RootReducerProp) => {
     return state.selected.selectedCampaign
 }
+export const getSelectedCharacter = (state: RootReducerProp) => {
+    return state.selected.selectedCharacter
+}
 
 
 export const isDungeonMasterSelector = (state: RootReducerProp) => {
@@ -41,19 +44,23 @@ export const getSelectedCampaignDatabaseRef = (state: RootReducerProp) => {
     }
 }
 
-export const getPlayerCharacter = (state: RootReducerProp) => {
+export const getPlayerCharacters = (state: RootReducerProp) => {
     let players;
-    if (state.selected.selectedCampaign) {
-        players = state.selected.selectedCampaign.campaign.characters?.filter((character: ICharacter) => character.isPlayer === "TRUE")
+    if (state.selected.selectedCampaign && state.selected.selectedCampaign.campaign.characters) {
+        players = Object.entries(state.selected.selectedCampaign.campaign.characters)
+            .filter(([, character]) => character.isPlayer === "TRUE")
+            .map((player) => { return { id: player[0], character: player[1] } })
     }
     return players ? players : []
 
 }
-export const getNpc = (state: RootReducerProp) => {
-    let npc;
-    if (state.selected.selectedCampaign) {
-        npc = state.selected.selectedCampaign.campaign.characters?.filter((character: ICharacter) => character.isUnique === "TRUE")
+export const getUniqueNpc = (state: RootReducerProp) => {
+    let npcs;
+    if (state.selected.selectedCampaign && state.selected.selectedCampaign.campaign.characters) {
+        npcs = Object.entries(state.selected.selectedCampaign.campaign.characters)
+            .filter(([, character]) => character.isUnique === "TRUE")
+            .map(([id, character]) => { return { id: id, character: character } })
     }
-    return npc ? npc : []
+    return npcs ? npcs : []
 
 }

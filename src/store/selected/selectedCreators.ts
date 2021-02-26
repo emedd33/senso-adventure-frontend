@@ -27,7 +27,7 @@ export const clearSelectedCampaign = () => {
 
 
 
-export const setSelectedCharacter = (selectedCharacter?: ISelectedPlayer) => {
+export const setSelectedCharacter = (selectedCharacter?: ISelectedCharacter) => {
   return {
     type: SET_SELECTED_CHARACTER,
     payload: selectedCharacter,

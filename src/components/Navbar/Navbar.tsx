@@ -96,7 +96,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                       : path.charAt(0).toUpperCase() + path.slice(1);
                     let linkPath = urlPathArray.slice(0, index + 1).join("/");
                     linkPath = !linkPath ? "/" : linkPath;
-                    if (urlPathArray.length - 1 !== index) {
+                    if (urlPathArray.length - 1 !== index && crumb !== "Sessions" && crumb !== "Characters") {
                       return (
                         <Link
                           to={linkPath}

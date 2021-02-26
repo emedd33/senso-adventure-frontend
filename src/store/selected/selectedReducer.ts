@@ -3,9 +3,7 @@ import {
   SET_BACKGROUND_IMAGE,
   SET_SELECTED_CAMPAIGN,
   SET_SELECTED_CHARACTER,
-  SET_SELECTED_PLAYER,
   SET_SELECTED_SESSION,
-  UPDATE_SELECTED_PLAYER,
 } from "./selectedActions";
 
 export const initialSelectedCampaignState = {
@@ -27,13 +25,9 @@ export const initialSelectedSessionState = {
   date: new Date().toDateString(),
   campaignTitle: "",
 };
-const initialSelectedState: SelectedState = {
-  selectedSession: { id: "", session: initialSelectedSessionState },
-  selectedCampaign: { id: "", campaign: initialSelectedCampaignState },
-  selectedCharacter: { isNew: true, player: {} },
-};
+
 const selectedReducer = (
-  state: SelectedState = initialSelectedState,
+  state: SelectedState = {},
   action: SelectedActions
 ): SelectedState => {
   switch (action.type) {

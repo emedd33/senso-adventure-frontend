@@ -1,24 +1,36 @@
 import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Scroll from "../../components/Scroll/Scroll";
 import { useHistory } from "react-router-dom";
-import { getNpc, getPlayerCharacter, getSelectedCampaign } from "../../store/selected/selectedSelectors";
+import { getUniqueNpc, getPlayerCharacters, getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
+import { Link } from "@material-ui/core";
+import { setSelectedCharacter, setSelectedSession } from "../../store/selected/selectedCreators";
 
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
+    const dispatch = useDispatch()
     const selectedCampaign = useSelector(getSelectedCampaign);
-    const playerCharacters = useSelector(getPlayerCharacter)
-    const npcs = useSelector(getNpc)
+    const playerCharacters = useSelector(getPlayerCharacters)
+    const npcs = useSelector(getUniqueNpc)
+    console.log(npcs)
     return (
         <>
             <Overview >
                 <h2>players</h2>
-                {playerCharacters.map((player: ICharacter) => <h2>{player.name}</h2>)}
+                {playerCharacters.map((player: { id: string, character: ICharacter }) => <h2>{player.character.name}</h2>)}
                 <h2>npc</h2>
-                {npcs.map((npc: ICharacter) => <h2>{npc.name}</h2>)}
+                {npcs.map((npc: { id: string, character: ICharacter }) => <Link href="#" onClick={() => {
+                    if (selectedCampaign) {
+                        dispatch(setSelectedCharacter(npc))
+                        history.push(`/${selectedCampaign.campaign.title}/characters/${npc.character.name}`)
+                    }
+                }
+                }>
+                    Link
+  </Link>)}
 
 
             </Overview>
@@ -35,6 +47,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                     campaignTitle={session.campaignTitle}
                                     sessionDay={session.sessionDay}
                                     onClick={() => {
+                                        dispatch(setSelectedSession({ id: id, session: session }))
                                         history.push(`/${selectedCampaign.campaign.slug}/sessions/${session.slug}`);
                                     }}
                                 />

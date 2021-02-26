@@ -7,7 +7,7 @@ import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSessionNew from "./CampaignSessionNew";
 import CampaignCharacterNew from "./CampaignCharacterNew";
 import CampaignSession from "./CampaignSession";
-import { getSelectedCampaign, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign, getSelectedSession, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 import { storage } from "../../firebase";
 import { setSelectedCampaign, setSelectedSession } from "../../store/selected/selectedCreators";
 import isValidSessionSlug from "../../utils/isValidSessionslug"
@@ -18,52 +18,49 @@ import { getIsLoading } from "../../store/admin/adminSelectors";
 import { Fab, Action } from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';
 import { initialSelectedSessionState } from "../../store/selected/selectedReducer";
+import CampaignCharacter from "./CampaignCharacter";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
-  const location = useLocation();
+  const pathArray = useLocation().pathname.split("/")
   const history = useHistory();
 
   const dispatch = useDispatch()
   const isLoading = useSelector(getIsLoading)
   const campaigns = useSelector((state: RootReducerProp) => state.rootCampaigns.campaigns)
   const selectedCampaign = useSelector(getSelectedCampaign);
+  const selectedSession = useSelector(getSelectedSession);
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
   const [imageUrl, setImageUrl] = useState("");
   const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
 
   useEffect(() => {
-    let pathArray = location.pathname.split("/")
-    if (selectedCampaign) {
 
-      if (pathArray.length >= 2) {
-        let filteredCampaign = Object.entries(campaigns)
-          .filter(([, campaign]: [string, ICampaign]) => {
-            return campaign.slug === pathArray[1]
-          })
-          .map(([id, campaign]: [string, ICampaign]) => { return { id: id, campaign: campaign } })
-        if (filteredCampaign.length >= 1) {
-          let campaign = { id: filteredCampaign[0].id, campaign: filteredCampaign[0].campaign }
-          if (campaign.id !== selectedCampaign.id) {
-            dispatch(setSelectedCampaign(campaign))
-          }
-          if (pathArray.length >= 4) {
-            if (pathArray[2] === "sessions") {
-              if (isValidSessionSlug(pathArray[3]) && campaign.campaign.sessions) {
-                let filteredSession = Object.entries(campaign.campaign.sessions)
-                  .filter(([, session]: [string, ISession]) => session.slug === pathArray[3])
-                  .map(([id, session]: [string, ISession]) => { return { id: id, session: session } })
-                if (filteredSession.length >= 1) {
-                  let session = { id: filteredSession[0].id, session: filteredSession[0].session }
-                  dispatch(setSelectedSession(session))
-                }
+    if (pathArray.length >= 2) {
+      let filteredCampaign = Object.entries(campaigns)
+        .filter(([, campaign]: [string, ICampaign]) => {
+          return campaign.slug === pathArray[1]
+        })
+        .map(([id, campaign]: [string, ICampaign]) => { return { id: id, campaign: campaign } })
+      if (filteredCampaign.length >= 1) {
+        let campaign = { id: filteredCampaign[0].id, campaign: filteredCampaign[0].campaign }
+        dispatch(setSelectedCampaign(campaign))
+        if (pathArray.length >= 4) {
+          if (pathArray[2] === "sessions") {
+            if (isValidSessionSlug(pathArray[3]) && campaign.campaign.sessions) {
+              let filteredSession = Object.entries(campaign.campaign.sessions)
+                .filter(([, session]: [string, ISession]) => session.slug === pathArray[3])
+                .map(([id, session]: [string, ISession]) => { return { id: id, session: session } })
+              if (filteredSession.length >= 1) {
+                let session = { id: filteredSession[0].id, session: filteredSession[0].session }
+                dispatch(setSelectedSession(session))
               }
             }
           }
         }
       }
     }
-  }, [location, campaigns, dispatch, selectedCampaign])
+  }, [dispatch, campaigns])
   useEffect(() => {
     setIsLoading(true)
     if (selectedCampaign) {
@@ -93,7 +90,11 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     }
   },
     [selectedCampaign, dispatch])
-  if (isLoading) {
+
+  if (pathArray.length >= 2 && !selectedCampaign) {
+    return <IsLoading />
+  }
+  if (pathArray.length >= 4 && !selectedSession) {
     return <IsLoading />
   }
   return (
@@ -122,9 +123,15 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         <Route exact path="/:campaignSlug/sessions/:sessionSlug/edit">
           {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
         </Route>
-        <Route exact path="/:campaignSlug/characters/new">
-          {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
-        </Route>
+        <Switch>
+
+          <Route exact path="/:campaignSlug/characters/new">
+            {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
+          </Route>
+          <Route exact path="/:campaignSlug/characters/:characterSlug">
+            <CampaignCharacter />
+          </Route>
+        </Switch>
         <Route exact path="/:campaignSlug">
           <Campaign />
         </Route>

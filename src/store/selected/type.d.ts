@@ -20,8 +20,7 @@ type SelectedActions = {
 type SelectedPlayerAction = {
   type: string;
 };
-type ISelectedPlayer = {
-  isNew: boolean;
-  player: any;
-  id?: string;
+type ISelectedCharacter = {
+  character: any;
+  id: string;
 };
