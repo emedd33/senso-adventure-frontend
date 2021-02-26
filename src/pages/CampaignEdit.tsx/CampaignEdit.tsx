@@ -8,7 +8,9 @@ import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { campaignsRef, firebaseStorageRef, storage } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
+import { getAuthUser } from "../../store/admin/adminSelectors";
 import { useImageFile } from "../../store/hooks/useImageFile";
+import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import { isValidImageFile } from "../../utils/isValidImageFile";
 
 export interface CampaignEditProps { isNew: boolean }
@@ -26,15 +28,9 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   }, []);
 
   const [isLoading, setIsLoading] = useState(false);
-  const selectedCampaign = useSelector(
-    (state: RootReducerProp) => state.selected.selectedCampaign
-  );
-  const [campaignTitle, setCampaignTitle] = useState<string>(
-    selectedCampaign.campaign.title
-  );
-  const userName = useSelector(
-    (state: RootReducerProp) => state.admin.authUser?.username
-  );
+  const selectedCampaign = useSelector(getSelectedCampaign);
+  const [campaignTitle, setCampaignTitle] = useState<string>();
+  const userName = useSelector(getAuthUser)
   const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false);
   const [
     campaignBackgroundImageFile,
@@ -44,6 +40,11 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
     "TitleImage"
   );
 
+  useEffect(() => {
+    if (selectedCampaign) {
+      setCampaignTitle(selectedCampaign.campaign.title)
+    }
+  }, [selectedCampaign])
   const submit = async () => {
     setIsLoading(true);
     if (!campaignTitle) {
@@ -68,10 +69,12 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
         .push(newCampaign)
         .catch((e) => console.log("Could not update campaing "));
     } else {
-      await campaignsRef
-        .child(selectedCampaign.id)
-        .set(newCampaign)
-        .catch((e) => console.log("Could not update campaing " + e));
+      if (campaignsRef && selectedCampaign) {
+        await campaignsRef
+          .child(selectedCampaign.id)
+          .set(newCampaign)
+          .catch((e) => console.log("Could not update campaing " + e));
+      }
     }
 
     const metadata = {

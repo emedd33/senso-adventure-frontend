@@ -35,7 +35,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                     campaignTitle={session.campaignTitle}
                                     sessionDay={session.sessionDay}
                                     onClick={() => {
-                                        history.push(`/${selectedCampaign.campaign.slug}/${session.slug}`);
+                                        history.push(`/${selectedCampaign.campaign.slug}/sessions/${session.slug}`);
                                     }}
                                 />
                             );

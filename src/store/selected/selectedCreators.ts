@@ -3,18 +3,13 @@ import { Dispatch } from "redux";
 import {
   REFRESH_SELECTED_CAMPAIGN,
   SET_SELECTED_CAMPAIGN,
-  SET_SELECTED_PLAYER,
+  SET_SELECTED_CHARACTER,
   SET_SELECTED_SESSION,
-  UPDATE_SELECTED_PLAYER,
 } from "./selectedActions";
 import { initialSelectedCampaignState } from "./selectedReducer";
 
 
-export const dispatchSetSelectedPlayer = (selectedPlayer: ISelectedPlayer) => {
-  return async (dispatch: Dispatch) => {
-    dispatch(setSelectedPlayer(selectedPlayer));
-  };
-};
+
 
 export const refreshSelectedCampaign = (campaigns: ICampaign[]) => {
   return async (dispatch: Dispatch) => {
@@ -30,18 +25,12 @@ export const clearSelectedCampaign = () => {
   };
 };
 
-export const updateSelectedPlayer = (update: any) => {
-  return {
-    type: UPDATE_SELECTED_PLAYER,
-    payload: update,
-  };
-};
 
 
-export const setSelectedPlayer = (selectedPlayer?: ISelectedPlayer) => {
+export const setSelectedCharacter = (selectedCharacter?: ISelectedPlayer) => {
   return {
-    type: SET_SELECTED_PLAYER,
-    payload: selectedPlayer,
+    type: SET_SELECTED_CHARACTER,
+    payload: selectedCharacter,
   };
 };
 export const setSelectedCampaign = (selectedCampaign?: ISelectedCampaign) => {

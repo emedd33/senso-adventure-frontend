@@ -37,7 +37,7 @@ const Home: FunctionComponent<HomeProps> = () => {
               campaignTitle={session.session.campaignTitle}
               sessionDay={session.session.sessionDay}
               onClick={() => {
-                history.push(`${session.session.campaignTitle.replace(/\s/g, '')}/${session.session.slug}`);
+                history.push(`${session.session.campaignTitle.replace(/\s/g, '')}/sessions/${session.session.slug}`);
               }}
             />
           );

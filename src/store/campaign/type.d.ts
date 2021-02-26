@@ -30,11 +30,11 @@ interface ICharacter {
   isPlayer: string;
   race: string;
   alignment: string;
-  languages: string[];
-  immunities: string[];
+  languages?: string[];
+  immunities?: string[];
   stats: IStats;
-  actions: CharacterAction[];
-  senses: string[];
+  actions?: CharacterAction[];
+  senses?: string[];
   isUnique: string;
   challengeRating?: string;
   playerName?: string;

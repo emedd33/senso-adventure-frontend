@@ -32,33 +32,36 @@ const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
     );
 
     const submitSession = () => {
-        if (!sessionTitle) {
-            setSessionTitleError(true);
-            dispatch(
-                setAlertDialog("Please fille out the Session Title", true, true)
-            );
-            return;
-        }
+        if (selectedCampaign) {
 
-        const toUpload = {
-            campaign: selectedCampaign.id,
-            date: sessionDate ? sessionDate : new Date().toDateString(),
-            title: sessionTitle,
-            subTitle: sessionSubTitle ? sessionSubTitle : "",
-            campaignTitle: selectedCampaign.campaign.title,
-            sessionDay: sessionDay ? sessionDay : 1,
-            slug: sessionTitle.replace(/\s/g, '')
-        };
-        campaignsRef
-            .child(selectedCampaign.id)
-            .child("sessions")
-            .push(toUpload)
-            .then((snap) => {
-                snap.once("value", async (snapshot: any) => {
-                    dispatch(setSelectedSession({ id: snapshot.key, session: snapshot.val() }))
-                    history.push(`/${selectedCampaign.campaign.slug}/${toUpload.slug}/edit`);
+            if (!sessionTitle) {
+                setSessionTitleError(true);
+                dispatch(
+                    setAlertDialog("Please fille out the Session Title", true, true)
+                );
+                return;
+            }
+
+            const toUpload = {
+                campaign: selectedCampaign.id,
+                date: sessionDate ? sessionDate : new Date().toDateString(),
+                title: sessionTitle,
+                subTitle: sessionSubTitle ? sessionSubTitle : "",
+                campaignTitle: selectedCampaign.campaign.title,
+                sessionDay: sessionDay ? sessionDay : 1,
+                slug: sessionTitle.replace(/\s/g, '')
+            };
+            campaignsRef
+                .child(selectedCampaign.id)
+                .child("sessions")
+                .push(toUpload)
+                .then((snap) => {
+                    snap.once("value", async (snapshot: any) => {
+                        dispatch(setSelectedSession({ id: snapshot.key, session: snapshot.val() }))
+                        history.push(`/${selectedCampaign.campaign.slug}/sessions/${toUpload.slug}/edit`);
+                    });
                 });
-            });
+        }
 
     };
 

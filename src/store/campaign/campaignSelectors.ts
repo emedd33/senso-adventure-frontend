@@ -4,7 +4,7 @@
 
 export const getNewSessionDay = (state: RootReducerProp) => {
   console.log(state)
-  if (state.selected.selectedCampaign.campaign.sessions) {
+  if (state.selected.selectedCampaign?.campaign.sessions) {
     return Object.keys(state.selected.selectedCampaign.campaign.sessions).length + 1
   }
   return 1
@@ -38,12 +38,15 @@ export const getAllSessions = (state: RootReducerProp) => {
 };
 
 export const getNextSession = (state: RootReducerProp) => {
-  let selectedSessionDay = state.selected.selectedSession.session.sessionDay;
-  if (typeof selectedSessionDay === "number" && state.selected.selectedCampaign.campaign.sessions) {
+  let selectedSessionDay = state.selected.selectedSession?.session.sessionDay;
+  if (selectedSessionDay && typeof selectedSessionDay === "number" && state.selected.selectedCampaign?.campaign.sessions) {
     let nextSession = Object.entries(
       state.selected.selectedCampaign.campaign.sessions
     ).filter(([id, session]) => {
-      return session.sessionDay === selectedSessionDay + 1;
+      if (selectedSessionDay) {
+        return session.sessionDay === selectedSessionDay + 1;
+      }
+      return false
     });
     if (nextSession[0]) {
       return {
@@ -55,12 +58,15 @@ export const getNextSession = (state: RootReducerProp) => {
   return null;
 };
 export const getPreviousSession = (state: RootReducerProp) => {
-  let selectedSessionDay = state.selected.selectedSession.session.sessionDay;
-  if (typeof selectedSessionDay === "number" && state.selected.selectedCampaign.campaign.sessions) {
+  let selectedSessionDay = state.selected.selectedSession?.session.sessionDay;
+  if (typeof selectedSessionDay === "number" && state.selected.selectedCampaign?.campaign.sessions) {
     let previousSession = Object.entries(
-      state.selected.selectedCampaign.campaign.sessions
+      state.selected.selectedCampaign?.campaign.sessions
     ).filter(([id, session]) => {
-      return session.sessionDay === selectedSessionDay - 1;
+      if (selectedSessionDay) {
+        return session.sessionDay === selectedSessionDay - 1;
+      }
+      return false
     });
     if (previousSession[0]) {
       return {

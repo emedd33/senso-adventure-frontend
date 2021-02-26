@@ -1,7 +1,7 @@
 type SelectedState = {
-  selectedCampaign: { id: string; campaign: ICampaign };
-  selectedSession: ISelectedSession;
-  selectedPlayer: ISelectedPlayer;
+  selectedCampaign?: { id: string; campaign: ICampaign };
+  selectedSession?: ISelectedSession;
+  selectedCharacter?: ISelectedCharacter;
   backgroundImage?: string;
 };
 

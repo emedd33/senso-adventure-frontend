@@ -29,39 +29,42 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const nextSession = useSelector(getNextSession);
     const previousSession = useSelector(getPreviousSession);
     useEffect(() => {
-        if (selectedSession.session && selectedSession.id) {
-            storageRef
-                .child("SessionStory.html")
-                .getDownloadURL()
-                .then((url) => {
-                    fetch(url)
-                        .then((res) => res.text())
-                        .then((res) => {
-                            const text = parseSessionStory(res, isDungeonMaster);
-                            setSessionStory(text ? text : "new story");
-                        })
-                }).catch(e => { console.log("Could not fetch session story") })
+        if (selectedSession) {
 
-            storageRef
-                .child("SessionImages").listAll()
-                .then((res) => {
-                    res.items.forEach((itemRef) => {
-                        itemRef.getDownloadURL()
-                            .then(url => {
-                                setSessionImages(urls => {
-                                    if (!urls.includes(url)) {
-                                        return [...urls, url]
-                                    }
-                                    return urls
-                                })
+            if (selectedSession.session && selectedSession.id && storageRef) {
+                storageRef
+                    .child("SessionStory.html")
+                    .getDownloadURL()
+                    .then((url) => {
+                        fetch(url)
+                            .then((res) => res.text())
+                            .then((res) => {
+                                const text = parseSessionStory(res, isDungeonMaster);
+                                setSessionStory(text ? text : "new story");
                             })
-                            .catch(e => console.log("Could not connect to firebase", e))
+                    }).catch(e => { console.log("Could not fetch session story") })
+
+                storageRef
+                    .child("SessionImages").listAll()
+                    .then((res) => {
+                        res.items.forEach((itemRef) => {
+                            itemRef.getDownloadURL()
+                                .then(url => {
+                                    setSessionImages(urls => {
+                                        if (!urls.includes(url)) {
+                                            return [...urls, url]
+                                        }
+                                        return urls
+                                    })
+                                })
+                                .catch(e => console.log("Could not connect to firebase", e))
+                        });
+
+                    }).catch((error) => {
+                        console.log("Error fetching session images", error)
                     });
 
-                }).catch((error) => {
-                    console.log("Error fetching session images", error)
-                });
-
+            }
         }
         return () => {
             setSessionStory("")
@@ -134,7 +137,10 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                             color="primary"
                             variant="contained"
                             onClick={() => {
-                                history.push(`/${selectedCampaign.campaign.slug}/${selectedSession.session.slug}/edit`);
+                                if (selectedCampaign && selectedSession) {
+
+                                    history.push(`/${selectedCampaign.campaign.slug}/sessions/${selectedSession.session.slug}/edit`);
+                                }
                             }}
                         >
                             <EditIcon />

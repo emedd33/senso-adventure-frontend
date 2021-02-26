@@ -21,6 +21,7 @@ import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Tooltip from '@material-ui/core/Tooltip';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
 import { getIsLoading } from "../../store/admin/adminSelectors";
+import { setSelectedSession } from "../../store/selected/selectedCreators";
 
 const useStyles = makeStyles({
     root: {
@@ -46,15 +47,15 @@ const CampaignSessionEdit: React.FC = () => {
 
     const [savedText, setSavedText] = useState<string>("")
 
-    const [sessionDate, setSessionDate] = useState<string>(new Date(selectedSession.session.date).toDateString())
-    const [savedSessionDate, setSavedSessionDate] = useState<string>(new Date(selectedSession.session.date).toDateString())
+    const [sessionDate, setSessionDate] = useState<string>(new Date().toDateString())
+    const [savedSessionDate, setSavedSessionDate] = useState<string>(new Date().toDateString())
 
-    const [sessionSubTitle, setSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
-    const [SavedSessionSubTitle, setSavedSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
+    const [sessionSubTitle, setSessionSubTitle] = useState<string>("");
+    const [SavedSessionSubTitle, setSavedSessionSubTitle] = useState<string>("");
     const storageRef = useSelector(getSelectedSessionStorageRef)
     const databaseRef = useSelector(getSelectedSessionDatabaseRef)
-    const [sessionDay, setSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
-    const [savedSessionDay, setSavedSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
+    const [sessionDay, setSessionDay] = useState<number>(1);
+    const [savedSessionDay, setSavedSessionDay] = useState<number>(1);
 
     const [newSessionImages, setNewSessionImages] = useState<any[]>([]);
     const [ImageUploaderKey, setImageUploaderKey] = useState(0);
@@ -86,79 +87,95 @@ const CampaignSessionEdit: React.FC = () => {
         }
     }, [quill, insertSecretToEditor]);
     useEffect(() => {
-        storageRef
-            .child("SessionImages").listAll()
-            .then((res) => {
-                res.items.forEach((itemRef) => {
-                    let name = itemRef.name
-                    itemRef.getDownloadURL()
-                        .then(url => {
-                            setExistingSessionImages(images => {
-                                if (!images.map(img => img.name).includes(name)) {
-                                    return [...images, { url: url, name: name }]
-                                }
-                                return images
+        if (selectedSession && storageRef) {
+
+            setSessionDate(new Date(selectedSession.session.date).toDateString())
+            setSavedSessionDate(new Date(selectedSession.session.date).toDateString())
+            if (selectedSession.session.subTitle) {
+                setSessionSubTitle(selectedSession.session.subTitle)
+                setSavedSessionSubTitle(selectedSession.session.subTitle)
+            }
+            setSessionDay(selectedSession.session.sessionDay)
+            setSavedSessionDay(selectedSession.session.sessionDay)
+            storageRef
+                .child("SessionImages").listAll()
+                .then((res) => {
+                    res.items.forEach((itemRef) => {
+                        let name = itemRef.name
+                        itemRef.getDownloadURL()
+                            .then(url => {
+                                setExistingSessionImages(images => {
+                                    if (!images.map(img => img.name).includes(name)) {
+                                        return [...images, { url: url, name: name }]
+                                    }
+                                    return images
+                                })
                             })
-                        })
-                        .catch(e => console.log("Could not connect to firebase", e))
+                            .catch(e => console.log("Could not connect to firebase", e))
+                    });
+
+                }).catch((error) => {
+                    console.log("Error fetching session images", error)
                 });
+            storageRef.child("SessionStory.html")
+                .getDownloadURL()
+                .then(url =>
+                    fetch(url)
+                        .then(res => res.text())
+                        .then(resText => {
+                            console.log("resText", resText)
+                            if (quill) {
+                                const delta = quill.clipboard.convert(resText)
+                                if (delta) {
+                                    quill.setContents(delta, "api");
 
-            }).catch((error) => {
-                console.log("Error fetching session images", error)
-            });
-        storageRef.child("SessionStory.html")
-            .getDownloadURL()
-            .then(url =>
-                fetch(url)
-                    .then(res => res.text())
-                    .then(resText => {
-                        console.log("resText", resText)
-                        if (quill) {
-                            const delta = quill.clipboard.convert(resText)
-                            if (delta) {
-                                quill.setContents(delta, "api");
-
+                                }
+                                setSavedText(resText)
                             }
-                            setSavedText(resText)
-                        }
-                    })
-                    .catch((e) => console.log("Could not fetch sessionstory", e))
-            )
-            .catch((e) => console.log("Could not connect to firebase for sessionstory", e))
+                        })
+                        .catch((e) => console.log("Could not fetch sessionstory", e))
+                )
+                .catch((e) => console.log("Could not connect to firebase for sessionstory", e))
+        }
 
         return (() => {
             setNewSessionImages([])
             setExistingSessionImages([])
         })
-    }, [storageRef, quill])
+    }, [storageRef, quill, selectedSession])
 
 
     useInterval(async () => {    // Your custom logic here 
-        if (quill && quill.root.innerHTML !== savedText) {
-            console.log("quill.root.innerHTML", quill.root.innerHTML)
-            console.log("savedtext", savedText);
-            setIsUploading(true)
-            setSavedText(quill.root.innerHTML)
-            storageRef
-                .child("SessionStory.html")
-                .putString(quill.root.innerHTML)
-                .catch(e => console.log("Could not update session story", e))
+        if (storageRef) {
+            if (quill && quill.root.innerHTML !== savedText) {
+                console.log("quill.root.innerHTML", quill.root.innerHTML)
+                console.log("savedtext", savedText);
+                setIsUploading(true)
+                setSavedText(quill.root.innerHTML)
+                storageRef
+                    .child("SessionStory.html")
+                    .putString(quill.root.innerHTML)
+                    .catch(e => console.log("Could not update session story", e))
+            }
         }
-        if (sessionSubTitle !== SavedSessionSubTitle) {
-            setIsUploading(true)
-            databaseRef.child("subTitle").set(sessionSubTitle)
-            setSavedSessionSubTitle(sessionSubTitle)
-        }
-        if (sessionDate !== savedSessionDate) {
-            setIsUploading(true)
-            databaseRef.child("date").set(sessionDate)
-            setSavedSessionDate(sessionDate)
-        }
+        if (databaseRef) {
 
-        if (sessionDay !== savedSessionDay) {
-            setIsUploading(true)
-            databaseRef.child("sessionDay").set(sessionDay)
-            setSavedSessionDay(sessionDay)
+            if (sessionSubTitle !== SavedSessionSubTitle) {
+                setIsUploading(true)
+                databaseRef.child("subTitle").set(sessionSubTitle)
+                setSavedSessionSubTitle(sessionSubTitle)
+            }
+            if (sessionDate !== savedSessionDate) {
+                setIsUploading(true)
+                databaseRef.child("date").set(sessionDate)
+                setSavedSessionDate(sessionDate)
+            }
+
+            if (sessionDay !== savedSessionDay) {
+                setIsUploading(true)
+                databaseRef.child("sessionDay").set(sessionDay)
+                setSavedSessionDay(sessionDay)
+            }
         }
         sleep(2000).then(() => {
             setIsUploading(false)
@@ -168,41 +185,47 @@ const CampaignSessionEdit: React.FC = () => {
 
     const submitImages = async () => {
         setIsUploadingImages(true)
-        await Promise.all(newSessionImages.map(
-            newImage => {
-                let uploadTask =
-                    storageRef
-                        .child("SessionImages")
-                        .child(newImage.name)
-                        .put(newImage)
-                return uploadTask.on('state_changed',
-                    () => { },
-                    (error) => {
-                        console.log(`Could not upload ${newImage.name}`, error)
-                    },
-                    () => {
-                        let name = uploadTask.snapshot.ref.name
-                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                            setExistingSessionImages((images) => [...images, { name: name, url: downloadURL }])
-                            return downloadURL
-                        });
-                    }
-                );
-            })).then((res) => {
-                setNewSessionImages([])
-                setImageUploaderKey(ImageUploaderKey + 1);
-                setIsUploadingImages(false)
-            })
+        if (storageRef) {
+
+            await Promise.all(newSessionImages.map(
+                newImage => {
+                    let uploadTask =
+                        storageRef
+                            .child("SessionImages")
+                            .child(newImage.name)
+                            .put(newImage)
+                    return uploadTask.on('state_changed',
+                        () => { },
+                        (error) => {
+                            console.log(`Could not upload ${newImage.name}`, error)
+                        },
+                        () => {
+                            let name = uploadTask.snapshot.ref.name
+                            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                                setExistingSessionImages((images) => [...images, { name: name, url: downloadURL }])
+                                return downloadURL
+                            });
+                        }
+                    );
+                })).then((res) => {
+                    setNewSessionImages([])
+                    setImageUploaderKey(ImageUploaderKey + 1);
+                    setIsUploadingImages(false)
+                })
+        }
     }
     const removeImage = (deleteImage: any) => {
-        storageRef
-            .child("SessionImages")
-            .child(deleteImage.name)
-            .delete()
-            .then(() => setExistingSessionImages(existingSessionImages.filter(existingImg => existingImg !== deleteImage)))
-            .catch(e => console.log("Could not remove image file", e))
+        if (storageRef) {
+
+            storageRef
+                .child("SessionImages")
+                .child(deleteImage.name)
+                .delete()
+                .then(() => setExistingSessionImages(existingSessionImages.filter(existingImg => existingImg !== deleteImage)))
+                .catch(e => console.log("Could not remove image file", e))
+        }
     }
-    if (isLoading) {
+    if (isLoading || !selectedSession) {
         return <IsLoading />;
     }
     return (

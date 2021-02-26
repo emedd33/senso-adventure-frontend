@@ -10,33 +10,50 @@ export const getSelectedCampaign = (state: RootReducerProp) => {
 export const isDungeonMasterSelector = (state: RootReducerProp) => {
     let username = state.admin.authUser?.username;
     if (username) {
-        return state.selected.selectedCampaign.campaign.dungeonMaster === username;
+        return state.selected.selectedCampaign?.campaign.dungeonMaster === username;
     }
     return false;
 };
 
 export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
     console.log(state)
-    return storage.ref()
-        .child("Campaigns")
-        .child(state.selected.selectedCampaign?.campaign?.title)
-        .child("Sessions")
-        .child(state.selected.selectedSession?.session?.title)
+    if (state.selected.selectedCampaign && state.selected.selectedSession) {
+        return storage.ref()
+            .child("Campaigns")
+            .child(state.selected.selectedCampaign?.campaign?.title)
+            .child("Sessions")
+            .child(state.selected.selectedSession?.session?.title)
+    }
 }
 export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
-    return campaignsRef
-        .child(state.selected?.selectedCampaign?.id)
-        .child("sessions")
-        .child(state.selected?.selectedSession?.id)
+    if (state.selected.selectedCampaign && state.selected.selectedSession) {
+        return campaignsRef
+            .child(state.selected?.selectedCampaign?.id)
+            .child("sessions")
+            .child(state.selected?.selectedSession?.id)
+    }
 
+}
+export const getSelectedCampaignDatabaseRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign) {
+        return campaignsRef
+            .child(state.selected?.selectedCampaign?.id)
+    }
 }
 
 export const getPlayerCharacter = (state: RootReducerProp) => {
-    let players = state.selected.selectedCampaign.campaign.characters?.filter((character: ICharacter) => character.isPlayer === "TRUE")
+    let players;
+    if (state.selected.selectedCampaign) {
+        players = state.selected.selectedCampaign.campaign.characters?.filter((character: ICharacter) => character.isPlayer === "TRUE")
+    }
     return players ? players : []
+
 }
 export const getNpc = (state: RootReducerProp) => {
-    let npc = state.selected.selectedCampaign.campaign.characters?.filter((character: ICharacter) => character.isUnique === "TRUE")
+    let npc;
+    if (state.selected.selectedCampaign) {
+        npc = state.selected.selectedCampaign.campaign.characters?.filter((character: ICharacter) => character.isUnique === "TRUE")
+    }
     return npc ? npc : []
 
 }
