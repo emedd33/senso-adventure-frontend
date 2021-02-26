@@ -6,7 +6,7 @@ import IsLoading from "../../components/IsLoading/IsLoading";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker } from "@material-ui/pickers";
-import ReactQuill from 'react-quill';
+import Editor from "../../components/CustomQuillToolbar/CustomQuillToolbar"
 import 'react-quill/dist/quill.snow.css';
 import "react-markdown-editor-lite/lib/index.css";
 import styled from "styled-components";
@@ -18,22 +18,8 @@ import CardActions from '@material-ui/core/CardActions';
 import ClearIcon from '@material-ui/icons/Clear';
 import useInterval from "../../store/hooks/useInterval";
 import { getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
-const modules = {
-    toolbar: [
-        [{ 'header': [1, 2, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-        ['link'],
-        ['clean']
-    ],
-}
 
-const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link',
-]
+
 const useStyles = makeStyles({
     root: {
         maxWidth: 345,
@@ -46,9 +32,8 @@ const useStyles = makeStyles({
     },
 });
 
-export interface CampaignSessionEditProps { }
 
-const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
+const CampaignSessionEdit: React.FC = () => {
 
     const selectedSession = useSelector(
         (state: RootReducerProp) => state.selected.selectedSession
@@ -67,7 +52,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     const [SavedSessionSubTitle, setSavedSessionSubTitle] = useState<string | undefined>(selectedSession.session.subTitle);
     const storageRef = useSelector(getSelectedSessionStorageRef)
     const databaseRef = useSelector(getSelectedSessionDatabaseRef)
-
     const [sessionDay, setSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
     const [savedSessionDay, setSavedSessionDay] = useState<number | undefined>(selectedSession.session.sessionDay);
 
@@ -81,7 +65,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
             .then((res) => {
                 res.items.forEach((itemRef) => {
                     let name = itemRef.name
-                    console.log(name)
                     itemRef.getDownloadURL()
                         .then(url => {
                             setExistingSessionImages(images => {
@@ -116,7 +99,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
     useInterval(async () => {    // Your custom logic here 
         if (text !== undefined && text !== savedText) {
             setIsUploading(true)
-            console.log("Uploading: ", text)
             setSavedText(text)
             storageRef
                 .child("SessionStory.html")
@@ -252,9 +234,9 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
                 </div>
             </div>
             <EditContainer>
-
-                <ReactQuill theme="snow" value={text} onChange={setText} modules={modules} style={{ border: "none", backgroundColor: "white" }}
-                    formats={formats} />
+                <Editor />
+                {/* <ReactQuill theme="snow" value={text} onChange={setText} modules={modules} style={{ border: "none", backgroundColor: "white" }}
+                    formats={formats} /> */}
             </EditContainer>
 
             <h1>Session Images</h1>
@@ -281,7 +263,6 @@ const CampaignSessionEdit: React.FC<CampaignSessionEditProps> = () => {
 
 
                         {existingSessionImages.map((img) => {
-                            console.log(img)
                             return (
 
                                 <Card className={classes.root}>
