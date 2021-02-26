@@ -23,7 +23,6 @@ export const dispatchLogin = (payload: ILogin) => {
         }
         dispatch(setAlertDialog(errorMessage, true, true));
       })
-      .finally(() => dispatch(setIsLoading(false)));
   };
 };
 export const dispatchLogout = () => {
@@ -37,7 +36,6 @@ export const dispatchLogout = () => {
       .catch((error) => {
         dispatch({ type: SET_ALERT_DIALOG, payload: "An error has occured" });
       })
-      .finally(() => dispatch(setIsLoading(false)));
   };
 };
 export const dispatchSignup = (payload: any) => {

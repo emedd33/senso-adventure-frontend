@@ -54,6 +54,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     }
   }, [location, campaigns, dispatch, selectedCampaign])
   useEffect(() => {
+    setIsLoading(true)
     let campaignRef = storage
       .ref("Campaigns")
       .child(selectedCampaign.campaign.title);
@@ -68,7 +69,6 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       })
       .catch((e) => console.log("could not fetch background image"))
     // Fetching Title Image
-    dispatch(setIsLoading(true))
     campaignRef
       .child("TitleImage")
       .getDownloadURL()
@@ -81,9 +81,6 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     [selectedCampaign, dispatch])
   if (isLoading) {
     return <IsLoading />
-  }
-  if (!isLoading && !selectedCampaign.id) {
-    return <Redirect to="/" />
   }
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>

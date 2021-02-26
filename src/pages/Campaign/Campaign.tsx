@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import Scroll from "../../components/Scroll/Scroll";
 import { useHistory } from "react-router-dom";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
+import styled from "styled-components";
+import { OLD_WHITE } from "../../assets/constants/Constants";
 
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
@@ -12,6 +14,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     return (
         <>
             {/* <Characters /> */}
+            <Overview />
             <div style={{ width: "50%", minWidth: "20rem" }}>
                 {selectedCampaign && selectedCampaign.campaign.sessions ?
                     Object.entries(selectedCampaign.campaign.sessions).map(
@@ -36,5 +39,10 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         </>
     );
 };
-
+const Overview = styled.div`
+width:70%;
+height:20rem;
+min-width:20rem;
+background-color: ${OLD_WHITE}
+`
 export default Campaign;

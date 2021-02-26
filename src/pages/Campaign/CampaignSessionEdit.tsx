@@ -20,6 +20,7 @@ import { useQuill } from 'react-quilljs';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Tooltip from '@material-ui/core/Tooltip';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
+import { getIsLoading } from "../../store/admin/adminSelectors";
 
 const useStyles = makeStyles({
     root: {
@@ -41,6 +42,7 @@ const CampaignSessionEdit: React.FC = () => {
     );
     const [isUploading, setIsUploading] = useState(false)
     const [isUploadingImages, setIsUploadingImages] = useState(false)
+    const isLoading = useSelector(getIsLoading)
 
     const [savedText, setSavedText] = useState<string>("")
 
@@ -200,7 +202,7 @@ const CampaignSessionEdit: React.FC = () => {
             .then(() => setExistingSessionImages(existingSessionImages.filter(existingImg => existingImg !== deleteImage)))
             .catch(e => console.log("Could not remove image file", e))
     }
-    if (!selectedSession) {
+    if (isLoading) {
         return <IsLoading />;
     }
     return (
