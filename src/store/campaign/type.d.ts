@@ -8,7 +8,7 @@ interface ISession {
   subTitle?: string;
   slug: string;
 }
-interface CharacterAction {
+interface ICharacterAction {
   name: string,
   description: string,
   tags: string[]
@@ -33,15 +33,15 @@ interface ICharacter {
   race: string;
   alignment: string;
   languages?: string[];
+  isDead?: string;
   immunities?: string[];
   stats: IStats;
-  actions?: CharacterAction[];
+  actions?: ICharacterAction[];
   senses?: string[];
   isUnique: string;
   challengeRating?: string;
   playerName?: string;
   level?: number;
-  isDead?: string;
   class?: string;
   Inventory?: string;
 }

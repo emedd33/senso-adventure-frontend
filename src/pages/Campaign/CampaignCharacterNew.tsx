@@ -6,13 +6,16 @@ import { OLD_WHITE } from "../../assets/constants/Constants";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { getSelectedCampaignDatabaseRef } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign, getSelectedCampaignDatabaseRef } from "../../store/selected/selectedSelectors";
 import { setSelectedCharacter } from "../../store/selected/selectedCreators";
+import { useHistory } from "react-router-dom";
 
 type CampaignCharacterNewProps = {};
 const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () => {
     const dispatch = useDispatch()
+    const history = useHistory()
     const [characterName, setCharacterName] = useState("")
+    const selectedCampaign = useSelector(getSelectedCampaign)
     const [characterNameError, setCharacterNameError] = useState(false)
     const [characterType, setCharacterType] = useState("npc")
     const campaignRef = useSelector(getSelectedCampaignDatabaseRef)
@@ -35,6 +38,7 @@ const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () =>
                 isUnique: "TRUE",
                 languages: ["Common"],
                 isDead: "FALSE",
+                actions: [{ name: "bite", description: "A fowerful bite", tags: ["nom nom"] }],
                 stats: {
                     armorClass: 12,
                     speed: 30,
@@ -79,7 +83,13 @@ const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () =>
             }
 
             setCharacterNameError(false)
-            campaignRef.child("characters").push(newCharacter).then(() => dispatch(setSelectedCharacter))
+            campaignRef.child("characters").push(newCharacter).then((snapshot) => {
+                let characterId = snapshot.key
+                if (characterId) {
+                    history.push(`/${selectedCampaign!.campaign.slug}/characters/${newCharacter.slug}`)
+                    dispatch(setSelectedCharacter({ id: characterId, character: newCharacter }))
+                }
+            })
         }
     }
     return (

@@ -22,7 +22,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 <h2>players</h2>
                 {playerCharacters.map((player: { id: string, character: ICharacter }) => <h2>{player.character.name}</h2>)}
                 <h2>npc</h2>
-                {npcs.map((npc: { id: string, character: ICharacter }) => <Link to={`/${selectedCampaign!.campaign.slug}/characters/${npc.character.slug}`} >Link</Link>)}
+                {npcs.map((npc: { id: string, character: ICharacter }) => <div><Link to={`/${selectedCampaign!.campaign.slug}/characters/${npc.character.slug}`} >{npc.character.name} </Link></div>)}
 
 
             </Overview>
