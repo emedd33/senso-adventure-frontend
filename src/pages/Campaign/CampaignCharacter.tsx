@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { getSelectedCampaign, getSelectedCharacter } from "../../store/selected/selectedSelectors";
+import { getSelectedCharacter } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
@@ -10,8 +9,6 @@ import addPlusMinusPrefix from "../../utils/addPlusMinusPrefix";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 type CampaignProps = {};
 const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
-    const history = useHistory();
-    const selectedCampaign = useSelector(getSelectedCampaign);
     const selectedCharacter = useSelector(getSelectedCharacter)
     const parseProficiency = (proficient: any) => {
         if (proficient === "TRUE") {
@@ -148,12 +145,10 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                     {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.charisma.value)}
                     </div>
                 </div>
-                <div style={{ width: "100%", borderBottom: "double" }}>
 
-                </div>
-                <div style={{ display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", flexWrap: "wrap" }}>
-                    <div style={{ display: "flex", width: "15rem", flexDirection: "column", alignItems: "center" }}>
-                        <table style={{ width: "14rem" }}>
+                <div style={{ display: "flex", width: "100%", justifyContent: "space-around", flexDirection: "row", flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Table >
                             <tr>
                                 <TableHeader >Proficient</TableHeader>
                                 <TableHeader >Modifier</TableHeader>
@@ -189,10 +184,10 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <TableElement>{selectedCharacter.character.stats.skills.history.value}</TableElement>
                                 <TableElement>History (Int)</TableElement>
                             </tr>
-                        </table>
+                        </Table>
                     </div>
-                    <div style={{ display: "flex", width: "15rem", flexDirection: "column", alignItems: "center" }}>
-                        <table style={{ width: "14rem" }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Table >
                             <tr>
                                 <TableHeader >Proficient</TableHeader>
                                 <TableHeader >Modifier</TableHeader>
@@ -228,10 +223,10 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <TableElement>{selectedCharacter.character.stats.skills.perception.value}</TableElement>
                                 <TableElement>Perception (Wis)</TableElement>
                             </tr>
-                        </table>
+                        </Table>
                     </div>
-                    <div style={{ display: "flex", width: "15rem", flexDirection: "column", alignItems: "center" }}>
-                        <table style={{ width: "14rem" }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Table >
                             <tr>
                                 <TableHeader >Proficient</TableHeader>
                                 <TableHeader >Modifier</TableHeader>
@@ -267,7 +262,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <TableElement>{selectedCharacter.character.stats.skills.survival.value}</TableElement>
                                 <TableElement>Survival (Wis)</TableElement>
                             </tr>
-                        </table>
+                        </Table>
                     </div>
                 </div>
 
@@ -300,8 +295,15 @@ display:flex;
 align-items:center;
 justify-items:flex-start;
 font-size:1.2rem;
-
 `
+const Table = styled.table`
+margin:0.3rem;
+border-radius:0.2rem;
+border: double;
+width:20rem;
+padding:0.2rem;
+`
+
 const TableHeader = styled.th`
 text-align: center
 `

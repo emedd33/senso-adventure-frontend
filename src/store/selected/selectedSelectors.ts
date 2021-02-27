@@ -19,7 +19,6 @@ export const isDungeonMasterSelector = (state: RootReducerProp) => {
 };
 
 export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
-    console.log(state)
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
         return storage.ref()
             .child("Campaigns")

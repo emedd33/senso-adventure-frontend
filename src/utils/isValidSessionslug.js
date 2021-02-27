@@ -1,4 +1,4 @@
-const isValidSessionSlug = (slug) => {
+const isValidSlug = (slug) => {
     if (slug) {
         if (slug !== "new") {
             return true
@@ -6,4 +6,5 @@ const isValidSessionSlug = (slug) => {
     }
     return false
 }
-export default isValidSessionSlug
+export default isValidSlug
+

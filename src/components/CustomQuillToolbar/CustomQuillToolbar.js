@@ -31,7 +31,6 @@ const StoryEditor = () => {
     React.useEffect(() => {
         if (quill) {
             // Add custom handler for Image Upload
-            console.log("useEffect")
             quill.getModule('toolbar').addHandler('ql-secret', insertSecretToEditor);
         }
     }, [quill]);

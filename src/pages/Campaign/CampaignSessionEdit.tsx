@@ -82,7 +82,6 @@ const CampaignSessionEdit: React.FC = () => {
     React.useEffect(() => {
         if (quill) {
             // Add custom handler for Image Upload
-            console.log("useEffect")
             quill.getModule('toolbar').addHandler('ql-secret', insertSecretToEditor);
         }
     }, [quill, insertSecretToEditor]);
@@ -123,7 +122,6 @@ const CampaignSessionEdit: React.FC = () => {
                     fetch(url)
                         .then(res => res.text())
                         .then(resText => {
-                            console.log("resText", resText)
                             if (quill) {
                                 const delta = quill.clipboard.convert(resText)
                                 if (delta) {
@@ -148,8 +146,6 @@ const CampaignSessionEdit: React.FC = () => {
     useInterval(async () => {    // Your custom logic here 
         if (storageRef) {
             if (quill && quill.root.innerHTML !== savedText) {
-                console.log("quill.root.innerHTML", quill.root.innerHTML)
-                console.log("savedtext", savedText);
                 setIsUploading(true)
                 setSavedText(quill.root.innerHTML)
                 storageRef

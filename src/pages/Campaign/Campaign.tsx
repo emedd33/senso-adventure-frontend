@@ -5,8 +5,8 @@ import { useHistory } from "react-router-dom";
 import { getUniqueNpc, getPlayerCharacters, getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
-import { Link } from "@material-ui/core";
-import { setSelectedCharacter, setSelectedSession } from "../../store/selected/selectedCreators";
+import { Link } from "react-router-dom";
+import { setSelectedSession } from "../../store/selected/selectedCreators";
 
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
@@ -15,22 +15,14 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const selectedCampaign = useSelector(getSelectedCampaign);
     const playerCharacters = useSelector(getPlayerCharacters)
     const npcs = useSelector(getUniqueNpc)
-    console.log(npcs)
+
     return (
         <>
             <Overview >
                 <h2>players</h2>
                 {playerCharacters.map((player: { id: string, character: ICharacter }) => <h2>{player.character.name}</h2>)}
                 <h2>npc</h2>
-                {npcs.map((npc: { id: string, character: ICharacter }) => <Link href="#" onClick={() => {
-                    if (selectedCampaign) {
-                        dispatch(setSelectedCharacter(npc))
-                        history.push(`/${selectedCampaign.campaign.title}/characters/${npc.character.name}`)
-                    }
-                }
-                }>
-                    Link
-  </Link>)}
+                {npcs.map((npc: { id: string, character: ICharacter }) => <Link to={`/${selectedCampaign!.campaign.slug}/characters/${npc.character.slug}`} >Link</Link>)}
 
 
             </Overview>

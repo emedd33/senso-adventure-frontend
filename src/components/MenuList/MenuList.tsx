@@ -78,7 +78,6 @@ export default function MenuListComposition() {
             textDecoration: "none",
             color: "black",
             textTransform: "none",
-            fontSize: "1rem",
           }}
         >
           <span
@@ -92,7 +91,6 @@ export default function MenuListComposition() {
               style={{
                 margin: "0",
                 paddingLeft: "1rem",
-                fontFamily: "italianno, cursive",
               }}
             >
               Login
@@ -119,11 +117,7 @@ export default function MenuListComposition() {
             aria-controls={open ? "menu-list-grow" : undefined}
             aria-haspopup="true"
             onClick={handleToggle}
-            style={{
-              fontFamily: "italianno, cursive",
-              fontSize: "1.5rem",
-              textTransform: "none",
-            }}
+
           >
             {authUser.username}
             <AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
@@ -155,10 +149,7 @@ export default function MenuListComposition() {
                         style={{ textDecoration: "none", color: "black" }}
                       >
                         <MenuItem
-                          style={{
-                            fontFamily: "italianno, cursive",
-                            fontSize: "1.5rem",
-                          }}
+
                           onClick={() => setOpen(false)}
                         >
                           Profile

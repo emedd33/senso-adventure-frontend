@@ -103,8 +103,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                           style={{
                             textDecoration: "none",
                             color: "black",
-                            fontFamily: "italianno, cursive",
-                            fontSize: "1.5rem",
                           }}
                           key={index}
                         >
@@ -118,9 +116,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                           style={{
                             textDecoration: "none",
                             color: "black",
-                            fontFamily: "italianno, cursive",
-                            fontSize: "1.5rem",
-                            opacity: 0.8,
+                            opacity: 0.5,
                           }}
                           key={index}
                         >
@@ -242,14 +238,12 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 };
 const Title = styled.h2`
   margin-left: 2vh;
-  width: 10rem;
-  font-size: 1.7rem;
+  width: 15rem;
 `;
 const CampaignTitle = styled.h1`
 padding;0;
 margin:0;
 width:100%;
-font-size: 2rem;
 margin-left:2vw;
 :hover {
     color: #ed1212;
@@ -271,7 +265,6 @@ const NavBarHeader = styled.div`
 const NavBarOpenIcon = styled(Link)`
   margin-left: 2rem;
   marin-ritgh: 2rem;
-  font-size: 2rem;
   background: none;
 `;
 

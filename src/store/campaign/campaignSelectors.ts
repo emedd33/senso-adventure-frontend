@@ -3,7 +3,6 @@
 
 
 export const getNewSessionDay = (state: RootReducerProp) => {
-  console.log(state)
   if (state.selected.selectedCampaign?.campaign.sessions) {
     return Object.keys(state.selected.selectedCampaign.campaign.sessions).length + 1
   }
