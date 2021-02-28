@@ -21,6 +21,6 @@ type SelectedPlayerAction = {
   type: string;
 };
 type ISelectedCharacter = {
-  character: any;
+  character: ICharacter;
   id: string;
 };

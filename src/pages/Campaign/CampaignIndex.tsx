@@ -5,7 +5,7 @@ import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-d
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSessionNew from "./CampaignSessionNew";
-import CampaignCharacterNew from "./CampaignCharacterNew";
+import CampaignCharacterNew, { NEW_CHARACTER } from "./CampaignCharacterNew";
 import CampaignSession from "./CampaignSession";
 import { getSelectedCampaign, getSelectedCharacter, getSelectedSession, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 import { storage } from "../../firebase";
@@ -174,6 +174,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
 
             onClick={() => {
               if (selectedCampaign) {
+                dispatch(setSelectedCharacter({ id: "", character: NEW_CHARACTER }))
                 history.push(`/${selectedCampaign.campaign.slug}/characters/new`)
               }
             }

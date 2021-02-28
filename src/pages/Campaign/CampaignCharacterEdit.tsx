@@ -12,7 +12,6 @@ import { Button, Chip, Switch, TextField } from "@material-ui/core";
 import useInterval from "../../store/hooks/useInterval";
 import useSavedState from "../../store/hooks/useSavedState";
 import onChangeNumberField from "../../utils/onChangeNumberField";
-import parseValuesToString from "../../utils/parseValuesToString";
 type CampaignProps = {};
 const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const selectedCharacter: ISelectedCharacter | undefined = useSelector(getSelectedCharacter)
@@ -21,7 +20,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [race, setRace, saveRace, isSavedRace] = useSavedState(selectedCharacter?.character.race)
     const [characterClass, setCharacterClass, saveCharacterClass, isSavedCharacterClass] = useSavedState(selectedCharacter?.character.class)
     const [alignment, setAlignment, saveAlignment, isSavedAlignment] = useSavedState(selectedCharacter?.character.alignment)
-    const [challengeRating, setChallengeRating, saveChallengeRating, isSavedChallengeRating] = useSavedState("")
+    const [challengeRating, setChallengeRating, saveChallengeRating, isSavedChallengeRating] = useSavedState(selectedCharacter?.character.challengeRating)
     const [level, setLevel, saveLevel, isSavedLevel] = useSavedState(selectedCharacter?.character.level)
     const [summary, setSummary, saveSummary, isSavedSummary] = useSavedState(selectedCharacter?.character.summary)
     const [summaryError, setSummaryError] = useState(false)
@@ -36,7 +35,18 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [immunities, setImmunities, saveImmunities, isSavedImmunities] = useSavedState(selectedCharacter?.character.immunities ? selectedCharacter?.character.immunities : [])
     const [newImmunity, setNewImmunity] = useState("")
     const [isUnique, setIsUnique, saveIsUnique, isSavedIsUnique] = useSavedState(selectedCharacter?.character.isUnique === "TRUE")
-
+    const [strength, setStrength, saveStrength, isSavedStrength] = useSavedState(selectedCharacter?.character.stats.strength.value)
+    const [isStrengthProficient, setIsStrengthProficient, saveIsStrengthProficient, isSavedIsStrengthProficient] = useSavedState(selectedCharacter?.character.stats.strength.isProficient === "TRUE")
+    const [dexterity, setDexterity, saveDexterity, isSavedDexterity] = useSavedState(selectedCharacter?.character.stats.dexterity.value)
+    const [isDexterityProficient, setIsDexterityProficient, saveIsDexterityProficient, isSavedIsDexterityProficient] = useSavedState(selectedCharacter?.character.stats.dexterity.isProficient === "TRUE")
+    const [constitution, setConstitution, saveConstitution, isSavedConstitution] = useSavedState(selectedCharacter?.character.stats.constitution.value)
+    const [isConstitutionProficient, setIsConstitutionProficient, saveIsConstitutionProficient, isSavedIsConstitutionProficient] = useSavedState(selectedCharacter?.character.stats.constitution.isProficient === "TRUE")
+    const [wisdom, setWisdom, saveWisdom, isSavedWisdom] = useSavedState(selectedCharacter?.character.stats.wisdom.value)
+    const [isWisdomProficient, setIsWisdomProficient, saveIsWisdomProficient, isSavedIsWisdomProficient] = useSavedState(selectedCharacter?.character.stats.wisdom.isProficient === "TRUE")
+    const [intelligence, setIntelligence, saveIntelligence, isSavedIntelligence] = useSavedState(selectedCharacter?.character.stats.intelligence.value)
+    const [isIntelligenceProficient, setIsIntelligenceProficient, saveIsIntelligenceProficient, isSavedIsIntelligenceProficient] = useSavedState(selectedCharacter?.character.stats.intelligence.isProficient === "TRUE")
+    const [charisma, setCharisma, saveCharisma, isSavedCharisma] = useSavedState(selectedCharacter?.character.stats.charisma.value)
+    const [isCharismaProficient, setIsCharismaProficient, saveIsCharismaProficient, isSavedIsCharismaProficient] = useSavedState(selectedCharacter?.character.stats.charisma.isProficient === "TRUE")
 
     const parseStringBooleanToCheckmark = (proficient: any, setCross: boolean) => {
         if (proficient === "TRUE") {
@@ -122,6 +132,14 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 saveIsUnique()
                 characterRef.child("isUnique").set(isUnique ? "TRUE" : "FALSE")
             }
+            if (!isSavedStrength) {
+                saveStrength()
+                characterRef.child("stats").child("strength").child("value").set(strength)
+            }
+            if (!isSavedIsStrengthProficient) {
+                saveIsStrengthProficient()
+                characterRef.child("stats").child("strength").child("isProficient").set(isStrengthProficient ? "TRUE" : "FALSE")
+            }
         }
     }, 3000)
     if (selectedCharacter === undefined) {
@@ -188,6 +206,11 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     </div>
                 </NestedNestedContainer>
                 <NestedNestedContainer>
+                    <div style={{ paddingLeft: "0.3rem" }}>
+                        <TextField label="Proficiency" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={proficiency} onChange={(event) => onChangeNumberField(event.target.value, setProficiency, true, false)} />
+                    </div>
+                </NestedNestedContainer>
+                <NestedNestedContainer>
                     <div style={{ paddingLeft: "0.3rem", margin: "0.3rem" }}>
                         <TextField label="Hitpoints" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={hitPoints} onChange={(event) => onChangeNumberField(event.target.value, setHitPoints, true, false)} />
                     </div>
@@ -206,13 +229,8 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         {passivePerception}
                     </div>
                 </NestedNestedContainer>
-                <NestedNestedContainer>
-                    <div style={{ paddingLeft: "0.3rem" }}>
-                        <TextField label="Proficiency" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={proficiency} onChange={(event) => onChangeNumberField(event.target.value, setProficiency, true, false)} />
-                    </div>
-                </NestedNestedContainer>
-                <NestedNestedContainer>
-
+                <i>Calculated from Wisdom</i>
+                <NestedNestedContainer style={{ marginTop: "1rem" }}>
                     <div>
                         <b>Inspiration: </b>
                     </div>
@@ -227,8 +245,21 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     />
 
                 </NestedNestedContainer>
+                <NestedNestedContainer style={{ marginTop: "1rem" }}>
+                    <div>
+                        <b>Unique: </b>
+                    </div>
+                    <Switch
+                        checked={isUnique}
+                        onChange={(event) => {
+                            setIsUnique(event.target.checked)
+                        }}
+                        color="primary"
+                        name="checkedB"
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />
+                </NestedNestedContainer>
             </div>
-
             <div >
                 <NestedNestedContainer style={{ flexDirection: "column", width: "15rem", alignItems: "flex-start" }}>
 
@@ -253,73 +284,66 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         <Button variant="contained" color="primary" style={{ height: "2rem" }} onClick={() => newImmunity ? setImmunities((existingImmunities: string[]) => [...existingImmunities, newImmunity]) : null}>Add</Button>
                     </div>
                 </NestedNestedContainer>
-                <NestedNestedContainer>
-                    <div>
-                        <b>Unique: </b>
-                    </div>
-                    <Switch
-                        checked={isUnique}
-                        onChange={(event) => {
-                            setIsUnique(event.target.checked)
-                        }}
-                        color="primary"
-                        name="checkedB"
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                </NestedNestedContainer>
+
             </div>
-
             <div style={{ width: "100%", borderBottom: "double" }}></div>
-
             <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", flexDirection: "row", alignItems: "space-between", width: "100%" }}>
 
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>STR:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.strength)}),
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.strength.value)}
-                    </div>
+                    <TextField style={{ margin: "0.3rem" }} label="Value" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={strength} onChange={(event) => onChangeNumberField(event.target.value, setStrength, true, false)} />
+                    <p>Saving: {getAbilityModifier(strength, isStrengthProficient, proficiency)}</p>
+                    <Switch
+                        checked={isStrengthProficient}
+                        onChange={(event) => {
+                            setIsStrengthProficient(event.target.checked)
+                        }}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'primary checkbox' }} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>DEX:</b>
-                    {selectedCharacter.character.stats.dexterity}
-                    ({getAbilityModifier(selectedCharacter.character.stats.dexterity)}),
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.dexterity.value)}
-                    </div>
+                    <TextField style={{ margin: "0.3rem" }} label="Value" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={dexterity} onChange={(event) => onChangeNumberField(event.target.value, setDexterity, true, false)} />
+                    <p>Saving: {getAbilityModifier(dexterity, isDexterityProficient, proficiency)}</p>
+                    <Switch
+                        checked={isDexterityProficient}
+                        onChange={(event) => {
+                            setIsDexterityProficient(event.target.checked)
+                        }}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'primary checkbox' }} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CON:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.constitution)}),
+                    {selectedCharacter.character.stats.constitution.value}
+                    {/* ({getAbilityModifier(selectedCharacter.character.stats.constitution.value)}), */}
                     <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.constitution.value)}
+                    {/* {addPlusMinusPrefix(selectedCharacter.character.stats.constitution.savingThrow)} */}
                     </div>
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>INT:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.intelligence)}),
+                    {selectedCharacter.character.stats.intelligence.value}
+                    {/* ({getAbilityModifier(selectedCharacter.character.stats.intelligence.value)}), */}
                     <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.intelligence.value)}
+                    {/* {addPlusMinusPrefix(selectedCharacter.character.stats.intelligence.savingThrow)} */}
                     </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>WIS:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.wisdom)}),
+                    {selectedCharacter.character.stats.wisdom.value}
+                    {/* ({getAbilityModifier(selectedCharacter.character.stats.wisdom.value)}), */}
                     <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.wisdom.value)}
+                    {/* {addPlusMinusPrefix(selectedCharacter.character.stats.wisdom.savingThrow)} */}
                     </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CHA:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.charisma)}),
+                    {selectedCharacter.character.stats.charisma.value}
+                    {/* ({getAbilityModifier(selectedCharacter.character.stats.charisma.value)}), */}
                     <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.charisma.value)}
+                    {/* {addPlusMinusPrefix(selectedCharacter.character.stats.charisma.savingThrow)} */}
                     </div>
                 </div>
 

@@ -53,22 +53,17 @@ interface IStats {
   proficiency: number;
   passivePerception: number;
   inspiration?: string;
-  strength: number;
-  dexterity: number;
-  wisdom: number;
-  constitution: number;
-  intelligence: number;
-  charisma: number;
-  savingThrows: ISavingThrows;
+  strength: IAbility;
+  dexterity: IAbility;
+  wisdom: IAbility;
+  constitution: IAbility;
+  intelligence: IAbility;
+  charisma: IAbility;
   skills: ISkills;
 }
-interface ISavingThrows {
-  strength: ISavingThrowsInfo;
-  dexterity: ISavingThrowsInfo;
-  wisdom: ISavingThrowsInfo;
-  constitution: ISavingThrowsInfo;
-  intelligence: ISavingThrowsInfo;
-  charisma: ISavingThrowsInfo;
+interface IAbility {
+  value: number;
+  isProficient: string;
 }
 interface ISkills {
   athletics: ISkillInfo;

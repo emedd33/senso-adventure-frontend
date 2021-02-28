@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import getAbilityModifier from "../../utils/getAbilityModifier";
-import addPlusMinusPrefix from "../../utils/addPlusMinusPrefix";
 import parseValuesToString from "../../utils/parseValuesToString";
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -90,6 +89,15 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                 </NestedNestedContainer>
                 <NestedNestedContainer>
                     <div >
+                        <b>Proficiency: </b>
+                    </div>
+                    <div style={{ paddingLeft: "0.3rem" }}>
+                        {selectedCharacter.character.stats.proficiency}
+
+                    </div>
+                </NestedNestedContainer>
+                <NestedNestedContainer>
+                    <div >
                         <b>Hit points: </b>
                     </div>
                     <div style={{ paddingLeft: "0.3rem" }}>
@@ -114,21 +122,21 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                         {selectedCharacter.character.stats.passivePerception}
                     </div>
                 </NestedNestedContainer>
-                <NestedNestedContainer>
-                    <div >
-                        <b>Proficiency: </b>
-                    </div>
-                    <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.stats.proficiency}
 
-                    </div>
-                </NestedNestedContainer>
                 <NestedNestedContainer>
                     <div>
                         <b>Inspiration: </b>
                     </div>
                     <div style={{ paddingLeft: "0.3rem", display: "flex", justifyContent: "center" }}>
                         {parseStringBooleanToCheckmark(selectedCharacter.character.stats.inspiration, true)}
+                    </div>
+                </NestedNestedContainer>
+                <NestedNestedContainer>
+                    <div>
+                        <b>Unique: </b>
+                    </div>
+                    <div style={{ paddingLeft: "0.3rem", display: "flex", justifyContent: "center" }}>
+                        {parseStringBooleanToCheckmark(selectedCharacter.character.isUnique, true)}
                     </div>
                 </NestedNestedContainer>
             </NestedContainer>
@@ -149,14 +157,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
 
                     </div>
                 </NestedNestedContainer>
-                <NestedNestedContainer>
-                    <div>
-                        <b>Unique: </b>
-                    </div>
-                    <div style={{ paddingLeft: "0.3rem", display: "flex", justifyContent: "center" }}>
-                        {parseStringBooleanToCheckmark(selectedCharacter.character.isUnique, true)}
-                    </div>
-                </NestedNestedContainer>
+
             </NestedContainer>
 
             <div style={{ width: "100%", borderBottom: "double" }}></div>
@@ -165,51 +166,57 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
 
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>STR:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.strength)}),
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.strength.value)}
+                    {selectedCharacter.character.stats.strength.value}
+                    ({getAbilityModifier(selectedCharacter.character.stats.strength.value)}),
+                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem", display: "flex", justifyContent: "center" }}>
+                        {selectedCharacter.character.stats.strength.isProficient === "TRUE" ? <CheckIcon style={{ width: "0.8rem", color: "green" }} /> : null}Saving:
+                    {getAbilityModifier(selectedCharacter.character.stats.strength.value, selectedCharacter.character.stats.strength.isProficient, selectedCharacter.character.stats.proficiency)}
                     </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>DEX:</b>
-                    {selectedCharacter.character.stats.dexterity}
-                    ({getAbilityModifier(selectedCharacter.character.stats.dexterity)}),
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.dexterity.value)}
+                    {selectedCharacter.character.stats.dexterity.value}
+                    ({getAbilityModifier(selectedCharacter.character.stats.dexterity.value)}),
+                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem", display: "flex", justifyContent: "center" }}>
+                        {selectedCharacter.character.stats.dexterity.isProficient === "TRUE" ? <CheckIcon style={{ width: "0.8rem", color: "green" }} /> : null}Saving:
+                    {getAbilityModifier(selectedCharacter.character.stats.dexterity.value, selectedCharacter.character.stats.dexterity.isProficient, selectedCharacter.character.stats.proficiency)}
                     </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CON:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.constitution)}),
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.constitution.value)}
+                    {selectedCharacter.character.stats.constitution.value}
+                    ({getAbilityModifier(selectedCharacter.character.stats.constitution.value)}),
+                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem", display: "flex", justifyContent: "center" }}>
+                        {selectedCharacter.character.stats.constitution.isProficient === "TRUE" ? <CheckIcon style={{ width: "0.8rem", color: "green" }} /> : null}Saving:
+                    {getAbilityModifier(selectedCharacter.character.stats.constitution.value, selectedCharacter.character.stats.constitution.isProficient, selectedCharacter.character.stats.proficiency)}
                     </div>
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>INT:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.intelligence)}),
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.intelligence.value)}
+                    {selectedCharacter.character.stats.intelligence.value}
+                    ({getAbilityModifier(selectedCharacter.character.stats.intelligence.value)}),
+                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem", display: "flex", justifyContent: "center" }}>
+                        {selectedCharacter.character.stats.intelligence.isProficient === "TRUE" ? <CheckIcon style={{ width: "0.8rem", color: "green" }} /> : null}Saving:
+                    {getAbilityModifier(selectedCharacter.character.stats.intelligence.value, selectedCharacter.character.stats.intelligence.isProficient, selectedCharacter.character.stats.proficiency)}
                     </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>WIS:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.wisdom)}),
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.wisdom.value)}
+                    {selectedCharacter.character.stats.wisdom.value}
+                    ({getAbilityModifier(selectedCharacter.character.stats.wisdom.value)}),
+                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem", display: "flex", justifyContent: "center" }}>
+                        {selectedCharacter.character.stats.wisdom.isProficient === "TRUE" ? <CheckIcon style={{ width: "0.8rem", color: "green" }} /> : null}Saving:
+                    {getAbilityModifier(selectedCharacter.character.stats.wisdom.value, selectedCharacter.character.stats.wisdom.isProficient, selectedCharacter.character.stats.proficiency)}
                     </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CHA:</b>
-                    {selectedCharacter.character.stats.strength}
-                    ({getAbilityModifier(selectedCharacter.character.stats.charisma)}),
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {addPlusMinusPrefix(selectedCharacter.character.stats.savingThrows.charisma.value)}
+                    {selectedCharacter.character.stats.charisma.value}
+                    ({getAbilityModifier(selectedCharacter.character.stats.charisma.value)}),
+                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem", display: "flex", justifyContent: "center" }}>
+                        {selectedCharacter.character.stats.charisma.isProficient === "TRUE" ? <CheckIcon style={{ width: "0.8rem", color: "green" }} /> : null}Saving:
+                    {getAbilityModifier(selectedCharacter.character.stats.charisma.value, selectedCharacter.character.stats.charisma.isProficient, selectedCharacter.character.stats.proficiency)}
                     </div>
                 </div>
 

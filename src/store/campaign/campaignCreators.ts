@@ -2,8 +2,7 @@ import { Dispatch } from "redux";
 import { campaignsRef, firebaseAuth } from "../../firebase";
 import { SET_AUTH_USER, SET_IS_LOADING } from "../admin/adminActions";
 import { setIsLoading } from "../admin/adminCreator";
-import { refreshSelectedCampaign } from "../selected/selectedCreators";
-import { SET_CAMPAIGNS, SET_SESSIONS } from "./campaignActions";
+import { SET_CAMPAIGNS } from "./campaignActions";
 
 // Thunk function
 export async function fetchFromFirebase(dispatch: any) {
@@ -14,10 +13,6 @@ export async function fetchFromFirebase(dispatch: any) {
     let campaigns = snapshot.val();
     if (campaigns) {
       dispatch({ type: SET_CAMPAIGNS, payload: campaigns });
-      // Porcessing campaigns to extract all sessions
-      const sessions = getSessionsFromCampaign(campaigns);
-      dispatch(refreshSelectedCampaign(campaigns))
-      dispatch({ type: SET_SESSIONS, payload: sessions });
     }
   });
 

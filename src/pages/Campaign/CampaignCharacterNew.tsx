@@ -9,11 +9,54 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getSelectedCampaign, getSelectedCampaignDatabaseRef } from "../../store/selected/selectedSelectors";
 import { setSelectedCharacter } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
-
+export const NEW_CHARACTER: ICharacter = {
+    name: "",
+    summary: "A short summary",
+    slug: "",
+    race: "Human",
+    isPlayer: "TRUE",
+    alignment: "True neutral",
+    isUnique: "TRUE",
+    languages: ["Common"],
+    isDead: "FALSE",
+    actions: [{ name: "bite", description: "A fowerful bite", tags: ["nom nom"] }],
+    stats: {
+        armorClass: 12,
+        speed: 30,
+        hitPoints: 10,
+        proficiency: 2,
+        passivePerception: 10,
+        strength: { value: 10, isProficient: "FALSE" },
+        dexterity: { value: 10, isProficient: "FALSE" },
+        wisdom: { value: 10, isProficient: "FALSE" },
+        constitution: { value: 10, isProficient: "FALSE" },
+        intelligence: { value: 10, isProficient: "FALSE" },
+        charisma: { value: 10, isProficient: "FALSE" },
+        skills: {
+            athletics: { value: 0, proficient: "FALSE" },
+            acrobatics: { value: 0, proficient: "FALSE" },
+            sleightOfHand: { value: 0, proficient: "FALSE" },
+            stealth: { value: 0, proficient: "FALSE" },
+            arcana: { value: 0, proficient: "FALSE" },
+            history: { value: 0, proficient: "FALSE" },
+            investigation: { value: 0, proficient: "FALSE" },
+            nature: { value: 0, proficient: "FALSE" },
+            religion: { value: 0, proficient: "FALSE" },
+            animalHandling: { value: 0, proficient: "FALSE" },
+            insight: { value: 0, proficient: "FALSE" },
+            medicine: { value: 0, proficient: "FALSE" },
+            perception: { value: 0, proficient: "FALSE" },
+            survival: { value: 0, proficient: "FALSE" },
+            deception: { value: 0, proficient: "FALSE" },
+            intimidation: { value: 0, proficient: "FALSE" },
+            performance: { value: 0, proficient: "FALSE" },
+            persuasion: { value: 0, proficient: "FALSE" }
+        }
+    }
+}
 type CampaignCharacterNewProps = {};
 const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () => {
     const dispatch = useDispatch()
-    const history = useHistory()
     const [characterName, setCharacterName] = useState("")
     const selectedCampaign = useSelector(getSelectedCampaign)
     const [characterNameError, setCharacterNameError] = useState(false)
@@ -28,66 +71,17 @@ const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () =>
         if (campaignRef) {
             let isPlayer = characterType === "player" ? "TRUE" : "FALSE"
 
-            let newCharacter: ICharacter = {
-                name: characterName,
-                summary: "A short summary",
-                slug: characterName.replace(/\s/g, ''),
-                race: "Human",
-                isPlayer: isPlayer,
-                alignment: "True neutral",
-                isUnique: "TRUE",
-                languages: ["Common"],
-                isDead: "FALSE",
-                actions: [{ name: "bite", description: "A fowerful bite", tags: ["nom nom"] }],
-                stats: {
-                    armorClass: 12,
-                    speed: 30,
-                    hitPoints: 10,
-                    proficiency: 2,
-                    passivePerception: 10,
-                    strength: 10,
-                    dexterity: 10,
-                    wisdom: 10,
-                    constitution: 10,
-                    intelligence: 10,
-                    charisma: 10,
-                    savingThrows: {
-                        strength: { value: 0, proficient: "FALSE" },
-                        dexterity: { value: 0, proficient: "FALSE" },
-                        wisdom: { value: 0, proficient: "FALSE" },
-                        constitution: { value: 0, proficient: "FALSE" },
-                        intelligence: { value: 0, proficient: "FALSE" },
-                        charisma: { value: 0, proficient: "FALSE" }
-                    },
-                    skills: {
-                        athletics: { value: 0, proficient: "FALSE" },
-                        acrobatics: { value: 0, proficient: "FALSE" },
-                        sleightOfHand: { value: 0, proficient: "FALSE" },
-                        stealth: { value: 0, proficient: "FALSE" },
-                        arcana: { value: 0, proficient: "FALSE" },
-                        history: { value: 0, proficient: "FALSE" },
-                        investigation: { value: 0, proficient: "FALSE" },
-                        nature: { value: 0, proficient: "FALSE" },
-                        religion: { value: 0, proficient: "FALSE" },
-                        animalHandling: { value: 0, proficient: "FALSE" },
-                        insight: { value: 0, proficient: "FALSE" },
-                        medicine: { value: 0, proficient: "FALSE" },
-                        perception: { value: 0, proficient: "FALSE" },
-                        survival: { value: 0, proficient: "FALSE" },
-                        deception: { value: 0, proficient: "FALSE" },
-                        intimidation: { value: 0, proficient: "FALSE" },
-                        performance: { value: 0, proficient: "FALSE" },
-                        persuasion: { value: 0, proficient: "FALSE" }
-                    }
-                }
-            }
+            let newCharacter: ICharacter = NEW_CHARACTER
+            newCharacter.name = characterName
+            newCharacter.slug = characterName.replace(/\s/g, '')
+            newCharacter.isPlayer = isPlayer
 
             setCharacterNameError(false)
             campaignRef.child("characters").push(newCharacter).then((snapshot) => {
                 let characterId = snapshot.key
                 if (characterId) {
-                    history.push(`/${selectedCampaign!.campaign.slug}/characters/${newCharacter.slug}`)
                     dispatch(setSelectedCharacter({ id: characterId, character: newCharacter }))
+                    console.log(`/${selectedCampaign!.campaign.slug}/characters/${newCharacter.slug}`)
                 }
             })
         }
