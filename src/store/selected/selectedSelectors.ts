@@ -8,7 +8,9 @@ export const getSelectedCampaign = (state: RootReducerProp) => {
 export const getSelectedCharacter = (state: RootReducerProp) => {
     return state.selected.selectedCharacter
 }
-
+export const getSelectedCharacterIsPlayer = (state: RootReducerProp) => {
+    return state.selected.selectedCharacter?.character.isPlayer === "TRUE"
+}
 
 export const isDungeonMasterSelector = (state: RootReducerProp) => {
     let username = state.admin.authUser?.username;

@@ -1,21 +1,42 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { useSelector } from "react-redux";
-import { getSelectedCharacter, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
+import { getSelectedCharacter, getSelectedCharacterIsPlayer } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import getAbilityModifier from "../../utils/getAbilityModifier";
 import addPlusMinusPrefix from "../../utils/addPlusMinusPrefix";
-import parseValuesToString from "../../utils/parseValuesToString";
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
-import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { Button, Chip, Switch, TextField } from "@material-ui/core";
+import useInterval from "../../store/hooks/useInterval";
+import useSavedState from "../../store/hooks/useSavedState";
+import onChangeNumberField from "../../utils/onChangeNumberField";
+import parseValuesToString from "../../utils/parseValuesToString";
 type CampaignProps = {};
-const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
-    const history = useHistory()
-    const selectedCharacter = useSelector(getSelectedCharacter)
-    const isDungeonMaster = useSelector(isDungeonMasterSelector)
+const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
+    const selectedCharacter: ISelectedCharacter | undefined = useSelector(getSelectedCharacter)
+    const isPlayer = useSelector(getSelectedCharacterIsPlayer)
+    const [race, setRace, saveRace, isSavedRace] = useSavedState(selectedCharacter?.character.race)
+    const [characterClass, setCharacterClass, saveCharacterClass, isSavedCharacterClass] = useSavedState(selectedCharacter?.character.class)
+    const [alignment, setAlignment, saveAlignment, isSavedAlignment] = useSavedState(selectedCharacter?.character.alignment)
+    const [challengeRating, setChallengeRating, saveChallengeRating, isSavedChallengeRating] = useSavedState("")
+    const [level, setLevel, saveLevel, isSavedLevel] = useSavedState(selectedCharacter?.character.level)
+    const [summary, setSummary, saveSummary, isSavedSummary] = useSavedState(selectedCharacter?.character.summary)
+    const [summaryError, setSummaryError] = useState(false)
+    const [armorClass, setArmorClass, saveArmorClass, isSavedArmorClass] = useSavedState(selectedCharacter?.character.stats.armorClass)
+    const [hitPoints, setHitPoints, saveHitPoints, isSavedHitPoints] = useSavedState(selectedCharacter?.character.stats.hitPoints)
+    const [tempHitPoints, setTempHitPoints, saveTempHitPoints, isSavedTempHitPoints] = useSavedState(selectedCharacter?.character.stats.tempHitPoints)
+    const [passivePerception, setPassivePerception, savePassivePerception, isSavedPassivePerception] = useSavedState(selectedCharacter?.character.stats.passivePerception)
+    const [proficiency, setProficiency, saveProficiency, isSavedProficiency] = useSavedState(selectedCharacter?.character.stats.proficiency)
+    const [inspiration, setInspiration, saveInspiration, isSavedInspiration] = useSavedState(selectedCharacter?.character.stats.inspiration)
+    const [senses, setSenses, saveSenses, isSavedSenses] = useSavedState(selectedCharacter?.character.senses ? selectedCharacter?.character.senses : [])
+    const [newSens, setNewSens] = useState("")
+    const [immunities, setImmunities, saveImmunities, isSavedImmunities] = useSavedState(selectedCharacter?.character.immunities ? selectedCharacter?.character.immunities : [])
+    const [newImmunity, setNewImmunity] = useState("")
+    const [isUnique, setIsUnique, saveIsUnique, isSavedIsUnique] = useSavedState(selectedCharacter?.character.isUnique)
+
+
     const parseStringBooleanToCheckmark = (proficient: any, setCross: boolean) => {
         if (proficient === "TRUE") {
             return <CheckIcon style={{ width: "0.8rem", color: "green" }} />
@@ -25,11 +46,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
         }
         return null
     }
-    if (selectedCharacter === undefined) {
-        return (<Container><IsLoading /></Container>)
-    }
     const renderArrayOfString = (array: string[] | undefined) => {
-        console.log("array", array)
         if (!array) {
             return ""
         }
@@ -41,6 +58,56 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
             return `${elem}`
         })
     }
+    useInterval(() => {
+        if (!isSavedRace) {
+            saveRace()
+        }
+        if (!isSavedCharacterClass) {
+            saveCharacterClass()
+        }
+        if (!isSavedAlignment) {
+            saveAlignment()
+        }
+        if (!isSavedChallengeRating) {
+            saveChallengeRating()
+        }
+        if (!isSavedLevel) {
+            saveLevel()
+        }
+        if (!isSavedSummary) {
+            saveSummary()
+        }
+        if (!isSavedArmorClass) {
+            saveArmorClass()
+        }
+        if (!isSavedHitPoints) {
+            saveHitPoints()
+        }
+        if (!isSavedTempHitPoints) {
+            saveTempHitPoints()
+        }
+        if (!isSavedPassivePerception) {
+            savePassivePerception()
+        }
+        if (!isSavedProficiency) {
+            saveProficiency()
+        }
+        if (!isSavedInspiration) {
+            saveInspiration()
+        }
+        if (!isSavedSenses) {
+            saveSenses()
+        }
+        if (!isSavedImmunities) {
+            saveImmunities()
+        }
+        if (!isSavedIsUnique) {
+            saveIsUnique()
+        }
+    }, 3000)
+    if (selectedCharacter === undefined) {
+        return (<Container><IsLoading /></Container>)
+    }
     return (
         <Container>
             <NestedContainer style={{ flex: 1 }} >
@@ -48,116 +115,140 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                     <h1 style={{ marginBottom: "0" }}>
                         {selectedCharacter.character.name}
                     </h1>
-                    {isDungeonMaster ? <>
-                        <NestedContainer style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
-                            <Button onClick={() => history.push(`${selectedCharacter.character.slug}/edit`)} variant="contained" color="primary" style={{ maxHeight: "2rem", maxWidth: "3rem", }}>Edit</Button>
-                        </NestedContainer>
-                    </>
-                        : null
-                    }
+
                 </div>
                 <NestedNestedContainer>
                     <div style={{ marginLeft: "0.5rem" }}>
-                        {selectedCharacter.character.race},
-                </div>
+                        <TextField variant="outlined" label="Race" value={race} onChange={(event) => { console.log("onChange", event.target.value); setRace(event.target.value) }} />
+                    </div>
                     {selectedCharacter.character.class ?
                         <div style={{ marginLeft: "0.5rem" }}>
-                            {parseValuesToString(selectedCharacter.character.class)},
-                </div>
+                            <TextField variant="outlined" label="Class" value={characterClass} onChange={(event) => setCharacterClass(event.target.value)} />
+                        </div>
                         : null}
                     <div style={{ marginLeft: "0.5rem" }}>
-                        {selectedCharacter.character.alignment},
+                        <TextField variant="outlined" label="Alignment" value={alignment} onChange={(event) => setAlignment(event.target.value)} />
                     </div>
                     <div style={{ marginLeft: "0.5rem" }}>
-                        {selectedCharacter.character.isPlayer === "TRUE" ? `Level: ${parseValuesToString(selectedCharacter.character.level)}` : `CR: ${parseValuesToString(selectedCharacter.character.challengeRating)}`}
+                        {isPlayer ? (
+                            <TextField label="Level" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={level} onChange={(event) => onChangeNumberField(event.target.value, setLevel, true, false)} />
+
+                        ) : (
+                                <TextField variant="outlined" label="Challenge Rating" value={challengeRating} onChange={(event) => setChallengeRating(event.target.value)} />
+
+                            )}
                     </div>
                 </NestedNestedContainer>
 
             </NestedContainer>
-            <NestedContainer style={{ width: "100%" }} >
-                <div style={{ width: "100%", borderBottom: "double" }}></div>
+            <NestedContainer style={{ width: "100%", marginTop: "1rem", marginBottom: "1rem" }} >
 
-                <b>Summary: </b>{selectedCharacter.character.summary}
-                <div style={{ width: "100%", borderBottom: "double" }}></div>
+                <TextField
+                    label="Summary"
+                    multiline
+                    rows={4}
+                    value={summary}
+                    error={summaryError}
+                    onChange={(event) => {
+                        if (event.target.value.length > 400) {
+                            setSummaryError(true)
+                        } else {
+                            setSummaryError(false)
+                            setSummary(event.target.value)
+                        }
+                    }}
+                    defaultValue="Default Value"
+                    variant="filled"
+                />
 
             </NestedContainer>
-            <NestedContainer >
+            <div >
                 <NestedNestedContainer>
-                    <div ><b>Armor class: </b> </div>
-                    <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.stats.armorClass}
+                    <div style={{ paddingLeft: "0.3rem", margin: "0.3rem" }}>
+                        <TextField label="Armor Class" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={armorClass} onChange={(event) => onChangeNumberField(event.target.value, setArmorClass, true, false)} />
                     </div>
                 </NestedNestedContainer>
                 <NestedNestedContainer>
-                    <div >
-                        <b>Hit points: </b>
+                    <div style={{ paddingLeft: "0.3rem", margin: "0.3rem" }}>
+                        <TextField label="Hitpoints" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={hitPoints} onChange={(event) => onChangeNumberField(event.target.value, setHitPoints, true, false)} />
                     </div>
-                    <div style={{ paddingLeft: "0.3rem" }}>
+                </NestedNestedContainer>
+                <NestedNestedContainer>
+                    <div style={{ paddingLeft: "0.3rem", margin: "0.3rem" }}>
+                        <TextField label="Temporarly Hitpoints" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={tempHitPoints} onChange={(event) => onChangeNumberField(event.target.value, setTempHitPoints, true, false)} />
+                    </div>
+                </NestedNestedContainer>
+            </div>
 
-                        {selectedCharacter.character.stats.hitPoints}
-                    </div>
-                </NestedNestedContainer>
-                <NestedNestedContainer>
-                    <div >
-                        <b>Temporarly hitpoints: </b>
-                    </div>
-                    <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.stats.tempHitPoints}
-                    </div>
-                </NestedNestedContainer>
-            </NestedContainer>
-
-            <NestedContainer >
+            <div   >
                 <NestedNestedContainer>
                     <div ><b>Passive Perception: </b> </div>
                     <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.stats.passivePerception}
+                        {passivePerception}
                     </div>
                 </NestedNestedContainer>
                 <NestedNestedContainer>
-                    <div >
-                        <b>Proficiency: </b>
-                    </div>
                     <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.stats.proficiency}
-
+                        <TextField label="Proficiency" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={proficiency} onChange={(event) => onChangeNumberField(event.target.value, setProficiency, true, false)} />
                     </div>
                 </NestedNestedContainer>
                 <NestedNestedContainer>
+
                     <div>
                         <b>Inspiration: </b>
                     </div>
-                    <div style={{ paddingLeft: "0.3rem", display: "flex", justifyContent: "center" }}>
-                        {parseStringBooleanToCheckmark(selectedCharacter.character.stats.inspiration, true)}
+                    <Switch
+                        checked={inspiration}
+                        onChange={(event) => {
+                            setInspiration(event.target.checked)
+                        }}
+                        color="primary"
+                        name="checkedB"
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />
+
+                </NestedNestedContainer>
+            </div>
+
+            <div >
+                <NestedNestedContainer style={{ flexDirection: "column", width: "15rem", alignItems: "flex-start" }}>
+
+                    <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", margin: "0.3rem" }}>
+                        <b>Senses: </b>
+                        {senses ? senses.map((sens: string) => <Chip style={{ marginLeft: "0.2rem", backgroundColor: "white" }} label={sens} onDelete={() => setSenses((existingSenses: string[]) => existingSenses.filter((existingSens: string) => existingSens !== sens))} variant="outlined" />) : null}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "row", marginLeft: "1rem", alignItems: "center", margin: "0.3rem" }}>
+
+                        <TextField onKeyDown={(event) => (newSens && event.key === "Enter") ? setSenses((existingSenses: string[]) => [...existingSenses, newSens]) : null} style={{ marginTop: "0.5rem", marginRight: "0.5rem" }} variant="outlined" onChange={(event) => setNewSens(event.target.value)} label="Senses" value={newSens} />
+                        <Button variant="contained" color="primary" style={{ height: "2rem" }} onClick={() => newSens ? setSenses((existingSenses: string[]) => [...existingSenses, newSens]) : null}>Add</Button>
                     </div>
                 </NestedNestedContainer>
-            </NestedContainer>
-
-            <NestedContainer >
-                <NestedNestedContainer>
-                    <div ><b>Senses: </b> </div>
-                    <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.senses}
+                <NestedNestedContainer style={{ flexDirection: "column", alignItems: "flex-start", width: "15rem", }}>
+                    <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", margin: "0.3rem" }}>
+                        <b>Immunities: </b>
+                        {immunities ? immunities.map((immunity: string) => <Chip style={{ marginLeft: "0.2rem", backgroundColor: "white" }} label={immunity} onDelete={() => setImmunities((existingImmunities: string[]) => existingImmunities.filter((existingImmunity: string) => existingImmunity !== immunity))} variant="outlined" />) : null}
                     </div>
-                </NestedNestedContainer>
-                <NestedNestedContainer>
-                    <div >
-                        <b>Immunities : </b>
-                    </div>
-                    <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.immunities}
+                    <div style={{ display: "flex", flexDirection: "row", marginLeft: "1rem", alignItems: "center", margin: "0.3rem" }}>
 
+                        <TextField onKeyDown={(event) => (newImmunity && event.key === "Enter") ? setImmunities((existingImmunities: string[]) => [...existingImmunities, newImmunity]) : null} style={{ marginTop: "0.5rem", marginRight: "0.5rem" }} variant="outlined" onChange={(event) => setNewImmunity(event.target.value)} label="Immunities" value={newImmunity} />
+                        <Button variant="contained" color="primary" style={{ height: "2rem" }} onClick={() => newImmunity ? setImmunities((existingImmunities: string[]) => [...existingImmunities, newImmunity]) : null}>Add</Button>
                     </div>
                 </NestedNestedContainer>
                 <NestedNestedContainer>
                     <div>
                         <b>Unique: </b>
                     </div>
-                    <div style={{ paddingLeft: "0.3rem", display: "flex", justifyContent: "center" }}>
-                        {parseStringBooleanToCheckmark(selectedCharacter.character.isUnique, true)}
-                    </div>
+                    <Switch
+                        checked={isUnique}
+                        onChange={(event) => {
+                            setIsUnique(event.target.checked)
+                        }}
+                        color="primary"
+                        name="checkedB"
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />
                 </NestedNestedContainer>
-            </NestedContainer>
+            </div>
 
             <div style={{ width: "100%", borderBottom: "double" }}></div>
 
@@ -367,16 +458,14 @@ min-height:20rem;
 `;
 const NestedContainer = styled.div`
 display:grid;
-grid-template-columns: 1fr;
-justify-self: end;
-grid-gap:auto;
+grid-template-rows: 1fr ;
+justify-self: start;
 min-width:15rem;
 `
 
 const NestedNestedContainer = styled.div`
 display:flex;
-align-items:center;
-justify-items:flex-start;
+margin:0.2rem;
 font-size:1.2rem;
 `
 const Table = styled.table`
@@ -394,4 +483,4 @@ text-align: center
 const TableElement = styled.td`
 text-align: center
 `
-export default CampaignCharacter;
+export default CampaignCharacterEdit;

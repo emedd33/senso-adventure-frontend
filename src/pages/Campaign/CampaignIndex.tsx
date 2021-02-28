@@ -19,6 +19,7 @@ import 'react-tiny-fab/dist/styles.css';
 import { initialSelectedSessionState } from "../../store/selected/selectedReducer";
 import CampaignCharacter from "./CampaignCharacter";
 import isValidSlug from "../../utils/isValidSessionslug";
+import CampaignCharacterEdit from "./CampaignCharacterEdit";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
@@ -143,6 +144,9 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           </Route>
           <Route exact path="/:campaignSlug/characters/:characterSlug">
             <CampaignCharacter />
+          </Route>
+          <Route exact path="/:campaignSlug/characters/:characterSlug/edit">
+            {isDungeonMaster ? <CampaignCharacterEdit /> : <Redirect to={"/"} />}
           </Route>
         </Switch>
         <Route exact path="/:campaignSlug">
