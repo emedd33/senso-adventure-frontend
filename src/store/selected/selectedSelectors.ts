@@ -45,6 +45,15 @@ export const getSelectedCampaignDatabaseRef = (state: RootReducerProp) => {
     }
 }
 
+export const getSelectedCharacterDatabaseRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedCharacter) {
+        return campaignsRef
+            .child(state.selected?.selectedCampaign?.id)
+            .child("characters")
+            .child(state.selected.selectedCharacter.id)
+    }
+}
+
 export const getPlayerCharacters = (state: RootReducerProp) => {
     let players;
     if (state.selected.selectedCampaign && state.selected.selectedCampaign.campaign.characters) {

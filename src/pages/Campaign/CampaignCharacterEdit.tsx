@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { useSelector } from "react-redux";
-import { getSelectedCharacter, getSelectedCharacterIsPlayer } from "../../store/selected/selectedSelectors";
+import { getSelectedCharacter, getSelectedCharacterDatabaseRef, getSelectedCharacterIsPlayer } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
@@ -16,6 +16,7 @@ import parseValuesToString from "../../utils/parseValuesToString";
 type CampaignProps = {};
 const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const selectedCharacter: ISelectedCharacter | undefined = useSelector(getSelectedCharacter)
+    const characterRef = useSelector(getSelectedCharacterDatabaseRef)
     const isPlayer = useSelector(getSelectedCharacterIsPlayer)
     const [race, setRace, saveRace, isSavedRace] = useSavedState(selectedCharacter?.character.race)
     const [characterClass, setCharacterClass, saveCharacterClass, isSavedCharacterClass] = useSavedState(selectedCharacter?.character.class)
@@ -29,12 +30,12 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [tempHitPoints, setTempHitPoints, saveTempHitPoints, isSavedTempHitPoints] = useSavedState(selectedCharacter?.character.stats.tempHitPoints)
     const [passivePerception, setPassivePerception, savePassivePerception, isSavedPassivePerception] = useSavedState(selectedCharacter?.character.stats.passivePerception)
     const [proficiency, setProficiency, saveProficiency, isSavedProficiency] = useSavedState(selectedCharacter?.character.stats.proficiency)
-    const [inspiration, setInspiration, saveInspiration, isSavedInspiration] = useSavedState(selectedCharacter?.character.stats.inspiration)
+    const [inspiration, setInspiration, saveInspiration, isSavedInspiration] = useSavedState(selectedCharacter?.character.stats.inspiration === "TRUE")
     const [senses, setSenses, saveSenses, isSavedSenses] = useSavedState(selectedCharacter?.character.senses ? selectedCharacter?.character.senses : [])
     const [newSens, setNewSens] = useState("")
     const [immunities, setImmunities, saveImmunities, isSavedImmunities] = useSavedState(selectedCharacter?.character.immunities ? selectedCharacter?.character.immunities : [])
     const [newImmunity, setNewImmunity] = useState("")
-    const [isUnique, setIsUnique, saveIsUnique, isSavedIsUnique] = useSavedState(selectedCharacter?.character.isUnique)
+    const [isUnique, setIsUnique, saveIsUnique, isSavedIsUnique] = useSavedState(selectedCharacter?.character.isUnique === "TRUE")
 
 
     const parseStringBooleanToCheckmark = (proficient: any, setCross: boolean) => {
@@ -59,50 +60,68 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
         })
     }
     useInterval(() => {
-        if (!isSavedRace) {
-            saveRace()
-        }
-        if (!isSavedCharacterClass) {
-            saveCharacterClass()
-        }
-        if (!isSavedAlignment) {
-            saveAlignment()
-        }
-        if (!isSavedChallengeRating) {
-            saveChallengeRating()
-        }
-        if (!isSavedLevel) {
-            saveLevel()
-        }
-        if (!isSavedSummary) {
-            saveSummary()
-        }
-        if (!isSavedArmorClass) {
-            saveArmorClass()
-        }
-        if (!isSavedHitPoints) {
-            saveHitPoints()
-        }
-        if (!isSavedTempHitPoints) {
-            saveTempHitPoints()
-        }
-        if (!isSavedPassivePerception) {
-            savePassivePerception()
-        }
-        if (!isSavedProficiency) {
-            saveProficiency()
-        }
-        if (!isSavedInspiration) {
-            saveInspiration()
-        }
-        if (!isSavedSenses) {
-            saveSenses()
-        }
-        if (!isSavedImmunities) {
-            saveImmunities()
-        }
-        if (!isSavedIsUnique) {
-            saveIsUnique()
+        if (characterRef) {
+            if (!isSavedRace) {
+                saveRace()
+                characterRef.child("race").set(race)
+            }
+            if (!isSavedCharacterClass) {
+                saveCharacterClass()
+                characterRef.child("class").set(characterClass)
+            }
+            if (!isSavedAlignment) {
+                saveAlignment()
+                characterRef.child("alignment").set(alignment)
+            }
+            if (!isSavedChallengeRating) {
+                saveChallengeRating()
+                characterRef.child("challengeRating").set(challengeRating)
+            }
+            if (!isSavedLevel) {
+                saveLevel()
+                characterRef.child("level").set(level)
+            }
+            if (!isSavedSummary) {
+                saveSummary()
+                characterRef.child("summary").set(summary)
+            }
+            if (!isSavedArmorClass) {
+                saveArmorClass()
+                characterRef.child("armorClass").set(armorClass)
+            }
+            if (!isSavedHitPoints) {
+                saveHitPoints()
+                characterRef.child("stats").child("hitPoints").set(hitPoints)
+            }
+            if (!isSavedTempHitPoints) {
+                saveTempHitPoints()
+                characterRef.child("stats").child("tempHitPoints").set(tempHitPoints)
+            }
+            if (!isSavedPassivePerception) {
+                savePassivePerception()
+                characterRef.child("stats").child("passivePerception").set(passivePerception)
+            }
+            if (!isSavedProficiency) {
+                saveProficiency()
+                characterRef.child("stats").child("proficiency").set(proficiency)
+
+            }
+            if (!isSavedInspiration) {
+                saveInspiration()
+                characterRef.child("stats").child("inspiration").set(inspiration ? "TRUE" : "FALSE")
+            }
+            if (!isSavedSenses) {
+                saveSenses()
+                characterRef.child("senses").set(senses)
+            }
+            if (!isSavedImmunities) {
+                saveImmunities()
+                characterRef.child("stats").child("immunities").set(immunities)
+            }
+            if (!isSavedIsUnique) {
+                saveIsUnique()
+                characterRef.child("isUnique").set(isUnique ? "TRUE" : "FALSE")
+            }
         }
     }, 3000)
     if (selectedCharacter === undefined) {
