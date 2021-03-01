@@ -1,18 +1,21 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import sortSessionsByDateValue from "../../utils/sortArrayDyDate";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import Scroll from "../../components/Scroll/Scroll";
-import { getAllSessions } from "../../store/campaign/campaignSelectors";
-import { MAX_NUM_SCROLLS_HOMEPAGE } from "../../assets/constants/Constants";
+import { getAllSessions, getAllCampaigns } from "../../store/campaign/campaignSelectors";
+import { MAX_NUM_SCROLLS_HOMEPAGE, OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import { storage } from "../../firebase";
+import { Button } from "@material-ui/core";
 
 type HomeProps = {};
 const Home: FunctionComponent<HomeProps> = () => {
   const history = useHistory();
+  const campaigns = useSelector(getAllCampaigns)
   const sessions = useSelector(getAllSessions);
+  const [campaignUrls, setCampaignUrls] = useState<{ campaignSlug: string, url?: string }[]>([])
   const [imageUrl, setImageUrl] = useState("")
 
   useEffect(() => {
@@ -21,6 +24,21 @@ const Home: FunctionComponent<HomeProps> = () => {
       .getDownloadURL()
       .then((url: string) => setImageUrl(url))
   }, []);
+  useEffect(() => {
+    if (campaigns) {
+
+      Object.values(campaigns).map((campaign: ICampaign) =>
+        storage.ref()
+          .child("Campaigns")
+          .child(campaign.title)
+          .child("TitleImage")
+          .getDownloadURL()
+          .then(url => setCampaignUrls((existingUrls: { campaignSlug: string, url?: string }[]) => [...existingUrls, { campaignSlug: campaign.slug, url: url }]))
+          .catch(() => setCampaignUrls((existingUrls: { campaignSlug: string, url?: string }[]) => [...existingUrls, { campaignSlug: campaign.slug }])))
+    }
+    return () => { setCampaignUrls([]) }
+  }, [campaigns])
+
   const renderScrolls = () => {
     if (sessions) {
       let sortedSessions = sortSessionsByDateValue(sessions);
@@ -45,15 +63,26 @@ const Home: FunctionComponent<HomeProps> = () => {
     }
   };
   return (
+
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      {" "}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", justifyContent: "center", alignItems: "center", background: OLD_WHITE_TRANSPARENT, margin: "5rem", height: "10rem" }}>
+        {campaignUrls ? Object.values(campaignUrls).map((campaign: { campaignSlug: string, url?: string }) => (
+          <Link to={`/${campaign.campaignSlug}`}>
+            <Button>
+              {campaign.url ?
+                <CampaignImg src={campaign.url} />
+                : <h1>{campaign.campaignSlug}</h1>
+              }
+            </Button>
+          </Link>
+        )) : null}
+      </div>
       <div style={{ width: "50%", minWidth: "20rem" }}>
         {sessions ? renderScrolls() : null}
       </div>
     </Container>
   );
-};
-
+}
 const Container = styled.div`
   z-index: 300;
   display: flex;
@@ -63,10 +92,18 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding-top: 5vh;
   width: 100%;
   height: 100%;
+  padding-top:10rem;
   min-height: 100vh;
 `;
+
+const CampaignImg = styled.img`
+max-height:20rem;
+width:90%;
+&:hover {
+  width: 100%;
+}
+`
 
 export default Home;

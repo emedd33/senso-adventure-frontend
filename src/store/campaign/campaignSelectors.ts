@@ -9,6 +9,10 @@ export const getNewSessionDay = (state: RootReducerProp) => {
   return 1
 }
 
+export const getAllCampaigns = (state: RootReducerProp) => {
+  return state.rootCampaigns?.campaigns
+}
+
 export const getAllSessions = (state: RootReducerProp) => {
   let sessions: (
     | { campaignId: string; sessionId: string; session: ISession }
