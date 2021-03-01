@@ -27,4 +27,5 @@ function getCursorPos(input) {
     }
     return -1;
 }
-export default getCursorPos 
+export default getCursorPos
+asd

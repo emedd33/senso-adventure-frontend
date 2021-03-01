@@ -10,6 +10,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+
 type CampaignProps = {};
 const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
     const history = useHistory()
@@ -105,14 +106,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                         {selectedCharacter.character.stats.hitPoints}
                     </div>
                 </NestedNestedContainer>
-                <NestedNestedContainer>
-                    <div >
-                        <b>Temporarly hitpoints: </b>
-                    </div>
-                    <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.stats.tempHitPoints}
-                    </div>
-                </NestedNestedContainer>
+
             </NestedContainer>
 
             <NestedContainer >

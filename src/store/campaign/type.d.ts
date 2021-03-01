@@ -49,7 +49,6 @@ interface IStats {
   armorClass: number;
   speed: number;
   hitPoints: number;
-  tempHitPoints?: number;
   proficiency: number;
   passivePerception: number;
   inspiration?: string;
@@ -85,11 +84,8 @@ interface ISkills {
   performance: ISkillInfo;
   persuasion: ISkillInfo;
 }
-interface ISavingThrowsInfo {
-  value: number;
-  proficient: string;
-}
+
 interface ISkillInfo {
-  value: number;
+  value?: number;
   proficient: string;
 }

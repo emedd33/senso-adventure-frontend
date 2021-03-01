@@ -1,4 +1,4 @@
-const getAbilityModifier = (ability: number | string, isProficient?: boolean | string, proficiency?: number) => {
+const getAbilityModifier = (ability: number | string, isProficient?: boolean | string, proficiency?: number, toValue?: boolean) => {
     if (typeof ability === "string") {
         ability = parseInt(ability)
     }
@@ -39,7 +39,9 @@ const getAbilityModifier = (ability: number | string, isProficient?: boolean | s
             }
         }
     }
-
+    if (toValue) {
+        return parsedAbility
+    }
     if (parsedAbility >= 0) {
         return `+${parsedAbility}`
     }

@@ -26,7 +26,6 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [summaryError, setSummaryError] = useState(false)
     const [armorClass, setArmorClass, saveArmorClass, isSavedArmorClass] = useSavedState(selectedCharacter?.character.stats.armorClass)
     const [hitPoints, setHitPoints, saveHitPoints, isSavedHitPoints] = useSavedState(selectedCharacter?.character.stats.hitPoints)
-    const [tempHitPoints, setTempHitPoints, saveTempHitPoints, isSavedTempHitPoints] = useSavedState(selectedCharacter?.character.stats.tempHitPoints)
     const [passivePerception, setPassivePerception, savePassivePerception, isSavedPassivePerception] = useSavedState(selectedCharacter?.character.stats.passivePerception)
     const [proficiency, setProficiency, saveProficiency, isSavedProficiency] = useSavedState(selectedCharacter?.character.stats.proficiency)
     const [inspiration, setInspiration, saveInspiration, isSavedInspiration] = useSavedState(selectedCharacter?.character.stats.inspiration === "TRUE")
@@ -47,6 +46,25 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [isIntelligenceProficient, setIsIntelligenceProficient, saveIsIntelligenceProficient, isSavedIsIntelligenceProficient] = useSavedState(selectedCharacter?.character.stats.intelligence.isProficient === "TRUE")
     const [charisma, setCharisma, saveCharisma, isSavedCharisma] = useSavedState(selectedCharacter?.character.stats.charisma.value)
     const [isCharismaProficient, setIsCharismaProficient, saveIsCharismaProficient, isSavedIsCharismaProficient] = useSavedState(selectedCharacter?.character.stats.charisma.isProficient === "TRUE")
+    const [isAcrobaticsProficient, setIsAcrobaticsProficient, saveIsAcrobaticsProficient, isSavedIsAcrobaticsProficient] = useSavedState(selectedCharacter?.character.stats.skills.acrobatics.proficient === "TRUE")
+    const [animalHandling, setAnimalHandling, saveAnimalHandling, isSavedAnimalHandling] = useSavedState(selectedCharacter?.character.stats.skills.animalHandling.value)
+    const [isAnimalHandlingProficient, setIsAnimalHandlingProficient, saveIsAnimalHandlingProficient, isSavedIsAnimalHandlingProficient] = useSavedState(selectedCharacter?.character.stats.skills.animalHandling.proficient === "TRUE")
+    const [isArcanaProficient, setIsArcanaProficient, saveIsArcanaProficient, isSavedIsArcanaProficient] = useSavedState(selectedCharacter?.character.stats.skills.arcana.proficient === "TRUE")
+    const [isAthleticsProficient, setIsAthleticsProficient, saveIsAthleticsProficient, isSavedIsAthleticsProficient] = useSavedState(selectedCharacter?.character.stats.skills.athletics.proficient === "TRUE")
+    const [isDeceptionProficient, setIsDeceptionProficient, saveIsDeceptionProficient, isSavedIsDeceptionProficient] = useSavedState(selectedCharacter?.character.stats.skills.deception.proficient === "TRUE")
+    const [isHistoryProficient, setIsHistoryProficient, saveIsHistoryProficient, isSavedIsHistoryProficient] = useSavedState(selectedCharacter?.character.stats.skills.history.proficient === "TRUE")
+    const [isInsightProficient, setIsInsightProficient, saveIsInsightProficient, isSavedIsInsightProficient] = useSavedState(selectedCharacter?.character.stats.skills.insight.proficient === "TRUE")
+    const [isIntimidationProficient, setIsIntimidationProficient, saveIsIntimidationProficient, isSavedIsIntimidationProficient] = useSavedState(selectedCharacter?.character.stats.skills.intimidation.proficient === "TRUE")
+    const [isInvestigationProficient, setIsInvestigationProficient, saveIsInvestigationProficient, isSavedIsInvestigationProficient] = useSavedState(selectedCharacter?.character.stats.skills.investigation.proficient === "TRUE")
+    const [isMedicineProficient, setIsMedicineProficient, saveIsMedicineProficient, isSavedIsMedicineProficient] = useSavedState(selectedCharacter?.character.stats.skills.medicine.proficient === "TRUE")
+    const [isNatureProficient, setIsNatureProficient, saveIsNatureProficient, isSavedIsNatureProficient] = useSavedState(selectedCharacter?.character.stats.skills.nature.proficient === "TRUE")
+    const [isPerceptionProficient, setIsPerceptionProficient, saveIsPerceptionProficient, isSavedIsPerceptionProficient] = useSavedState(selectedCharacter?.character.stats.skills.perception.proficient === "TRUE")
+    const [isPerformanceProficient, setIsPerformanceProficient, saveIsPerformanceProficient, isSavedIsPerformanceProficient] = useSavedState(selectedCharacter?.character.stats.skills.performance.proficient === "TRUE")
+    const [isPersuasionProficient, setIsPersuasionProficient, saveIsPersuasionProficient, isSavedIsPersuasionProficient] = useSavedState(selectedCharacter?.character.stats.skills.persuasion.proficient === "TRUE")
+    const [isReligionProficient, setIsReligionProficient, saveIsReligionProficient, isSavedIsReligionProficient] = useSavedState(selectedCharacter?.character.stats.skills.religion.proficient === "TRUE")
+    const [isSleightOfHandProficient, setIsSleightOfHandProficient, saveIsSleightOfHandProficient, isSavedIsSleightOfHandProficient] = useSavedState(selectedCharacter?.character.stats.skills.sleightOfHand.proficient === "TRUE")
+    const [isStealthProficient, setIsStealthProficient, saveIsStealthProficient, isSavedIsStealthProficient] = useSavedState(selectedCharacter?.character.stats.skills.stealth.proficient === "TRUE")
+    const [isSurvivalProficient, setIsSurvivalProficient, saveIsSurvivalProficient, isSavedIsSurvivalProficient] = useSavedState(selectedCharacter?.character.stats.skills.survival.proficient === "TRUE")
 
     const parseStringBooleanToCheckmark = (proficient: any, setCross: boolean) => {
         if (proficient === "TRUE") {
@@ -97,15 +115,11 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
             }
             if (!isSavedArmorClass) {
                 saveArmorClass()
-                characterRef.child("armorClass").set(armorClass)
+                characterRef.child("stats").child("armorClass").set(armorClass)
             }
             if (!isSavedHitPoints) {
                 saveHitPoints()
                 characterRef.child("stats").child("hitPoints").set(hitPoints)
-            }
-            if (!isSavedTempHitPoints) {
-                saveTempHitPoints()
-                characterRef.child("stats").child("tempHitPoints").set(tempHitPoints)
             }
             if (!isSavedPassivePerception) {
                 savePassivePerception()
@@ -139,6 +153,51 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
             if (!isSavedIsStrengthProficient) {
                 saveIsStrengthProficient()
                 characterRef.child("stats").child("strength").child("isProficient").set(isStrengthProficient ? "TRUE" : "FALSE")
+            }
+            if (!isSavedDexterity) {
+                saveDexterity()
+                characterRef.child("stats").child("dexterity").child("value").set(dexterity)
+            }
+            if (!isSavedIsDexterityProficient) {
+                saveIsDexterityProficient()
+                characterRef.child("stats").child("dexterity").child("isProficient").set(isDexterityProficient ? "TRUE" : "FALSE")
+            }
+            if (!isSavedConstitution) {
+                saveConstitution()
+                characterRef.child("stats").child("constitution").child("value").set(constitution)
+            }
+            if (!isSavedIsConstitutionProficient) {
+                saveIsConstitutionProficient()
+                characterRef.child("stats").child("constitution").child("isProficient").set(isConstitutionProficient ? "TRUE" : "FALSE")
+            }
+            if (!isSavedWisdom) {
+                saveWisdom()
+                characterRef.child("stats").child("wisdom").child("value").set(wisdom)
+            }
+            if (!isSavedIsWisdomProficient) {
+                saveIsWisdomProficient()
+                characterRef.child("stats").child("wisdom").child("isProficient").set(isWisdomProficient ? "TRUE" : "FALSE")
+            }
+            if (!isSavedIntelligence) {
+                saveIntelligence()
+                characterRef.child("stats").child("intelligence").child("value").set(intelligence)
+            }
+            if (!isSavedIsIntelligenceProficient) {
+                saveIsIntelligenceProficient()
+                characterRef.child("stats").child("intelligence").child("isProficient").set(isIntelligenceProficient ? "TRUE" : "FALSE")
+            }
+            if (!isSavedCharisma) {
+                saveCharisma()
+                characterRef.child("stats").child("charisma").child("value").set(charisma)
+            }
+            if (!isSavedIsCharismaProficient) {
+                saveIsCharismaProficient()
+                characterRef.child("stats").child("charisma").child("isProficient").set(isCharismaProficient ? "TRUE" : "FALSE")
+            }
+
+            if (!isSavedIsAcrobaticsProficient) {
+                saveIsAcrobaticsProficient()
+                characterRef.child('stats').child("skills").child('acrobatics').child('proficient').set(isAcrobaticsProficient ? 'TRUE' : 'FALSE')
             }
         }
     }, 3000)
@@ -215,11 +274,6 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         <TextField label="Hitpoints" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={hitPoints} onChange={(event) => onChangeNumberField(event.target.value, setHitPoints, true, false)} />
                     </div>
                 </NestedNestedContainer>
-                <NestedNestedContainer>
-                    <div style={{ paddingLeft: "0.3rem", margin: "0.3rem" }}>
-                        <TextField label="Temporarly Hitpoints" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={tempHitPoints} onChange={(event) => onChangeNumberField(event.target.value, setTempHitPoints, true, false)} />
-                    </div>
-                </NestedNestedContainer>
             </div>
 
             <div   >
@@ -292,7 +346,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>STR:</b>
                     <TextField style={{ margin: "0.3rem" }} label="Value" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={strength} onChange={(event) => onChangeNumberField(event.target.value, setStrength, true, false)} />
-                    <p>Saving: {getAbilityModifier(strength, isStrengthProficient, proficiency)}</p>
+                    <p>Proficient?</p>
                     <Switch
                         checked={isStrengthProficient}
                         onChange={(event) => {
@@ -300,11 +354,13 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         }}
                         color="primary"
                         inputProps={{ 'aria-label': 'primary checkbox' }} />
+                    <p>Saving: {getAbilityModifier(strength, isStrengthProficient, proficiency)}</p>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>DEX:</b>
                     <TextField style={{ margin: "0.3rem" }} label="Value" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={dexterity} onChange={(event) => onChangeNumberField(event.target.value, setDexterity, true, false)} />
-                    <p>Saving: {getAbilityModifier(dexterity, isDexterityProficient, proficiency)}</p>
+                    <p>Proficient?</p>
+
                     <Switch
                         checked={isDexterityProficient}
                         onChange={(event) => {
@@ -312,39 +368,61 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         }}
                         color="primary"
                         inputProps={{ 'aria-label': 'primary checkbox' }} />
+                    <p>Saving: {getAbilityModifier(dexterity, isDexterityProficient, proficiency)}</p>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CON:</b>
-                    {selectedCharacter.character.stats.constitution.value}
-                    {/* ({getAbilityModifier(selectedCharacter.character.stats.constitution.value)}), */}
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {/* {addPlusMinusPrefix(selectedCharacter.character.stats.constitution.savingThrow)} */}
-                    </div>
+                    <TextField style={{ margin: "0.3rem" }} label="Value" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={constitution} onChange={(event) => onChangeNumberField(event.target.value, setConstitution, true, false)} />
+                    <p>Proficient?</p>
+                    <Switch
+                        checked={isConstitutionProficient}
+                        onChange={(event) => {
+                            setIsConstitutionProficient(event.target.checked)
+                        }}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'primary checkbox' }} />
+                    <p>Saving: {getAbilityModifier(constitution, isConstitutionProficient, proficiency)}</p>
                 </div>
-
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>INT:</b>
-                    {selectedCharacter.character.stats.intelligence.value}
-                    {/* ({getAbilityModifier(selectedCharacter.character.stats.intelligence.value)}), */}
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {/* {addPlusMinusPrefix(selectedCharacter.character.stats.intelligence.savingThrow)} */}
-                    </div>
+                    <TextField style={{ margin: "0.3rem" }} label="Value" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={intelligence} onChange={(event) => onChangeNumberField(event.target.value, setIntelligence, true, false)} />
+                    <p>Proficient?</p>
+
+                    <Switch
+                        checked={isIntelligenceProficient}
+                        onChange={(event) => {
+                            setIsIntelligenceProficient(event.target.checked)
+                        }}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'primary checkbox' }} />
+                    <p>Saving: {getAbilityModifier(intelligence, isIntelligenceProficient, proficiency)}</p>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>WIS:</b>
-                    {selectedCharacter.character.stats.wisdom.value}
-                    {/* ({getAbilityModifier(selectedCharacter.character.stats.wisdom.value)}), */}
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {/* {addPlusMinusPrefix(selectedCharacter.character.stats.wisdom.savingThrow)} */}
-                    </div>
+                    <TextField style={{ margin: "0.3rem" }} label="Value" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={wisdom} onChange={(event) => onChangeNumberField(event.target.value, setWisdom, true, false)} />
+                    <p>Proficient?</p>
+                    <Switch
+                        checked={isWisdomProficient}
+                        onChange={(event) => {
+                            setIsWisdomProficient(event.target.checked)
+                        }}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'primary checkbox' }} />
+                    <p>Saving: {getAbilityModifier(wisdom, isWisdomProficient, proficiency)}</p>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "5rem" }}>
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CHA:</b>
-                    {selectedCharacter.character.stats.charisma.value}
-                    {/* ({getAbilityModifier(selectedCharacter.character.stats.charisma.value)}), */}
-                    <div style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}>Saving:
-                    {/* {addPlusMinusPrefix(selectedCharacter.character.stats.charisma.savingThrow)} */}
-                    </div>
+                    <TextField style={{ margin: "0.3rem" }} label="Value" type="number" variant="outlined" InputLabelProps={{ shrink: true }} value={charisma} onChange={(event) => onChangeNumberField(event.target.value, setCharisma, true, false)} />
+                    <p>Proficient?</p>
+
+                    <Switch
+                        checked={isCharismaProficient}
+                        onChange={(event) => {
+                            setIsCharismaProficient(event.target.checked)
+                        }}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'primary checkbox' }} />
+                    <p>Saving: {getAbilityModifier(dexterity, isCharismaProficient, proficiency)}</p>
                 </div>
 
                 <div style={{ display: "flex", width: "100%", justifyContent: "space-around", flexDirection: "row", flexWrap: "wrap" }}>
@@ -356,33 +434,29 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                                 <TableHeader >Skill</TableHeader>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.acrobatics.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.acrobatics.value}</TableElement>
+                                <TableElement > <Switch checked={isAcrobaticsProficient} onChange={(event) => { setIsAcrobaticsProficient(event.target.checked) }} color="primary" name="checkedB" inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement>
+                                <TableElement>{getAbilityModifier(dexterity, isAcrobaticsProficient, proficiency)}</TableElement>
                                 <TableElement >Acrobatics (Dex)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.animalHandling.proficient, false)}</TableElement>
-                                <TableElement >{selectedCharacter.character.stats.skills.animalHandling.value}</TableElement>
+                                <TableElement > <Switch checked={isAnimalHandlingProficient} onChange={(event) => { setIsAnimalHandlingProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement>
+                                <TableElement>{getAbilityModifier(dexterity, isAnimalHandlingProficient, proficiency)}</TableElement>
                                 <TableElement >Animal Handling (Dex)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.arcana.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.arcana.value}</TableElement>
+                                <TableElement > <Switch checked={isArcanaProficient} onChange={(event) => { setIsArcanaProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(intelligence, isArcanaProficient, proficiency)}</TableElement>
                                 <TableElement>Arcana (Int)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.athletics.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.athletics.value}</TableElement>
+                                <TableElement > <Switch checked={isAthleticsProficient} onChange={(event) => { setIsAthleticsProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(strength, isAthleticsProficient, proficiency)}</TableElement>
                                 <TableElement>Athletics (Str)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.deception.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.deception.value}</TableElement>
+                                <TableElement > <Switch checked={isDeceptionProficient} onChange={(event) => { setIsDeceptionProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(charisma, isDeceptionProficient, proficiency)}</TableElement>
                                 <TableElement>Deception (Cha)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.history.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.history.value}</TableElement>
+                                <TableElement > <Switch checked={isHistoryProficient} onChange={(event) => { setIsHistoryProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(intelligence, isHistoryProficient, proficiency)}</TableElement>
                                 <TableElement>History (Int)</TableElement>
                             </tr>
                         </Table>
@@ -395,33 +469,27 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                                 <TableHeader >Skill</TableHeader>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.insight.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.insight.value}</TableElement>
+                                <TableElement > <Switch checked={isInsightProficient} onChange={(event) => { setIsInsightProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(wisdom, isInsightProficient, proficiency)}</TableElement>
                                 <TableElement >Insight (Wis)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.intimidation.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.intimidation.value}</TableElement>
+                                <TableElement > <Switch checked={isIntimidationProficient} onChange={(event) => { setIsIntimidationProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(charisma, isIntimidationProficient, proficiency)}</TableElement>
                                 <TableElement>Intimidation (Cha)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.investigation.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.investigation.value}</TableElement>
+                                <TableElement > <Switch checked={isInvestigationProficient} onChange={(event) => { setIsInvestigationProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(intelligence, isInvestigationProficient, proficiency)}</TableElement>
                                 <TableElement>Investigation (Int)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.medicine.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.medicine.value}</TableElement>
-                                <TableElement>Medicine (Nature)</TableElement>
+                                <TableElement > <Switch checked={isMedicineProficient} onChange={(event) => { setIsMedicineProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(wisdom, isMedicineProficient, proficiency)}</TableElement>
+                                <TableElement>Medicine (Wis)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.nature.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.nature.value}</TableElement>
+                                <TableElement > <Switch checked={isNatureProficient} onChange={(event) => { setIsNatureProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(intelligence, isNatureProficient, proficiency)}</TableElement>
                                 <TableElement>Nature (Int)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.perception.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.perception.value}</TableElement>
+                                <TableElement > <Switch checked={isPerceptionProficient} onChange={(event) => { setIsPerceptionProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(wisdom, isPerceptionProficient, proficiency)}</TableElement>
                                 <TableElement>Perception (Wis)</TableElement>
                             </tr>
                         </Table>
@@ -434,33 +502,27 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                                 <TableHeader >Skill</TableHeader>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.performance.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.performance.value}</TableElement>
+                                <TableElement > <Switch checked={isPerformanceProficient} onChange={(event) => { setIsPerformanceProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(charisma, isPerformanceProficient, proficiency)}</TableElement>
                                 <TableElement >Performance (Cha)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.persuasion.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.persuasion.value}</TableElement>
+                                <TableElement > <Switch checked={isPersuasionProficient} onChange={(event) => { setIsPersuasionProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(charisma, isPersuasionProficient, proficiency)}</TableElement>
                                 <TableElement>Persuasion (Cha)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.religion.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.religion.value}</TableElement>
+                                <TableElement > <Switch checked={isReligionProficient} onChange={(event) => { setIsReligionProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(intelligence, isReligionProficient, proficiency)}</TableElement>
                                 <TableElement>Religion (Int)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.sleightOfHand.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.sleightOfHand.value}</TableElement>
+                                <TableElement > <Switch checked={isSleightOfHandProficient} onChange={(event) => { setIsSleightOfHandProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(dexterity, isSleightOfHandProficient, proficiency)}</TableElement>
                                 <TableElement>Sleight of Hand (Dex)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.stealth.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.stealth.value}</TableElement>
+                                <TableElement > <Switch checked={isStealthProficient} onChange={(event) => { setIsStealthProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(dexterity, isStealthProficient, proficiency)}</TableElement>
                                 <TableElement>Stealth (Dex)</TableElement>
                             </tr>
                             <tr>
-                                <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.survival.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.survival.value}</TableElement>
+                                <TableElement > <Switch checked={isSurvivalProficient} onChange={(event) => { setIsSurvivalProficient(event.target.checked) }} color='primary' inputProps={{ 'aria-label': 'primary checkbox' }} /></TableElement><TableElement>{getAbilityModifier(wisdom, isSurvivalProficient, proficiency)}</TableElement>
                                 <TableElement>Survival (Wis)</TableElement>
                             </tr>
                         </Table>
