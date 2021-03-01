@@ -50,6 +50,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
         }
     }, [selectedCharacter, storageRef]);
     if (selectedCharacter === undefined) {
+        console.log("hei")
         return (<Container><IsLoading /></Container>)
     }
     return (
@@ -366,9 +367,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                     <div >
                         {description ? parse(
                             description
-                        ) : (
-                                <IsLoading />
-                            )}
+                        ) : null}
                     </div>
                 </NestedContainer>
 

@@ -69,70 +69,56 @@ const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
         return <IsLoading />;
     }
     return (
-        <div
-            style={{
-                marginBottom: "10rem",
-                width: "70%",
-                backgroundColor: OLD_WHITE,
-                alignItems: "center",
-                justifyContent: "center",
-                display: "flex",
-                padding: "1rem",
-                flexDirection: "column",
-            }}
-        >
-            <TitleContainer>
-                <TextField
-                    id="outlined-multiline-static"
-                    placeholder="Write a fitting title"
-                    variant="filled"
-                    disabled={false}
-                    style={{ width: "90%", margin: "1rem" }}
-                    label="Session title"
-                    error={sessionTitleError}
-                    value={sessionTitle}
-                    onChange={(event) => setSessionTitle(event.target.value)}
+
+        <TitleContainer>
+            <TextField
+                id="outlined-multiline-static"
+                placeholder="Write a fitting title"
+                variant="filled"
+                disabled={false}
+                style={{ width: "90%", margin: "1rem" }}
+                label="Session title"
+                error={sessionTitleError}
+                value={sessionTitle}
+                onChange={(event) => setSessionTitle(event.target.value)}
+            />
+
+            <TextField
+                id="outlined-multiline-static"
+                placeholder="Write a fitting subtitle"
+                style={{ width: "90%", margin: "1rem" }}
+                variant="filled"
+                label="Subtitle"
+                value={sessionSubTitle}
+                onChange={(event) => setSessionSubTitle(event.target.value)}
+            />
+            <TextField
+                id="outlined-number"
+                label="Session day"
+                placeholder="Which session is this?"
+                type="number"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                style={{ width: "90%", margin: "1rem" }}
+                value={sessionDay}
+                disabled={false}
+            />
+
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                    autoOk
+                    style={{ margin: "1rem" }}
+                    clearable
+                    disableFuture
+                    value={sessionDate}
+                    onChange={(date) =>
+                        setSessionDate(
+                            date ? date.toDateString() : new Date().toDateString()
+                        )
+                    }
                 />
-
-                <TextField
-                    id="outlined-multiline-static"
-                    placeholder="Write a fitting subtitle"
-                    style={{ width: "90%", margin: "1rem" }}
-                    variant="filled"
-                    label="Subtitle"
-                    value={sessionSubTitle}
-                    onChange={(event) => setSessionSubTitle(event.target.value)}
-                />
-                <TextField
-                    id="outlined-number"
-                    label="Session day"
-                    placeholder="Which session is this?"
-                    type="number"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    style={{ width: "90%", margin: "1rem" }}
-                    value={sessionDay}
-                    disabled={true}
-                />
-
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DatePicker
-                        autoOk
-                        style={{ margin: "1rem" }}
-                        clearable
-                        disableFuture
-                        value={sessionDate}
-                        onChange={(date) =>
-                            setSessionDate(
-                                date ? date.toDateString() : new Date().toDateString()
-                            )
-                        }
-                    />
-                </MuiPickersUtilsProvider>
-            </TitleContainer>
-
-
+            </MuiPickersUtilsProvider>
             <Button
                 variant="contained"
                 color="primary"
@@ -141,12 +127,14 @@ const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
             >
                 Continue
       </Button>
-        </div>
+        </TitleContainer>
+
+
     );
 };
 
 const TitleContainer = styled.div`
-  background-color: white;
+  background-color: ${OLD_WHITE};
   width: 50%;
   min-width:15rem;
   justify-content: center;

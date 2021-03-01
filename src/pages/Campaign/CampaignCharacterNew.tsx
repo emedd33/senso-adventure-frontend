@@ -8,6 +8,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getSelectedCampaign, getSelectedCampaignDatabaseRef } from "../../store/selected/selectedSelectors";
 import { setSelectedCharacter } from "../../store/selected/selectedCreators";
+import { useHistory } from "react-router-dom";
 export const NEW_CHARACTER: ICharacter = {
     name: "",
     summary: "A short summary",
@@ -56,8 +57,10 @@ export const NEW_CHARACTER: ICharacter = {
 }
 type CampaignCharacterNewProps = {};
 const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () => {
+    const history = useHistory()
     const dispatch = useDispatch()
     const [characterName, setCharacterName] = useState("")
+    const [playerName, setPlayerName] = useState("")
     const selectedCampaign = useSelector(getSelectedCampaign)
     const [characterNameError, setCharacterNameError] = useState(false)
     const [characterType, setCharacterType] = useState("npc")
@@ -75,40 +78,72 @@ const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () =>
             newCharacter.name = characterName
             newCharacter.slug = characterName.replace(/\s/g, '')
             newCharacter.isPlayer = isPlayer
-
+            if (isPlayer) {
+                newCharacter.playerName = playerName
+            }
             setCharacterNameError(false)
             campaignRef.child("characters").push(newCharacter).then((snapshot) => {
                 let characterId = snapshot.key
                 if (characterId) {
                     dispatch(setSelectedCharacter({ id: characterId, character: newCharacter }))
-                    console.log(`/${selectedCampaign!.campaign.slug}/characters/${newCharacter.slug}`)
+                    history.push(`/${selectedCampaign!.campaign.slug}/characters/${newCharacter.slug}`)
                 }
             })
         }
     }
     return (
-        <Container>
-            <form noValidate autoComplete="off">
-                <TextField id="outlined-basic" label="Character name" variant="outlined" onChange={(event) => setCharacterName(event.target.value)} error={characterNameError} />
-                <RadioGroup aria-label="characterType" name="characterType" value={characterType} onChange={(event) => setCharacterType(event.target.value)}>
-                    <FormControlLabel value="player" control={<Radio />} label="Player" />
-                    <FormControlLabel value="npc" control={<Radio />} label="Npc" />
-                </RadioGroup>
-                <Button onClick={() => submitCharacter()}>
-                    Submit
+
+        <TitleContainer>
+            <TextField
+                id="outlined-multiline-static"
+                placeholder="Write a fitting name for the character"
+                variant="filled"
+                error={characterNameError}
+                value={characterName}
+                disabled={false}
+                style={{ width: "90%", margin: "1rem" }}
+                label="Character Name"
+                onChange={(event) => setCharacterName(event.target.value)}
+            />
+
+            <RadioGroup aria-label="characterType" name="characterType" value={characterType} onChange={(event) => setCharacterType(event.target.value)}>
+                <FormControlLabel value="player" control={<Radio />} label="Player" />
+                <FormControlLabel value="npc" control={<Radio />} label="Npc" />
+            </RadioGroup>
+            {characterType === "player" ?
+                <TextField
+                    id="outlined-number"
+                    label="Player Name"
+                    value={playerName}
+                    onKeyDown={(e) => (e.key === "Enter" ? submitCharacter() : null)}
+                    placeholder="Name person playing this character?"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    style={{ width: "90%", margin: "1rem" }}
+                    onChange={(event) => setPlayerName(event.target.value)}
+                />
+                : null}
+
+            <Button style={{ margin: "2rem" }} variant="contained" color="primary" onClick={() => submitCharacter()}>
+                Submit
                 </Button>
-            </form>
-        </Container>
+        </TitleContainer>
     );
 }
 
-const Container = styled.div`
-  min-height: 20rem;
-  min-width: 15rem;
-  width: 50%;
-  padding: 1rem;
-  -webkit-box-shadow: 5px 5px 15px 5px #000000;
-  box-shadow: 5px 0px 15px 2px #000000;
+
+const TitleContainer = styled.div`
   background-color: ${OLD_WHITE};
+  width: 50%;
+  min-width:15rem;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
+  moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
+  box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
 `;
 export default CampaignCharacterNew;
