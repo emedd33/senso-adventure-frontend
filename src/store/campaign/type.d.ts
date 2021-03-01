@@ -42,7 +42,7 @@ interface ICharacter {
   playerName?: string;
   level?: number;
   class?: string;
-  Inventory?: string;
+  description: string;
 }
 interface IStats {
   armorClass: number;

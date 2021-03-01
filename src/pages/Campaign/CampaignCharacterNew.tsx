@@ -19,6 +19,7 @@ export const NEW_CHARACTER: ICharacter = {
     languages: ["Common"],
     isDead: "FALSE",
     actions: [],
+    description: "",
     stats: {
         armorClass: 12,
         speed: 30,

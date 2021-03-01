@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getSelectedCharacter, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
+import { getSelectedCharacter, isDungeonMasterSelector, getSelectedCharacterStorageRef } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
@@ -10,12 +10,16 @@ import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import renderArrayOfString from "../../utils/renderArrayToString";
+import parse from 'html-react-parser';
 
 type CampaignProps = {};
 const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
     const history = useHistory()
     const selectedCharacter = useSelector(getSelectedCharacter)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
+    const storageRef = useSelector(getSelectedCharacterStorageRef)
+    const [description, setDescription] = useState("")
     const parseStringBooleanToCheckmark = (proficient: any, setCross: boolean) => {
         if (proficient === "TRUE") {
             return <CheckIcon style={{ width: "0.8rem", color: "green" }} />
@@ -25,26 +29,54 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
         }
         return null
     }
+    useEffect(() => {
+        if (selectedCharacter) {
+
+            if (storageRef) {
+                storageRef
+                    .child("CharacterDescription.html")
+                    .getDownloadURL()
+                    .then((url: string) => {
+                        fetch(url)
+                            .then((res) => res.text())
+                            .then((res) => {
+                                setDescription(res ? res : " ");
+                            })
+                    }).catch(e => { console.log("Could not fetch session story") })
+            }
+        }
+        return () => {
+            setDescription("")
+        }
+    }, [selectedCharacter, storageRef]);
     if (selectedCharacter === undefined) {
         return (<Container><IsLoading /></Container>)
     }
-
     return (
         <Container>
             <NestedContainer style={{ flex: 1 }} >
                 <div style={{ display: "grid", width: "100%", gridTemplateColumns: "1fr 1fr", height: "5rem" }}>
-                    <h1 style={{ marginBottom: "0" }}>
-                        {selectedCharacter.character.name}
-                    </h1>
-                    {isDungeonMaster ? <>
-                        <NestedContainer style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
-                            <Button onClick={() => history.push(`${selectedCharacter.character.slug}/edit`)} variant="contained" color="primary" style={{ maxHeight: "2rem", maxWidth: "3rem", }}>Edit</Button>
-                        </NestedContainer>
-                    </>
-                        : null
-                    }
+                    <div>
+
+                        <h1 style={{ marginBottom: "0" }}>
+                            {selectedCharacter.character.name}
+                        </h1>
+                    </div>
+                    <div>
+
+                        {isDungeonMaster ? <>
+                            <NestedContainer style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
+                                <Button onClick={() => history.push(`${selectedCharacter.character.slug}/edit`)} variant="contained" color="primary" style={{ maxHeight: "2rem", maxWidth: "3rem", }}>Edit</Button>
+                            </NestedContainer>
+                        </>
+                            : null
+                        }
+                    </div>
                 </div>
                 <NestedNestedContainer>
+                    <div>
+                        <p>{selectedCharacter.character.isPlayer === "TRUE" ? "Player" : "NPC"},</p>
+                    </div>
                     <div style={{ marginLeft: "0.5rem" }}>
                         {selectedCharacter.character.race},
                 </div>
@@ -127,7 +159,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                 <NestedNestedContainer>
                     <div ><b>Senses: </b> </div>
                     <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.senses}
+                        {renderArrayOfString(selectedCharacter.character.senses)}
                     </div>
                 </NestedNestedContainer>
                 <NestedNestedContainer>
@@ -135,8 +167,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                         <b>Immunities : </b>
                     </div>
                     <div style={{ paddingLeft: "0.3rem" }}>
-                        {selectedCharacter.character.immunities}
-
+                        {renderArrayOfString(selectedCharacter.character.immunities)}
                     </div>
                 </NestedNestedContainer>
 
@@ -212,32 +243,32 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.acrobatics.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.acrobatics.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.dexterity.value, selectedCharacter.character.stats.skills.acrobatics.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement >Acrobatics (Dex)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.animalHandling.proficient, false)}</TableElement>
-                                <TableElement >{selectedCharacter.character.stats.skills.animalHandling.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.dexterity.value, selectedCharacter.character.stats.skills.animalHandling.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement >Animal Handling (Dex)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.arcana.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.arcana.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.intelligence.value, selectedCharacter.character.stats.skills.arcana.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Arcana (Int)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.athletics.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.athletics.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.strength.value, selectedCharacter.character.stats.skills.athletics.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Athletics (Str)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.deception.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.deception.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.charisma.value, selectedCharacter.character.stats.skills.deception.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Deception (Cha)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.history.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.history.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.intelligence.value, selectedCharacter.character.stats.skills.history.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>History (Int)</TableElement>
                             </tr>
                         </Table>
@@ -251,32 +282,32 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.insight.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.insight.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.wisdom.value, selectedCharacter.character.stats.skills.insight.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement >Insight (Wis)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.intimidation.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.intimidation.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.charisma.value, selectedCharacter.character.stats.skills.intimidation.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Intimidation (Cha)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.investigation.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.investigation.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.intelligence.value, selectedCharacter.character.stats.skills.investigation.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Investigation (Int)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.medicine.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.medicine.value}</TableElement>
-                                <TableElement>Medicine (Nature)</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.wisdom.value, selectedCharacter.character.stats.skills.medicine.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
+                                <TableElement>Medicine (Wis)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.nature.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.nature.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.intelligence.value, selectedCharacter.character.stats.skills.nature.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Nature (Int)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.perception.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.perception.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.wisdom.value, selectedCharacter.character.stats.skills.perception.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Perception (Wis)</TableElement>
                             </tr>
                         </Table>
@@ -290,52 +321,55 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.performance.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.performance.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.charisma.value, selectedCharacter.character.stats.skills.performance.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement >Performance (Cha)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.persuasion.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.persuasion.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.charisma.value, selectedCharacter.character.stats.skills.persuasion.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Persuasion (Cha)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.religion.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.religion.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.intelligence.value, selectedCharacter.character.stats.skills.religion.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Religion (Int)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.sleightOfHand.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.sleightOfHand.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.dexterity.value, selectedCharacter.character.stats.skills.sleightOfHand.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Sleight of Hand (Dex)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.stealth.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.stealth.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.dexterity.value, selectedCharacter.character.stats.skills.stealth.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Stealth (Dex)</TableElement>
                             </tr>
                             <tr>
                                 <TableElement >{parseStringBooleanToCheckmark(selectedCharacter.character.stats.skills.survival.proficient, false)}</TableElement>
-                                <TableElement>{selectedCharacter.character.stats.skills.survival.value}</TableElement>
+                                <TableElement>{getAbilityModifier(selectedCharacter.character.stats.wisdom.value, selectedCharacter.character.stats.skills.survival.proficient === "TRUE", selectedCharacter.character.stats.proficiency)}</TableElement>
                                 <TableElement>Survival (Wis)</TableElement>
                             </tr>
                         </Table>
                     </div>
                 </div>
                 {selectedCharacter.character.actions ?
-                    <NestedContainer style={{ gridColumn: 1 / 3 }} >
+                    <NestedContainer style={{ width: "100%" }} >
                         <h3>
                             Actions and Specials:
                     </h3>
-                        {selectedCharacter.character.actions.map((action: ICharacterAction) => <div><b >{action.name}</b> {action.description}</div>)}
-                        <div style={{ width: "100%", borderBottom: "double" }}></div>
+                        {selectedCharacter.character.actions.map((action: ICharacterAction) => <div><b >{action.name}:</b> {action.description}</div>)}
                     </NestedContainer>
 
                     : null}
-                <NestedContainer style={{ gridColumn: "1/3" }} >
-                </NestedContainer>
-                <NestedContainer style={{ gridColumn: "1/3" }} >
+                <NestedContainer style={{ width: "100%" }} >
                     <h3>Description and history: </h3>
-                    <div>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</div>
+                    <div >
+                        {description ? parse(
+                            description
+                        ) : (
+                                <IsLoading />
+                            )}
+                    </div>
                 </NestedContainer>
 
             </div>

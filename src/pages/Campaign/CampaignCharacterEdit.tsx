@@ -1,20 +1,22 @@
 import React, { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getSelectedCharacter, getSelectedCharacterDatabaseRef, getSelectedCharacterIsPlayer } from "../../store/selected/selectedSelectors";
+import { getSelectedCharacter, getSelectedCharacterDatabaseRef, getSelectedCharacterIsPlayer, getSelectedCharacterStorageRef } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import getAbilityModifier from "../../utils/getAbilityModifier";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Chip, IconButton, Switch, TextField, Typography } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, Button, Chip, IconButton, Switch, TextField, Tooltip, Typography } from "@material-ui/core";
 import useInterval from "../../store/hooks/useInterval";
+import { useQuill } from 'react-quilljs';
 import useSavedState from "../../store/hooks/useSavedState";
 import onChangeNumberField from "../../utils/onChangeNumberField";
 type CampaignProps = {};
 const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const selectedCharacter: ISelectedCharacter | undefined = useSelector(getSelectedCharacter)
     const characterRef = useSelector(getSelectedCharacterDatabaseRef)
+    const storageRef = useSelector(getSelectedCharacterStorageRef)
     const isPlayer = useSelector(getSelectedCharacterIsPlayer)
     const [race, setRace, saveRace, isSavedRace] = useSavedState(selectedCharacter?.character.race)
     const [characterClass, setCharacterClass, saveCharacterClass, isSavedCharacterClass] = useSavedState(selectedCharacter?.character.class)
@@ -64,8 +66,19 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [isStealthProficient, setIsStealthProficient, saveIsStealthProficient, isSavedIsStealthProficient] = useSavedState(selectedCharacter?.character.stats.skills.stealth.proficient === "TRUE")
     const [isSurvivalProficient, setIsSurvivalProficient, saveIsSurvivalProficient, isSavedIsSurvivalProficient] = useSavedState(selectedCharacter?.character.stats.skills.survival.proficient === "TRUE")
     const [actions, setActions, saveActions, isSavedActions] = useSavedState(selectedCharacter?.character.actions)
+    const [description, setDescription] = useState(selectedCharacter?.character.description)
     const [newActionName, setNewActionName] = useState("")
-
+    const { quillRef, quill } = useQuill({
+        modules: {
+            toolbar: '#toolbar'
+        },
+        formats: ['bold', 'italic', 'underline', 'strike',
+            'align', 'list', 'indent',
+            'size', 'header',
+            'link',
+            'color', 'background',
+            'clean',],
+    });
     const renderAccordian = useCallback((actions) => actions.map((action: ICharacterAction, index: number) => {
         return (<Accordion style={{ width: "100%", backgroundColor: "transparent" }}>
             <AccordionSummary
@@ -73,7 +86,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
             >
                 <Typography >{action.name}</Typography>
             </AccordionSummary>
-            <AccordionDetails style={{ display: "grid", gridTemplateColumns: '4fr 1fr', alignItems: "start", justifyContent: "space-between" }}>
+            <AccordionDetails style={{ display: "grid", gridTemplateColumns: '4fr 1fr', alignItems: "center", justifyContent: "space-between" }}>
                 <TextField
                     label="Action description"
                     multiline
@@ -87,187 +100,231 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     defaultValue="Default Value"
                     variant="filled"
                 />
-                <IconButton><DeleteIcon color="secondary" /></IconButton>
+                <IconButton><DeleteIcon onClick={() => setActions((existingActions: ICharacterAction[]) => existingActions.filter((existingAction: ICharacterAction) => existingAction.name !== action.name))} color="secondary" /></IconButton>
             </AccordionDetails>
         </Accordion>)
     }), [setActions])
     useInterval(() => {
         if (characterRef) {
             if (!isSavedRace) {
+
                 saveRace()
                 characterRef.child("race").set(race)
             }
             if (!isSavedCharacterClass) {
+
                 saveCharacterClass()
                 characterRef.child("class").set(characterClass)
             }
             if (!isSavedAlignment) {
+
                 saveAlignment()
                 characterRef.child("alignment").set(alignment)
             }
             if (!isSavedChallengeRating) {
+
                 saveChallengeRating()
                 characterRef.child("challengeRating").set(challengeRating)
             }
             if (!isSavedLevel) {
+
                 saveLevel()
                 characterRef.child("level").set(level)
             }
             if (!isSavedSummary) {
+
                 saveSummary()
                 characterRef.child("summary").set(summary)
             }
             if (!isSavedArmorClass) {
+
                 saveArmorClass()
                 characterRef.child("stats").child("armorClass").set(armorClass)
             }
             if (!isSavedHitPoints) {
+
                 saveHitPoints()
                 characterRef.child("stats").child("hitPoints").set(hitPoints)
             }
             if (!isSavedPassivePerception) {
+
                 savePassivePerception()
                 characterRef.child("stats").child("passivePerception").set(passivePerception)
             }
             if (!isSavedProficiency) {
+
                 saveProficiency()
                 characterRef.child("stats").child("proficiency").set(proficiency)
 
             }
             if (!isSavedInspiration) {
+
                 saveInspiration()
                 characterRef.child("stats").child("inspiration").set(inspiration ? "TRUE" : "FALSE")
             }
             if (!isSavedSenses) {
+
                 saveSenses()
                 characterRef.child("senses").set(senses)
             }
             if (!isSavedImmunities) {
+
                 saveImmunities()
-                characterRef.child("stats").child("immunities").set(immunities)
+                characterRef.child("immunities").set(immunities)
             }
             if (!isSavedIsUnique) {
+
                 saveIsUnique()
                 characterRef.child("isUnique").set(isUnique ? "TRUE" : "FALSE")
             }
             if (!isSavedStrength) {
+
                 saveStrength()
                 characterRef.child("stats").child("strength").child("value").set(strength)
             }
             if (!isSavedIsStrengthProficient) {
+
                 saveIsStrengthProficient()
                 characterRef.child("stats").child("strength").child("isProficient").set(isStrengthProficient ? "TRUE" : "FALSE")
             }
             if (!isSavedDexterity) {
+
                 saveDexterity()
                 characterRef.child("stats").child("dexterity").child("value").set(dexterity)
             }
             if (!isSavedIsDexterityProficient) {
+
                 saveIsDexterityProficient()
                 characterRef.child("stats").child("dexterity").child("isProficient").set(isDexterityProficient ? "TRUE" : "FALSE")
             }
             if (!isSavedConstitution) {
+
                 saveConstitution()
                 characterRef.child("stats").child("constitution").child("value").set(constitution)
             }
             if (!isSavedIsConstitutionProficient) {
+
                 saveIsConstitutionProficient()
                 characterRef.child("stats").child("constitution").child("isProficient").set(isConstitutionProficient ? "TRUE" : "FALSE")
             }
             if (!isSavedWisdom) {
+
                 saveWisdom()
                 characterRef.child("stats").child("wisdom").child("value").set(wisdom)
             }
             if (!isSavedIsWisdomProficient) {
+
                 saveIsWisdomProficient()
                 characterRef.child("stats").child("wisdom").child("isProficient").set(isWisdomProficient ? "TRUE" : "FALSE")
             }
             if (!isSavedIntelligence) {
+
                 saveIntelligence()
                 characterRef.child("stats").child("intelligence").child("value").set(intelligence)
             }
             if (!isSavedIsIntelligenceProficient) {
+
                 saveIsIntelligenceProficient()
                 characterRef.child("stats").child("intelligence").child("isProficient").set(isIntelligenceProficient ? "TRUE" : "FALSE")
             }
             if (!isSavedCharisma) {
+
                 saveCharisma()
                 characterRef.child("stats").child("charisma").child("value").set(charisma)
             }
             if (!isSavedIsCharismaProficient) {
+
                 saveIsCharismaProficient()
                 characterRef.child("stats").child("charisma").child("isProficient").set(isCharismaProficient ? "TRUE" : "FALSE")
             }
 
             if (!isSavedIsAcrobaticsProficient) {
+
                 saveIsAcrobaticsProficient()
                 characterRef.child('stats').child("skills").child('acrobatics').child('proficient').set(isAcrobaticsProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsAnimalHandlingProficient) {
+
                 saveIsAnimalHandlingProficient()
                 characterRef.child('stats').child('animalHandling').child('isProficient').set(isAnimalHandlingProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsArcanaProficient) {
+
                 saveIsArcanaProficient()
                 characterRef.child('stats').child('arcana').child('isProficient').set(isArcanaProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsAthleticsProficient) {
+
                 saveIsAthleticsProficient()
                 characterRef.child('stats').child('athletics').child('isProficient').set(isAthleticsProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsDeceptionProficient) {
+
                 saveIsDeceptionProficient()
                 characterRef.child('stats').child('deception').child('isProficient').set(isDeceptionProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsHistoryProficient) {
+
                 saveIsHistoryProficient()
                 characterRef.child('stats').child('history').child('isProficient').set(isHistoryProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsInsightProficient) {
+
                 saveIsInsightProficient()
                 characterRef.child('stats').child('insight').child('isProficient').set(isInsightProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsIntimidationProficient) {
+
                 saveIsIntimidationProficient()
                 characterRef.child('stats').child('intimidation').child('isProficient').set(isIntimidationProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsInvestigationProficient) {
+
                 saveIsInvestigationProficient()
                 characterRef.child('stats').child('investigation').child('isProficient').set(isInvestigationProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsMedicineProficient) {
+
                 saveIsMedicineProficient()
                 characterRef.child('stats').child('medicine').child('isProficient').set(isMedicineProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsNatureProficient) {
+
                 saveIsNatureProficient()
                 characterRef.child('stats').child('nature').child('isProficient').set(isNatureProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsPerceptionProficient) {
+
                 saveIsPerceptionProficient()
                 characterRef.child('stats').child('perception').child('isProficient').set(isPerceptionProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsPerformanceProficient) {
+
                 saveIsPerformanceProficient()
                 characterRef.child('stats').child('performance').child('isProficient').set(isPerformanceProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsPersuasionProficient) {
+
                 saveIsPersuasionProficient()
                 characterRef.child('stats').child('persuasion').child('isProficient').set(isPersuasionProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsReligionProficient) {
+
                 saveIsReligionProficient()
                 characterRef.child('stats').child('religion').child('isProficient').set(isReligionProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsSleightOfHandProficient) {
+
                 saveIsSleightOfHandProficient()
                 characterRef.child('stats').child('sleightOfHand').child('isProficient').set(isSleightOfHandProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsStealthProficient) {
+
                 saveIsStealthProficient()
                 characterRef.child('stats').child('stealth').child('isProficient').set(isStealthProficient ? 'TRUE' : 'FALSE')
             }
             if (!isSavedIsSurvivalProficient) {
+
                 saveIsSurvivalProficient()
                 characterRef.child('stats').child('survival').child('isProficient').set(isSurvivalProficient ? 'TRUE' : 'FALSE')
             }
@@ -276,7 +333,21 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 characterRef.child("actions").set(actions)
             }
         }
-    }, 3000)
+    }, 1000)
+    useInterval(() => {
+
+        if (storageRef) {
+
+            if (quill && quill.root.innerHTML !== description) {
+                setDescription(quill.root.innerHTML)
+                storageRef
+                    .child("CharacterDescription.html")
+                    .putString(quill.root.innerHTML)
+                    .catch(e => console.log("Could not update character description", e))
+            }
+        }
+    }, [3000])
+
     useEffect(() => {
         let modifier = getAbilityModifier(wisdom, false, 0, true)
         if (typeof modifier === "number") {
@@ -409,17 +480,19 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         <Button variant="contained" color="primary" style={{ height: "2rem" }} onClick={() => newSens ? setSenses((existingSenses: string[]) => [...existingSenses, newSens]) : null}>Add</Button>
                     </div>
                 </NestedNestedContainer>
-                <NestedNestedContainer style={{ flexDirection: "column", alignItems: "flex-start", width: "15rem", }}>
+                <NestedNestedContainer style={{ flexDirection: "column", width: "15rem", alignItems: "flex-start" }}>
+
                     <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", margin: "0.3rem" }}>
                         <b>Immunities: </b>
-                        {immunities ? immunities.map((immunity: string) => <Chip style={{ marginLeft: "0.2rem", backgroundColor: "white" }} label={immunity} onDelete={() => setImmunities((existingImmunities: string[]) => existingImmunities.filter((existingImmunity: string) => existingImmunity !== immunity))} variant="outlined" />) : null}
+                        {immunities ? immunities.map((immunity: string) => <Chip style={{ marginLeft: "0.2rem", backgroundColor: "white" }} label={immunity} onDelete={() => setImmunities((existingimmunities: string[]) => existingimmunities.filter((existingImmunity: string) => existingImmunity !== immunity))} variant="outlined" />) : null}
                     </div>
                     <div style={{ display: "flex", flexDirection: "row", marginLeft: "1rem", alignItems: "center", margin: "0.3rem" }}>
 
-                        <TextField onKeyDown={(event) => (newImmunity && event.key === "Enter") ? setImmunities((existingImmunities: string[]) => [...existingImmunities, newImmunity]) : null} style={{ marginTop: "0.5rem", marginRight: "0.5rem" }} variant="outlined" onChange={(event) => setNewImmunity(event.target.value)} label="Immunities" value={newImmunity} />
+                        <TextField onKeyDown={(event) => (newSens && event.key === "Enter") ? setImmunities((existingImmunities: string[]) => [...existingImmunities, newImmunity]) : null} style={{ marginTop: "0.5rem", marginRight: "0.5rem" }} variant="outlined" onChange={(event) => setNewImmunity(event.target.value)} label="Immunity" value={newImmunity} />
                         <Button variant="contained" color="primary" style={{ height: "2rem" }} onClick={() => newImmunity ? setImmunities((existingImmunities: string[]) => [...existingImmunities, newImmunity]) : null}>Add</Button>
                     </div>
                 </NestedNestedContainer>
+
 
             </div>
             <div style={{ width: "100%", borderBottom: "double" }}></div>
@@ -631,19 +704,50 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         }
                     }}>Add new action</Button>
                 </div>
+
+                <h3>
+                    Description and history:
+                </h3>
+                <div style={{ width: "100%", backgroundColor: "white", minHeight: "20rem" }}>
+                    <div id="toolbar">
+                        <select className="ql-size">
+                            <option value="small" />
+                            <option selected />
+                            <option value="large" />
+                            <option value="huge" />
+                        </select>
+                        <Tooltip title="Bold">
+
+                            <button className="ql-bold" />
+                        </Tooltip>
+
+                        <Tooltip title="Italic">
+                            <button className="ql-italic" />
+                        </Tooltip>
+                        <Tooltip title="Underline">
+                            <button className="ql-underline" />
+                        </Tooltip>
+                        <Tooltip title="Strike">
+                            <button className="ql-strike" />
+                        </Tooltip>
+                        <Tooltip title="Link">
+                            <button className="ql-link" />
+                        </Tooltip>
+                        <Tooltip title="Sub-text">
+                            <button className="ql-script" value="sub" />
+                        </Tooltip>
+                        <Tooltip title="Super-text">
+                            <button className="ql-script" value="super" />
+                        </Tooltip>
+                    </div>
+                    <div id="editor" />
+                    <div ref={quillRef} style={{ minHeight: "19rem", height: "auto" }} />
+                </div>
             </div>
-
-
-            <NestedContainer style={{ gridColumn: "1/3" }} >
-            </NestedContainer>
-            <NestedContainer style={{ gridColumn: "1/3" }} >
-                <h3>Description and history: </h3>
-                <div>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</div>
-            </NestedContainer>
-
         </Container >
     )
 };
+
 const Container = styled.div`
 width: 70%;
 padding: 1rem;

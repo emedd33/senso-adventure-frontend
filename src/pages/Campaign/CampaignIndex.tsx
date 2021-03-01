@@ -86,7 +86,6 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         .child("BackgroundImage")
         .getDownloadURL()
         .then((url: string) => {
-          console.log(url);
           setImageUrl(url);
         })
         .catch((e) => console.log("could not fetch background image"))

@@ -29,6 +29,15 @@ export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
             .child(state.selected.selectedSession?.session?.title)
     }
 }
+export const getSelectedCharacterStorageRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedCharacter) {
+        return storage.ref()
+            .child("Campaigns")
+            .child(state.selected.selectedCampaign?.campaign?.title)
+            .child("characters")
+            .child(state.selected.selectedCharacter?.character.name)
+    }
+}
 export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
         return campaignsRef
