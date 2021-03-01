@@ -10,8 +10,7 @@ interface ISession {
 }
 interface ICharacterAction {
   name: string,
-  description: string,
-  tags: string[]
+  description: string
 }
 interface ICampaign {
   slug: string;
@@ -76,7 +75,7 @@ interface ISkills {
   religion: ISkillInfo;
   animalHandling: ISkillInfo;
   insight: ISkillInfo;
-  medicine: numISkillInfober;
+  medicine: numISkillInfo;
   perception: ISkillInfo;
   survival: ISkillInfo;
   deception: ISkillInfo;

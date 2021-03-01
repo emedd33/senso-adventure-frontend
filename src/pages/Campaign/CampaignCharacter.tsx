@@ -28,19 +28,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
     if (selectedCharacter === undefined) {
         return (<Container><IsLoading /></Container>)
     }
-    const renderArrayOfString = (array: string[] | undefined) => {
-        console.log("array", array)
-        if (!array) {
-            return ""
-        }
-        let lastIndex = array.length - 1
-        return array.map((elem: string, index: number) => {
-            if (index !== lastIndex) {
-                return `${elem}, `
-            }
-            return `${elem}`
-        })
-    }
+
     return (
         <Container>
             <NestedContainer style={{ flex: 1 }} >
@@ -338,7 +326,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                         <h3>
                             Actions and Specials:
                     </h3>
-                        {selectedCharacter.character.actions.map((action: ICharacterAction) => <div><b >{action.name}</b> {action.tags ? `(${renderArrayOfString(action.tags)}):` : ":"} {action.description}</div>)}
+                        {selectedCharacter.character.actions.map((action: ICharacterAction) => <div><b >{action.name}</b> {action.description}</div>)}
                         <div style={{ width: "100%", borderBottom: "double" }}></div>
                     </NestedContainer>
 

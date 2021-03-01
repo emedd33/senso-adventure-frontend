@@ -21,7 +21,6 @@ import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Tooltip from '@material-ui/core/Tooltip';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
 import { getIsLoading } from "../../store/admin/adminSelectors";
-import { setSelectedSession } from "../../store/selected/selectedCreators";
 
 const useStyles = makeStyles({
     root: {

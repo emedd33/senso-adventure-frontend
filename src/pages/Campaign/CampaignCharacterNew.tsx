@@ -8,7 +8,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getSelectedCampaign, getSelectedCampaignDatabaseRef } from "../../store/selected/selectedSelectors";
 import { setSelectedCharacter } from "../../store/selected/selectedCreators";
-import { useHistory } from "react-router-dom";
 export const NEW_CHARACTER: ICharacter = {
     name: "",
     summary: "A short summary",
@@ -19,7 +18,7 @@ export const NEW_CHARACTER: ICharacter = {
     isUnique: "TRUE",
     languages: ["Common"],
     isDead: "FALSE",
-    actions: [{ name: "bite", description: "A fowerful bite", tags: ["nom nom"] }],
+    actions: [],
     stats: {
         armorClass: 12,
         speed: 30,

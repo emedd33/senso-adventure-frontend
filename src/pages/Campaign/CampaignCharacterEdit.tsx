@@ -1,14 +1,13 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getSelectedCharacter, getSelectedCharacterDatabaseRef, getSelectedCharacterIsPlayer } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import getAbilityModifier from "../../utils/getAbilityModifier";
-import addPlusMinusPrefix from "../../utils/addPlusMinusPrefix";
-import CheckIcon from '@material-ui/icons/Check';
-import ClearIcon from '@material-ui/icons/Clear';
-import { Button, Chip, Switch, TextField } from "@material-ui/core";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Chip, IconButton, Switch, TextField, Typography } from "@material-ui/core";
 import useInterval from "../../store/hooks/useInterval";
 import useSavedState from "../../store/hooks/useSavedState";
 import onChangeNumberField from "../../utils/onChangeNumberField";
@@ -47,7 +46,6 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [charisma, setCharisma, saveCharisma, isSavedCharisma] = useSavedState(selectedCharacter?.character.stats.charisma.value)
     const [isCharismaProficient, setIsCharismaProficient, saveIsCharismaProficient, isSavedIsCharismaProficient] = useSavedState(selectedCharacter?.character.stats.charisma.isProficient === "TRUE")
     const [isAcrobaticsProficient, setIsAcrobaticsProficient, saveIsAcrobaticsProficient, isSavedIsAcrobaticsProficient] = useSavedState(selectedCharacter?.character.stats.skills.acrobatics.proficient === "TRUE")
-    const [animalHandling, setAnimalHandling, saveAnimalHandling, isSavedAnimalHandling] = useSavedState(selectedCharacter?.character.stats.skills.animalHandling.value)
     const [isAnimalHandlingProficient, setIsAnimalHandlingProficient, saveIsAnimalHandlingProficient, isSavedIsAnimalHandlingProficient] = useSavedState(selectedCharacter?.character.stats.skills.animalHandling.proficient === "TRUE")
     const [isArcanaProficient, setIsArcanaProficient, saveIsArcanaProficient, isSavedIsArcanaProficient] = useSavedState(selectedCharacter?.character.stats.skills.arcana.proficient === "TRUE")
     const [isAthleticsProficient, setIsAthleticsProficient, saveIsAthleticsProficient, isSavedIsAthleticsProficient] = useSavedState(selectedCharacter?.character.stats.skills.athletics.proficient === "TRUE")
@@ -65,28 +63,34 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [isSleightOfHandProficient, setIsSleightOfHandProficient, saveIsSleightOfHandProficient, isSavedIsSleightOfHandProficient] = useSavedState(selectedCharacter?.character.stats.skills.sleightOfHand.proficient === "TRUE")
     const [isStealthProficient, setIsStealthProficient, saveIsStealthProficient, isSavedIsStealthProficient] = useSavedState(selectedCharacter?.character.stats.skills.stealth.proficient === "TRUE")
     const [isSurvivalProficient, setIsSurvivalProficient, saveIsSurvivalProficient, isSavedIsSurvivalProficient] = useSavedState(selectedCharacter?.character.stats.skills.survival.proficient === "TRUE")
+    const [actions, setActions, saveActions, isSavedActions] = useSavedState(selectedCharacter?.character.actions)
+    const [newActionName, setNewActionName] = useState("")
 
-    const parseStringBooleanToCheckmark = (proficient: any, setCross: boolean) => {
-        if (proficient === "TRUE") {
-            return <CheckIcon style={{ width: "0.8rem", color: "green" }} />
-        } if (setCross) {
-            return <ClearIcon style={{ width: "0.8rem", color: "red" }} />
-
-        }
-        return null
-    }
-    const renderArrayOfString = (array: string[] | undefined) => {
-        if (!array) {
-            return ""
-        }
-        let lastIndex = array.length - 1
-        return array.map((elem: string, index: number) => {
-            if (index !== lastIndex) {
-                return `${elem}, `
-            }
-            return `${elem}`
-        })
-    }
+    const renderAccordian = useCallback((actions) => actions.map((action: ICharacterAction, index: number) => {
+        return (<Accordion style={{ width: "100%", backgroundColor: "transparent" }}>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+            >
+                <Typography >{action.name}</Typography>
+            </AccordionSummary>
+            <AccordionDetails style={{ display: "grid", gridTemplateColumns: '4fr 1fr', alignItems: "start", justifyContent: "space-between" }}>
+                <TextField
+                    label="Action description"
+                    multiline
+                    rows={4}
+                    value={action.description}
+                    onChange={(event) => {
+                        if (event.target.value.length < 400) {
+                            setActions((existingActions: ICharacterAction[]) => { existingActions[index].description = event.target.value; return [...existingActions] })
+                        }
+                    }}
+                    defaultValue="Default Value"
+                    variant="filled"
+                />
+                <IconButton><DeleteIcon color="secondary" /></IconButton>
+            </AccordionDetails>
+        </Accordion>)
+    }), [setActions])
     useInterval(() => {
         if (characterRef) {
             if (!isSavedRace) {
@@ -199,8 +203,86 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 saveIsAcrobaticsProficient()
                 characterRef.child('stats').child("skills").child('acrobatics').child('proficient').set(isAcrobaticsProficient ? 'TRUE' : 'FALSE')
             }
+            if (!isSavedIsAnimalHandlingProficient) {
+                saveIsAnimalHandlingProficient()
+                characterRef.child('stats').child('animalHandling').child('isProficient').set(isAnimalHandlingProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsArcanaProficient) {
+                saveIsArcanaProficient()
+                characterRef.child('stats').child('arcana').child('isProficient').set(isArcanaProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsAthleticsProficient) {
+                saveIsAthleticsProficient()
+                characterRef.child('stats').child('athletics').child('isProficient').set(isAthleticsProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsDeceptionProficient) {
+                saveIsDeceptionProficient()
+                characterRef.child('stats').child('deception').child('isProficient').set(isDeceptionProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsHistoryProficient) {
+                saveIsHistoryProficient()
+                characterRef.child('stats').child('history').child('isProficient').set(isHistoryProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsInsightProficient) {
+                saveIsInsightProficient()
+                characterRef.child('stats').child('insight').child('isProficient').set(isInsightProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsIntimidationProficient) {
+                saveIsIntimidationProficient()
+                characterRef.child('stats').child('intimidation').child('isProficient').set(isIntimidationProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsInvestigationProficient) {
+                saveIsInvestigationProficient()
+                characterRef.child('stats').child('investigation').child('isProficient').set(isInvestigationProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsMedicineProficient) {
+                saveIsMedicineProficient()
+                characterRef.child('stats').child('medicine').child('isProficient').set(isMedicineProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsNatureProficient) {
+                saveIsNatureProficient()
+                characterRef.child('stats').child('nature').child('isProficient').set(isNatureProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsPerceptionProficient) {
+                saveIsPerceptionProficient()
+                characterRef.child('stats').child('perception').child('isProficient').set(isPerceptionProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsPerformanceProficient) {
+                saveIsPerformanceProficient()
+                characterRef.child('stats').child('performance').child('isProficient').set(isPerformanceProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsPersuasionProficient) {
+                saveIsPersuasionProficient()
+                characterRef.child('stats').child('persuasion').child('isProficient').set(isPersuasionProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsReligionProficient) {
+                saveIsReligionProficient()
+                characterRef.child('stats').child('religion').child('isProficient').set(isReligionProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsSleightOfHandProficient) {
+                saveIsSleightOfHandProficient()
+                characterRef.child('stats').child('sleightOfHand').child('isProficient').set(isSleightOfHandProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsStealthProficient) {
+                saveIsStealthProficient()
+                characterRef.child('stats').child('stealth').child('isProficient').set(isStealthProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedIsSurvivalProficient) {
+                saveIsSurvivalProficient()
+                characterRef.child('stats').child('survival').child('isProficient').set(isSurvivalProficient ? 'TRUE' : 'FALSE')
+            }
+            if (!isSavedActions) {
+                saveActions()
+                characterRef.child("actions").set(actions)
+            }
         }
     }, 3000)
+    useEffect(() => {
+        let modifier = getAbilityModifier(wisdom, false, 0, true)
+        if (typeof modifier === "number") {
+            setPassivePerception(modifier + 10)
+        }
+    }, [wisdom, setPassivePerception])
     if (selectedCharacter === undefined) {
         return (<Container><IsLoading /></Container>)
     }
@@ -215,7 +297,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 </div>
                 <NestedNestedContainer>
                     <div style={{ marginLeft: "0.5rem" }}>
-                        <TextField variant="outlined" label="Race" value={race} onChange={(event) => { console.log("onChange", event.target.value); setRace(event.target.value) }} />
+                        <TextField variant="outlined" label="Race" value={race} onChange={(event) => { setRace(event.target.value) }} />
                     </div>
                     {selectedCharacter.character.class ?
                         <div style={{ marginLeft: "0.5rem" }}>
@@ -528,24 +610,37 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         </Table>
                     </div>
                 </div>
+
                 {selectedCharacter.character.actions ?
-                    <NestedContainer style={{ gridColumn: 1 / 3 }} >
+                    < NestedContainer style={{ gridColumn: 1 / 3, width: "100%" }} >
                         <h3>
                             Actions and Specials:
                     </h3>
-                        {selectedCharacter.character.actions.map((action: ICharacterAction) => <div><b >{action.name}</b> {action.tags ? `(${renderArrayOfString(action.tags)}):` : ":"} {action.description}</div>)}
-                        <div style={{ width: "100%", borderBottom: "double" }}></div>
+                        {renderAccordian(actions)}
+
                     </NestedContainer>
-
                     : null}
-                <NestedContainer style={{ gridColumn: "1/3" }} >
-                </NestedContainer>
-                <NestedContainer style={{ gridColumn: "1/3" }} >
-                    <h3>Description and history: </h3>
-                    <div>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</div>
-                </NestedContainer>
 
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", justifyContent: "start", margin: "1rem" }} >
+
+
+                    <TextField variant="outlined" label="New action" value={newActionName} onChange={(event) => { setNewActionName(event.target.value) }} />
+                    <Button variant="contained" color="primary" style={{ height: "2rem", margin: "1rem" }} onClick={() => {
+                        if (newActionName) {
+                            setActions((existingActions: ICharacterAction[]) => [...existingActions, { name: newActionName, description: "" }]); setNewActionName("")
+                        }
+                    }}>Add new action</Button>
+                </div>
             </div>
+
+
+            <NestedContainer style={{ gridColumn: "1/3" }} >
+            </NestedContainer>
+            <NestedContainer style={{ gridColumn: "1/3" }} >
+                <h3>Description and history: </h3>
+                <div>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</div>
+            </NestedContainer>
+
         </Container >
     )
 };
