@@ -781,10 +781,10 @@ padding:0.2rem;
 `
 
 const TableHeader = styled.th`
-text-align: center
+text-align: center;
 `
 
 const TableElement = styled.td`
-text-align: center
+text-align: center;
 `
 export default CampaignCharacterEdit;

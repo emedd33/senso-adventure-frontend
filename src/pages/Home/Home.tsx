@@ -65,10 +65,10 @@ const Home: FunctionComponent<HomeProps> = () => {
   return (
 
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", justifyContent: "center", alignItems: "center", background: OLD_WHITE_TRANSPARENT, margin: "5rem", height: "10rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", justifyContent: "space-between", alignItems: "center", background: OLD_WHITE_TRANSPARENT, margin: "5rem", height: "10rem" }}>
         {campaignUrls ? Object.values(campaignUrls).map((campaign: { campaignSlug: string, url?: string }) => (
           <Link to={`/${campaign.campaignSlug}`}>
-            <Button>
+            <Button style={{ marginLeft: "2rem", marginRight: "2rem" }}>
               {campaign.url ?
                 <CampaignImg src={campaign.url} />
                 : <h1>{campaign.campaignSlug}</h1>
@@ -77,7 +77,7 @@ const Home: FunctionComponent<HomeProps> = () => {
           </Link>
         )) : null}
       </div>
-      <div style={{ width: "50%", minWidth: "20rem" }}>
+      <div style={{ minWidth: "20rem", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
         {sessions ? renderScrolls() : null}
       </div>
     </Container>
@@ -92,7 +92,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 100%;
   height: 100%;
   padding-top:10rem;
   min-height: 100vh;

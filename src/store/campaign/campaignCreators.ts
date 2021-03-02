@@ -29,27 +29,6 @@ export async function fetchFromFirebase(dispatch: any) {
     }
   });
 }
-export async function getSessionsFromCampaign(campaigns: ICampaign) {
-  const sessions = Object.entries(campaigns)
-    .map(([campaignId, campaign]) => {
-      if (campaign.sessions) {
-        return Object.entries(campaign.sessions).map(([sessionId, session]) => {
-          return {
-            campaignId: campaignId,
-            sessionId: sessionId,
-            session: session,
-          };
-        });
-      }
-      return null;
-    })
-    .flat()
-    .filter((e) => e !== null);
-  if (sessions) {
-    return sessions;
-  }
-  return null;
-}
 
 export const dispatchLevelUpCharacters = (selectedCampaign: any) => {
   return async (dispatch: Dispatch) => {

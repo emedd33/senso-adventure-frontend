@@ -1,10 +1,10 @@
+import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ScrollImage from "../../assets/backgroundImage/scroll.png";
 import { storage } from "../../firebase";
 import px2vw from "../../utils/px2vw";
 
-import "./Scroll.scss";
 type ScrollProps = {
   id: any;
   title: string;
@@ -35,69 +35,70 @@ function Scroll({
       .catch(e => console.log("could not fetch TitleImage for scroll"))
   }, [campaignTitle])
   return (
-    <div
-      style={{
-        zIndex: 20,
-        width: "100%",
-        justifyContent: "center",
-        display: "flex",
-        overflow: "hidden",
-      }}
+
+    <ScrollButton
+      onClick={onClick}
     >
+
       <ScrollContainer
-        onClick={onClick}
-        className={onClick ? "scroll-container-active" : "scroll-container"}
       >
-        <ScrollContent>
-          <div>
-            <h1 style={{ margin: 0, opacity: 0.7 }}>
-              Session day: {sessionDay}
-            </h1>
-            <ScrollDate>{date}</ScrollDate>
-          </div>
-          <div>
-            <div style={{ justifyContent: "center", display: "flex" }}>
-              <StoryImage src={imageUrl} alt="" />
-            </div>
-            <ScrollTitle>{title}</ScrollTitle>
-            <h3 style={{ color: "black", textAlign: "center" }}>{subTitle}</h3>
-          </div>
-        </ScrollContent>
+        <div>
+          <h5 style={{ margin: 0, opacity: 0.7 }}>
+            Session day: {sessionDay}
+          </h5>
+          <ScrollDate>{date}</ScrollDate>
+        </div>
+        <div>
+          <StoryImage src={imageUrl} alt="" />
+          <ScrollTitle>{title}</ScrollTitle>
+          <h5 style={{ color: "black", textAlign: "center", opacity: 0.7 }}>{subTitle}</h5>
+        </div>
       </ScrollContainer>
-    </div>
+    </ScrollButton>
   );
 }
-const StoryImage = styled.img`
-  margintop: -1rem;
-  width: 70%;
-`;
-const ScrollContent = styled.div`
-  font-size: ${px2vw(20)};
-  padding-top: 30%;
-  padding-bottom: 35%;
-  padding-right: 15%;
-  padding-left: 15%;
-  margin-left: 0;
-`;
-
-const ScrollTitle = styled.h1`
-  text-align: center;
-  opacity: 0.7;
-  width: 100%;
-`;
-
-const ScrollContainer = styled.div`
-  margin: ${px2vw(22)};
-  width: 90%;
-  min-width: 20rem;
-  background-image: url(${ScrollImage});
-
+const ScrollButton = styled(Button)`
+  margin:3rem;
+  margin-top:5rem;
+  width:25rem;
+  height:20rem;
   &:hover {
-    width: 100%;
+    width:30rem;
+  }
+  padding:1rem;
+  transition: 300ms;
+  display:flex;
+  justify-content:center;
+`
+const StoryImage = styled.img`
+  margin-top:1rem; 
+  width:10rem;
+`;
+const ScrollContainer = styled.div`
+  background-image: url(${ScrollImage});
+  height:20rem;
+  padding-top:3rem;
+  width:25rem;
+  padding-bottom:3rem;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transition: 250ms;
+  justify-content:center;
+  display:flex;
+  flex-direction:column;
+  
+  &:hover {
+    width:30rem;
   }
 `;
 
-const ScrollDate = styled.h2`
+const ScrollTitle = styled.h3`
+  text-align: center;
+  opacity: 0.7;
+`;
+
+
+const ScrollDate = styled.h4`
   margin-top: -${px2vw(4)};
   margin-bottom: 0;
   opacity: 0.7;
