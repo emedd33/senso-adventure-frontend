@@ -16,11 +16,9 @@ import CardActions from '@material-ui/core/CardActions';
 import ClearIcon from '@material-ui/icons/Clear';
 import useInterval from "../../store/hooks/useInterval";
 import { getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
-import { useQuill } from 'react-quilljs';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Tooltip from '@material-ui/core/Tooltip';
-import 'quill/dist/quill.snow.css'; // Add css for snow theme
 import { getIsLoading } from "../../store/admin/adminSelectors";
+import SimpleMentionEditor from "../../components/DraftComponent/SimpleMentionEditor";
 
 const useStyles = makeStyles({
     root: {
@@ -60,30 +58,7 @@ const CampaignSessionEdit: React.FC = () => {
     const [ImageUploaderKey, setImageUploaderKey] = useState(0);
     const [existingSessionImages, setExistingSessionImages] = useState<any[]>([]);
     const classes = useStyles();
-    const { quillRef, quill } = useQuill({
-        modules: {
-            toolbar: '#toolbar'
-        },
-        formats: ['bold', 'italic', 'underline', 'strike',
-            'align', 'list', 'indent',
-            'size', 'header',
-            'link',
-            'color', 'background',
-            'clean',], // Important
-    });
-    const insertSecretToEditor = useCallback(() => {
-        let selection = quill?.getSelection()
-        if (selection && selection.length > 0) {
-            quill?.formatText(selection.index, selection.length, { "color": "#9965db", "bold": true })
-        };
-    }, [quill])
-    // Insert Image(selected by user) to quill
-    React.useEffect(() => {
-        if (quill) {
-            // Add custom handler for Image Upload
-            quill.getModule('toolbar').addHandler('ql-secret', insertSecretToEditor);
-        }
-    }, [quill, insertSecretToEditor]);
+
     useEffect(() => {
         if (selectedSession && storageRef) {
 
@@ -121,14 +96,7 @@ const CampaignSessionEdit: React.FC = () => {
                     fetch(url)
                         .then(res => res.text())
                         .then(resText => {
-                            if (quill) {
-                                const delta = quill.clipboard.convert(resText)
-                                if (delta) {
-                                    quill.setContents(delta, "api");
 
-                                }
-                                setSavedText(resText)
-                            }
                         })
                         .catch((e) => console.log("Could not fetch sessionstory", e))
                 )
@@ -139,19 +107,19 @@ const CampaignSessionEdit: React.FC = () => {
             setNewSessionImages([])
             setExistingSessionImages([])
         })
-    }, [storageRef, quill, selectedSession])
+    }, [storageRef, , selectedSession])
 
 
     useInterval(async () => {    // Your custom logic here 
         if (storageRef) {
-            if (quill && quill.root.innerHTML !== savedText) {
-                setIsUploading(true)
-                setSavedText(quill.root.innerHTML)
-                storageRef
-                    .child("SessionStory.html")
-                    .putString(quill.root.innerHTML)
-                    .catch(e => console.log("Could not update session story", e))
-            }
+
+            setIsUploading(true)
+
+            // storageRef
+            //     .child("SessionStory.html")
+            //     .putString(quill.root.innerHTML)
+            //     .catch(e => console.log("Could not update session story", e))
+
         }
         if (databaseRef) {
 
@@ -291,44 +259,7 @@ const CampaignSessionEdit: React.FC = () => {
                 </div>
             </div>
             <EditContainer>
-                <div style={{ width: "100%", backgroundColor: "white" }}>
-                    <div id="toolbar">
-                        <select className="ql-size">
-                            <option value="small" />
-                            <option selected />
-                            <option value="large" />
-                            <option value="huge" />
-                        </select>
-                        <Tooltip title="Secret message">
-                            <button className="ql-secret" onClick={insertSecretToEditor} ><VpnKeyIcon /></button>
-                        </Tooltip>
-                        <Tooltip title="Bold">
-
-                            <button className="ql-bold" />
-                        </Tooltip>
-
-                        <Tooltip title="Italic">
-                            <button className="ql-italic" />
-                        </Tooltip>
-                        <Tooltip title="Underline">
-                            <button className="ql-underline" />
-                        </Tooltip>
-                        <Tooltip title="Strike">
-                            <button className="ql-strike" />
-                        </Tooltip>
-                        <Tooltip title="Link">
-                            <button className="ql-link" />
-                        </Tooltip>
-                        <Tooltip title="Sub-text">
-                            <button className="ql-script" value="sub" />
-                        </Tooltip>
-                        <Tooltip title="Super-text">
-                            <button className="ql-script" value="super" />
-                        </Tooltip>
-                    </div>
-                    <div id="editor" />
-                    <div ref={quillRef} />
-                </div>
+                <SimpleMentionEditor />
             </EditContainer>
 
             <h1>Session Images</h1>
