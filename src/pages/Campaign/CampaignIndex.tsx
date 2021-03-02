@@ -27,7 +27,6 @@ type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation()
   const history = useHistory();
-
   const dispatch = useDispatch()
   const campaigns = useSelector((state: RootReducerProp) => state.rootCampaigns.campaigns)
   const selectedCampaign = useSelector(getSelectedCampaign);
@@ -149,7 +148,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
           </Route>
           <Route exact path="/:campaignSlug/characters/:characterSlug">
-            <CampaignCharacter />
+            {isDungeonMaster ? <CampaignCharacter /> : <Redirect to={"/"} />}
           </Route>
           <Route exact path="/:campaignSlug/characters/:characterSlug/edit">
             {isDungeonMaster ? <CampaignCharacterEdit /> : <Redirect to={"/"} />}

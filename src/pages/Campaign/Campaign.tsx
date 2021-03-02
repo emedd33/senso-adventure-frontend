@@ -169,7 +169,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         }
         return () => { setSessions([]); setPlayers([]); setNpc([]) }
     }, [selectedCampaign, dispatch, history])
-    console.log("sessions", sessions)
     return (
         <>
             <Overview >

@@ -1,34 +1,37 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
+
+
 import Scroll from "../../components/Scroll/Scroll";
-import { Link, useHistory } from "react-router-dom";
-import { getUniqueNpc, getPlayerCharacters, getSelectedCampaign } from "../../store/selected/selectedSelectors";
-import styled from "styled-components";
-import { setSelectedCharacter, setSelectedSession } from "../../store/selected/selectedCreators";
-import { OLD_WHITE_TRANSPARENT, OLD_WHITE } from "../../assets/constants/Constants";
+import { setSelectedSession } from "../../store/selected/selectedCreators";
 
 type CampaignSessionsProps = {};
 const CampaignSessions: FunctionComponent<CampaignSessionsProps> = () => {
     const history = useHistory();
-
+    const dispatch = useDispatch()
     const selectedCampaign = useSelector(getSelectedCampaign);
 
     return (
         <>
-            <Overview >
-
-
-
-            </Overview>
-
+            {selectedCampaign && selectedCampaign.campaign.sessions ? Object.entries(selectedCampaign.campaign.sessions).map(([id, session]: [string, ISession]) => {
+                return <Scroll
+                    id={id}
+                    title={session.title}
+                    subTitle={session.subTitle ? session.subTitle : ""}
+                    date={session.date}
+                    campaignTitle={session.campaignTitle}
+                    sessionDay={session.sessionDay}
+                    onClick={() => {
+                        dispatch(setSelectedSession({ id: id, session: session }))
+                        history.push(`/${selectedCampaign.campaign.slug}/sessions/${session.slug}`);
+                    }}
+                />
+            }
+            ) : null}
         </>
     );
 };
-const Overview = styled.div`
-width:90%;
-margin:5rem;
-background:${OLD_WHITE_TRANSPARENT};
-padding:1rem;
-min-width:20rem;
-`
+
 export default CampaignSessions;

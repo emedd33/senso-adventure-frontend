@@ -1,27 +1,45 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Scroll from "../../components/Scroll/Scroll";
-import { Link, useHistory } from "react-router-dom";
-import { getUniqueNpc, getPlayerCharacters, getSelectedCampaign, getSelectedCampaignCharacters } from "../../store/selected/selectedSelectors";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getSelectedCampaign, getSelectedCampaignCharacters, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
-import { setSelectedCharacter, setSelectedSession } from "../../store/selected/selectedCreators";
-import { OLD_WHITE_TRANSPARENT, OLD_WHITE } from "../../assets/constants/Constants";
-import { Button } from "@material-ui/core";
 
+import { OLD_WHITE } from "../../assets/constants/Constants";
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Typography } from "@material-ui/core";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 type CampaignCharactersProps = {};
 const CampaignCharacters: FunctionComponent<CampaignCharactersProps> = () => {
-    const history = useHistory();
-
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const characters = useSelector(getSelectedCampaignCharacters)
+    const selectedCampaign = useSelector(getSelectedCampaign)
 
     return (
         <>
             <Container >
-                {characters ? Object.entries(characters).map(([id, character]: [string, ICharacter,]) => (
-
-                    <Button>
-                        <h1>{character.name}</h1>
-                    </Button>
+                {characters && selectedCampaign ? Object.entries(characters).map(([id, character]: [string, ICharacter,]) => (
+                    <Accordion >
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1bh-content"
+                            id="panel1bh-header"
+                        >
+                            <Typography style={{ flexBasis: '33.33%', flexShrink: 0, }} >{character.name}</Typography>
+                            <Typography style={{ fontSize: "1rem", color: "gray" }}>{character.isPlayer === "TRUE" ? "Player" : "NPC"}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            {character.summary}
+                        </AccordionDetails>
+                        {isDungeonMaster ?
+                            <AccordionActions>
+                                <Link to={`/${selectedCampaign.campaign.slug}/characters/${character.slug}`}>
+                                    <Button size="small" color="primary">
+                                        <ArrowForwardIcon />
+                                    </Button>
+                                </Link>
+                            </AccordionActions>
+                            : null}
+                    </Accordion>
                 )
                 )
                     : null}
@@ -42,4 +60,9 @@ display: grid;
 grid-template-columns:1fr
 min-height:20rem;
 `;
+const CharacterButton = styled(Button)`
+display:grid;
+grid-template-columns:1fr 1fr;
+width:100%;
+`
 export default CampaignCharacters;

@@ -30,7 +30,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const [isLoading, setIsLoading] = useState(false);
   const selectedCampaign = useSelector(getSelectedCampaign);
   const [campaignTitle, setCampaignTitle] = useState<string>();
-  const userName = useSelector(getAuthUser)
+  const user = useSelector(getAuthUser)
   const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false);
   const [
     campaignBackgroundImageFile,
@@ -59,21 +59,24 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
     }
 
     let slug = campaignTitle.replace(/\s/g, '')
-    let newCampaign = {
-      dungeonMaster: userName,
-      title: campaignTitle,
-      slug: slug
-    };
-    if (isNew) {
-      await campaignsRef
-        .push(newCampaign)
-        .catch((e) => console.log("Could not update campaing "));
-    } else {
-      if (campaignsRef && selectedCampaign) {
+    if (user) {
+
+      let newCampaign = {
+        dungeonMaster: user.username,
+        title: campaignTitle,
+        slug: slug
+      };
+      if (isNew) {
         await campaignsRef
-          .child(selectedCampaign.id)
-          .set(newCampaign)
-          .catch((e) => console.log("Could not update campaing " + e));
+          .push(newCampaign)
+          .catch((e) => console.log("Could not update campaing "));
+      } else {
+        if (campaignsRef && selectedCampaign) {
+          await campaignsRef
+            .child(selectedCampaign.id)
+            .set(newCampaign)
+            .catch((e) => console.log("Could not update campaing " + e));
+        }
       }
     }
 

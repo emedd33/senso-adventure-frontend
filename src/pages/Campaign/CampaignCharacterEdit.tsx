@@ -370,11 +370,10 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     <div style={{ marginLeft: "0.5rem" }}>
                         <TextField variant="outlined" label="Race" value={race} onChange={(event) => { setRace(event.target.value) }} />
                     </div>
-                    {selectedCharacter.character.class ?
-                        <div style={{ marginLeft: "0.5rem" }}>
-                            <TextField variant="outlined" label="Class" value={characterClass} onChange={(event) => setCharacterClass(event.target.value)} />
-                        </div>
-                        : null}
+
+                    <div style={{ marginLeft: "0.5rem" }}>
+                        <TextField variant="outlined" label="Class" value={characterClass ? characterClass : ""} onChange={(event) => setCharacterClass(event.target.value)} />
+                    </div>
                     <div style={{ marginLeft: "0.5rem" }}>
                         <TextField variant="outlined" label="Alignment" value={alignment} onChange={(event) => setAlignment(event.target.value)} />
                     </div>
