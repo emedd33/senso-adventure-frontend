@@ -20,6 +20,10 @@ export const isDungeonMasterSelector = (state: RootReducerProp) => {
     return false;
 };
 
+export const getSelectedCampaignCharacters = (state: RootReducerProp) => {
+    return state.selected.selectedCampaign?.campaign.characters
+}
+
 export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
         return storage.ref()

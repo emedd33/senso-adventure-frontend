@@ -20,6 +20,8 @@ import { initialSelectedSessionState } from "../../store/selected/selectedReduce
 import CampaignCharacter from "./CampaignCharacter";
 import isValidSlug from "../../utils/isValidSessionslug";
 import CampaignCharacterEdit from "./CampaignCharacterEdit";
+import CampaignSessions from "./CampaignSessions"
+import CampaignCharacters from "./CampaignCharacters"
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
@@ -129,6 +131,9 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           <Route exact path="/:campaignSlug/sessions/new">
             {isDungeonMaster ? <CampaignSessionNew /> : <Redirect to={"/"} />}
           </Route>
+          <Route exact path="/:campaignSlug/sessions/">
+            <CampaignSessions />
+          </Route>
           <Route exact path="/:campaignSlug/sessions/:sessionSlug">
             <CampaignSession />
           </Route>
@@ -137,7 +142,9 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
         </Route>
         <Switch>
-
+          <Route exact path="/:campaignSlug/characters/">
+            <CampaignCharacters />
+          </Route>
           <Route exact path="/:campaignSlug/characters/new">
             {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
           </Route>

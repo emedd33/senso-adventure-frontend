@@ -51,7 +51,7 @@ function Scroll({
         <div>
           <StoryImage src={imageUrl} alt="" />
           <ScrollTitle>{title}</ScrollTitle>
-          <h5 style={{ color: "black", textAlign: "center", opacity: 0.7 }}>{subTitle}</h5>
+          <h5 style={{ color: "black", textAlign: "center", opacity: 0.7 }}>{subTitle ? subTitle : "Subtitle"}</h5>
         </div>
       </ScrollContainer>
     </ScrollButton>
@@ -60,10 +60,11 @@ function Scroll({
 const ScrollButton = styled(Button)`
   margin:3rem;
   margin-top:5rem;
-  width:25rem;
+  width:90%;
   height:20rem;
+  max-width:30rem;
   &:hover {
-    width:30rem;
+    width:100%;
   }
   padding:1rem;
   transition: 300ms;
@@ -72,13 +73,14 @@ const ScrollButton = styled(Button)`
 `
 const StoryImage = styled.img`
   margin-top:1rem; 
-  width:10rem;
+  width:70%;
+  max-width:25rem;
 `;
 const ScrollContainer = styled.div`
   background-image: url(${ScrollImage});
   height:20rem;
-  padding-top:3rem;
-  width:25rem;
+  padding:3rem;
+  width:80%;
   padding-bottom:3rem;
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -88,7 +90,7 @@ const ScrollContainer = styled.div`
   flex-direction:column;
   
   &:hover {
-    width:30rem;
+    width:100%rem;
   }
 `;
 

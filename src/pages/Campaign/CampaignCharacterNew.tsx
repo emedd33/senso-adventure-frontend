@@ -80,6 +80,9 @@ const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () =>
             newCharacter.isPlayer = isPlayer
             if (isPlayer) {
                 newCharacter.playerName = playerName
+                newCharacter.level = 1
+            } else {
+                newCharacter.challengeRating = "1"
             }
             setCharacterNameError(false)
             campaignRef.child("characters").push(newCharacter).then((snapshot) => {

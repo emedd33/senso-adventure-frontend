@@ -1,13 +1,12 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Scroll from "../../components/Scroll/Scroll";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { getUniqueNpc, getPlayerCharacters, getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { setSelectedSession } from "../../store/selected/selectedCreators";
+import { setSelectedCharacter, setSelectedSession } from "../../store/selected/selectedCreators";
 import { OLD_WHITE_TRANSPARENT, OLD_WHITE } from "../../assets/constants/Constants";
-import { IconButton } from "@material-ui/core";
+import { Avatar, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, IconButton, } from "@material-ui/core";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
@@ -31,74 +30,27 @@ export const Menu = (list: any[], selected: any) =>
 
 
 
-const initSelected = 'item1';
 
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
 
     const selectedCampaign = useSelector(getSelectedCampaign);
-    const playerCharacters = useSelector(getPlayerCharacters)
-    const npcs = useSelector(getUniqueNpc)
     const [sessions, setSessions] = useState<any[]>([])
+    const [players, setPlayers] = useState<any[]>([])
+    const [npc, setNpc] = useState<any[]>([])
     const dispatch = useDispatch()
-    const [selected, setSelected] = useState(initSelected)
+    const [selectedSessionMenu, setSelectedSessionMenu] = useState("")
+    const [selectedPlayerMenu, setSelectedPlayerMenu] = useState("")
+    const [selectedNpcMenu, setSelectedNpcMenu] = useState("")
     useEffect(() => {
-        if (selectedCampaign && selectedCampaign.campaign.sessions) {
-            Object.entries(selectedCampaign.campaign.sessions).slice(0, 10).map(
-                ([id, session], index) => {
-                    if (session) {
-                        setSessions((existing) => [...existing, <MenuItem text={
-                            <Scroll
-                                id={id}
-                                title={session.title}
-                                subTitle={session.subTitle ? session.subTitle : ""}
-                                date={session.date}
-                                campaignTitle={session.campaignTitle}
-                                sessionDay={session.sessionDay}
-                                onClick={() => {
-                                    dispatch(setSelectedSession({ id: id, session: session }))
-                                    history.push(`/${selectedCampaign.campaign.slug}/sessions/${session.slug}`);
-                                }}
-                            />
-                        } key={index} selected={selected} />])
-                    }
-                    return undefined
-                })
+        if (selectedCampaign) {
+            if (selectedCampaign.campaign.sessions) {
 
-
-        }
-        return () => { setSessions([]) }
-    }, [selectedCampaign, dispatch, history, selected])
-    console.log("sessions", sessions)
-    return (
-        <>
-            <Overview >
-                <ScrollMenu
-                    data={sessions}
-                    arrowLeft={<IconButton style={{ backgroundColor: OLD_WHITE }}><ArrowBackIcon /></IconButton>}
-                    arrowRight={<IconButton style={{ backgroundColor: OLD_WHITE }}><ArrowForwardIcon /></IconButton>}
-                    selected={selected}
-                    wheel={false}
-                    onSelect={(key) => {
-                        if (typeof key === "string") {
-                            setSelected(key)
-                        }
-                    }}
-                />
-
-
-
-            </Overview>
-            <h2>players</h2>
-            {playerCharacters.map((player: { id: string, character: ICharacter }) => <h2>{player.character.name}</h2>)}
-            <h2>npc</h2>
-            {npcs.map((npc: { id: string, character: ICharacter }) => <div><Link to={`/${selectedCampaign!.campaign.slug}/characters/${npc.character.slug}`} >{npc.character.name} </Link></div>)}
-            <div style={{ width: "50%", minWidth: "20rem" }}>
-                {selectedCampaign && selectedCampaign.campaign.sessions ?
-                    Object.entries(selectedCampaign.campaign.sessions).map(
-                        ([id, session],) => {
-                            return (
+                Object.entries(selectedCampaign.campaign.sessions).slice(0, 10).map(
+                    ([id, session], index) => {
+                        if (session) {
+                            setSessions((existing) => [...existing, <MenuItem text={
                                 <Scroll
                                     id={id}
                                     title={session.title}
@@ -111,16 +63,177 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                         history.push(`/${selectedCampaign.campaign.slug}/sessions/${session.slug}`);
                                     }}
                                 />
-                            );
+                            } key={index} selected={selectedSessionMenu} />])
+
                         }
-                    ) :
-                    null}
-            </div>
+                        return undefined
+                    })
+            }
+            console.log("players", players)
+            if (selectedCampaign.campaign.characters) {
+                Object.entries(selectedCampaign.campaign.characters).slice(0, 10).map(
+                    ([id, character]: [string, ICharacter], index) => {
+                        if (character) {
+                            if (character.isPlayer === "TRUE" && character.isDead === "FALSE") {
+                                setPlayers((existing) => [...existing, <MenuItem text={
+                                    <Card style={{ margin: "2rem", backgroundColor: OLD_WHITE }} onClick={() => {
+                                        dispatch(setSelectedCharacter({ id: id, character: character }))
+                                        history.push(`/${selectedCampaign.campaign.slug}/characters/${character.slug}`);
+                                    }}>
+                                        <CardActionArea>
+                                            <CardHeader
+                                                avatar={
+                                                    <Avatar aria-label="recipe" >
+                                                        {character.name[0]}
+                                                    </Avatar>
+                                                }
+                                                style={{ width: "15rem" }}
+                                                title={character.name}
+                                                subheader={`Level ${character.level}, ${character.race},${character.class ? character.class : ""}`}
+                                            />
+                                            <CardContent >
+                                                <p>{character.summary}</p>
+                                                <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)" }}>
+                                                    <div>
+                                                        STR
+                                                    </div>
+                                                    <div>
+                                                        DEX
+                                                    </div>
+                                                    <div>
+                                                        CON
+                                                    </div>
+                                                    <div>
+                                                        INT
+                                                    </div>
+                                                    <div>
+                                                        WIS
+                                                    </div>
+                                                    <div>
+                                                        CHA
+                                                    </div>
+                                                    <div>
+                                                        {character.stats.strength.value}
+                                                    </div>
+                                                    <div>
+                                                        {character.stats.dexterity.value}
+                                                    </div>
+                                                    <div>
+                                                        {character.stats.constitution.value}
+                                                    </div>
+                                                    <div>
+                                                        {character.stats.intelligence.value}
+                                                    </div>
+                                                    <div>
+                                                        {character.stats.wisdom.value}
+                                                    </div>
+                                                    <div>
+                                                        {character.stats.charisma.value}
+                                                    </div>
+                                                </div>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                } key={index} selected={selectedPlayerMenu} />])
+                            }
+                            else {
+                                setNpc((existing) => [...existing, <MenuItem text={
+                                    <Card style={{ margin: "2rem", backgroundColor: OLD_WHITE }} onClick={() => {
+                                        dispatch(setSelectedCharacter({ id: id, character: character }))
+                                        history.push(`/${selectedCampaign.campaign.slug}/characters/${character.slug}`);
+                                    }}>
+                                        <CardActionArea>
+                                            <CardHeader
+                                                avatar={
+                                                    <Avatar aria-label="recipe" >
+                                                        {character.name[0]}
+                                                    </Avatar>
+                                                }
+                                                style={{ width: "15rem" }}
+                                                title={character.name}
+                                                subheader={`${character.race}`}
+                                            />
+                                            <CardContent >
+                                                <p>{character.summary}</p>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                } key={index} selected={selectedPlayerMenu} />])
+                            }
+                        }
+                        return undefined
+                    })
+            }
+
+
+        }
+        return () => { setSessions([]); setPlayers([]); setNpc([]) }
+    }, [selectedCampaign, dispatch, history])
+    console.log("sessions", sessions)
+    return (
+        <>
+            <Overview >
+                <Link to={`/${selectedCampaign?.campaign.slug}/sessions`}><Button variant="contained" style={{ backgroundColor: OLD_WHITE, textTransform: "none", width: "100%" }} ><h3 style={{ textAlign: "end" }}>Sessions</h3></Button></Link>
+                <ScrollMenu
+                    data={sessions}
+                    arrowLeft={<IconButton style={{ backgroundColor: OLD_WHITE }}><ArrowBackIcon /></IconButton>}
+                    arrowRight={<IconButton style={{ backgroundColor: OLD_WHITE }}><ArrowForwardIcon /></IconButton>}
+                    selected={selectedSessionMenu}
+                    wheel={false}
+                    onSelect={(key) => {
+                        if (typeof key === "string") {
+                            setSelectedSessionMenu(key)
+                        }
+                    }}
+                />
+
+
+
+            </Overview>
+            <Overview >
+                <Link to={`/${selectedCampaign?.campaign.slug}/characters`}><Button variant="contained" style={{ backgroundColor: OLD_WHITE, textTransform: "none", width: "100%" }} ><h3 style={{ textAlign: "end" }}>Players</h3></Button></Link>
+                <ScrollMenu
+                    data={players}
+                    arrowLeft={<IconButton style={{ backgroundColor: OLD_WHITE }}><ArrowBackIcon /></IconButton>}
+                    arrowRight={<IconButton style={{ backgroundColor: OLD_WHITE }}><ArrowForwardIcon /></IconButton>}
+                    selected={selectedPlayerMenu}
+                    wheel={false}
+                    menuStyle={{ justifyContent: "center" }}
+                    onSelect={(key) => {
+                        if (typeof key === "string") {
+                            setSelectedPlayerMenu(key)
+                        }
+                    }}
+                />
+
+
+
+            </Overview>
+            <Overview >
+                <Link to={`/${selectedCampaign?.campaign.slug}/characters`}><Button variant="contained" style={{ backgroundColor: OLD_WHITE, textTransform: "none", width: "100%" }} ><h3 style={{ textAlign: "end" }}>Npc</h3></Button></Link>
+                <ScrollMenu
+                    data={npc}
+                    arrowLeft={<IconButton style={{ backgroundColor: OLD_WHITE }}><ArrowBackIcon /></IconButton>}
+                    arrowRight={<IconButton style={{ backgroundColor: OLD_WHITE }}><ArrowForwardIcon /></IconButton>}
+                    selected={selectedNpcMenu}
+                    wheel={false}
+                    onSelect={(key) => {
+                        if (typeof key === "string") {
+                            setSelectedNpcMenu(key)
+                        }
+                    }}
+                />
+
+
+
+            </Overview>
+
         </>
     );
 };
 const Overview = styled.div`
 width:90%;
+margin:5rem;
 background:${OLD_WHITE_TRANSPARENT};
 padding:1rem;
 min-width:20rem;
