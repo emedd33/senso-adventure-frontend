@@ -12,8 +12,12 @@ import createMentionPlugin, {
 } from '@draft-js-plugins/mention';
 import editorStyles from './SimpleMentionEditor.module.css';
 import '@draft-js-plugins/mention/lib/plugin.css';
+import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import mentions from './Mentions';
 import useInterval from '../../store/hooks/useInterval';
+import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
+const staticToolbarPlugin = createToolbarPlugin();
+const { Toolbar } = staticToolbarPlugin;
 type DraftJSEditorProps = {
   JSONRef: any | undefined,
   readOnly: boolean
@@ -24,7 +28,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const [savedEditorState, setSavedEditorState] = useState<any>();
+  const [savedEditorState, setSavedEditorState] = useState<any>(editorState);
 
   useInterval(() => {
     if (!readOnly) {
@@ -60,9 +64,9 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
 
           })
         )
-        .catch((e: any) => { console.log("Could not fetch from firebase", e); setSavedEditorState(editorState) })
+        .catch((e: any) => { console.log("Could not fetch from firebase", e) })
     }
-  }, [JSONRef, editorState])
+  }, [JSONRef])
 
 
   const [open, setOpen] = useState(true);
@@ -92,6 +96,10 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
         ref.current!.focus();
       }}
     >
+      {readOnly ?
+        null :
+        <Toolbar />
+      }
       <Editor
         editorKey={'editor'}
         editorState={editorState}
