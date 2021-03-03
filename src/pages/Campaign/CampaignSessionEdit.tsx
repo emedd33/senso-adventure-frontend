@@ -18,7 +18,7 @@ import useInterval from "../../store/hooks/useInterval";
 import { getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
 import Tooltip from '@material-ui/core/Tooltip';
 import { getIsLoading } from "../../store/admin/adminSelectors";
-import SimpleMentionEditor from "../../components/DraftComponent/SimpleMentionEditor";
+import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 
 const useStyles = makeStyles({
     root: {
@@ -90,17 +90,17 @@ const CampaignSessionEdit: React.FC = () => {
                 }).catch((error) => {
                     console.log("Error fetching session images", error)
                 });
-            storageRef.child("SessionStory.html")
-                .getDownloadURL()
-                .then(url =>
-                    fetch(url)
-                        .then(res => res.text())
-                        .then(resText => {
+            // storageRef.child("SessionStory.html")
+            //     .getDownloadURL()
+            //     .then(url =>
+            //         fetch(url)
+            //             .then(res => res.text())
+            //             .then(resText => {
 
-                        })
-                        .catch((e) => console.log("Could not fetch sessionstory", e))
-                )
-                .catch((e) => console.log("Could not connect to firebase for sessionstory", e))
+            //             })
+            //             .catch((e) => console.log("Could not fetch sessionstory", e))
+            //     )
+            //     .catch((e) => console.log("Could not connect to firebase for sessionstory", e))
         }
 
         return (() => {
@@ -259,7 +259,7 @@ const CampaignSessionEdit: React.FC = () => {
                 </div>
             </div>
             <EditContainer>
-                <SimpleMentionEditor />
+                <DraftJSEditor JSONRef={storageRef?.child("SessionStory.json")} />
             </EditContainer>
 
             <h1>Session Images</h1>

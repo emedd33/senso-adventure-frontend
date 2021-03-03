@@ -14,18 +14,18 @@ import createMentionPlugin, {
 import editorStyles from './SimpleMentionEditor.module.css';
 import '@draft-js-plugins/mention/lib/plugin.css';
 import mentions from './Mentions';
-import { stateToHTML } from 'draft-js-export-html';
 import useInterval from '../../store/hooks/useInterval';
 import { getSelectedSessionStorageRef } from '../../store/selected/selectedSelectors';
 import { useSelector } from 'react-redux';
-
-export default function SimpleMentionEditor(): ReactElement {
+type DraftJSEditorProps = {
+  JSONRef: any | undefined
+}
+const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef }) => {
   const ref = useRef<Editor>(null);
-  const storageRef = useSelector(getSelectedSessionStorageRef)
-
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  const [savedEditorState, setSavedEditorState] = useState<any>();
   let options = {
     entityStyleFn: (entity: any) => {
       const entityType = entity.get('type').toLowerCase();
@@ -46,31 +46,46 @@ export default function SimpleMentionEditor(): ReactElement {
   const onExtractData = () => {
   };
   useInterval(() => {
-    console.log("hehhe")
-    if (storageRef) {
-      const editorJSON = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
-      var blob = new Blob([editorJSON], { type: "application/json" })
+    console.log(savedEditorState)
+    if (JSONRef && savedEditorState) {
+      // console.log(JSON.stringify(editorState.getCurrentContent()))
+      if (JSON.stringify(editorState.getCurrentContent()) !== JSON.stringify(savedEditorState.getCurrentContent())) {
 
-      // storageRef
-      // .child("sessionStory.json")
-      // .put(blob)
-      // .catch(e => console.log("Could not update session story", e))
+        setSavedEditorState(editorState)
+        var blob = new Blob([savedEditorState], { type: "application/json" })
+        console.log("uploading")
+        // JSONRef
+        //   .put(blob)
+        //   .catch((e: any) => console.log("Could not update session story", e))
+      } else {
+        console.log("Equal")
+      }
     }
+
 
   }, 3000)
+
   useEffect(() => {
-    if (storageRef) {
-      storageRef
-        .child("sessionStory.json")
+    if (JSONRef) {
+      JSONRef
         .getDownloadURL()
-        .then((url) => fetch(url)
+        .then((url: string) => fetch(url)
           .then(res => res.json())
-          .then((json) => {
-            setEditorState(EditorState.createWithContent(convertFromRaw(json)))
-          }))
+          .then(text => console.log(text))
+          // .then(blob => blob.text())
+        )
+        // .then(() => console.log(url)))
+        // .then((json) => {
+        //   console.log("json", json)
+        //   let loadedEditorState = EditorState.createWithContent(convertFromRaw(json))
+        //   setSavedEditorState(loadedEditorState)
+        //   setEditorState(loadedEditorState)
+        //   console.log("savedEditorState", savedEditorState)
+        // }))
+        .catch((e: any) => { console.log("could not fetch sesion story", e); setSavedEditorState(editorState) })
 
     }
-  }, [storageRef])
+  }, [])
 
 
   const [open, setOpen] = useState(true);
@@ -120,3 +135,5 @@ export default function SimpleMentionEditor(): ReactElement {
     </div>
   );
 }
+
+export default DraftJSEditor
