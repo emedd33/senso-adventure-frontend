@@ -29,12 +29,14 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
   useInterval(() => {
     if (!readOnly) {
       if (JSONRef && savedEditorState) {
+
+
         if (JSON.stringify(editorState.getCurrentContent()) !== JSON.stringify(savedEditorState.getCurrentContent())) {
+          console.log("updatinf")
           let uploadedState = editorState
           var blob = new Blob([JSON.stringify(convertToRaw(uploadedState.getCurrentContent()))], { type: "application/json" })
           JSONRef
             .put(blob).then(() => {
-              console.log("uploaded")
               setSavedEditorState(uploadedState)
             }
             )
@@ -58,8 +60,9 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
 
           })
         )
+        .catch((e: any) => { console.log("Could not fetch from firebase", e); setSavedEditorState(editorState) })
     }
-  }, [JSONRef])
+  }, [JSONRef, editorState])
 
 
   const [open, setOpen] = useState(true);

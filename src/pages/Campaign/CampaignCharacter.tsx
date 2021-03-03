@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { getSelectedCharacter, isDungeonMasterSelector, getSelectedCharacterStorageRef } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
@@ -11,7 +11,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import renderArrayOfString from "../../utils/renderArrayToString";
-import parse from 'html-react-parser';
+import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 
 type CampaignProps = {};
 const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
@@ -19,7 +19,6 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
     const selectedCharacter = useSelector(getSelectedCharacter)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const storageRef = useSelector(getSelectedCharacterStorageRef)
-    const [description, setDescription] = useState("")
     const parseStringBooleanToCheckmark = (proficient: any, setCross: boolean) => {
         if (proficient === "TRUE") {
             return <CheckIcon style={{ width: "0.8rem", color: "green" }} />
@@ -29,28 +28,8 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
         }
         return null
     }
-    useEffect(() => {
-        if (selectedCharacter) {
 
-            if (storageRef) {
-                storageRef
-                    .child("CharacterDescription.html")
-                    .getDownloadURL()
-                    .then((url: string) => {
-                        fetch(url)
-                            .then((res) => res.text())
-                            .then((res) => {
-                                setDescription(res ? res : " ");
-                            })
-                    }).catch(e => { console.log("Could not fetch session story") })
-            }
-        }
-        return () => {
-            setDescription("")
-        }
-    }, [selectedCharacter, storageRef]);
     if (selectedCharacter === undefined) {
-        console.log("hei")
         return (<Container><IsLoading /></Container>)
     }
     return (
@@ -364,11 +343,8 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                     : null}
                 <NestedContainer style={{ width: "100%" }} >
                     <h3>Description and history: </h3>
-                    <div >
-                        {description ? parse(
-                            description
-                        ) : null}
-                    </div>
+                    <DraftJSEditor readOnly={true} JSONRef={storageRef?.child("CharacterDescription.json")} />
+
                 </NestedContainer>
 
             </div>

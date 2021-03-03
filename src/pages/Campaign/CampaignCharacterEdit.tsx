@@ -7,11 +7,11 @@ import IsLoading from "../../components/IsLoading/IsLoading";
 import getAbilityModifier from "../../utils/getAbilityModifier";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Chip, IconButton, Switch, TextField, Tooltip, Typography } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, Button, Chip, IconButton, Switch, TextField, Typography } from "@material-ui/core";
 import useInterval from "../../store/hooks/useInterval";
-import { useQuill } from 'react-quilljs';
 import useSavedState from "../../store/hooks/useSavedState";
 import onChangeNumberField from "../../utils/onChangeNumberField";
+import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 type CampaignProps = {};
 const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const selectedCharacter: ISelectedCharacter | undefined = useSelector(getSelectedCharacter)
@@ -66,19 +66,8 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const [isStealthProficient, setIsStealthProficient, saveIsStealthProficient, isSavedIsStealthProficient] = useSavedState(selectedCharacter?.character.stats.skills.stealth.proficient === "TRUE")
     const [isSurvivalProficient, setIsSurvivalProficient, saveIsSurvivalProficient, isSavedIsSurvivalProficient] = useSavedState(selectedCharacter?.character.stats.skills.survival.proficient === "TRUE")
     const [actions, setActions, saveActions, isSavedActions] = useSavedState(selectedCharacter?.character.actions)
-    const [description, setDescription] = useState(selectedCharacter?.character.description)
     const [newActionName, setNewActionName] = useState("")
-    const { quillRef, quill } = useQuill({
-        modules: {
-            toolbar: '#toolbar'
-        },
-        formats: ['bold', 'italic', 'underline', 'strike',
-            'align', 'list', 'indent',
-            'size', 'header',
-            'link',
-            'color', 'background',
-            'clean',],
-    });
+
     const renderAccordian = useCallback((actions) => actions.map((action: ICharacterAction, index: number) => {
         return (<Accordion style={{ width: "100%", backgroundColor: "transparent" }}>
             <AccordionSummary
@@ -334,19 +323,6 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
             }
         }
     }, 1000)
-    useInterval(() => {
-
-        if (storageRef) {
-
-            if (quill && quill.root.innerHTML !== description) {
-                setDescription(quill.root.innerHTML)
-                storageRef
-                    .child("CharacterDescription.html")
-                    .putString(quill.root.innerHTML)
-                    .catch(e => console.log("Could not update character description", e))
-            }
-        }
-    }, [3000])
 
     useEffect(() => {
         let modifier = getAbilityModifier(wisdom, false, 0, true)
@@ -703,44 +679,13 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         }
                     }}>Add new action</Button>
                 </div>
+                <div style={{ width: "100%" }}>
 
-                <h3>
-                    Description and history:
+                    <h3>
+                        Description and history:
                 </h3>
-                <div style={{ width: "100%", backgroundColor: "white", minHeight: "20rem" }}>
-                    <div id="toolbar">
-                        <select className="ql-size">
-                            <option value="small" />
-                            <option selected />
-                            <option value="large" />
-                            <option value="huge" />
-                        </select>
-                        <Tooltip title="Bold">
+                    <DraftJSEditor readOnly={false} JSONRef={storageRef?.child("CharacterDescription.json")} />
 
-                            <button className="ql-bold" />
-                        </Tooltip>
-
-                        <Tooltip title="Italic">
-                            <button className="ql-italic" />
-                        </Tooltip>
-                        <Tooltip title="Underline">
-                            <button className="ql-underline" />
-                        </Tooltip>
-                        <Tooltip title="Strike">
-                            <button className="ql-strike" />
-                        </Tooltip>
-                        <Tooltip title="Link">
-                            <button className="ql-link" />
-                        </Tooltip>
-                        <Tooltip title="Sub-text">
-                            <button className="ql-script" value="sub" />
-                        </Tooltip>
-                        <Tooltip title="Super-text">
-                            <button className="ql-script" value="super" />
-                        </Tooltip>
-                    </div>
-                    <div id="editor" />
-                    <div ref={quillRef} style={{ minHeight: "19rem", height: "auto" }} />
                 </div>
             </div>
         </Container >
