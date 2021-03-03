@@ -2,11 +2,11 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Scroll from "../../components/Scroll/Scroll";
 import { Link, useHistory } from "react-router-dom";
-import { getUniqueNpc, getPlayerCharacters, getSelectedCampaign } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { setSelectedCharacter, setSelectedSession } from "../../store/selected/selectedCreators";
 import { OLD_WHITE_TRANSPARENT, OLD_WHITE } from "../../assets/constants/Constants";
-import { Avatar, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, IconButton, } from "@material-ui/core";
+import { Avatar, Button, Card, CardActionArea, CardContent, CardHeader, IconButton, } from "@material-ui/core";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
@@ -69,7 +69,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                         return undefined
                     })
             }
-            console.log("players", players)
             if (selectedCampaign.campaign.characters) {
                 Object.entries(selectedCampaign.campaign.characters).slice(0, 10).map(
                     ([id, character]: [string, ICharacter], index) => {
@@ -168,7 +167,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
         }
         return () => { setSessions([]); setPlayers([]); setNpc([]) }
-    }, [selectedCampaign, dispatch, history])
+    }, [selectedCampaign, dispatch, history, selectedSessionMenu, selectedPlayerMenu])
     return (
         <>
             <Overview >

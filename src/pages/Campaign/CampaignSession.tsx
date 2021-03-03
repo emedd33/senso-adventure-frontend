@@ -5,21 +5,18 @@ import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { useHistory } from "react-router-dom";
-import IsLoading from "../../components/IsLoading/IsLoading";
-import { parseSessionStory } from "../../utils/paseSessionStory";
 import {
     getNextSession,
     getPreviousSession,
 } from "../../store/campaign/campaignSelectors";
 
-import parse from 'html-react-parser';
 import { getSelectedCampaign, getSelectedSession, getSelectedSessionStorageRef, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
+import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 
 type CampaignSessionProps = {};
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const [sessionStory, setSessionStory] = useState("");
     const [sessionImages, setSessionImages] = useState<string[]>([]);
 
     const selectedSession = useSelector(getSelectedSession);
@@ -31,18 +28,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     useEffect(() => {
         if (selectedSession) {
 
-            if (selectedSession.session && selectedSession.id && storageRef) {
-                storageRef
-                    .child("SessionStory.html")
-                    .getDownloadURL()
-                    .then((url) => {
-                        fetch(url)
-                            .then((res) => res.text())
-                            .then((res) => {
-                                const text = parseSessionStory(res, isDungeonMaster);
-                                setSessionStory(text ? text : "new story");
-                            })
-                    }).catch(e => { console.log("Could not fetch session story") })
+            if (storageRef) {
 
                 storageRef
                     .child("SessionImages").listAll()
@@ -67,7 +53,6 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
             }
         }
         return () => {
-            setSessionStory("")
             setSessionImages([])
         }
     }, [dispatch, selectedSession, isDungeonMaster, selectedCampaign, storageRef]);
@@ -153,13 +138,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 <h3 style={{ fontSize: "2rem", textAlign: "center", opacity: 0.5 }}>
                     {selectedSession?.session.subTitle}
                 </h3>
-                <div style={{ fontFamily: "sans-serif" }}>
-                    {sessionStory ? parse(
-                        sessionStory
-                    ) : (
-                            <IsLoading />
-                        )}
-                </div>
+                <DraftJSEditor readOnly={true} JSONRef={storageRef?.child("SessionStory.json")} />
             </Container>
 
             {sessionImages ? sessionImages.map((url) => <img src={url} alt="SessionImage" style={{ width: "10rem", height: "10rem" }} />) : null}

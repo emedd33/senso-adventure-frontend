@@ -60,9 +60,4 @@ display: grid;
 grid-template-columns:1fr
 min-height:20rem;
 `;
-const CharacterButton = styled(Button)`
-display:grid;
-grid-template-columns:1fr 1fr;
-width:100%;
-`
 export default CampaignCharacters;

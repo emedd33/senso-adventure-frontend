@@ -1,5 +1,5 @@
 import { Button, CardActionArea, CardMedia, IconButton, makeStyles, TextField } from "@material-ui/core";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
@@ -9,14 +9,12 @@ import { DatePicker } from "@material-ui/pickers";
 import "react-markdown-editor-lite/lib/index.css";
 import styled from "styled-components";
 import ImageUploader from 'react-images-upload';
-import sleep from "../../utils/sleep"
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import ClearIcon from '@material-ui/icons/Clear';
 import useInterval from "../../store/hooks/useInterval";
 import { getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
-import Tooltip from '@material-ui/core/Tooltip';
 import { getIsLoading } from "../../store/admin/adminSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 
@@ -38,11 +36,9 @@ const CampaignSessionEdit: React.FC = () => {
     const selectedSession = useSelector(
         (state: RootReducerProp) => state.selected.selectedSession
     );
-    const [isUploading, setIsUploading] = useState(false)
     const [isUploadingImages, setIsUploadingImages] = useState(false)
     const isLoading = useSelector(getIsLoading)
 
-    const [savedText, setSavedText] = useState<string>("")
 
     const [sessionDate, setSessionDate] = useState<string>(new Date().toDateString())
     const [savedSessionDate, setSavedSessionDate] = useState<string>(new Date().toDateString())
@@ -90,59 +86,34 @@ const CampaignSessionEdit: React.FC = () => {
                 }).catch((error) => {
                     console.log("Error fetching session images", error)
                 });
-            // storageRef.child("SessionStory.html")
-            //     .getDownloadURL()
-            //     .then(url =>
-            //         fetch(url)
-            //             .then(res => res.text())
-            //             .then(resText => {
-
-            //             })
-            //             .catch((e) => console.log("Could not fetch sessionstory", e))
-            //     )
-            //     .catch((e) => console.log("Could not connect to firebase for sessionstory", e))
         }
 
         return (() => {
             setNewSessionImages([])
             setExistingSessionImages([])
         })
-    }, [storageRef, , selectedSession])
+    }, [storageRef, selectedSession])
 
 
     useInterval(async () => {    // Your custom logic here 
-        if (storageRef) {
 
-            setIsUploading(true)
-
-            // storageRef
-            //     .child("SessionStory.html")
-            //     .putString(quill.root.innerHTML)
-            //     .catch(e => console.log("Could not update session story", e))
-
-        }
         if (databaseRef) {
 
             if (sessionSubTitle !== SavedSessionSubTitle) {
-                setIsUploading(true)
                 databaseRef.child("subTitle").set(sessionSubTitle)
                 setSavedSessionSubTitle(sessionSubTitle)
             }
             if (sessionDate !== savedSessionDate) {
-                setIsUploading(true)
                 databaseRef.child("date").set(sessionDate)
                 setSavedSessionDate(sessionDate)
             }
 
             if (sessionDay !== savedSessionDay) {
-                setIsUploading(true)
                 databaseRef.child("sessionDay").set(sessionDay)
                 setSavedSessionDay(sessionDay)
             }
         }
-        sleep(2000).then(() => {
-            setIsUploading(false)
-        });
+
     },
         3000)
 
@@ -254,12 +225,9 @@ const CampaignSessionEdit: React.FC = () => {
             </TitleContainer>
             <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center", width: "100%" }}>
                 <h1 style={{ flex: 2, textAlign: "right" }}>Session story</h1>
-                <div style={{ flex: 1, margin: "1rem" }}>
-                    {isUploading ? <CircularProgress /> : null}
-                </div>
             </div>
             <EditContainer>
-                <DraftJSEditor JSONRef={storageRef?.child("SessionStory.json")} />
+                <DraftJSEditor readOnly={false} JSONRef={storageRef?.child("SessionStory.json")} />
             </EditContainer>
 
             <h1>Session Images</h1>
