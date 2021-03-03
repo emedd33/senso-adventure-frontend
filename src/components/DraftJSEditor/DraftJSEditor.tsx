@@ -15,7 +15,21 @@ import '@draft-js-plugins/mention/lib/plugin.css';
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import mentions from './Mentions';
 import useInterval from '../../store/hooks/useInterval';
-import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
+import createToolbarPlugin, {
+  Separator,
+} from '@draft-js-plugins/static-toolbar';
+import {
+  ItalicButton,
+  BoldButton,
+  UnderlineButton,
+  HeadlineOneButton,
+  HeadlineTwoButton,
+  HeadlineThreeButton,
+  UnorderedListButton,
+  OrderedListButton,
+  BlockquoteButton,
+  CodeBlockButton,
+} from '@draft-js-plugins/buttons'
 const staticToolbarPlugin = createToolbarPlugin();
 const { Toolbar } = staticToolbarPlugin;
 type DraftJSEditorProps = {
@@ -77,8 +91,10 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
     // eslint-disable-next-line no-shadow
     const { MentionSuggestions } = mentionPlugin;
     // eslint-disable-next-line no-shadow
-    const plugins = [mentionPlugin];
-    return { plugins, MentionSuggestions };
+
+
+    const plugins = [mentionPlugin, staticToolbarPlugin];
+    return { plugins, MentionSuggestions, Toolbar };
   }, []);
 
 
@@ -98,7 +114,28 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
     >
       {readOnly ?
         null :
-        <Toolbar />
+        <Toolbar>
+          {
+            // may be use React.Fragment instead of div to improve perfomance after React 16
+            (externalProps) => (
+              <div>
+                <HeadlineOneButton {...externalProps} />
+                <HeadlineTwoButton {...externalProps} />
+                <HeadlineThreeButton {...externalProps} />
+                <Separator />
+                <BoldButton {...externalProps} />
+                <ItalicButton {...externalProps} />
+                <UnderlineButton {...externalProps} />
+                <Separator />
+                <UnorderedListButton {...externalProps} />
+                <OrderedListButton {...externalProps} />
+                <BlockquoteButton {...externalProps} />
+                <CodeBlockButton {...externalProps} />
+              </div>
+            )
+          }
+        </Toolbar>
+
       }
       <Editor
         editorKey={'editor'}
@@ -107,7 +144,6 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
         plugins={plugins}
         ref={ref}
         readOnly={readOnly}
-
       />
       <MentionSuggestions
         open={open}
