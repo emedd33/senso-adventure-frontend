@@ -8,7 +8,6 @@ import {
 
 export const dispatchLogin = (payload: ILogin) => {
   return async (dispatch: Dispatch) => {
-    dispatch(setIsLoading(true));
     await firebaseAuth
       .signInWithEmailAndPassword(payload.email, payload.password)
       .then((user: any) => {
@@ -22,13 +21,11 @@ export const dispatchLogin = (payload: ILogin) => {
             errorMessage = "invalid email or password";
         }
         dispatch(setAlertDialog(errorMessage, true, true));
-        dispatch(setIsLoading(false));
       })
   };
 };
 export const dispatchLogout = () => {
   return async (dispatch: Dispatch) => {
-    dispatch(setIsLoading(true));
     firebaseAuth
       .signOut()
       .then(() => {
@@ -36,14 +33,13 @@ export const dispatchLogout = () => {
       })
       .catch((error) => {
         dispatch({ type: SET_ALERT_DIALOG, payload: "An error has occured" });
-        dispatch(setIsLoading(true));
+
 
       })
   };
 };
 export const dispatchSignup = (payload: any) => {
   return async (dispatch: any) => {
-    dispatch(setIsLoading(true));
     await firebaseAuth
       .createUserWithEmailAndPassword(payload.email, payload.password)
       .then(async (user) => {
@@ -65,10 +61,8 @@ export const dispatchSignup = (payload: any) => {
         dispatch(setAlertDialog(errorMessage, true, true));
       })
       .finally(() => {
-        dispatch(setIsLoading(false));
       });
-    // if (firebaseUser) {
-    // }
+
   };
 };
 
