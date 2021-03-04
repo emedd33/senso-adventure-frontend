@@ -11,7 +11,7 @@ type ScrollProps = {
   subTitle: string;
   date: string;
   sessionDay: number;
-  campaignTitle: string;
+  campaignSlug: string;
   onClick: any;
   isOpaque: boolean;
 };
@@ -22,7 +22,7 @@ function Scroll({
   subTitle,
   date,
   sessionDay,
-  campaignTitle,
+  campaignSlug,
   onClick,
   isOpaque,
 }: ScrollProps): JSX.Element {
@@ -31,12 +31,12 @@ function Scroll({
     storage
       .ref()
       .child("Campaigns")
-      .child(campaignTitle)
+      .child(campaignSlug)
       .child("TitleImage")
       .getDownloadURL()
       .then((url) => setImageUrl(url))
       .catch((e) => console.log("could not fetch TitleImage for scroll"));
-  }, [campaignTitle]);
+  }, [campaignSlug]);
   return (
     <ScrollButton onClick={onClick}>
       <ScrollContainer style={isOpaque ? { opacity: 0.5 } : {}}>

@@ -31,7 +31,7 @@ const Home: FunctionComponent<HomeProps> = () => {
         storage
           .ref()
           .child("Campaigns")
-          .child(campaign.title)
+          .child(campaign.slug)
           .child("TitleImage")
           .getDownloadURL()
           .then((url) =>
@@ -71,7 +71,7 @@ const Home: FunctionComponent<HomeProps> = () => {
               isOpaque={session.session.isPublished === "FALSE"}
               subTitle={session.session.subTitle}
               date={session.session.date}
-              campaignTitle={session.session.campaignTitle}
+              campaignSlug={session.session.slug}
               sessionDay={session.session.sessionDay}
               onClick={() => {
                 history.push(
@@ -101,18 +101,18 @@ const Home: FunctionComponent<HomeProps> = () => {
       >
         {campaignUrls
           ? Object.values(campaignUrls).map(
-              (campaign: { campaignSlug: string; url?: string }) => (
-                <Link to={`/${campaign.campaignSlug}`}>
-                  <Button style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-                    {campaign.url ? (
-                      <CampaignImg src={campaign.url} />
-                    ) : (
+            (campaign: { campaignSlug: string; url?: string }) => (
+              <Link to={`/${campaign.campaignSlug}`}>
+                <Button style={{ marginLeft: "2rem", marginRight: "2rem" }}>
+                  {campaign.url ? (
+                    <CampaignImg src={campaign.url} />
+                  ) : (
                       <h1>{campaign.campaignSlug}</h1>
                     )}
-                  </Button>
-                </Link>
-              )
+                </Button>
+              </Link>
             )
+          )
           : null}
       </div>
       <div

@@ -37,6 +37,7 @@ import isValidSlug from "../../utils/isValidSessionslug";
 import CampaignCharacterEdit from "./CampaignCharacterEdit";
 import CampaignSessions from "./CampaignSessions";
 import CampaignCharacters from "./CampaignCharacters";
+import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
@@ -122,7 +123,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     if (selectedCampaign) {
       let campaignRef = storage
         .ref("Campaigns")
-        .child(selectedCampaign.campaign.title);
+        .child(selectedCampaign.campaign.slug);
 
       // Fetching BackgroundImage
       campaignRef
@@ -168,6 +169,9 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       ) : null}
       <>
         <Switch>
+          <Route exact path="/:campaignSlug/Edit">
+            <CampaignEdit isNew={false} />
+          </Route>
           <Route exact path="/:campaignSlug/sessions/new">
             {isDungeonMaster ? <CampaignSessionNew /> : <Redirect to={"/"} />}
           </Route>
@@ -195,8 +199,8 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             {isDungeonMaster ? (
               <CampaignCharacterEdit />
             ) : (
-              <Redirect to={"/"} />
-            )}
+                <Redirect to={"/"} />
+              )}
           </Route>
         </Switch>
         <Route exact path="/:campaignSlug">

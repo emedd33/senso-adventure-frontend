@@ -12,6 +12,7 @@ import { getAuthUser } from "../../store/admin/adminSelectors";
 import { useImageFile } from "../../store/hooks/useImageFile";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import { isValidImageFile } from "../../utils/isValidImageFile";
+import BackgroundImage from "../../assets/Images/background_home.jpg";
 
 export interface CampaignEditProps {
   isNew: boolean;
@@ -20,14 +21,9 @@ export interface CampaignEditProps {
 const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const dispatch = useDispatch();
   const history = useHistory();
+
   const [imageUrl, setImageUrl] = useState("");
 
-  useEffect(() => {
-    storage
-      .ref("Images/Background/dnd_background.jpg")
-      .getDownloadURL()
-      .then((url: string) => setImageUrl(url));
-  }, []);
 
   const [isLoading, setIsLoading] = useState(false);
   const selectedCampaign = useSelector(getSelectedCampaign);
@@ -41,6 +37,21 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(
     "TitleImage"
   );
+  useEffect(() => {
+    if (!isNew && selectedCampaign) {
+      storage
+        .ref("Campaigns")
+        .child(selectedCampaign.campaign.slug)
+        .child("BackgroundImage")
+        .getDownloadURL()
+        .then((url: string) => {
+          setImageUrl(url);
+        })
+        .catch((e) => console.log("could not fetch background image"));
+    } else {
+      setImageUrl(BackgroundImage)
+    }
+  }, [isNew, selectedCampaign]);
 
   useEffect(() => {
     if (selectedCampaign) {
@@ -49,186 +60,178 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   }, [selectedCampaign]);
   const submit = async () => {
     setIsLoading(true);
-    if (!campaignTitle) {
-      setCampaignTitleError(true);
-      dispatch(
-        setAlertDialog("Please fille out the Campaign Title", true, true)
-      );
-      setIsLoading(false);
-      return;
-    } else {
-      setCampaignTitleError(false);
-    }
-
-    let slug = campaignTitle.replace(/\s/g, "");
     if (user) {
-      let newCampaign = {
-        dungeonMaster: user.username,
-        title: campaignTitle,
-        slug: slug,
-      };
+      let slug = selectedCampaign?.campaign.slug
+      let title = selectedCampaign?.campaign.title
       if (isNew) {
+        if (!campaignTitle) {
+          setCampaignTitleError(true);
+          dispatch(
+            setAlertDialog("Please fille out the Campaign Title", true, true)
+          );
+          setIsLoading(false);
+          return;
+        } else {
+          setCampaignTitleError(false);
+        }
+        title = campaignTitle
+        slug = campaignTitle.replace(/\s/g, "");
+        let newCampaign = {
+          dungeonMaster: user.username,
+          title: title,
+          slug: slug,
+        };
         await campaignsRef
           .push(newCampaign)
           .catch((e) => console.log("Could not update campaing "));
-      } else {
-        if (campaignsRef && selectedCampaign) {
-          await campaignsRef
-            .child(selectedCampaign.id)
-            .set(newCampaign)
-            .catch((e) => console.log("Could not update campaing " + e));
+      }
+
+
+      if (slug && title) {
+        const metadata = {
+          customMetadata: {
+            contentType: "image",
+            campaignTitle: title,
+          },
+        };
+
+        if (isValidImageFile(campaignBackgroundImageFile)) {
+          await firebaseStorageRef
+            .child("Campaigns")
+            .child(slug)
+            .child("BackgroundImage")
+            .put(campaignBackgroundImageFile.file.file, metadata);
         }
+        if (isValidImageFile(campaignTitleImageFile)) {
+          await firebaseStorageRef
+            .child("Campaigns")
+            .child(slug)
+            .child("TitleImage")
+            .put(campaignTitleImageFile.file.file, metadata);
+        }
+        history.push(`/${slug}`);
       }
     }
+  }
 
-    const metadata = {
-      customMetadata: {
-        contentType: "image",
-        campaignTitle: campaignTitle,
-      },
-    };
-
-    if (isValidImageFile(campaignBackgroundImageFile)) {
-      await firebaseStorageRef
-        .child("Campaigns")
-        .child(campaignTitle)
-        .child("BackgroundImage")
-        .put(campaignBackgroundImageFile.file.file, metadata);
-    }
-    if (isValidImageFile(campaignTitleImageFile)) {
-      await firebaseStorageRef
-        .child("Campaigns")
-        .child(campaignTitle)
-        .child("TitleImage")
-        .put(campaignTitleImageFile.file.file, metadata);
-    }
-    history.push(`/${slug}`);
-  };
 
   return (
     <ParentContainer style={{ backgroundImage: "url(" + imageUrl + ")" }}>
       {isLoading ? (
         <IsLoading />
       ) : (
-        <Container>
-          <>
-            <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
-              Campaign Creator
+          <Container>
+            <>
+              <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
+                Campaign Creator
             </h1>
-            <TextField
-              id="outlined-multiline-static"
-              placeholder="Write a fitting title"
-              style={{ width: "50%", textAlign: "center" }}
-              variant="filled"
-              error={campaignTitleError}
-              value={campaignTitle}
-              onChange={(event: any) => setCampaignTitle(event.target.value)}
-            />
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "1rem",
-                flexWrap: "wrap",
-              }}
-            >
+              <TextField
+                id="outlined-multiline-static"
+                placeholder="Write a fitting title"
+                style={{ width: "50%", textAlign: "center" }}
+                variant="filled"
+                error={campaignTitleError}
+                value={campaignTitle}
+                disabled={!isNew}
+                onChange={(event: any) => setCampaignTitle(event.target.value)}
+              />
               <div
                 style={{
                   display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
                   alignItems: "center",
-                  justifyContent: "flex-start",
                   margin: "1rem",
-                  width: "15rem",
+                  flexWrap: "wrap",
                 }}
               >
-                <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
-                  {" "}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    margin: "1rem",
+                    width: "15rem",
+                  }}
+                >
+                  <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
+                    {" "}
                   Background Image
                 </h3>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "15rem",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+
+                  <ImageUpload
+                    imageFile={campaignBackgroundImageFile.file}
+                    setImageFile={setCampaignBackgroundImageFile}
+                    maxFiles={1}
+                  />
+                </div>
               </div>
+
               <div
                 style={{
                   display: "flex",
-                  width: "15rem",
-                  flexDirection: "column",
+                  width: "100%",
                   justifyContent: "center",
                   alignItems: "center",
-                }}
-              >
-                {campaignBackgroundImageFile.name ? (
-                  <h4 style={{ fontFamily: "sans-serif" }}>
-                    {campaignBackgroundImageFile.name}
-                  </h4>
-                ) : null}
-                <ImageUpload
-                  imageFile={campaignBackgroundImageFile.file}
-                  setImageFile={setCampaignBackgroundImageFile}
-                  maxFiles={1}
-                />
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "1rem",
-                flexWrap: "wrap",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
                   margin: "1rem",
-                  width: "15rem",
+                  flexWrap: "wrap",
                 }}
               >
-                <h3 style={{ fontFamily: "serif" }}>
-                  {" "}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    margin: "1rem",
+                    width: "15rem",
+                  }}
+                >
+                  <h3 style={{ fontFamily: "serif" }}>
+                    {" "}
                   Choose campaign title image
                 </h3>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "15rem",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+
+                  <ImageUpload
+                    imageFile={campaignTitleImageFile.file}
+                    setImageFile={setCampaignTitleImageFile}
+                    maxFiles={1}
+                  />
+                </div>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  width: "15rem",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+              <Button
+                variant="contained"
+                onClick={submit}
+                style={{ marginTop: "1rem" }}
+                color="primary"
               >
-                {campaignTitleImageFile.name ? (
-                  <h4 style={{ fontFamily: "sans-serif" }}>
-                    {campaignTitleImageFile.name}
-                  </h4>
-                ) : null}
-                <ImageUpload
-                  imageFile={campaignTitleImageFile.file}
-                  setImageFile={setCampaignTitleImageFile}
-                  maxFiles={1}
-                />
-              </div>
-            </div>
-            <Button
-              variant="contained"
-              onClick={submit}
-              style={{ marginTop: "1rem" }}
-              color="primary"
-            >
-              Submit
+                Submit
             </Button>
-          </>
-        </Container>
-      )}
+            </>
+          </Container>
+        )}
     </ParentContainer>
   );
-};
+}
 const ParentContainer = styled.div`
   z-index: 300;
   display: flex;
