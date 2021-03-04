@@ -23,7 +23,6 @@ const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
     );
 
     const sessionDay = useSelector(getNewSessionDay)
-    console.log(sessionDay)
     const [sessionTitle, setSessionTitle] = useState<string>("");
     const [sessionSubTitle, setSessionSubTitle] = useState<string>("");
     const [sessionTitleError, setSessionTitleError] = useState<boolean>(false);
@@ -42,10 +41,10 @@ const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
                 return;
             }
 
-            const toUpload = {
-                campaign: selectedCampaign.id,
+            const toUpload: ISession = {
                 date: sessionDate ? sessionDate : new Date().toDateString(),
                 title: sessionTitle,
+                isPublished: "FALSE",
                 subTitle: sessionSubTitle ? sessionSubTitle : "",
                 campaignTitle: selectedCampaign.campaign.title,
                 sessionDay: sessionDay ? sessionDay : 1,

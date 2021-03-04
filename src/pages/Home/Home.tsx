@@ -43,6 +43,7 @@ const Home: FunctionComponent<HomeProps> = () => {
               key={session.session.sessionId}
               id={session.sessionId}
               title={session.session.title}
+              isOpaque={session.session.isPublished === "FALSE"}
               subTitle={session.session.subTitle}
               date={session.session.date}
               campaignTitle={session.session.campaignTitle}

@@ -59,6 +59,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                     date={session.date}
                                     campaignTitle={session.campaignTitle}
                                     sessionDay={session.sessionDay}
+                                    isOpaque={session.isPublished === "FALSE"}
                                     onClick={() => {
                                         dispatch(setSelectedSession({ id: id, session: session }))
                                         history.push(`/${selectedCampaign.campaign.slug}/sessions/${session.slug}`);

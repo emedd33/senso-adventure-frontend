@@ -1,4 +1,4 @@
-import { Button, CardActionArea, CardMedia, IconButton, makeStyles, TextField } from "@material-ui/core";
+import { Button, CardActionArea, CardMedia, IconButton, makeStyles, Switch, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { OLD_WHITE } from "../../assets/constants/Constants";
@@ -17,6 +17,7 @@ import useInterval from "../../store/hooks/useInterval";
 import { getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
 import { getIsLoading } from "../../store/admin/adminSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
+import useSavedState from "../../store/hooks/useSavedState";
 
 const useStyles = makeStyles({
     root: {
@@ -39,7 +40,7 @@ const CampaignSessionEdit: React.FC = () => {
     const [isUploadingImages, setIsUploadingImages] = useState(false)
     const isLoading = useSelector(getIsLoading)
 
-
+    const [isPublished, setIsPublished, saveIsPublished, isSavedIsPublished] = useSavedState(selectedSession?.session.isPublished === "TRUE")
     const [sessionDate, setSessionDate] = useState<string>(new Date().toDateString())
     const [savedSessionDate, setSavedSessionDate] = useState<string>(new Date().toDateString())
 
@@ -98,6 +99,10 @@ const CampaignSessionEdit: React.FC = () => {
     useInterval(async () => {    // Your custom logic here 
 
         if (databaseRef) {
+            if (!isSavedIsPublished) {
+                saveIsPublished()
+                databaseRef.child("isPublished").set(isPublished ? "TRUE" : "FALSE")
+            }
 
             if (sessionSubTitle !== SavedSessionSubTitle) {
                 databaseRef.child("subTitle").set(sessionSubTitle)
@@ -115,7 +120,7 @@ const CampaignSessionEdit: React.FC = () => {
         }
 
     },
-        3000)
+        1000)
 
     const submitImages = async () => {
         setIsUploadingImages(true)
@@ -222,9 +227,19 @@ const CampaignSessionEdit: React.FC = () => {
                         }
                     />
                 </MuiPickersUtilsProvider>
+                Publish:
+                <Switch
+                    checked={isPublished}
+                    onChange={(event: { target: { checked: any; }; }) => {
+                        setIsPublished(event.target.checked)
+                    }}
+                    color="primary"
+                    name="checkedB"
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                />
             </TitleContainer>
             <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center", width: "100%" }}>
-                <h1 style={{ flex: 2, textAlign: "right" }}>Session story</h1>
+                <h1 style={{ flex: 2, textAlign: "center" }}>Session story</h1>
             </div>
             <EditContainer>
                 <DraftJSEditor readOnly={false} JSONRef={storageRef?.child("SessionStory.json")} />

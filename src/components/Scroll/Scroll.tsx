@@ -13,6 +13,7 @@ type ScrollProps = {
   sessionDay: number;
   campaignTitle: string;
   onClick: any;
+  isOpaque: boolean;
 };
 
 function Scroll({
@@ -23,6 +24,7 @@ function Scroll({
   sessionDay,
   campaignTitle,
   onClick,
+  isOpaque
 }: ScrollProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState("")
   useEffect(() => {
@@ -40,8 +42,7 @@ function Scroll({
       onClick={onClick}
     >
 
-      <ScrollContainer
-      >
+      <ScrollContainer style={isOpaque ? { opacity: 0.5 } : {}}>
         <div>
           <h5 style={{ margin: 0, opacity: 0.7 }}>
             Session day: {sessionDay}

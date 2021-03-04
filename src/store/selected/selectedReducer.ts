@@ -20,6 +20,7 @@ export const initialSelectedSessionState = {
   title: "",
   subTitle: "",
   story: "",
+  isPublished: "FALSE",
   slug: "",
   sessionDay: 1,
   date: new Date().toDateString(),

@@ -133,7 +133,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     ) : null}
                 </div>
                 <h2 style={{ fontSize: "3rem", textAlign: "center" }}>
-                    {selectedSession?.session.title}
+                    {selectedSession?.session.title} {selectedSession?.session.isPublished === "FALSE" ? "(Unpublished)" : null}
                 </h2>
                 <h3 style={{ fontSize: "2rem", textAlign: "center", opacity: 0.5 }}>
                     {selectedSession?.session.subTitle}

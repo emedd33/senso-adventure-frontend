@@ -22,7 +22,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const storageRef = useSelector(getSelectedCharacterStorageRef)
     const isPlayer = useSelector(getSelectedCharacterIsPlayer)
     const [race, setRace, saveRace, isSavedRace] = useSavedState(selectedCharacter?.character.race)
-    const [isPublised, setIsPublished, saveIsPublished, isSavedIsPublished] = useSavedState(selectedCharacter?.character.isPublished === "TRUE")
+    const [isPublished, setIsPublished, saveIsPublished, isSavedIsPublished] = useSavedState(selectedCharacter?.character.isPublished === "TRUE")
     const [characterClass, setCharacterClass, saveCharacterClass, isSavedCharacterClass] = useSavedState(selectedCharacter?.character.class)
     const [alignment, setAlignment, saveAlignment, isSavedAlignment] = useSavedState(selectedCharacter?.character.alignment)
     const [challengeRating, setChallengeRating, saveChallengeRating, isSavedChallengeRating] = useSavedState(selectedCharacter?.character.challengeRating)
@@ -107,7 +107,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
             if (!isSavedIsPublished) {
 
                 saveIsPublished()
-                characterRef.child("isPublished").set(isPublised ? "TRUE" : "FALSE")
+                characterRef.child("isPublished").set(isPublished ? "TRUE" : "FALSE")
             }
             if (!isSavedCharacterClass) {
 
@@ -355,7 +355,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         Publish:
                     </h3>
                     <Switch
-                        checked={isPublised}
+                        checked={isPublished}
                         onChange={(event) => {
                             setIsPublished(event.target.checked)
                         }}
