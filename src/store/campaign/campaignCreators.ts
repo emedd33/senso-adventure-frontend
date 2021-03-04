@@ -1,12 +1,10 @@
 import { Dispatch } from "redux";
 import { campaignsRef, firebaseAuth } from "../../firebase";
-import { SET_AUTH_USER, SET_IS_LOADING } from "../admin/adminActions";
-import { setIsLoading } from "../admin/adminCreator";
+import { SET_AUTH_USER } from "../admin/adminActions";
 import { SET_CAMPAIGNS } from "./campaignActions";
 
 // Thunk function
 export async function fetchFromFirebase(dispatch: any) {
-
   // Database
   campaignsRef.on("value", (snapshot) => {
     let campaigns = snapshot.val();

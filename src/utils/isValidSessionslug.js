@@ -1,10 +1,9 @@
 const isValidSlug = (slug) => {
-    if (slug) {
-        if (slug !== "new") {
-            return true
-        }
+  if (slug) {
+    if (slug !== "new") {
+      return true;
     }
-    return false
-}
-export default isValidSlug
-
+  }
+  return false;
+};
+export default isValidSlug;

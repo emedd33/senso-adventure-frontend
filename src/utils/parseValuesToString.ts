@@ -1,8 +1,8 @@
 const parseValuesToString = (value: any) => {
-    if (value) {
-        return value
-    }
-    return ""
-}
+  if (value) {
+    return value;
+  }
+  return "";
+};
 
-export default parseValuesToString
+export default parseValuesToString;

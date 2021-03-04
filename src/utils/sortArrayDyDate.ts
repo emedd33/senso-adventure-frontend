@@ -6,7 +6,7 @@ const sortSessionsByDateValue = (array: any) => {
         let last: any = new Date(b.session.date);
         let first: any = new Date(a.session.date);
         if (last.getDate() === first.getDate()) {
-          return b.session.sessionDay - a.session.sessionDay
+          return b.session.sessionDay - a.session.sessionDay;
         }
         return last - first;
       });

@@ -9,8 +9,8 @@ interface ISession {
   slug: string;
 }
 interface ICharacterAction {
-  name: string,
-  description: string
+  name: string;
+  description: string;
 }
 interface ICampaign {
   slug: string;

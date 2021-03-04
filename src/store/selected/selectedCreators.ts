@@ -8,15 +8,11 @@ import {
 } from "./selectedActions";
 import { initialSelectedCampaignState } from "./selectedReducer";
 
-
-
-
 export const refreshSelectedCampaign = (campaigns: ICampaign[]) => {
   return async (dispatch: Dispatch) => {
-    dispatch({ type: REFRESH_SELECTED_CAMPAIGN, payload: campaigns })
-  }
-}
-
+    dispatch({ type: REFRESH_SELECTED_CAMPAIGN, payload: campaigns });
+  };
+};
 
 export const clearSelectedCampaign = () => {
   return {
@@ -25,9 +21,9 @@ export const clearSelectedCampaign = () => {
   };
 };
 
-
-
-export const setSelectedCharacter = (selectedCharacter?: ISelectedCharacter) => {
+export const setSelectedCharacter = (
+  selectedCharacter?: ISelectedCharacter
+) => {
   return {
     type: SET_SELECTED_CHARACTER,
     payload: selectedCharacter,

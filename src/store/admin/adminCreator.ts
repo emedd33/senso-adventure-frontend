@@ -13,7 +13,7 @@ export const dispatchLogin = (payload: ILogin) => {
       .then((user: any) => {
         dispatch(loginSuccess(user));
       })
-      .catch((error: { code: any; }) => {
+      .catch((error: { code: any }) => {
         let errorMessage = "An error has occured";
 
         switch (error.code) {
@@ -21,7 +21,7 @@ export const dispatchLogin = (payload: ILogin) => {
             errorMessage = "invalid email or password";
         }
         dispatch(setAlertDialog(errorMessage, true, true));
-      })
+      });
   };
 };
 export const dispatchLogout = () => {
@@ -33,9 +33,7 @@ export const dispatchLogout = () => {
       })
       .catch((error) => {
         dispatch({ type: SET_ALERT_DIALOG, payload: "An error has occured" });
-
-
-      })
+      });
   };
 };
 export const dispatchSignup = (payload: any) => {
@@ -60,9 +58,7 @@ export const dispatchSignup = (payload: any) => {
         let errorMessage = "Could not create user";
         dispatch(setAlertDialog(errorMessage, true, true));
       })
-      .finally(() => {
-      });
-
+      .finally(() => {});
   };
 };
 

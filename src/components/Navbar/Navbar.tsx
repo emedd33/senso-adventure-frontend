@@ -9,7 +9,8 @@ import MenuListComposition from "../MenuList/MenuList";
 import CampaignCrest from "../../assets/icons/CampaignCrest.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearSelectedCampaign, setSelectedCampaign
+  clearSelectedCampaign,
+  setSelectedCampaign,
 } from "../../store/selected/selectedCreators";
 import {
   Backdrop,
@@ -171,7 +172,14 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   ([id, campaign]) => {
                     return (
                       <NavBarItem
-                        onClick={() => dispatch(setSelectedCampaign({ id: "", campaign: initialSelectedCampaignState }))}
+                        onClick={() =>
+                          dispatch(
+                            setSelectedCampaign({
+                              id: "",
+                              campaign: initialSelectedCampaignState,
+                            })
+                          )
+                        }
                       >
                         <Link
                           to={`/${campaign.slug}`}

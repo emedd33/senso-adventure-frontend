@@ -1,6 +1,6 @@
 /// <reference types="react-scripts" />
 declare namespace JSX {
-    interface IntrinsicElements {
-        secret: any
-    }
+  interface IntrinsicElements {
+    secret: any;
+  }
 }
