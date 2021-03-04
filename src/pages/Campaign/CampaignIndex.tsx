@@ -38,7 +38,9 @@ import CampaignCharacterEdit from "./CampaignCharacterEdit";
 import CampaignSessions from "./CampaignSessions";
 import CampaignCharacters from "./CampaignCharacters";
 import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
-
+import sessionIcon from "../../assets/icons/session_icon.png"
+import characterIcon from "../../assets/icons/character_icon.png"
+import { OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
@@ -209,11 +211,12 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
       </>
       {isDungeonMaster ? (
         <Fab
+          mainButtonStyles={{ backgroundColor: OLD_WHITE_TRANSPARENT }}
           icon={<AddIcon />}
           alwaysShowTitle={true}
-          onClick={() => console.log("clicked")}
         >
           <Action
+            style={{ backgroundColor: "transparent" }}
             text="New session"
             onClick={() => {
               dispatch(
@@ -226,9 +229,12 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
                 history.push(`/${selectedCampaign.campaign.slug}/sessions/new`);
               }
             }}
-          ></Action>
+          >
+            <img src={sessionIcon} style={{ width: "inherit" }} alt="New Session" />
+          </Action>
           <Action
             text="New Character"
+            style={{ backgroundColor: "transparent" }}
             onClick={() => {
               if (selectedCampaign) {
                 dispatch(
@@ -240,11 +246,10 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
               }
             }}
           >
-            <i className="fa fa-help" />
+            <img src={characterIcon} style={{ width: "inherit" }} alt="New Character" />
+
           </Action>
-          <Action text="New Place" onClick={() => console.log("clicked h")}>
-            <i className="fa fa-help" />
-          </Action>
+
         </Fab>
       ) : null}
     </Container>
