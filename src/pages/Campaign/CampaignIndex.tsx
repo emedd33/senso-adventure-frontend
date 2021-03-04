@@ -148,7 +148,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
           </Route>
           <Route exact path="/:campaignSlug/characters/:characterSlug">
-            {isDungeonMaster ? <CampaignCharacter /> : <Redirect to={"/"} />}
+            <CampaignCharacter />
           </Route>
           <Route exact path="/:campaignSlug/characters/:characterSlug/edit">
             {isDungeonMaster ? <CampaignCharacterEdit /> : <Redirect to={"/"} />}

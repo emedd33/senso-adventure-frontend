@@ -22,6 +22,7 @@ export const dispatchLogin = (payload: ILogin) => {
             errorMessage = "invalid email or password";
         }
         dispatch(setAlertDialog(errorMessage, true, true));
+        dispatch(setIsLoading(false));
       })
   };
 };
@@ -35,6 +36,8 @@ export const dispatchLogout = () => {
       })
       .catch((error) => {
         dispatch({ type: SET_ALERT_DIALOG, payload: "An error has occured" });
+        dispatch(setIsLoading(true));
+
       })
   };
 };

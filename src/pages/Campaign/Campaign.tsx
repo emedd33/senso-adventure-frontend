@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Scroll from "../../components/Scroll/Scroll";
 import { Link, useHistory } from "react-router-dom";
-import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign, getSelectedCampaignCharacters } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { setSelectedCharacter, setSelectedSession } from "../../store/selected/selectedCreators";
 import { OLD_WHITE_TRANSPARENT, OLD_WHITE } from "../../assets/constants/Constants";
@@ -36,6 +36,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
 
     const selectedCampaign = useSelector(getSelectedCampaign);
+    const characters = useSelector(getSelectedCampaignCharacters)
     const [sessions, setSessions] = useState<any[]>([])
     const [players, setPlayers] = useState<any[]>([])
     const [npc, setNpc] = useState<any[]>([])
@@ -69,13 +70,13 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                         return undefined
                     })
             }
-            if (selectedCampaign.campaign.characters) {
-                Object.entries(selectedCampaign.campaign.characters).slice(0, 10).map(
+            if (characters) {
+                characters.slice(0, 10).map(
                     ([id, character]: [string, ICharacter], index) => {
                         if (character) {
                             if (character.isPlayer === "TRUE" && character.isDead === "FALSE") {
                                 setPlayers((existing) => [...existing, <MenuItem text={
-                                    <Card style={{ margin: "2rem", backgroundColor: OLD_WHITE }} onClick={() => {
+                                    <Card style={character.isPublished === "TRUE" ? { margin: "2rem", backgroundColor: OLD_WHITE } : { margin: "2rem", backgroundColor: OLD_WHITE, opacity: 0.5 }} onClick={() => {
                                         dispatch(setSelectedCharacter({ id: id, character: character }))
                                         history.push(`/${selectedCampaign.campaign.slug}/characters/${character.slug}`);
                                     }}>
@@ -92,44 +93,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                             />
                                             <CardContent >
                                                 <p>{character.summary}</p>
-                                                <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)" }}>
-                                                    <div>
-                                                        STR
-                                                    </div>
-                                                    <div>
-                                                        DEX
-                                                    </div>
-                                                    <div>
-                                                        CON
-                                                    </div>
-                                                    <div>
-                                                        INT
-                                                    </div>
-                                                    <div>
-                                                        WIS
-                                                    </div>
-                                                    <div>
-                                                        CHA
-                                                    </div>
-                                                    <div>
-                                                        {character.stats.strength.value}
-                                                    </div>
-                                                    <div>
-                                                        {character.stats.dexterity.value}
-                                                    </div>
-                                                    <div>
-                                                        {character.stats.constitution.value}
-                                                    </div>
-                                                    <div>
-                                                        {character.stats.intelligence.value}
-                                                    </div>
-                                                    <div>
-                                                        {character.stats.wisdom.value}
-                                                    </div>
-                                                    <div>
-                                                        {character.stats.charisma.value}
-                                                    </div>
-                                                </div>
                                             </CardContent>
                                         </CardActionArea>
                                     </Card>
@@ -137,7 +100,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                             }
                             else {
                                 setNpc((existing) => [...existing, <MenuItem text={
-                                    <Card style={{ margin: "2rem", backgroundColor: OLD_WHITE }} onClick={() => {
+                                    <Card style={character.isPublished === "TRUE" ? { margin: "2rem", backgroundColor: OLD_WHITE } : { margin: "2rem", backgroundColor: OLD_WHITE, opacity: 0.5 }} onClick={() => {
                                         dispatch(setSelectedCharacter({ id: id, character: character }))
                                         history.push(`/${selectedCampaign.campaign.slug}/characters/${character.slug}`);
                                     }}>
@@ -167,7 +130,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
         }
         return () => { setSessions([]); setPlayers([]); setNpc([]) }
-    }, [selectedCampaign, dispatch, history, selectedSessionMenu, selectedPlayerMenu])
+    }, [selectedCampaign, dispatch, history, selectedSessionMenu, selectedPlayerMenu, characters])
     return (
         <>
             <Overview >

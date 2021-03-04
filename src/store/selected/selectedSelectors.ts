@@ -21,6 +21,21 @@ export const isDungeonMasterSelector = (state: RootReducerProp) => {
 };
 
 export const getSelectedCampaignCharacters = (state: RootReducerProp) => {
+    if (isDungeonMasterSelector(state)) {
+        if (state.selected.selectedCampaign) {
+            if (state.selected.selectedCampaign.campaign.characters) {
+                return Object.entries(state.selected.selectedCampaign.campaign.characters)
+            }
+        }
+    } else {
+        if (state.selected.selectedCampaign) {
+            if (state.selected.selectedCampaign.campaign.characters) {
+                return Object.entries(state.selected.selectedCampaign.campaign.characters).filter(([id, character]: [string, ICharacter]) => character.isPublished === "TRUE")
+            }
+        }
+    }
+}
+export const getSelectedCampaignCharactersUn = (state: RootReducerProp) => {
     return state.selected.selectedCampaign?.campaign.characters
 }
 

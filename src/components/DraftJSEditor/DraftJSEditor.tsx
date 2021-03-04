@@ -135,6 +135,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
               )
             }
           </Toolbar>
+          <div style={{ width: "auto", height: "1rem" }}></div>
 
         </>
       }

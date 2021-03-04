@@ -11,6 +11,7 @@ import { setSelectedCharacter } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
 export const NEW_CHARACTER: ICharacter = {
     name: "",
+    isPublished: "FALSE",
     summary: "A short summary",
     slug: "",
     race: "Human",

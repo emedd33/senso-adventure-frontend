@@ -26,6 +26,7 @@ interface ICampaign {
 }
 interface ICharacter {
   name: string;
+  isPublished: string;
   summary: string;
   slug: string;
   isPlayer: string;

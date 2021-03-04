@@ -12,13 +12,17 @@ import useInterval from "../../store/hooks/useInterval";
 import useSavedState from "../../store/hooks/useSavedState";
 import onChangeNumberField from "../../utils/onChangeNumberField";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
-type CampaignProps = {};
+type CampaignProps = {
+
+
+};
 const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     const selectedCharacter: ISelectedCharacter | undefined = useSelector(getSelectedCharacter)
     const characterRef = useSelector(getSelectedCharacterDatabaseRef)
     const storageRef = useSelector(getSelectedCharacterStorageRef)
     const isPlayer = useSelector(getSelectedCharacterIsPlayer)
     const [race, setRace, saveRace, isSavedRace] = useSavedState(selectedCharacter?.character.race)
+    const [isPublised, setIsPublished, saveIsPublished, isSavedIsPublished] = useSavedState(selectedCharacter?.character.isPublished === "TRUE")
     const [characterClass, setCharacterClass, saveCharacterClass, isSavedCharacterClass] = useSavedState(selectedCharacter?.character.class)
     const [alignment, setAlignment, saveAlignment, isSavedAlignment] = useSavedState(selectedCharacter?.character.alignment)
     const [challengeRating, setChallengeRating, saveChallengeRating, isSavedChallengeRating] = useSavedState(selectedCharacter?.character.challengeRating)
@@ -99,6 +103,11 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
 
                 saveRace()
                 characterRef.child("race").set(race)
+            }
+            if (!isSavedIsPublished) {
+
+                saveIsPublished()
+                characterRef.child("isPublished").set(isPublised ? "TRUE" : "FALSE")
             }
             if (!isSavedCharacterClass) {
 
@@ -336,10 +345,25 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     return (
         <Container>
             <NestedContainer style={{ flex: 1 }} >
-                <div style={{ display: "grid", width: "100%", gridTemplateColumns: "1fr 1fr", height: "5rem" }}>
+                <div style={{ display: "grid", width: "100%", }}>
                     <h1 style={{ marginBottom: "0" }}>
                         {selectedCharacter.character.name}
                     </h1>
+
+                </div>    <div style={{ display: "flex", width: "50%", flexDirection: "row", height: "5rem", justifyContent: "flex-start", alignItems: "center", }}>
+                    <h3 style={{ margin: "0" }}>
+                        Publish:
+                    </h3>
+                    <Switch
+                        checked={isPublised}
+                        onChange={(event) => {
+                            setIsPublished(event.target.checked)
+                        }}
+                        color="primary"
+                        name="checkedB"
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />
+
 
                 </div>
                 <NestedNestedContainer>
@@ -675,7 +699,11 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     <TextField variant="outlined" label="New action" value={newActionName} onChange={(event) => { setNewActionName(event.target.value) }} />
                     <Button variant="contained" color="primary" style={{ height: "2rem", margin: "1rem" }} onClick={() => {
                         if (newActionName) {
-                            setActions((existingActions: ICharacterAction[]) => [...existingActions, { name: newActionName, description: "" }]); setNewActionName("")
+                            if (actions) {
+                                setActions((existingActions: ICharacterAction[]) => [...existingActions, { name: newActionName, description: "" }]); setNewActionName("")
+                            } else {
+                                setActions([{ name: newActionName, description: "" }])
+                            }
                         }
                     }}>Add new action</Button>
                 </div>
