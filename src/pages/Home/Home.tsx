@@ -9,21 +9,14 @@ import { MAX_NUM_SCROLLS_HOMEPAGE, OLD_WHITE_TRANSPARENT } from "../../assets/co
 import styled from "styled-components";
 import { storage } from "../../firebase";
 import { Button } from "@material-ui/core";
-
+import BackgroundImage from "../../assets/Images/background_home.jpg";
 type HomeProps = {};
 const Home: FunctionComponent<HomeProps> = () => {
   const history = useHistory();
   const campaigns = useSelector(getAllCampaigns)
   const sessions = useSelector(getAllSessions);
   const [campaignUrls, setCampaignUrls] = useState<{ campaignSlug: string, url?: string }[]>([])
-  const [imageUrl, setImageUrl] = useState("")
 
-  useEffect(() => {
-    storage
-      .ref("Images/Background/dnd_background.jpg")
-      .getDownloadURL()
-      .then((url: string) => setImageUrl(url))
-  }, []);
   useEffect(() => {
     if (campaigns) {
 
@@ -64,8 +57,8 @@ const Home: FunctionComponent<HomeProps> = () => {
   };
   return (
 
-    <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", justifyContent: "space-between", alignItems: "center", background: OLD_WHITE_TRANSPARENT, margin: "5rem", height: "10rem" }}>
+    <Container >
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", justifyContent: "space-between", alignItems: "center", background: OLD_WHITE_TRANSPARENT, margin: "5rem", minHeight: "15rem" }}>
         {campaignUrls ? Object.values(campaignUrls).map((campaign: { campaignSlug: string, url?: string }) => (
           <Link to={`/${campaign.campaignSlug}`}>
             <Button style={{ marginLeft: "2rem", marginRight: "2rem" }}>
@@ -86,6 +79,7 @@ const Home: FunctionComponent<HomeProps> = () => {
 const Container = styled.div`
   z-index: 300;
   display: flex;
+  background-image: url(${BackgroundImage});
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
@@ -98,7 +92,7 @@ const Container = styled.div`
 `;
 
 const CampaignImg = styled.img`
-max-height:20rem;
+max-height:10rem;
 width:90%;
 &:hover {
   width: 100%;

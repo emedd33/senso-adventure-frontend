@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import ScrollImage from "../../assets/backgroundImage/scroll.png";
+import ScrollImage from "../../assets/Images/scroll.png";
 import { storage } from "../../firebase";
 import px2vw from "../../utils/px2vw";
 

@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -15,15 +14,35 @@ import '@draft-js-plugins/mention/lib/plugin.css';
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import mentions from './Mentions';
 import useInterval from '../../store/hooks/useInterval';
-import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
-const staticToolbarPlugin = createToolbarPlugin();
-const { Toolbar } = staticToolbarPlugin;
+import createToolbarPlugin, {
+  Separator,
+} from '@draft-js-plugins/static-toolbar';
+import {
+  ItalicButton,
+  BoldButton,
+  UnderlineButton,
+  HeadlineOneButton,
+  HeadlineTwoButton,
+  HeadlineThreeButton,
+  UnorderedListButton,
+  OrderedListButton,
+  BlockquoteButton,
+  CodeBlockButton,
+} from '@draft-js-plugins/buttons';
+import { CircularProgress } from '@material-ui/core';
 type DraftJSEditorProps = {
   JSONRef: any | undefined,
   readOnly: boolean
 
 }
+const mentionPlugin = createMentionPlugin();
+const staticToolbarPlugin = createToolbarPlugin();
+const { Toolbar } = staticToolbarPlugin;
+const { MentionSuggestions } = mentionPlugin;
+const plugins = [mentionPlugin, staticToolbarPlugin];
+
 const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
+  const [isUploading, setIsUploading] = useState(false)
   const ref = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -36,19 +55,22 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
 
 
         if (JSON.stringify(editorState.getCurrentContent()) !== JSON.stringify(savedEditorState.getCurrentContent())) {
-          console.log("updatinf")
+          setIsUploading(true)
           let uploadedState = editorState
           var blob = new Blob([JSON.stringify(convertToRaw(uploadedState.getCurrentContent()))], { type: "application/json" })
           JSONRef
             .put(blob).then(() => {
               setSavedEditorState(uploadedState)
+
             }
             )
-            .catch((e: any) => console.log("Could not update session story", e))
+            .catch((e: any) => { console.log("Could not update session story", e) })
+        } else {
+          setIsUploading(false)
         }
       }
     }
-  }, 1000)
+  }, 3000)
 
   useEffect(() => {
     if (JSONRef) {
@@ -72,15 +94,6 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
   const [open, setOpen] = useState(true);
   const [suggestions, setSuggestions] = useState(mentions);
 
-  const { MentionSuggestions, plugins } = useMemo(() => {
-    const mentionPlugin = createMentionPlugin();
-    // eslint-disable-next-line no-shadow
-    const { MentionSuggestions } = mentionPlugin;
-    // eslint-disable-next-line no-shadow
-    const plugins = [mentionPlugin];
-    return { plugins, MentionSuggestions };
-  }, []);
-
 
   const onOpenChange = useCallback((_open: boolean) => {
     setOpen(_open);
@@ -97,8 +110,33 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly }) => {
       }}
     >
       {readOnly ?
-        null :
-        <Toolbar />
+        null : <>
+
+          <Toolbar>
+            {
+              // may be use React.Fragment instead of div to improve perfomance after React 16
+              (externalProps) => (
+                <div>
+                  <HeadlineOneButton {...externalProps} />
+                  <HeadlineTwoButton {...externalProps} />
+                  <HeadlineThreeButton {...externalProps} />
+                  <Separator />
+                  <BoldButton {...externalProps} />
+                  <ItalicButton {...externalProps} />
+                  <UnderlineButton {...externalProps} />
+                  <Separator />
+                  <UnorderedListButton {...externalProps} />
+                  <OrderedListButton {...externalProps} />
+                  <BlockquoteButton {...externalProps} />
+                  <CodeBlockButton {...externalProps} />
+                  {isUploading ? <CircularProgress size={20} /> : null}
+
+                </div>
+              )
+            }
+          </Toolbar>
+
+        </>
       }
       <Editor
         editorKey={'editor'}

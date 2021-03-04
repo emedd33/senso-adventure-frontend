@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import * as FaIcons from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import HomeCrest from "../../assets/backgroundImage/home_crest.png";
+import HomeCrest from "../../assets/icons/home_crest.png";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
 import styled from "styled-components";
@@ -91,9 +91,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
               {size.width && size.width! > 769 ? (
                 <Breadcrumbs aria-label="breadcrumb">
                   {urlPathArray.map((path: string, index: any) => {
-                    let crumb = !path
-                      ? "Home"
-                      : path.charAt(0).toUpperCase() + path.slice(1);
+                    let crumb = path.charAt(0).toUpperCase() + path.slice(1);
                     let linkPath = urlPathArray.slice(0, index + 1).join("/");
                     linkPath = !linkPath ? "/" : linkPath;
                     if (urlPathArray.length - 1 !== index) {
