@@ -40,7 +40,7 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
             };
             campaignsRef
                 .child(selectedCampaign.id)
-                .child("sessions")
+                .child("locations")
                 .push(toUpload)
                 .then((snap) => {
                     snap.once("value", async (snapshot: any) => {

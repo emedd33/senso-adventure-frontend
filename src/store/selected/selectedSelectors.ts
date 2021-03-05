@@ -48,8 +48,54 @@ export const getSelectedCampaignCharacters = (state: RootReducerProp) => {
         }
     }
 };
-export const getSelectedCampaignCharactersUn = (state: RootReducerProp) => {
-    return state.selected.selectedCampaign?.campaign.characters;
+
+
+export const getSelectedCampaignSessions = (state: RootReducerProp) => {
+    if (isDungeonMasterSelector(state)) {
+        if (state.selected.selectedCampaign) {
+            if (state.selected.selectedCampaign.campaign.sessions) {
+                return Object.entries(
+                    state.selected.selectedCampaign.campaign.sessions
+                );
+            }
+        }
+    } else {
+        if (state.selected.selectedCampaign) {
+            if (state.selected.selectedCampaign.campaign.sessions) {
+                return Object.entries(
+                    state.selected.selectedCampaign.campaign.sessions
+                ).filter(
+                    ([id, session]: [string, ISession]) =>
+                        session.isPublished === "TRUE"
+                );
+            }
+        }
+    }
+};
+
+
+
+export const getSelectedCampaignLocations = (state: RootReducerProp) => {
+    if (isDungeonMasterSelector(state)) {
+        if (state.selected.selectedCampaign) {
+            if (state.selected.selectedCampaign.campaign.locations) {
+                return Object.entries(
+                    state.selected.selectedCampaign.campaign.locations
+                );
+            }
+        }
+    } else {
+        if (state.selected.selectedCampaign) {
+            if (state.selected.selectedCampaign.campaign.locations) {
+                return Object.entries(
+                    state.selected.selectedCampaign.campaign.locations
+                ).filter(
+                    ([id, location]: [string, ILocation]) =>
+                        location.isPublished === "TRUE"
+                );
+            }
+        }
+    }
 };
 
 export const getSelectedSessionStorageRef = (state: RootReducerProp) => {

@@ -45,6 +45,8 @@ import characterIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
 import { NEW_LOCATION, OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
 import CampaignLocationNew from "./CampaignLocationNew";
+import CampaignLocations from "./CampaignLocations";
+import CampaignLocation from "./CampaignLocation";
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
@@ -236,16 +238,12 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           <Route exact path="/:campaignSlug/locations/new">
             {isDungeonMaster ? <CampaignLocationNew /> : <Redirect to={"/"} />}
           </Route>
-          {/* <Route exact path="/:campaignSlug/locations/:locationSlug">
+          <Route exact path="/:campaignSlug/locations">
+            <CampaignLocations />
+          </Route>
+          <Route exact path="/:campaignSlug/locations/:locationSlug">
             <CampaignLocation />
           </Route>
-          <Route exact path="/:campaignSlug/locations/:locationSlug/edit">
-            {isDungeonMaster ? (
-              <CampaignLocationEdit />
-            ) : (
-                <Redirect to={"/"} />
-              )}
-          </Route> */}
         </Switch>
         <Route exact path="/:campaignSlug">
           <Campaign />

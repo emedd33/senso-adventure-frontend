@@ -8,6 +8,7 @@ export const HOST = "https://senso-adventure.web.app/"
 
 export const NEW_LOCATION: ILocation = {
     name: "",
+    isPublished: "FALSE",
     slug: "",
     summary: "",
     characters: [],
