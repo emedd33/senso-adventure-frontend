@@ -4,6 +4,7 @@ import {
   REFRESH_SELECTED_CAMPAIGN,
   SET_SELECTED_CAMPAIGN,
   SET_SELECTED_CHARACTER,
+  SET_SELECTED_LOCATION,
   SET_SELECTED_SESSION,
 } from "./selectedActions";
 import { initialSelectedCampaignState } from "./selectedReducer";
@@ -21,6 +22,12 @@ export const clearSelectedCampaign = () => {
   };
 };
 
+export const setSelectedLocation = (
+  selectedLocation?: ISelectedLocation
+) => {
+  return { type: SET_SELECTED_LOCATION, payload: selectedLocation }
+
+}
 export const setSelectedCharacter = (
   selectedCharacter?: ISelectedCharacter
 ) => {

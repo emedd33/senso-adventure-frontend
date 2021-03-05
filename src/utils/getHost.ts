@@ -1,3 +1,5 @@
+import { HOST } from "../assets/constants/Constants"
+
 export const getHost = () => {
-    return window.location.host
+    return HOST
 }

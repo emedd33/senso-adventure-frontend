@@ -11,6 +11,9 @@ export const getSelectedCampaign = (state: RootReducerProp) => {
 export const getSelectedCharacter = (state: RootReducerProp) => {
     return state.selected.selectedCharacter;
 };
+export const getSelectedLocation = (state: RootReducerProp) => {
+    return state.selected.selectedLocation;
+};
 export const getSelectedCharacterIsPlayer = (state: RootReducerProp) => {
     return state.selected.selectedCharacter?.character.isPlayer === "TRUE";
 };

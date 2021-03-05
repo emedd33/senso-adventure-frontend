@@ -22,7 +22,8 @@ interface ICampaign {
   dungeonMaster: string;
   sessions?: ISession[];
   characters?: ICharacter[];
-  places?: IPlaces[];
+  locations?: ILocation[];
+
 }
 interface ICharacter {
   name: string;
@@ -88,4 +89,18 @@ interface ISkills {
 interface ISkillInfo {
   value?: number;
   proficient: string;
+}
+
+
+interface ILocation {
+  name: string,
+  slug: string,
+  summary: string,
+  characters: { character: ICharacter, role: string }[],
+  religion?: string,
+  governRule?: string,
+  resources: { name: string, description: string }[],
+  connectedPlaces: { location: ILocation, distance: string }[],
+  keyElements: { name: string, discription: string }[],
+
 }

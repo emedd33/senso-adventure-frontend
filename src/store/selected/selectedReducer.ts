@@ -3,6 +3,7 @@ import {
   SET_BACKGROUND_IMAGE,
   SET_SELECTED_CAMPAIGN,
   SET_SELECTED_CHARACTER,
+  SET_SELECTED_LOCATION,
   SET_SELECTED_SESSION,
 } from "./selectedActions";
 
@@ -13,6 +14,7 @@ export const initialSelectedCampaignState = {
   slug: "",
   dungeonMaster: "",
   sessions: [],
+  locations: [],
   characters: [],
   isNew: true,
 };
@@ -41,6 +43,10 @@ const selectedReducer = (
     }
     case SET_SELECTED_SESSION: {
       state.selectedSession = action.payload;
+      return state;
+    }
+    case SET_SELECTED_LOCATION: {
+      state.selectedLocation = action.payload;
       return state;
     }
     case SET_BACKGROUND_IMAGE: {

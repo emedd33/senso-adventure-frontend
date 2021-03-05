@@ -16,6 +16,7 @@ import CampaignSession from "./CampaignSession";
 import {
   getSelectedCampaign,
   getSelectedCharacter,
+  getSelectedLocation,
   getSelectedSession,
   isDungeonMasterSelector,
 } from "../../store/selected/selectedSelectors";
@@ -23,6 +24,7 @@ import { storage } from "../../firebase";
 import {
   setSelectedCampaign,
   setSelectedCharacter,
+  setSelectedLocation,
   setSelectedSession,
 } from "../../store/selected/selectedCreators";
 import isValidSessionSlug from "../../utils/isValidSessionslug";
@@ -40,7 +42,9 @@ import CampaignCharacters from "./CampaignCharacters";
 import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 import sessionIcon from "../../assets/icons/session_icon.png"
 import characterIcon from "../../assets/icons/character_icon.png"
-import { OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
+import locationIcon from "../../assets/icons/location_icon.png"
+import { NEW_LOCATION, OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
+import CampaignLocationNew from "./CampaignLocationNew";
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
@@ -51,6 +55,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   );
   const selectedCampaign = useSelector(getSelectedCampaign);
   const selectedSession = useSelector(getSelectedSession);
+  const selectedLocation = useSelector(getSelectedLocation);
   const selectedCharacter = useSelector(getSelectedCharacter);
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
   const [imageUrl, setImageUrl] = useState("");
@@ -116,6 +121,28 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
               }
             }
           }
+          if (pathArray[2] === "locations") {
+            if (
+              isValidSlug(pathArray[3]) &&
+              campaign.campaign.locations
+            ) {
+              let filteredLocation = Object.entries(campaign.campaign.locations)
+                .filter(
+                  ([, location]: [string, ILocation]) =>
+                    location.slug === pathArray[3]
+                )
+                .map(([id, location]: [string, ILocation]) => {
+                  return { id: id, location: location };
+                });
+              if (filteredLocation.length >= 1) {
+                let location = {
+                  id: filteredLocation[0].id,
+                  location: filteredLocation[0].location,
+                };
+                dispatch(setSelectedLocation(location));
+              }
+            }
+          }
         }
       }
     }
@@ -151,7 +178,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     return <IsLoading />;
   }
   if (location.pathname.split("/").length >= 4) {
-    if (!selectedSession && !selectedCharacter) {
+    if (!selectedSession && !selectedCharacter && !selectedLocation) {
       return <IsLoading />;
     }
   }
@@ -205,6 +232,21 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
               )}
           </Route>
         </Switch>
+        <Switch>
+          <Route exact path="/:campaignSlug/locations/new">
+            {isDungeonMaster ? <CampaignLocationNew /> : <Redirect to={"/"} />}
+          </Route>
+          {/* <Route exact path="/:campaignSlug/locations/:locationSlug">
+            <CampaignLocation />
+          </Route>
+          <Route exact path="/:campaignSlug/locations/:locationSlug/edit">
+            {isDungeonMaster ? (
+              <CampaignLocationEdit />
+            ) : (
+                <Redirect to={"/"} />
+              )}
+          </Route> */}
+        </Switch>
         <Route exact path="/:campaignSlug">
           <Campaign />
         </Route>
@@ -247,6 +289,23 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             }}
           >
             <img src={characterIcon} style={{ width: "inherit" }} alt="New Character" />
+
+          </Action>
+          <Action
+            text="New Location"
+            style={{ backgroundColor: "transparent" }}
+            onClick={() => {
+              if (selectedCampaign) {
+                dispatch(
+                  setSelectedLocation({ id: "", location: NEW_LOCATION })
+                );
+                history.push(
+                  `/${selectedCampaign.campaign.slug}/locations/new`
+                );
+              }
+            }}
+          >
+            <img src={locationIcon} style={{ width: "inherit" }} alt="New Location" />
 
           </Action>
 
