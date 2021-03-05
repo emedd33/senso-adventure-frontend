@@ -11,6 +11,8 @@ const initialState: AdminState = {
     message: "",
     isOpen: false,
   },
+  env: "http://localhost",
+  port: "3000"
 };
 
 const adminReducer = (

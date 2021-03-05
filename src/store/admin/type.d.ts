@@ -14,6 +14,8 @@ type AdminState = {
   isLoading: boolean;
   authUser?: IAuthUser;
   error: IError;
+  env: string,
+  port: string,
 };
 type ILogin = {
   email: string;
