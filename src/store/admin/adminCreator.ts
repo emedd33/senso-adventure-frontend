@@ -8,13 +8,12 @@ import {
 
 export const dispatchLogin = (payload: ILogin) => {
   return async (dispatch: Dispatch) => {
-    dispatch(setIsLoading(true));
     await firebaseAuth
       .signInWithEmailAndPassword(payload.email, payload.password)
       .then((user: any) => {
         dispatch(loginSuccess(user));
       })
-      .catch((error: { code: any; }) => {
+      .catch((error: { code: any }) => {
         let errorMessage = "An error has occured";
 
         switch (error.code) {
@@ -22,12 +21,11 @@ export const dispatchLogin = (payload: ILogin) => {
             errorMessage = "invalid email or password";
         }
         dispatch(setAlertDialog(errorMessage, true, true));
-      })
+      });
   };
 };
 export const dispatchLogout = () => {
   return async (dispatch: Dispatch) => {
-    dispatch(setIsLoading(true));
     firebaseAuth
       .signOut()
       .then(() => {
@@ -35,12 +33,11 @@ export const dispatchLogout = () => {
       })
       .catch((error) => {
         dispatch({ type: SET_ALERT_DIALOG, payload: "An error has occured" });
-      })
+      });
   };
 };
 export const dispatchSignup = (payload: any) => {
   return async (dispatch: any) => {
-    dispatch(setIsLoading(true));
     await firebaseAuth
       .createUserWithEmailAndPassword(payload.email, payload.password)
       .then(async (user) => {
@@ -61,11 +58,7 @@ export const dispatchSignup = (payload: any) => {
         let errorMessage = "Could not create user";
         dispatch(setAlertDialog(errorMessage, true, true));
       })
-      .finally(() => {
-        dispatch(setIsLoading(false));
-      });
-    // if (firebaseUser) {
-    // }
+      .finally(() => {});
   };
 };
 

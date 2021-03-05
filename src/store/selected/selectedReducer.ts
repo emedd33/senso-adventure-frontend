@@ -20,6 +20,7 @@ export const initialSelectedSessionState = {
   title: "",
   subTitle: "",
   story: "",
+  isPublished: "FALSE",
   slug: "",
   sessionDay: 1,
   date: new Date().toDateString(),
@@ -50,18 +51,22 @@ const selectedReducer = (
     }
     case REFRESH_SELECTED_CAMPAIGN: {
       if (state.selectedCampaign) {
-        let filteredCampaign = Object.entries(action.payload).filter(([id,]) => id === state.selectedCampaign?.id)
+        let filteredCampaign = Object.entries(action.payload).filter(
+          ([id]) => id === state.selectedCampaign?.id
+        );
         if (filteredCampaign.length > 0) {
-          let updatedCampaign: { id: string, campaign: any } = Object({ id: filteredCampaign[0][0], campaign: filteredCampaign[0][1] })
+          let updatedCampaign: { id: string; campaign: any } = Object({
+            id: filteredCampaign[0][0],
+            campaign: filteredCampaign[0][1],
+          });
           return {
             ...state,
-            selectedCampaign: updatedCampaign
-
-          }
+            selectedCampaign: updatedCampaign,
+          };
         }
       }
     }
   }
-  return state
+  return state;
 };
 export default selectedReducer;

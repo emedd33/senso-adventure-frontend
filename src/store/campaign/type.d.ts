@@ -1,7 +1,7 @@
 interface ISession {
   title: string;
-  story: string;
   date: string;
+  isPublished: string;
   campaignTitle: string;
   sessionDay: number;
   date: string;
@@ -9,8 +9,8 @@ interface ISession {
   slug: string;
 }
 interface ICharacterAction {
-  name: string,
-  description: string
+  name: string;
+  description: string;
 }
 interface ICampaign {
   slug: string;
@@ -26,6 +26,7 @@ interface ICampaign {
 }
 interface ICharacter {
   name: string;
+  isPublished: string;
   summary: string;
   slug: string;
   isPlayer: string;

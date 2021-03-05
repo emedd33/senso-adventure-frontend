@@ -1,17 +1,15 @@
-
-
-
-
 export const getNewSessionDay = (state: RootReducerProp) => {
   if (state.selected.selectedCampaign?.campaign.sessions) {
-    return Object.keys(state.selected.selectedCampaign.campaign.sessions).length + 1
+    return (
+      Object.keys(state.selected.selectedCampaign.campaign.sessions).length + 1
+    );
   }
-  return 1
-}
+  return 1;
+};
 
 export const getAllCampaigns = (state: RootReducerProp) => {
-  return state.rootCampaigns?.campaigns
-}
+  return state.rootCampaigns?.campaigns;
+};
 
 export const getAllSessions = (state: RootReducerProp) => {
   let sessions: (
@@ -42,14 +40,18 @@ export const getAllSessions = (state: RootReducerProp) => {
 
 export const getNextSession = (state: RootReducerProp) => {
   let selectedSessionDay = state.selected.selectedSession?.session.sessionDay;
-  if (selectedSessionDay && typeof selectedSessionDay === "number" && state.selected.selectedCampaign?.campaign.sessions) {
+  if (
+    selectedSessionDay &&
+    typeof selectedSessionDay === "number" &&
+    state.selected.selectedCampaign?.campaign.sessions
+  ) {
     let nextSession = Object.entries(
       state.selected.selectedCampaign.campaign.sessions
     ).filter(([id, session]) => {
       if (selectedSessionDay) {
         return session.sessionDay === selectedSessionDay + 1;
       }
-      return false
+      return false;
     });
     if (nextSession[0]) {
       return {
@@ -62,14 +64,17 @@ export const getNextSession = (state: RootReducerProp) => {
 };
 export const getPreviousSession = (state: RootReducerProp) => {
   let selectedSessionDay = state.selected.selectedSession?.session.sessionDay;
-  if (typeof selectedSessionDay === "number" && state.selected.selectedCampaign?.campaign.sessions) {
+  if (
+    typeof selectedSessionDay === "number" &&
+    state.selected.selectedCampaign?.campaign.sessions
+  ) {
     let previousSession = Object.entries(
       state.selected.selectedCampaign?.campaign.sessions
     ).filter(([id, session]) => {
       if (selectedSessionDay) {
         return session.sessionDay === selectedSessionDay - 1;
       }
-      return false
+      return false;
     });
     if (previousSession[0]) {
       return {
@@ -80,4 +85,3 @@ export const getPreviousSession = (state: RootReducerProp) => {
   }
   return null;
 };
-

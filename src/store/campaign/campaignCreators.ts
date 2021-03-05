@@ -1,13 +1,10 @@
 import { Dispatch } from "redux";
 import { campaignsRef, firebaseAuth } from "../../firebase";
-import { SET_AUTH_USER, SET_IS_LOADING } from "../admin/adminActions";
-import { setIsLoading } from "../admin/adminCreator";
+import { SET_AUTH_USER } from "../admin/adminActions";
 import { SET_CAMPAIGNS } from "./campaignActions";
 
 // Thunk function
 export async function fetchFromFirebase(dispatch: any) {
-  dispatch({ type: SET_IS_LOADING, payload: true });
-
   // Database
   campaignsRef.on("value", (snapshot) => {
     let campaigns = snapshot.val();
@@ -32,7 +29,6 @@ export async function fetchFromFirebase(dispatch: any) {
 
 export const dispatchLevelUpCharacters = (selectedCampaign: any) => {
   return async (dispatch: Dispatch) => {
-    dispatch(setIsLoading(true));
     Object.entries(selectedCampaign.campaign.players).forEach((elem: any) => {
       let id = elem[0];
       let player = elem[1];
@@ -46,6 +42,5 @@ export const dispatchLevelUpCharacters = (selectedCampaign: any) => {
           .set(player);
       }
     });
-    dispatch(setIsLoading(false));
   };
 };

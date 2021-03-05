@@ -12,25 +12,23 @@ import { getAuthUser } from "../../store/admin/adminSelectors";
 import { useImageFile } from "../../store/hooks/useImageFile";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import { isValidImageFile } from "../../utils/isValidImageFile";
+import BackgroundImage from "../../assets/Images/background_home.jpg";
 
-export interface CampaignEditProps { isNew: boolean }
+export interface CampaignEditProps {
+  isNew: boolean;
+}
 
 const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [imageUrl, setImageUrl] = useState("")
 
-  useEffect(() => {
-    storage
-      .ref("Images/Background/dnd_background.jpg")
-      .getDownloadURL()
-      .then((url: string) => setImageUrl(url))
-  }, []);
+  const [imageUrl, setImageUrl] = useState("");
+
 
   const [isLoading, setIsLoading] = useState(false);
   const selectedCampaign = useSelector(getSelectedCampaign);
   const [campaignTitle, setCampaignTitle] = useState<string>();
-  const user = useSelector(getAuthUser)
+  const user = useSelector(getAuthUser);
   const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false);
   const [
     campaignBackgroundImageFile,
@@ -39,74 +37,86 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(
     "TitleImage"
   );
+  useEffect(() => {
+    if (!isNew && selectedCampaign) {
+      storage
+        .ref("Campaigns")
+        .child(selectedCampaign.campaign.slug)
+        .child("BackgroundImage")
+        .getDownloadURL()
+        .then((url: string) => {
+          setImageUrl(url);
+        })
+        .catch((e) => console.log("could not fetch background image"));
+    } else {
+      setImageUrl(BackgroundImage)
+    }
+  }, [isNew, selectedCampaign]);
 
   useEffect(() => {
     if (selectedCampaign) {
-      setCampaignTitle(selectedCampaign.campaign.title)
+      setCampaignTitle(selectedCampaign.campaign.title);
     }
-  }, [selectedCampaign])
+  }, [selectedCampaign]);
   const submit = async () => {
     setIsLoading(true);
-    if (!campaignTitle) {
-      setCampaignTitleError(true);
-      dispatch(
-        setAlertDialog("Please fille out the Campaign Title", true, true)
-      );
-      setIsLoading(false);
-      return;
-    } else {
-      setCampaignTitleError(false);
-    }
-
-    let slug = campaignTitle.replace(/\s/g, '')
     if (user) {
-
-      let newCampaign = {
-        dungeonMaster: user.username,
-        title: campaignTitle,
-        slug: slug
-      };
+      let slug = selectedCampaign?.campaign.slug
+      let title = selectedCampaign?.campaign.title
       if (isNew) {
+        if (!campaignTitle) {
+          setCampaignTitleError(true);
+          dispatch(
+            setAlertDialog("Please fille out the Campaign Title", true, true)
+          );
+          setIsLoading(false);
+          return;
+        } else {
+          setCampaignTitleError(false);
+        }
+        title = campaignTitle
+        slug = campaignTitle.replace(/\s/g, "");
+        let newCampaign = {
+          dungeonMaster: user.username,
+          title: title,
+          slug: slug,
+        };
         await campaignsRef
           .push(newCampaign)
           .catch((e) => console.log("Could not update campaing "));
-      } else {
-        if (campaignsRef && selectedCampaign) {
-          await campaignsRef
-            .child(selectedCampaign.id)
-            .set(newCampaign)
-            .catch((e) => console.log("Could not update campaing " + e));
+      }
+
+
+      if (slug && title) {
+        const metadata = {
+          customMetadata: {
+            contentType: "image",
+            campaignTitle: title,
+          },
+        };
+
+        if (isValidImageFile(campaignBackgroundImageFile)) {
+          await firebaseStorageRef
+            .child("Campaigns")
+            .child(slug)
+            .child("BackgroundImage")
+            .put(campaignBackgroundImageFile.file.file, metadata);
         }
+        if (isValidImageFile(campaignTitleImageFile)) {
+          await firebaseStorageRef
+            .child("Campaigns")
+            .child(slug)
+            .child("TitleImage")
+            .put(campaignTitleImageFile.file.file, metadata);
+        }
+        history.push(`/${slug}`);
       }
     }
-
-    const metadata = {
-      customMetadata: {
-        contentType: "image",
-        campaignTitle: campaignTitle,
-      },
-    };
-
-    if (isValidImageFile(campaignBackgroundImageFile)) {
-      await firebaseStorageRef
-        .child("Campaigns")
-        .child(campaignTitle)
-        .child("BackgroundImage")
-        .put(campaignBackgroundImageFile.file.file, metadata);
-    }
-    if (isValidImageFile(campaignTitleImageFile)) {
-      await firebaseStorageRef
-        .child("Campaigns")
-        .child(campaignTitle)
-        .child("TitleImage")
-        .put(campaignTitleImageFile.file.file, metadata);
-    }
-    history.push(`/${slug}`);
   }
+
 
   return (
     <ParentContainer style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-
       {isLoading ? (
         <IsLoading />
       ) : (
@@ -114,7 +124,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
             <>
               <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
                 Campaign Creator
-          </h1>
+            </h1>
               <TextField
                 id="outlined-multiline-static"
                 placeholder="Write a fitting title"
@@ -122,6 +132,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
                 variant="filled"
                 error={campaignTitleError}
                 value={campaignTitle}
+                disabled={!isNew}
                 onChange={(event: any) => setCampaignTitle(event.target.value)}
               />
               <div
@@ -145,8 +156,8 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
                 >
                   <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
                     {" "}
-                Background Image
-              </h3>
+                  Background Image
+                </h3>
                 </div>
                 <div
                   style={{
@@ -157,11 +168,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
                     alignItems: "center",
                   }}
                 >
-                  {campaignBackgroundImageFile.name ? (
-                    <h4 style={{ fontFamily: "sans-serif" }}>
-                      {campaignBackgroundImageFile.name}
-                    </h4>
-                  ) : null}
+
                   <ImageUpload
                     imageFile={campaignBackgroundImageFile.file}
                     setImageFile={setCampaignBackgroundImageFile}
@@ -191,8 +198,8 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
                 >
                   <h3 style={{ fontFamily: "serif" }}>
                     {" "}
-                Choose campaign title image
-              </h3>
+                  Choose campaign title image
+                </h3>
                 </div>
                 <div
                   style={{
@@ -203,11 +210,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
                     alignItems: "center",
                   }}
                 >
-                  {campaignTitleImageFile.name ? (
-                    <h4 style={{ fontFamily: "sans-serif" }}>
-                      {campaignTitleImageFile.name}
-                    </h4>
-                  ) : null}
+
                   <ImageUpload
                     imageFile={campaignTitleImageFile.file}
                     setImageFile={setCampaignTitleImageFile}
@@ -222,13 +225,13 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
                 color="primary"
               >
                 Submit
-          </Button>
+            </Button>
             </>
           </Container>
         )}
     </ParentContainer>
   );
-};
+}
 const ParentContainer = styled.div`
   z-index: 300;
   display: flex;

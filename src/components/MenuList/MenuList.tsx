@@ -117,7 +117,6 @@ export default function MenuListComposition() {
             aria-controls={open ? "menu-list-grow" : undefined}
             aria-haspopup="true"
             onClick={handleToggle}
-
           >
             {authUser.username}
             <AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
@@ -148,10 +147,7 @@ export default function MenuListComposition() {
                         to="/profile"
                         style={{ textDecoration: "none", color: "black" }}
                       >
-                        <MenuItem
-
-                          onClick={() => setOpen(false)}
-                        >
+                        <MenuItem onClick={() => setOpen(false)}>
                           Profile
                         </MenuItem>
                       </Link>

@@ -3,14 +3,18 @@ import React, { FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { getSelectedCampaign, getSelectedCampaignDatabaseRef } from "../../store/selected/selectedSelectors";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import {
+    getSelectedCampaign,
+    getSelectedCampaignDatabaseRef,
+} from "../../store/selected/selectedSelectors";
 import { setSelectedCharacter } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
 export const NEW_CHARACTER: ICharacter = {
     name: "",
+    isPublished: "FALSE",
     summary: "A short summary",
     slug: "",
     race: "Human",
@@ -51,51 +55,57 @@ export const NEW_CHARACTER: ICharacter = {
             deception: { proficient: "FALSE" },
             intimidation: { proficient: "FALSE" },
             performance: { proficient: "FALSE" },
-            persuasion: { proficient: "FALSE" }
-        }
-    }
-}
+            persuasion: { proficient: "FALSE" },
+        },
+    },
+};
 type CampaignCharacterNewProps = {};
 const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () => {
-    const history = useHistory()
-    const dispatch = useDispatch()
-    const [characterName, setCharacterName] = useState("")
-    const [playerName, setPlayerName] = useState("")
-    const selectedCampaign = useSelector(getSelectedCampaign)
-    const [characterNameError, setCharacterNameError] = useState(false)
-    const [characterType, setCharacterType] = useState("npc")
-    const campaignRef = useSelector(getSelectedCampaignDatabaseRef)
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const [characterName, setCharacterName] = useState("");
+    const [playerName, setPlayerName] = useState("");
+    const selectedCampaign = useSelector(getSelectedCampaign);
+    const [characterNameError, setCharacterNameError] = useState(false);
+    const [characterType, setCharacterType] = useState("npc");
+    const campaignRef = useSelector(getSelectedCampaignDatabaseRef);
     const submitCharacter = () => {
-
         if (!characterName) {
-            setCharacterNameError(true)
-            return
+            setCharacterNameError(true);
+            return;
         }
         if (campaignRef) {
-            let isPlayer = characterType === "player" ? "TRUE" : "FALSE"
+            let isPlayer = characterType === "player" ? "TRUE" : "FALSE";
 
-            let newCharacter: ICharacter = NEW_CHARACTER
-            newCharacter.name = characterName
-            newCharacter.slug = characterName.replace(/\s/g, '')
-            newCharacter.isPlayer = isPlayer
+            let newCharacter: ICharacter = NEW_CHARACTER;
+            newCharacter.name = characterName;
+            newCharacter.slug = characterName.replace(/\s/g, "");
+            newCharacter.isPlayer = isPlayer;
             if (isPlayer) {
-                newCharacter.playerName = playerName
-                newCharacter.level = 1
+                newCharacter.playerName = playerName;
+                newCharacter.level = 1;
             } else {
-                newCharacter.challengeRating = "1"
+                newCharacter.challengeRating = "1";
             }
-            setCharacterNameError(false)
-            campaignRef.child("characters").push(newCharacter).then((snapshot) => {
-                let characterId = snapshot.key
-                if (characterId) {
-                    dispatch(setSelectedCharacter({ id: characterId, character: newCharacter }))
-                    history.push(`/${selectedCampaign!.campaign.slug}/characters/${newCharacter.slug}`)
-                }
-            })
+            setCharacterNameError(false);
+            campaignRef
+                .child("characters")
+                .push(newCharacter)
+                .then((snapshot) => {
+                    let characterId = snapshot.key;
+                    if (characterId) {
+                        dispatch(
+                            setSelectedCharacter({ id: characterId, character: newCharacter })
+                        );
+                        history.push(
+                            `/${selectedCampaign!.campaign.slug}/characters/${newCharacter.slug
+                            }`
+                        );
+                    }
+                });
         }
-    }
+    };
     return (
-
         <TitleContainer>
             <TextField
                 id="outlined-multiline-static"
@@ -109,37 +119,47 @@ const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () =>
                 onChange={(event) => setCharacterName(event.target.value)}
             />
 
-            <RadioGroup aria-label="characterType" name="characterType" value={characterType} onChange={(event) => setCharacterType(event.target.value)}>
+            <RadioGroup
+                aria-label="characterType"
+                name="characterType"
+                value={characterType}
+                style={{ display: "flex", flexDirection: "row" }}
+                onChange={(event) => setCharacterType(event.target.value)}
+            >
                 <FormControlLabel value="player" control={<Radio />} label="Player" />
                 <FormControlLabel value="npc" control={<Radio />} label="Npc" />
             </RadioGroup>
-            {characterType === "player" ?
+            {characterType === "player" ? (
                 <TextField
                     id="outlined-number"
                     label="Player Name"
                     value={playerName}
                     onKeyDown={(e) => (e.key === "Enter" ? submitCharacter() : null)}
-                    placeholder="Name person playing this character?"
+                    placeholder="Name of the person playing this character?"
                     InputLabelProps={{
                         shrink: true,
                     }}
                     style={{ width: "90%", margin: "1rem" }}
                     onChange={(event) => setPlayerName(event.target.value)}
                 />
-                : null}
+            ) : null}
 
-            <Button style={{ margin: "2rem" }} variant="contained" color="primary" onClick={() => submitCharacter()}>
+            <Button
+                style={{ margin: "2rem" }}
+                variant="contained"
+                color="primary"
+                onClick={() => submitCharacter()}
+            >
                 Submit
-                </Button>
+      </Button>
         </TitleContainer>
     );
-}
-
+};
 
 const TitleContainer = styled.div`
   background-color: ${OLD_WHITE};
   width: 50%;
-  min-width:15rem;
+  min-width: 15rem;
   justify-content: center;
   align-items: center;
   display: flex;

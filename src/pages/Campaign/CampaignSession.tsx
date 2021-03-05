@@ -10,7 +10,12 @@ import {
     getPreviousSession,
 } from "../../store/campaign/campaignSelectors";
 
-import { getSelectedCampaign, getSelectedSession, getSelectedSessionStorageRef, isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
+import {
+    getSelectedCampaign,
+    getSelectedSession,
+    getSelectedSessionStorageRef,
+    isDungeonMasterSelector,
+} from "../../store/selected/selectedSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 
 type CampaignSessionProps = {};
@@ -21,41 +26,46 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
 
     const selectedSession = useSelector(getSelectedSession);
     const selectedCampaign = useSelector(getSelectedCampaign);
-    const storageRef = useSelector(getSelectedSessionStorageRef)
+    const storageRef = useSelector(getSelectedSessionStorageRef);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const nextSession = useSelector(getNextSession);
     const previousSession = useSelector(getPreviousSession);
     useEffect(() => {
         if (selectedSession) {
-
             if (storageRef) {
-
                 storageRef
-                    .child("SessionImages").listAll()
+                    .child("SessionImages")
+                    .listAll()
                     .then((res) => {
                         res.items.forEach((itemRef) => {
-                            itemRef.getDownloadURL()
-                                .then(url => {
-                                    setSessionImages(urls => {
+                            itemRef
+                                .getDownloadURL()
+                                .then((url) => {
+                                    setSessionImages((urls) => {
                                         if (!urls.includes(url)) {
-                                            return [...urls, url]
+                                            return [...urls, url];
                                         }
-                                        return urls
-                                    })
+                                        return urls;
+                                    });
                                 })
-                                .catch(e => console.log("Could not connect to firebase", e))
+                                .catch((e) => console.log("Could not connect to firebase", e));
                         });
-
-                    }).catch((error) => {
-                        console.log("Error fetching session images", error)
+                    })
+                    .catch((error) => {
+                        console.log("Error fetching session images", error);
                     });
-
             }
         }
         return () => {
-            setSessionImages([])
-        }
-    }, [dispatch, selectedSession, isDungeonMaster, selectedCampaign, storageRef]);
+            setSessionImages([]);
+        };
+    }, [
+        dispatch,
+        selectedSession,
+        isDungeonMaster,
+        selectedCampaign,
+        storageRef,
+    ]);
 
     return (
         <>
@@ -123,8 +133,9 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                             variant="contained"
                             onClick={() => {
                                 if (selectedCampaign && selectedSession) {
-
-                                    history.push(`/${selectedCampaign.campaign.slug}/sessions/${selectedSession.session.slug}/edit`);
+                                    history.push(
+                                        `/${selectedCampaign.campaign.slug}/sessions/${selectedSession.session.slug}/edit`
+                                    );
                                 }
                             }}
                         >
@@ -133,16 +144,30 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     ) : null}
                 </div>
                 <h2 style={{ fontSize: "3rem", textAlign: "center" }}>
-                    {selectedSession?.session.title}
+                    {selectedSession?.session.title}{" "}
+                    {selectedSession?.session.isPublished === "FALSE"
+                        ? "(Unpublished)"
+                        : null}
                 </h2>
                 <h3 style={{ fontSize: "2rem", textAlign: "center", opacity: 0.5 }}>
                     {selectedSession?.session.subTitle}
                 </h3>
-                <DraftJSEditor characterMentionList={[]} readOnly={true} JSONRef={storageRef?.child("SessionStory.json")} />
+                <DraftJSEditor
+                    characterMentionList={[]}
+                    readOnly={true}
+                    JSONRef={storageRef?.child("SessionStory.json")}
+                />
             </Container>
 
-            {sessionImages ? sessionImages.map((url) => <img src={url} alt="SessionImage" style={{ width: "10rem", height: "10rem" }} />) : null}
-
+            {sessionImages
+                ? sessionImages.map((url) => (
+                    <img
+                        src={url}
+                        alt="SessionImage"
+                        style={{ width: "10rem", height: "10rem" }}
+                    />
+                ))
+                : null}
         </>
     );
 };
