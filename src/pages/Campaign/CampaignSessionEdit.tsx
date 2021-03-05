@@ -23,6 +23,7 @@ import CardActions from "@material-ui/core/CardActions";
 import ClearIcon from "@material-ui/icons/Clear";
 import useInterval from "../../store/hooks/useInterval";
 import {
+    getSelectedCampaignCharacterMentionList,
     getSelectedSessionDatabaseRef,
     getSelectedSessionStorageRef,
 } from "../../store/selected/selectedSelectors";
@@ -43,6 +44,7 @@ const useStyles = makeStyles({
 });
 
 const CampaignSessionEdit: React.FC = () => {
+    const classes = useStyles();
     const selectedSession = useSelector(
         (state: RootReducerProp) => state.selected.selectedSession
     );
@@ -72,8 +74,7 @@ const CampaignSessionEdit: React.FC = () => {
     const [newSessionImages, setNewSessionImages] = useState<any[]>([]);
     const [ImageUploaderKey, setImageUploaderKey] = useState(0);
     const [existingSessionImages, setExistingSessionImages] = useState<any[]>([]);
-    const classes = useStyles();
-
+    const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList)
     useEffect(() => {
         if (selectedSession && storageRef) {
             setSessionDate(new Date(selectedSession.session.date).toDateString());
@@ -275,7 +276,7 @@ const CampaignSessionEdit: React.FC = () => {
             </div>
             <EditContainer>
                 <DraftJSEditor
-                    characterMentionList={[]}
+                    characterMentionList={characterMentionList}
                     readOnly={false}
                     JSONRef={storageRef?.child("SessionStory.json")}
                 />

@@ -828,28 +828,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 </Table>
                             </div>
                         </div>
-                        {selectedCharacter.character.actions ? (
-                            <NestedContainer style={{ width: "100%" }}>
-                                <h3>Actions and Specials:</h3>
-                                {selectedCharacter.character.actions.map(
-                                    (action: ICharacterAction) => (
-                                        <div>
-                                            <b>{action.name}:</b> {action.description}
-                                        </div>
-                                    )
-                                )}
-                            </NestedContainer>
-                        ) : null}
-                        {isDungeonMaster ? (
-                            <NestedContainer style={{ width: "100%" }}>
-                                <h3>Description and history: </h3>
-                                <DraftJSEditor
-                                    readOnly={true}
-                                    characterMentionList={[]}
-                                    JSONRef={storageRef?.child("CharacterDescription.json")}
-                                />
-                            </NestedContainer>
-                        ) : null}
+
                     </div>
                     {selectedCharacter.character.actions ?
                         <NestedContainer style={{ width: "100%" }} >

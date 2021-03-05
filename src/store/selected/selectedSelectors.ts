@@ -60,13 +60,25 @@ export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
 };
 
 export const getSelectedCampaignCharacterMentionList = (state: RootReducerProp) => {
-    const mentions: MentionData[] = [
-        {
-            name: 'Liotro',
-            link: 'http://localhost:3000/CurseOfStrahd/characters/Liotro',
-            avatar:
-                'https://pbs.twimg.com/profile_images/517863945/mattsailing_400x400.jpg',
-        }]
+    const ENV = "http://localhost"
+    const PORT = "3000"
+    let mentions: MentionData[] = []
+    if (state.selected.selectedCampaign) {
+        if (state.selected.selectedCampaign?.campaign.characters) {
+
+            mentions = Object.values(state.selected.selectedCampaign?.campaign.characters).map((character: ICharacter) => ({
+                name: character.name,
+                link: `${ENV}:${PORT}/${state.selected.selectedCampaign?.campaign.slug}/characters/${character.slug}`
+            }))
+            // : MentionData[] = [
+            //     {
+            //         name: 'Liotro',
+            //         link: 'http://localhost:3000/CurseOfStrahd/characters/Liotro',
+            //         avatar:
+            //         'https://pbs.twimg.com/profile_images/517863945/mattsailing_400x400.jpg',
+            //     }]
+        }
+    }
     return mentions
 }
 

@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { useSelector } from "react-redux";
 import {
+    getSelectedCampaignCharacterMentionList,
     getSelectedCharacter,
     getSelectedCharacterDatabaseRef,
     getSelectedCharacterIsPlayer,
@@ -350,7 +351,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
         selectedCharacter?.character.actions
     );
     const [newActionName, setNewActionName] = useState("");
-
+    const characerMentionList = useSelector(getSelectedCampaignCharacterMentionList)
     const renderAccordian = useCallback(
         (actions) =>
             actions.map((action: ICharacterAction, index: number) => {
@@ -1798,7 +1799,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 <div style={{ width: "100%" }}>
                     <h3>Description and history:</h3>
                     <DraftJSEditor
-                        characterMentionList={[]}
+                        characterMentionList={characerMentionList}
                         readOnly={false}
                         JSONRef={storageRef?.child("CharacterDescription.json")}
                     />
