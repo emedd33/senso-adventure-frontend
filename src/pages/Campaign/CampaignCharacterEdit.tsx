@@ -684,7 +684,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     <h3>
                         Description and history:
                 </h3>
-                    <DraftJSEditor readOnly={false} JSONRef={storageRef?.child("CharacterDescription.json")} />
+                    <DraftJSEditor characterMentionList={[]} readOnly={false} JSONRef={storageRef?.child("CharacterDescription.json")} />
 
                 </div>
             </div>

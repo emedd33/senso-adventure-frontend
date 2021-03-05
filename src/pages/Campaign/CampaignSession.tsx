@@ -138,7 +138,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 <h3 style={{ fontSize: "2rem", textAlign: "center", opacity: 0.5 }}>
                     {selectedSession?.session.subTitle}
                 </h3>
-                <DraftJSEditor readOnly={true} JSONRef={storageRef?.child("SessionStory.json")} />
+                <DraftJSEditor characterMentionList={[]} readOnly={true} JSONRef={storageRef?.child("SessionStory.json")} />
             </Container>
 
             {sessionImages ? sessionImages.map((url) => <img src={url} alt="SessionImage" style={{ width: "10rem", height: "10rem" }} />) : null}

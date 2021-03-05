@@ -14,7 +14,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import ClearIcon from '@material-ui/icons/Clear';
 import useInterval from "../../store/hooks/useInterval";
-import { getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaignCharacterMentionList, getSelectedSessionDatabaseRef, getSelectedSessionStorageRef } from "../../store/selected/selectedSelectors";
 import { getIsLoading } from "../../store/admin/adminSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 
 
 const CampaignSessionEdit: React.FC = () => {
-
+    const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList)
     const selectedSession = useSelector(
         (state: RootReducerProp) => state.selected.selectedSession
     );
@@ -227,7 +227,7 @@ const CampaignSessionEdit: React.FC = () => {
                 <h1 style={{ flex: 2, textAlign: "right" }}>Session story</h1>
             </div>
             <EditContainer>
-                <DraftJSEditor readOnly={false} JSONRef={storageRef?.child("SessionStory.json")} />
+                <DraftJSEditor readOnly={false} JSONRef={storageRef?.child("SessionStory.json")} characterMentionList={characterMentionList} />
             </EditContainer>
 
             <h1>Session Images</h1>

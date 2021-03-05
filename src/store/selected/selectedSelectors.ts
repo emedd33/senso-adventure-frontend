@@ -1,3 +1,4 @@
+import { MentionData } from "@draft-js-plugins/mention";
 import { campaignsRef, storage } from "../../firebase";
 
 export const getSelectedSession = (state: RootReducerProp) => state.selected.selectedSession
@@ -32,6 +33,16 @@ export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
             .child("Sessions")
             .child(state.selected.selectedSession?.session?.title)
     }
+}
+export const getSelectedCampaignCharacterMentionList = (state: RootReducerProp) => {
+    const mentions: MentionData[] = [
+        {
+            name: 'Liotro',
+            link: 'http://localhost:3000/CurseOfStrahd/characters/Liotro',
+            avatar:
+                'https://pbs.twimg.com/profile_images/517863945/mattsailing_400x400.jpg',
+        }]
+    return mentions
 }
 export const getSelectedCharacterStorageRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedCharacter) {
