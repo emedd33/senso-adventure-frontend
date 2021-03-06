@@ -18,9 +18,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Helmet>
-        <meta charSet="utf-8" />
+        {/* <meta charSet="utf-8" /> */}
         <title>Senso Adventure</title>
-        <link rel="icon" type="image/png" href="home_crest.png" sizes="16x16" />
+        {/* <link rel="icon" type="image/png" href="home_crest.png" sizes="16x16" /> */}
       </Helmet>
       <App />
     </Provider>

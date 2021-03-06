@@ -103,14 +103,14 @@ const Home: FunctionComponent<HomeProps> = () => {
       >
         {campaignUrls
           ? Object.values(campaignUrls).map(
-            (campaign: { campaignSlug: string; url?: string }) => (
-              <Link to={`/${campaign.campaignSlug}`}>
+            (campaign: { campaignSlug: string; url?: string }, index: number) => (
+              <Link to={`/${campaign.campaignSlug}`} key={index}>
                 <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem" }}>
                   {campaign.url ? (
                     <CampaignImg src={campaign.url} />
                   ) : (
-                      <h1>{campaign.campaignSlug}</h1>
-                    )}
+                    <h1>{campaign.campaignSlug}</h1>
+                  )}
                 </Button>
               </Link>
             )

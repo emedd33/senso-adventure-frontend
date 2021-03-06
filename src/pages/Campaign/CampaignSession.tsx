@@ -52,7 +52,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                         });
                     })
                     .catch((error) => {
-                        console.log("Error fetching session images", error);
+                        console.log("Could not fetch session images");
                     });
             }
         }

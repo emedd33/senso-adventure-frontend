@@ -107,7 +107,7 @@ const CampaignSessionEdit: React.FC = () => {
                     });
                 })
                 .catch((error) => {
-                    console.log("Error fetching session images", error);
+                    console.log("Could not fetch session images");
                 });
         }
 
@@ -296,60 +296,60 @@ const CampaignSessionEdit: React.FC = () => {
                     <CircularProgress />
                 </div>
             ) : (
-                    <>
-                        <ImageUploader
-                            key={ImageUploaderKey}
-                            withIcon={true}
-                            label="Max file size: 10mb, accepted: jpg|gif|png"
-                            buttonText="Choose images"
-                            onChange={(newImages: any) =>
-                                setNewSessionImages([...newSessionImages, ...newImages])
-                            }
-                            imgExtension={[".jpg", ".gif", ".png"]}
-                            maxFileSize={10485760}
-                            withPreview={true}
-                        />
-                        <Button variant="contained" onClick={submitImages}>
-                            Upload Pictures
+                <>
+                    <ImageUploader
+                        key={ImageUploaderKey}
+                        withIcon={true}
+                        label="Max file size: 10mb, accepted: jpg|gif|png"
+                        buttonText="Choose images"
+                        onChange={(newImages: any) =>
+                            setNewSessionImages([...newSessionImages, ...newImages])
+                        }
+                        imgExtension={[".jpg", ".gif", ".png"]}
+                        maxFileSize={10485760}
+                        withPreview={true}
+                    />
+                    <Button variant="contained" onClick={submitImages}>
+                        Upload Pictures
           </Button>
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                margin: "1rem",
-                            }}
-                        >
-                            {existingSessionImages.map((img) => {
-                                return (
-                                    <Card className={classes.root}>
-                                        <CardActionArea>
-                                            <CardActions
-                                                style={{
-                                                    display: "flex",
-                                                    justifyContent: "center",
-                                                    height: "2rem",
-                                                }}
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            margin: "1rem",
+                        }}
+                    >
+                        {existingSessionImages.map((img) => {
+                            return (
+                                <Card className={classes.root}>
+                                    <CardActionArea>
+                                        <CardActions
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                height: "2rem",
+                                            }}
+                                        >
+                                            <IconButton
+                                                aria-label="delete"
+                                                onClick={() => removeImage(img)}
                                             >
-                                                <IconButton
-                                                    aria-label="delete"
-                                                    onClick={() => removeImage(img)}
-                                                >
-                                                    <ClearIcon color="secondary" />
-                                                </IconButton>
-                                            </CardActions>
-                                            <CardMedia
-                                                className={classes.media}
-                                                image={img.url}
-                                                title="Contemplative Reptile"
-                                            />
-                                        </CardActionArea>
-                                    </Card>
-                                );
-                            })}
-                        </div>
-                    </>
-                )}
+                                                <ClearIcon color="secondary" />
+                                            </IconButton>
+                                        </CardActions>
+                                        <CardMedia
+                                            className={classes.media}
+                                            image={img.url}
+                                            title="Contemplative Reptile"
+                                        />
+                                    </CardActionArea>
+                                </Card>
+                            );
+                        })}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

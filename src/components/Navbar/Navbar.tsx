@@ -172,6 +172,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   ([id, campaign]) => {
                     return (
                       <NavBarItem
+                        key={id}
                         onClick={() =>
                           dispatch(
                             setSelectedCampaign({

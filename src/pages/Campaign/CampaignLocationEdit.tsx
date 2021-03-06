@@ -142,7 +142,7 @@ const CampaignLocationEdit: React.FC = () => {
                     });
                 })
                 .catch((error) => {
-                    console.log("Error fetching location images", error);
+                    console.log("Error fetching location images");
                 });
         }
 

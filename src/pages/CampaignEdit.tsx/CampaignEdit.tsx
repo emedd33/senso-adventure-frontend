@@ -83,7 +83,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
         };
         await campaignsRef
           .push(newCampaign)
-          .catch((e) => console.log("Could not update campaing "));
+          .catch((e) => console.log("Could not update campaing ", e));
       }
 
 
@@ -120,115 +120,115 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
       {isLoading ? (
         <IsLoading />
       ) : (
-          <Container>
-            <>
-              <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
-                Campaign Creator
+        <Container>
+          <>
+            <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
+              Campaign Creator
             </h1>
-              <TextField
-                id="outlined-multiline-static"
-                placeholder="Write a fitting title"
-                style={{ width: "50%", textAlign: "center" }}
-                variant="filled"
-                error={campaignTitleError}
-                value={campaignTitle}
-                disabled={!isNew}
-                onChange={(event: any) => setCampaignTitle(event.target.value)}
-              />
+            <TextField
+              id="outlined-multiline-static"
+              placeholder="Write a fitting title"
+              style={{ width: "50%", textAlign: "center" }}
+              variant="filled"
+              error={campaignTitleError}
+              value={campaignTitle}
+              disabled={!isNew}
+              onChange={(event: any) => setCampaignTitle(event.target.value)}
+            />
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "1rem",
+                flexWrap: "wrap",
+              }}
+            >
               <div
                 style={{
                   display: "flex",
-                  width: "100%",
-                  justifyContent: "center",
                   alignItems: "center",
+                  justifyContent: "flex-start",
                   margin: "1rem",
-                  flexWrap: "wrap",
+                  width: "15rem",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    margin: "1rem",
-                    width: "15rem",
-                  }}
-                >
-                  <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
-                    {" "}
+                <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
+                  {" "}
                   Background Image
                 </h3>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    width: "15rem",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-
-                  <ImageUpload
-                    imageFile={campaignBackgroundImageFile.file}
-                    setImageFile={setCampaignBackgroundImageFile}
-                    maxFiles={1}
-                  />
-                </div>
               </div>
-
               <div
                 style={{
                   display: "flex",
-                  width: "100%",
+                  width: "15rem",
+                  flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                  margin: "1rem",
-                  flexWrap: "wrap",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    margin: "1rem",
-                    width: "15rem",
-                  }}
-                >
-                  <h3 style={{ fontFamily: "serif" }}>
-                    {" "}
+
+                <ImageUpload
+                  imageFile={campaignBackgroundImageFile.file}
+                  setImageFile={setCampaignBackgroundImageFile}
+                  maxFiles={1}
+                />
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "1rem",
+                flexWrap: "wrap",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  margin: "1rem",
+                  width: "15rem",
+                }}
+              >
+                <h3 style={{ fontFamily: "serif" }}>
+                  {" "}
                   Choose campaign title image
                 </h3>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    width: "15rem",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-
-                  <ImageUpload
-                    imageFile={campaignTitleImageFile.file}
-                    setImageFile={setCampaignTitleImageFile}
-                    maxFiles={1}
-                  />
-                </div>
               </div>
-              <Button
-                variant="contained"
-                onClick={submit}
-                style={{ marginTop: "1rem" }}
-                color="primary"
+              <div
+                style={{
+                  display: "flex",
+                  width: "15rem",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                Submit
+
+                <ImageUpload
+                  imageFile={campaignTitleImageFile.file}
+                  setImageFile={setCampaignTitleImageFile}
+                  maxFiles={1}
+                />
+              </div>
+            </div>
+            <Button
+              variant="contained"
+              onClick={submit}
+              style={{ marginTop: "1rem" }}
+              color="primary"
+            >
+              Submit
             </Button>
-            </>
-          </Container>
-        )}
+          </>
+        </Container>
+      )}
     </ParentContainer>
   );
 }
