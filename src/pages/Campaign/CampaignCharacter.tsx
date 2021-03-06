@@ -45,24 +45,15 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
     }
     return (
         <Container>
-            <NestedContainer style={{ flex: 1 }}>
+            <div style={{ flex: 1 }}>
                 <div
                     style={{
                         display: "grid",
                         width: "100%",
                         gridTemplateColumns: "1fr 1fr",
-                        height: "5rem",
                     }}
                 >
-                    <div>
-                        <h1 style={{ marginBottom: "0" }}>
-                            {selectedCharacter.character.name}{" "}
-                            {selectedCharacter.character.isPublished === "FALSE"
-                                ? "(Unpublished)"
-                                : null}
-                        </h1>
-                    </div>
-                    <div>
+                    <div style={{ display: "flex", justifyContent: "flex-end", gridColumn: "1/3" }}>
                         {isDungeonMaster ? (
                             <>
                                 <NestedContainer
@@ -87,53 +78,51 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             </>
                         ) : null}
                     </div>
-                    <NestedNestedContainer style={{ marginBottom: "1rem" }}>
-                        {selectedCharacter.character.nickNames ? renderArrayOfString(selectedCharacter.character.nickNames) : null}
-                    </NestedNestedContainer>
-                    <NestedNestedContainer style={{ marginBottom: "1rem" }}>
 
+                    <h1 style={{ marginBottom: "0", gridColumn: "1/3" }}>
+                        {selectedCharacter.character.name}
+                        {selectedCharacter.character.isPublished === "FALSE"
+                            ? " (Unpublished)"
+                            : null}
+                    </h1>
+
+                    <div style={{ marginBottom: "1rem", gridColumn: "1/3" }}>
+                        <b>Also known as: </b>{selectedCharacter.character.nickNames ? renderArrayOfString(selectedCharacter.character.nickNames) : null}
+                    </div>
+                    <b style={{ marginBottom: "1rem" }}>
                         {selectedCharacter.character.isPlayer === "TRUE"
                             ? `Played by: ${selectedCharacter.character.playerName}`
                             : "NPC"}
-                    </NestedNestedContainer>
-                </div>
-                <NestedNestedContainer style={{ marginTop: "1rem" }}>
-                    <div>
-
+                    </b>
+                    <div style={{ marginLeft: "0.5rem" }}>
+                        {selectedCharacter.character.isPlayer === "TRUE"
+                            ? `Level: ${parseValuesToString(
+                                selectedCharacter.character.level
+                            )}`
+                            : `CR: ${parseValuesToString(
+                                selectedCharacter.character.challengeRating
+                            )}`}
                     </div>
-                    <div>
-                        {selectedCharacter.character.race},
-          </div>
-                    {selectedCharacter.character.class ? (
-                        <div style={{ marginLeft: "0.5rem" }}>
-                            {parseValuesToString(selectedCharacter.character.class)},
-                        </div>
-                    ) : null}
+                </div>
+                <div >
+
+                    {selectedCharacter.character.race},
+                    {selectedCharacter.character.class ? selectedCharacter.character.class : null}
                     {isDungeonMaster ? (
                         <>
-                            <div style={{ marginLeft: "0.5rem" }}>
-                                {selectedCharacter.character.alignment},
-              </div>
-                            <div style={{ marginLeft: "0.5rem" }}>
-                                {selectedCharacter.character.isPlayer === "TRUE"
-                                    ? `Level: ${parseValuesToString(
-                                        selectedCharacter.character.level
-                                    )}`
-                                    : `CR: ${parseValuesToString(
-                                        selectedCharacter.character.challengeRating
-                                    )}`}
-                            </div>
+                            {selectedCharacter.character.alignment},
+
                         </>
                     ) : null}
-                </NestedNestedContainer>
-            </NestedContainer>
-            <NestedContainer style={{ width: "100%" }}>
+                </div>
+            </div>
+            <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", borderBottom: "double" }}></div>
 
                 <b>Summary: </b>
                 {selectedCharacter.character.summary}
                 <div style={{ width: "100%", borderBottom: "double" }}></div>
-            </NestedContainer>
+            </div>
             {isDungeonMaster || selectedCharacter.character.isPlayer === "TRUE" ? (
                 <>
                     <NestedContainer>
@@ -265,14 +254,14 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             >
                                 {selectedCharacter.character.stats.strength.isProficient ===
                                     "TRUE" ? (
-                                        <CheckIcon style={{ width: "0.8rem", color: "green" }} />
-                                    ) : null}
+                                    <CheckIcon style={{ width: "0.8rem", color: "green" }} />
+                                ) : null}
                 Saving:
                 {getAbilityModifier(
-                                        selectedCharacter.character.stats.strength.value,
-                                        selectedCharacter.character.stats.strength.isProficient,
-                                        selectedCharacter.character.stats.proficiency
-                                    )}
+                                    selectedCharacter.character.stats.strength.value,
+                                    selectedCharacter.character.stats.strength.isProficient,
+                                    selectedCharacter.character.stats.proficiency
+                                )}
                             </div>
                         </div>
                         <div
@@ -300,14 +289,14 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             >
                                 {selectedCharacter.character.stats.dexterity.isProficient ===
                                     "TRUE" ? (
-                                        <CheckIcon style={{ width: "0.8rem", color: "green" }} />
-                                    ) : null}
+                                    <CheckIcon style={{ width: "0.8rem", color: "green" }} />
+                                ) : null}
                 Saving:
                 {getAbilityModifier(
-                                        selectedCharacter.character.stats.dexterity.value,
-                                        selectedCharacter.character.stats.dexterity.isProficient,
-                                        selectedCharacter.character.stats.proficiency
-                                    )}
+                                    selectedCharacter.character.stats.dexterity.value,
+                                    selectedCharacter.character.stats.dexterity.isProficient,
+                                    selectedCharacter.character.stats.proficiency
+                                )}
                             </div>
                         </div>
                         <div
@@ -335,14 +324,14 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             >
                                 {selectedCharacter.character.stats.constitution.isProficient ===
                                     "TRUE" ? (
-                                        <CheckIcon style={{ width: "0.8rem", color: "green" }} />
-                                    ) : null}
+                                    <CheckIcon style={{ width: "0.8rem", color: "green" }} />
+                                ) : null}
                 Saving:
                 {getAbilityModifier(
-                                        selectedCharacter.character.stats.constitution.value,
-                                        selectedCharacter.character.stats.constitution.isProficient,
-                                        selectedCharacter.character.stats.proficiency
-                                    )}
+                                    selectedCharacter.character.stats.constitution.value,
+                                    selectedCharacter.character.stats.constitution.isProficient,
+                                    selectedCharacter.character.stats.proficiency
+                                )}
                             </div>
                         </div>
 
@@ -371,14 +360,14 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             >
                                 {selectedCharacter.character.stats.intelligence.isProficient ===
                                     "TRUE" ? (
-                                        <CheckIcon style={{ width: "0.8rem", color: "green" }} />
-                                    ) : null}
+                                    <CheckIcon style={{ width: "0.8rem", color: "green" }} />
+                                ) : null}
                 Saving:
                 {getAbilityModifier(
-                                        selectedCharacter.character.stats.intelligence.value,
-                                        selectedCharacter.character.stats.intelligence.isProficient,
-                                        selectedCharacter.character.stats.proficiency
-                                    )}
+                                    selectedCharacter.character.stats.intelligence.value,
+                                    selectedCharacter.character.stats.intelligence.isProficient,
+                                    selectedCharacter.character.stats.proficiency
+                                )}
                             </div>
                         </div>
                         <div
@@ -406,14 +395,14 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             >
                                 {selectedCharacter.character.stats.wisdom.isProficient ===
                                     "TRUE" ? (
-                                        <CheckIcon style={{ width: "0.8rem", color: "green" }} />
-                                    ) : null}
+                                    <CheckIcon style={{ width: "0.8rem", color: "green" }} />
+                                ) : null}
                 Saving:
                 {getAbilityModifier(
-                                        selectedCharacter.character.stats.wisdom.value,
-                                        selectedCharacter.character.stats.wisdom.isProficient,
-                                        selectedCharacter.character.stats.proficiency
-                                    )}
+                                    selectedCharacter.character.stats.wisdom.value,
+                                    selectedCharacter.character.stats.wisdom.isProficient,
+                                    selectedCharacter.character.stats.proficiency
+                                )}
                             </div>
                         </div>
                         <div
@@ -441,14 +430,14 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             >
                                 {selectedCharacter.character.stats.charisma.isProficient ===
                                     "TRUE" ? (
-                                        <CheckIcon style={{ width: "0.8rem", color: "green" }} />
-                                    ) : null}
+                                    <CheckIcon style={{ width: "0.8rem", color: "green" }} />
+                                ) : null}
                 Saving:
                 {getAbilityModifier(
-                                        selectedCharacter.character.stats.charisma.value,
-                                        selectedCharacter.character.stats.charisma.isProficient,
-                                        selectedCharacter.character.stats.proficiency
-                                    )}
+                                    selectedCharacter.character.stats.charisma.value,
+                                    selectedCharacter.character.stats.charisma.isProficient,
+                                    selectedCharacter.character.stats.proficiency
+                                )}
                             </div>
                         </div>
 

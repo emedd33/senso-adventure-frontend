@@ -24,10 +24,11 @@ import {
   CodeBlockButton,
 } from "@draft-js-plugins/buttons";
 import { CircularProgress } from "@material-ui/core";
+import IsLoading from "../IsLoading/IsLoading";
 type DraftJSEditorProps = {
   JSONRef: any | undefined;
   readOnly: boolean;
-  characterMentionList: MentionData[]
+  characterMentionList?: MentionData[]
 };
 const mentionPlugin = createMentionPlugin();
 const staticToolbarPlugin = createToolbarPlugin();
@@ -49,7 +50,10 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
     setOpen(_open);
   }, []);
   const onSearchChange = useCallback(({ value }: { value: string }) => {
-    setCharacterSuggestions(defaultSuggestionsFilter(value, characterMentionList));
+    if (characterMentionList) {
+
+      setCharacterSuggestions(defaultSuggestionsFilter(value, characterMentionList));
+    }
   }, [characterMentionList]);
   useInterval(() => {
     if (!readOnly) {
@@ -60,6 +64,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
         ) {
           setIsUploading(true);
           let uploadedState = editorState;
+          console.log("uploading")
           var blob = new Blob(
             [JSON.stringify(convertToRaw(uploadedState.getCurrentContent()))],
             { type: "application/json" }
@@ -76,7 +81,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
         }
       }
     }
-  }, 3000);
+  }, 10000);
 
   useEffect(() => {
     if (JSONRef) {
@@ -100,7 +105,9 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
   }, [JSONRef]);
 
 
-
+  if (!characterSuggestions) {
+    return <IsLoading />
+  }
   return (
     <div
       className={editorStyles.editor}

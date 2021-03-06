@@ -1,5 +1,5 @@
 import { Button, TextField } from "@material-ui/core";
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { NEW_CHARACTER, OLD_WHITE } from "../../assets/constants/Constants";
@@ -23,6 +23,9 @@ const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () =>
     const [characterNameError, setCharacterNameError] = useState(false);
     const [characterType, setCharacterType] = useState("npc");
     const campaignRef = useSelector(getSelectedCampaignDatabaseRef);
+    useEffect(() => {
+        dispatch(setSelectedCharacter({ id: "", character: NEW_CHARACTER }))
+    }, [dispatch])
     const submitCharacter = () => {
         if (!characterName) {
             setCharacterNameError(true);

@@ -13,7 +13,7 @@ import {
     getSelectedCharacterStorageRef,
 } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
-import { OLD_WHITE } from "../../assets/constants/Constants";
+import { OLD_WHITE, OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import getAbilityModifier from "../../utils/getAbilityModifier";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -377,6 +377,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                             <TextField
                                 label="Action description"
                                 multiline
+                                style={{ backgroundColor: OLD_WHITE_DARK }}
                                 rows={4}
                                 value={action.description}
                                 onChange={(event) => {
@@ -724,7 +725,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 characterRef.child("actions").set(actions);
             }
         }
-    }, 1000);
+    }, 3000);
 
     useEffect(() => {
         let modifier = getAbilityModifier(wisdom, false, 0, true);
@@ -747,10 +748,11 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         {selectedCharacter.character.name}
                     </h1>
                 </div>
+                <b>Also known as:</b>
                 {nickNames
                     ? nickNames.map((nickName: string) => (
                         <Chip
-                            style={{ marginLeft: "0.2rem", backgroundColor: "white", }}
+                            style={{ marginLeft: "0.2rem", backgroundColor: OLD_WHITE_DARK, maxWidth: "10rem" }}
                             label={nickName}
                             onDelete={() =>
                                 setNickNames((existingNickNames: string[]) =>
@@ -773,15 +775,18 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     }}
                 >
                     <TextField
-                        onKeyDown={(event) =>
-                            newNickName && event.key === "Enter"
-                                ? setNickNames((existingNickNames: string[]) => [
+                        onKeyDown={(event) => {
+
+                            if (newNickName && event.key === "Enter") {
+                                setNickNames((existingNickNames: string[]) => [
                                     ...existingNickNames,
                                     newNickName,
                                 ])
-                                : null
+                                setNewNickName("")
+                            }
                         }
-                        style={{ marginTop: "0.5rem", marginRight: "0.5rem" }}
+                        }
+                        style={{ marginTop: "0.5rem", marginRight: "0.5rem", backgroundColor: OLD_WHITE_DARK }}
                         variant="outlined"
                         onChange={(event) => setNewNickName(event.target.value)}
                         label="Nick Name"
@@ -829,6 +834,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         <TextField
                             variant="outlined"
                             label="Race"
+                            style={{ backgroundColor: OLD_WHITE_DARK }}
                             value={race}
                             onChange={(event) => {
                                 setRace(event.target.value);
@@ -840,6 +846,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         <TextField
                             variant="outlined"
                             label="Class"
+                            style={{ backgroundColor: OLD_WHITE_DARK }}
                             value={characterClass ? characterClass : ""}
                             onChange={(event) => setCharacterClass(event.target.value)}
                         />
@@ -849,6 +856,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                             variant="outlined"
                             label="Alignment"
                             value={alignment}
+                            style={{ backgroundColor: OLD_WHITE_DARK }}
                             onChange={(event) => setAlignment(event.target.value)}
                         />
                     </div>
@@ -857,6 +865,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                             <TextField
                                 label="Level"
                                 type="number"
+                                style={{ backgroundColor: OLD_WHITE_DARK }}
                                 variant="outlined"
                                 InputLabelProps={{ shrink: true }}
                                 value={level}
@@ -869,6 +878,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                                 variant="outlined"
                                 label="Challenge Rating"
                                 value={challengeRating}
+                                style={{ backgroundColor: OLD_WHITE_DARK }}
                                 onChange={(event) => setChallengeRating(event.target.value)}
                             />
                         )}
@@ -879,9 +889,10 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 style={{ width: "100%", marginTop: "1rem", marginBottom: "1rem" }}
             >
                 <TextField
-                    label="Summary"
+                    label="Apperence"
                     multiline
                     rows={4}
+                    style={{ backgroundColor: OLD_WHITE_DARK }}
                     value={summary}
                     error={summaryError}
                     onChange={(event) => {
@@ -898,11 +909,12 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
             </NestedContainer>
             <div>
                 <NestedNestedContainer>
-                    <div style={{ paddingLeft: "0.3rem", margin: "0.3rem" }}>
+                    <div >
                         <TextField
                             label="Armor Class"
                             type="number"
                             variant="outlined"
+                            style={{ backgroundColor: OLD_WHITE_DARK }}
                             InputLabelProps={{ shrink: true }}
                             value={armorClass}
                             onChange={(event) =>
@@ -917,11 +929,12 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     </div>
                 </NestedNestedContainer>
                 <NestedNestedContainer>
-                    <div style={{ paddingLeft: "0.3rem" }}>
+                    <div >
                         <TextField
-                            label="Proficiency"
+                            label="Proficiency bonus"
                             type="number"
                             variant="outlined"
+                            style={{ backgroundColor: OLD_WHITE_DARK }}
                             InputLabelProps={{ shrink: true }}
                             value={proficiency}
                             onChange={(event) =>
@@ -936,11 +949,12 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     </div>
                 </NestedNestedContainer>
                 <NestedNestedContainer>
-                    <div style={{ paddingLeft: "0.3rem", margin: "0.3rem" }}>
+                    <div>
                         <TextField
                             label="Hitpoints"
                             type="number"
                             variant="outlined"
+                            style={{ backgroundColor: OLD_WHITE_DARK }}
                             InputLabelProps={{ shrink: true }}
                             value={hitPoints}
                             onChange={(event) =>
@@ -1013,7 +1027,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         {senses
                             ? senses.map((sens: string) => (
                                 <Chip
-                                    style={{ marginLeft: "0.2rem", backgroundColor: "white" }}
+                                    style={{ marginLeft: "0.2rem", backgroundColor: OLD_WHITE_DARK }}
                                     label={sens}
                                     onDelete={() =>
                                         setSenses((existingSenses: string[]) =>
@@ -1045,7 +1059,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                                     ])
                                     : null
                             }
-                            style={{ marginTop: "0.5rem", marginRight: "0.5rem" }}
+                            style={{ marginTop: "0.5rem", marginRight: "0.5rem", backgroundColor: OLD_WHITE_DARK }}
                             variant="outlined"
                             onChange={(event) => setNewSens(event.target.value)}
                             label="Senses"
@@ -1087,7 +1101,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                         {immunities
                             ? immunities.map((immunity: string) => (
                                 <Chip
-                                    style={{ marginLeft: "0.2rem", backgroundColor: "white" }}
+                                    style={{ marginLeft: "0.2rem", backgroundColor: OLD_WHITE_DARK }}
                                     label={immunity}
                                     onDelete={() =>
                                         setImmunities((existingimmunities: string[]) =>
@@ -1120,7 +1134,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                                     ])
                                     : null
                             }
-                            style={{ marginTop: "0.5rem", marginRight: "0.5rem" }}
+                            style={{ marginTop: "0.5rem", marginRight: "0.5rem", backgroundColor: OLD_WHITE_DARK }}
                             variant="outlined"
                             onChange={(event) => setNewImmunity(event.target.value)}
                             label="Immunity"
@@ -1166,7 +1180,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 >
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>STR:</b>
                     <TextField
-                        style={{ margin: "0.3rem" }}
+                        style={{ margin: "0.3rem", backgroundColor: OLD_WHITE_DARK }}
                         label="Value"
                         type="number"
                         variant="outlined"
@@ -1201,7 +1215,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 >
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>DEX:</b>
                     <TextField
-                        style={{ margin: "0.3rem" }}
+                        style={{ margin: "0.3rem", backgroundColor: OLD_WHITE_DARK }}
                         label="Value"
                         type="number"
                         variant="outlined"
@@ -1237,7 +1251,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 >
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CON:</b>
                     <TextField
-                        style={{ margin: "0.3rem" }}
+                        style={{ margin: "0.3rem", backgroundColor: OLD_WHITE_DARK }}
                         label="Value"
                         type="number"
                         variant="outlined"
@@ -1281,7 +1295,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 >
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>INT:</b>
                     <TextField
-                        style={{ margin: "0.3rem" }}
+                        style={{ margin: "0.3rem", backgroundColor: OLD_WHITE_DARK }}
                         label="Value"
                         type="number"
                         variant="outlined"
@@ -1326,7 +1340,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 >
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>WIS:</b>
                     <TextField
-                        style={{ margin: "0.3rem" }}
+                        style={{ margin: "0.3rem", backgroundColor: OLD_WHITE_DARK }}
                         label="Value"
                         type="number"
                         variant="outlined"
@@ -1361,7 +1375,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 >
                     <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CHA:</b>
                     <TextField
-                        style={{ margin: "0.3rem" }}
+                        style={{ margin: "0.3rem", backgroundColor: OLD_WHITE_DARK }}
                         label="Value"
                         type="number"
                         variant="outlined"
@@ -1836,6 +1850,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     <TextField
                         variant="outlined"
                         label="New action"
+                        style={{ backgroundColor: OLD_WHITE_DARK }}
                         value={newActionName}
                         onChange={(event) => {
                             setNewActionName(event.target.value);
@@ -1896,7 +1911,7 @@ const NestedContainer = styled.div`
 
 const NestedNestedContainer = styled.div`
   display: flex;
-  margin: 0.2rem;
+  margin: 0.5rem;
   font-size: 1.2rem;
 `;
 const Table = styled.table`

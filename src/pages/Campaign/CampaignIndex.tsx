@@ -15,6 +15,7 @@ import CampaignCharacterNew from "./CampaignCharacterNew";
 import CampaignSession from "./CampaignSession";
 import {
   getSelectedCampaign,
+  getSelectedCampaignSlug,
   getSelectedCharacter,
   getSelectedLocation,
   getSelectedSession,
@@ -43,7 +44,7 @@ import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 import sessionIcon from "../../assets/icons/session_icon.png"
 import characterIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
-import { NEW_CHARACTER, NEW_LOCATION, OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
+import { OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
 import CampaignLocationNew from "./CampaignLocationNew";
 import CampaignLocations from "./CampaignLocations";
 import CampaignLocation from "./CampaignLocation";
@@ -60,6 +61,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const selectedSession = useSelector(getSelectedSession);
   const selectedLocation = useSelector(getSelectedLocation);
   const selectedCharacter = useSelector(getSelectedCharacter);
+  const selectedCampaignSlug = useSelector(getSelectedCampaignSlug)
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
   const [imageUrl, setImageUrl] = useState("");
   const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
@@ -152,10 +154,10 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   }, [dispatch, campaigns, location]);
   useEffect(() => {
     setIsLoading(true);
-    if (selectedCampaign) {
+    if (selectedCampaignSlug) {
       let campaignRef = storage
         .ref("Campaigns")
-        .child(selectedCampaign.campaign.slug);
+        .child(selectedCampaignSlug);
 
       // Fetching BackgroundImage
       campaignRef
@@ -175,7 +177,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         .catch((e) => console.log("Could not fetch Campaign image"))
         .finally(() => dispatch(setIsLoading(false)));
     }
-  }, [dispatch, selectedCampaign]);
+  }, [dispatch, selectedCampaignSlug]);
 
   if (location.pathname.split("/").length >= 2 && !selectedCampaign) {
     return <IsLoading />;
@@ -282,7 +284,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             onClick={() => {
               if (selectedCampaign) {
                 dispatch(
-                  setSelectedCharacter({ id: "", character: NEW_CHARACTER })
+                  setSelectedCharacter()
                 );
                 history.push(
                   `/${selectedCampaign.campaign.slug}/characters/new`
@@ -298,9 +300,6 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             style={{ backgroundColor: "transparent" }}
             onClick={() => {
               if (selectedCampaign) {
-                dispatch(
-                  setSelectedLocation({ id: "", location: NEW_LOCATION })
-                );
                 history.push(
                   `/${selectedCampaign.campaign.slug}/locations/new`
                 );

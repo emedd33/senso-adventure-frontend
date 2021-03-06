@@ -8,6 +8,9 @@ export const getSelectedSession = (state: RootReducerProp) =>
 export const getSelectedCampaign = (state: RootReducerProp) => {
     return state.selected.selectedCampaign;
 };
+export const getSelectedCampaignSlug = (state: RootReducerProp) => {
+    return state.selected.selectedCampaign?.campaign.slug;
+};
 export const getSelectedCharacter = (state: RootReducerProp) => {
     return state.selected.selectedCharacter;
 };

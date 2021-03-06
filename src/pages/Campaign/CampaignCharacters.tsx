@@ -34,7 +34,7 @@ const CampaignCharacters: FunctionComponent<CampaignCharactersProps> = () => {
             style={
               character.isPublished === "TRUE"
                 ? { backgroundColor: OLD_WHITE }
-                : { backgroundColor: OLD_WHITE, opacity: 0.5 }
+                : { backgroundColor: OLD_WHITE, opacity: 0.7 }
             }
           >
             <AccordionSummary

@@ -32,7 +32,7 @@ export const NEW_CHARACTER: ICharacter = {
     name: "",
     nickNames: [],
     isPublished: "FALSE",
-    summary: "A short summary",
+    summary: "",
     slug: "",
     race: "Human",
     isPlayer: "TRUE",
