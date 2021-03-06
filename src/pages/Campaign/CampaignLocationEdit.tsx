@@ -113,13 +113,12 @@ const CampaignLocationEdit: React.FC = () => {
             ? selectedLocation?.location.keyElements
             : []
     );
-    const [newKeyElemnt, setNewKeyElement] = useState<{ name: string, description: string } | null>()
+    const [newKeyElement, setNewKeyElement] = useState<{ name: string, description: string } | null>()
     const [keyElementError, setKeyElementError] = useState(false);
 
     const [ImageUploaderKey, setImageUploaderKey] = useState(0);
     const [existingLocationImages, setExistingLocationImages] = useState<any[]>([]);
     const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList)
-    console.log("resources", resources);
 
     useEffect(() => {
         if (selectedLocation && storageRef) {
@@ -155,7 +154,6 @@ const CampaignLocationEdit: React.FC = () => {
 
     useInterval(async () => {
         // Your custom logic here
-        console.log("characters", characters)
         if (databaseRef) {
             if (!isSavedIsPublished) {
                 saveIsPublished();
@@ -192,7 +190,6 @@ const CampaignLocationEdit: React.FC = () => {
 
         }
     }, 1000);
-    console.log("newCharacter", newCharacter)
     const submitImages = async () => {
         setIsUploadingImages(true);
         if (storageRef) {
@@ -631,24 +628,26 @@ const CampaignLocationEdit: React.FC = () => {
                     Add
         </Button>
             </div>
-            <TextField
-                style={{ width: "100%" }}
-                label="Description of the resource"
-                multiline
-                rows={4}
-                value={newResource ? newResource.description : ""}
-                error={resourceError}
-                onChange={(event) => {
-                    if (event.target.value.length > 400 || !newResource) {
-                        setResourceError(true);
-                    } else {
-                        setResourceError(false);
-                        setNewResource({ name: newResource.name, description: event.target.value });
-                    }
-                }}
-                defaultValue=""
-                variant="filled"
-            />
+            {newResource ?
+                <TextField
+                    style={{ width: "100%" }}
+                    label="Description of the resource"
+                    multiline
+                    rows={4}
+                    value={newResource ? newResource.description : ""}
+                    error={resourceError}
+                    onChange={(event) => {
+                        if (event.target.value.length > 400) {
+                            setResourceError(true);
+                        } else {
+                            setResourceError(false);
+                            setNewResource({ name: newResource.name, description: event.target.value });
+                        }
+                    }}
+                    defaultValue=""
+                    variant="filled"
+                />
+                : null}
 
             <div style={{ width: "100%", display: "flex", flexWrap: "wrap", flexDirection: "row" }}>
                 {renderResourceAccordian()}
@@ -670,7 +669,7 @@ const CampaignLocationEdit: React.FC = () => {
                 <TextField
                     style={{ width: "15rem" }}
                     label="Name of the the key element"
-                    value={newKeyElemnt ? newKeyElemnt.name : ""}
+                    value={newKeyElement ? newKeyElement.name : ""}
                     onChange={(event) => setNewKeyElement({ name: event.target.value, description: "" })}
                     defaultValue=""
                     error={keyElementError}
@@ -683,10 +682,10 @@ const CampaignLocationEdit: React.FC = () => {
                     color="primary"
                     style={{ height: "2rem", margin: "1rem" }}
                     onClick={() => {
-                        if (newKeyElemnt && newKeyElemnt.name) {
+                        if (newKeyElement && newKeyElement.name) {
                             setKeyElements((existingKeyElements: { name: string, description: string }[]) => [
                                 ...existingKeyElements,
-                                newKeyElemnt,
+                                newKeyElement,
                             ])
                             setNewKeyElement(null)
                             setKeyElementError(false)
@@ -699,23 +698,25 @@ const CampaignLocationEdit: React.FC = () => {
                     Add
         </Button>
             </div>
-            <TextField
-                style={{ width: "100%" }}
-                label="Description of the key element"
-                multiline
-                rows={4}
-                value={newKeyElemnt ? newKeyElemnt.description : ""}
-                onChange={(event) => {
-                    if (event.target.value.length > 400 || !newResource) {
-                        setResourceError(true);
-                    } else {
-                        setResourceError(false);
-                        setNewResource({ name: newResource.name, description: event.target.value });
-                    }
-                }}
-                defaultValue=""
-                variant="filled"
-            />
+            {newKeyElement ?
+                <TextField
+                    style={{ width: "100%" }}
+                    label="Description of the key element"
+                    multiline
+                    rows={4}
+                    value={newKeyElement ? newKeyElement.description : ""}
+                    onChange={(event) => {
+                        if (event.target.value.length > 400) {
+                            setResourceError(true);
+                        } else {
+                            setResourceError(false);
+                            setNewKeyElement({ name: newKeyElement.name, description: event.target.value });
+                        }
+                    }}
+                    defaultValue=""
+                    variant="filled"
+                />
+                : null}
 
             <div style={{ width: "100%", display: "flex", flexWrap: "wrap", flexDirection: "row" }}>
                 {renderKeyElementsAccordian()}

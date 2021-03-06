@@ -10,7 +10,8 @@ import styled from "styled-components";
 import {
     getSelectedLocation,
     getSelectedCampaign,
-    isDungeonMasterSelector
+    isDungeonMasterSelector,
+    getSelectedLocationStorageRef
 } from "../../store/selected/selectedSelectors";
 import {
     Accordion,
@@ -26,6 +27,7 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link } from "react-router-dom";
 import renderArrayOfString from "../../utils/renderArrayToString";
+import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 
 export interface CampaignLocationNewProps { }
 
@@ -37,6 +39,7 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
     const selectedCampaign = useSelector(getSelectedCampaign);
     const selectedLocation = useSelector(getSelectedLocation)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
+    const locationRef = useSelector(getSelectedLocationStorageRef);
 
 
     if (!selectedLocation) {
@@ -95,10 +98,38 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                     {selectedLocation.location.governRule}
                 </i>
             </div>
+            <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
+
             <div style={{ gridColumn: "1/3" }}>
                 <h3>Summary</h3>
                 {selectedLocation.location.summary}
             </div>
+
+            {isDungeonMaster && selectedLocation.location.keyElements && selectedCampaign ? (
+                <>
+                    <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
+                    <h3 style={{ gridColumn: "1/3" }}>{`Key Elements in ${selectedLocation.location.name}`}</h3>
+                    {Object.values(selectedLocation.location.keyElements).map((keyElement: { name: string, description: string }) => (
+                        <div>
+                            <b>{keyElement.name}: </b>
+                            {keyElement.description}
+                        </div>
+                    ))
+                    }
+                    <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
+                    <h3 style={{ gridColumn: "1/3" }}>{`Resources in ${selectedLocation.location.name}`}</h3>
+                    {Object.values(selectedLocation.location.resources).map((resource: { name: string, description: string }) => (
+                        <div>
+                            <b>{resource.name}: </b>
+                            {resource.description}
+                        </div>
+                    ))
+                    }
+
+                </>
+            )
+                : null}
+            <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
 
             <div style={{ gridColumn: "1/3" }}>
                 <h3>{`Characters in ${selectedLocation.location.name}`}</h3>
@@ -167,6 +198,12 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                         </AccordionActions>
                     </Accordion>
                 )) : null}
+            {isDungeonMaster && locationRef ?
+                <div style={{ gridColumn: "1/3" }}>
+                    <DraftJSEditor readOnly={true} JSONRef={locationRef.child("LocationDescription.json")} characterMentionList={[]} />
+                </div>
+                : null}
+
         </Container>
     );
 };
@@ -177,6 +214,7 @@ const Container = styled.div`
   box-shadow: 5px 0px 15px 2px #000000;
   background-color: ${OLD_WHITE};
   display: grid;
+  grid-gap:1rem;
   grid-template-columns: 1fr 1fr;
   justify-content: space-between;
   align-center: center;

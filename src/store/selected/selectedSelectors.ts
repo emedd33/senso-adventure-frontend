@@ -116,7 +116,8 @@ export const getSelectedLocationStorageRef = (state: RootReducerProp) => {
             .child("Campaigns")
             .child(state.selected.selectedCampaign?.campaign?.slug)
             .child("Locations")
-            .child(state.selected.selectedLocation?.location?.slug);
+            .child(state.selected.selectedLocation?.location?.slug)
+
     }
 };
 
