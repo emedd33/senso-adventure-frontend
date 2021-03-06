@@ -28,6 +28,7 @@ function Scroll({
 }: ScrollProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
+    console.log("title image", `${storage.ref()}Campaigns/${campaignSlug}/TitleImage`)
     storage
       .ref()
       .child("Campaigns")
@@ -61,9 +62,6 @@ const ScrollButton = styled(Button)`
   width: 90%;
   height: 20rem;
   max-width: 30rem;
-  &:hover {
-    width: 100%;
-  }
   padding: 1rem;
   transition: 300ms;
   display: flex;
@@ -87,9 +85,6 @@ const ScrollContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  &:hover {
-    width: 100%rem;
-  }
 `;
 
 const ScrollTitle = styled.h3`

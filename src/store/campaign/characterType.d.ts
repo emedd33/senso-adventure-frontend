@@ -1,6 +1,7 @@
 
 interface ICharacter {
     name: string;
+    nickNames: string[];
     isPublished: string;
     summary: string;
     slug: string;

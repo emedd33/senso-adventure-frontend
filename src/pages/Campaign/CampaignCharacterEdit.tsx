@@ -105,6 +105,12 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
         saveInspiration,
         isSavedInspiration,
     ] = useSavedState(selectedCharacter?.character.stats.inspiration === "TRUE");
+    const [nickNames, setNickNames, saveNickNames, isSavedNickNames] = useSavedState(
+        selectedCharacter?.character.nickNames
+            ? selectedCharacter?.character.nickNames
+            : []
+    );
+    const [newNickName, setNewNickName] = useState("");
     const [senses, setSenses, saveSenses, isSavedSenses] = useSavedState(
         selectedCharacter?.character.senses
             ? selectedCharacter?.character.senses
@@ -405,6 +411,10 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     );
     useInterval(() => {
         if (characterRef) {
+            if (!isSavedNickNames) {
+                saveNickNames();
+                characterRef.child("nickNames").set(nickNames);
+            }
             if (!isSavedRace) {
                 saveRace();
                 characterRef.child("race").set(race);
@@ -736,7 +746,63 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     <h1 style={{ marginBottom: "0" }}>
                         {selectedCharacter.character.name}
                     </h1>
-                </div>{" "}
+                </div>
+                {nickNames
+                    ? nickNames.map((nickName: string) => (
+                        <Chip
+                            style={{ marginLeft: "0.2rem", backgroundColor: "white", }}
+                            label={nickName}
+                            onDelete={() =>
+                                setNickNames((existingNickNames: string[]) =>
+                                    existingNickNames.filter(
+                                        (existingNickName: string) => existingNickName !== nickName
+                                    )
+                                )
+                            }
+                            variant="outlined"
+                        />
+                    ))
+                    : null}
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        marginLeft: "1rem",
+                        alignItems: "center",
+                        margin: "0.3rem",
+                    }}
+                >
+                    <TextField
+                        onKeyDown={(event) =>
+                            newNickName && event.key === "Enter"
+                                ? setNickNames((existingNickNames: string[]) => [
+                                    ...existingNickNames,
+                                    newNickName,
+                                ])
+                                : null
+                        }
+                        style={{ marginTop: "0.5rem", marginRight: "0.5rem" }}
+                        variant="outlined"
+                        onChange={(event) => setNewNickName(event.target.value)}
+                        label="Nick Name"
+                        value={newNickName}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ height: "2rem" }}
+                        onClick={() =>
+                            newNickName
+                                ? setNickNames((existingNickNames: string[]) => [
+                                    ...existingNickNames,
+                                    newNickName,
+                                ])
+                                : null
+                        }
+                    >
+                        Add
+            </Button>
+                </div>
                 <div
                     style={{
                         display: "flex",
@@ -799,13 +865,13 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                                 }
                             />
                         ) : (
-                                <TextField
-                                    variant="outlined"
-                                    label="Challenge Rating"
-                                    value={challengeRating}
-                                    onChange={(event) => setChallengeRating(event.target.value)}
-                                />
-                            )}
+                            <TextField
+                                variant="outlined"
+                                label="Challenge Rating"
+                                value={challengeRating}
+                                onChange={(event) => setChallengeRating(event.target.value)}
+                            />
+                        )}
                     </div>
                 </NestedNestedContainer>
             </NestedContainer>
@@ -1752,7 +1818,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     </div>
                 </div>
 
-                {selectedCharacter.character.actions ? (
+                {actions ? (
                     <NestedContainer style={{ gridColumn: 1 / 3, width: "100%" }}>
                         <h3>Actions and Specials:</h3>
                         {renderAccordian(actions)}

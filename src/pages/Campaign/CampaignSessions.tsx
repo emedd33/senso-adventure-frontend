@@ -22,7 +22,7 @@ const CampaignSessions: FunctionComponent<CampaignSessionsProps> = () => {
                             title={session.title}
                             subTitle={session.subTitle ? session.subTitle : ""}
                             date={session.date}
-                            campaignSlug={session.slug}
+                            campaignSlug={selectedCampaign.campaign.slug}
                             sessionDay={session.sessionDay}
                             isOpaque={session.isPublished === "FALSE"}
                             onClick={() => {

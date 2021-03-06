@@ -2,7 +2,7 @@ import { Button, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { OLD_WHITE } from "../../assets/constants/Constants";
+import { NEW_SESSION, OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -12,7 +12,7 @@ import { setAlertDialog } from "../../store/admin/adminCreator";
 import styled from "styled-components";
 import { getNewSessionDay } from "../../store/campaign/campaignSelectors";
 import { setSelectedSession } from "../../store/selected/selectedCreators";
-export interface CampaignSessionNewProps {}
+export interface CampaignSessionNewProps { }
 
 const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
   const dispatch = useDispatch();
@@ -42,9 +42,9 @@ const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
       }
 
       const toUpload: ISession = {
+        ...NEW_SESSION,
         date: sessionDate ? sessionDate : new Date().toDateString(),
         title: sessionTitle,
-        isPublished: "FALSE",
         subTitle: sessionSubTitle ? sessionSubTitle : "",
         campaignTitle: selectedCampaign.campaign.title,
         sessionDay: sessionDay ? sessionDay : 1,

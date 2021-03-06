@@ -11,7 +11,7 @@ import {
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSessionNew from "./CampaignSessionNew";
-import CampaignCharacterNew, { NEW_CHARACTER } from "./CampaignCharacterNew";
+import CampaignCharacterNew from "./CampaignCharacterNew";
 import CampaignSession from "./CampaignSession";
 import {
   getSelectedCampaign,
@@ -43,10 +43,11 @@ import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 import sessionIcon from "../../assets/icons/session_icon.png"
 import characterIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
-import { NEW_LOCATION, OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
+import { NEW_CHARACTER, NEW_LOCATION, OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
 import CampaignLocationNew from "./CampaignLocationNew";
 import CampaignLocations from "./CampaignLocations";
 import CampaignLocation from "./CampaignLocation";
+import CampaignLocationEdit from "./CampaignLocationEdit";
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
@@ -230,8 +231,8 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
             {isDungeonMaster ? (
               <CampaignCharacterEdit />
             ) : (
-                <Redirect to={"/"} />
-              )}
+              <Redirect to={"/"} />
+            )}
           </Route>
         </Switch>
         <Switch>
@@ -240,6 +241,9 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           </Route>
           <Route exact path="/:campaignSlug/locations">
             <CampaignLocations />
+          </Route>
+          <Route exact path="/:campaignSlug/locations/:locationSlug/edit">
+            {isDungeonMaster ? <CampaignLocationEdit /> : <Redirect to={"/"} />}
           </Route>
           <Route exact path="/:campaignSlug/locations/:locationSlug">
             <CampaignLocation />

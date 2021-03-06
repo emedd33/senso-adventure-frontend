@@ -1,4 +1,4 @@
-const renderArrayOfString = (array: string[] | undefined) => {
+const renderArrayOfString = (array?: string[]) => {
   if (array) {
     let length = array.length;
     return array.map((elem: string, index: number) => {

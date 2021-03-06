@@ -16,11 +16,13 @@ import styled from "styled-components";
 import { storage } from "../../firebase";
 import { Button } from "@material-ui/core";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
+import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 type HomeProps = {};
 const Home: FunctionComponent<HomeProps> = () => {
   const history = useHistory();
   const campaigns = useSelector(getAllCampaigns);
   const sessions = useSelector(getAllSessions);
+  const selectedCampaign = useSelector(getSelectedCampaign)
   const [campaignUrls, setCampaignUrls] = useState<
     { campaignSlug: string; url?: string }[]
   >([]);
@@ -58,7 +60,7 @@ const Home: FunctionComponent<HomeProps> = () => {
   }, [campaigns]);
 
   const renderScrolls = () => {
-    if (sessions) {
+    if (sessions && selectedCampaign) {
       let sortedSessions = sortSessionsByDateValue(sessions);
       return sortedSessions
         .slice(0, MAX_NUM_SCROLLS_HOMEPAGE)
@@ -71,7 +73,7 @@ const Home: FunctionComponent<HomeProps> = () => {
               isOpaque={session.session.isPublished === "FALSE"}
               subTitle={session.session.subTitle}
               date={session.session.date}
-              campaignSlug={session.session.slug}
+              campaignSlug={selectedCampaign.campaign.slug}
               sessionDay={session.session.sessionDay}
               onClick={() => {
                 history.push(
@@ -103,7 +105,7 @@ const Home: FunctionComponent<HomeProps> = () => {
           ? Object.values(campaignUrls).map(
             (campaign: { campaignSlug: string; url?: string }) => (
               <Link to={`/${campaign.campaignSlug}`}>
-                <Button style={{ marginLeft: "2rem", marginRight: "2rem" }}>
+                <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem" }}>
                   {campaign.url ? (
                     <CampaignImg src={campaign.url} />
                   ) : (
@@ -146,6 +148,7 @@ const Container = styled.div`
 
 const CampaignImg = styled.img`
   max-height: 10rem;
+  min-heitgh:10rem;
   width: 90%;
   &:hover {
     width: 100%;

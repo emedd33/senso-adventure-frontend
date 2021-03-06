@@ -105,9 +105,21 @@ export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
             .child("Campaigns")
             .child(state.selected.selectedCampaign?.campaign?.slug)
             .child("Sessions")
-            .child(state.selected.selectedSession?.session?.title);
+            .child(state.selected.selectedSession?.session?.title); // TODO: Change to slug
     }
 };
+
+export const getSelectedLocationStorageRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedLocation) {
+        return storage
+            .ref()
+            .child("Campaigns")
+            .child(state.selected.selectedCampaign?.campaign?.slug)
+            .child("Locations")
+            .child(state.selected.selectedLocation?.location?.slug);
+    }
+};
+
 
 export const getSelectedCampaignCharacterMentionList = (state: RootReducerProp) => {
     const host = getHost()
@@ -141,6 +153,15 @@ export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
             .child(state.selected?.selectedCampaign?.id)
             .child("sessions")
             .child(state.selected?.selectedSession?.id);
+    }
+};
+
+export const getSelectedLocationDatabaseRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedLocation) {
+        return campaignsRef
+            .child(state.selected?.selectedCampaign?.id)
+            .child("locations")
+            .child(state.selected?.selectedLocation?.id);
     }
 };
 export const getSelectedCampaignDatabaseRef = (state: RootReducerProp) => {

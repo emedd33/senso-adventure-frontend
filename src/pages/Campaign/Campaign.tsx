@@ -1,14 +1,17 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Scroll from "../../components/Scroll/Scroll";
 import { Link, useHistory } from "react-router-dom";
 import {
     getSelectedCampaign,
     getSelectedCampaignCharacters,
+    getSelectedCampaignLocations,
+    getSelectedCampaignSessions,
 } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import {
     setSelectedCharacter,
+    setSelectedLocation,
     setSelectedSession,
 } from "../../store/selected/selectedCreators";
 import {
@@ -47,21 +50,25 @@ type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
 
+    const dispatch = useDispatch();
     const selectedCampaign = useSelector(getSelectedCampaign);
     const characters = useSelector(getSelectedCampaignCharacters);
+    const campaignSessions = useSelector(getSelectedCampaignSessions)
+    const campaignLocations = useSelector(getSelectedCampaignLocations)
     const [sessions, setSessions] = useState<any[]>([]);
     const [players, setPlayers] = useState<any[]>([]);
     const [npc, setNpc] = useState<any[]>([]);
-    const dispatch = useDispatch();
+    const [locations, setLocations] = useState<any[]>([]);
     const [selectedSessionMenu, setSelectedSessionMenu] = useState("");
     const [selectedPlayerMenu, setSelectedPlayerMenu] = useState("");
     const [selectedNpcMenu, setSelectedNpcMenu] = useState("");
+    const [selectedLocationMenu, setSelectedLocationMenu] = useState("");
     useEffect(() => {
         if (selectedCampaign) {
-            if (selectedCampaign.campaign.sessions) {
-                Object.entries(selectedCampaign.campaign.sessions)
+            if (campaignSessions) {
+                campaignSessions
                     .slice(0, 10)
-                    .map(([id, session], index) => {
+                    .map(([id, session]: [string, ISession], index: number) => {
                         if (session) {
                             setSessions((existing) => [
                                 ...existing,
@@ -72,7 +79,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                             title={session.title}
                                             subTitle={session.subTitle ? session.subTitle : ""}
                                             date={session.date}
-                                            campaignSlug={session.slug}
+                                            campaignSlug={selectedCampaign.campaign.slug}
                                             sessionDay={session.sessionDay}
                                             isOpaque={session.isPublished === "FALSE"}
                                             onClick={() => {
@@ -93,10 +100,65 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                         return undefined;
                     });
             }
+            if (campaignLocations) {
+                campaignLocations
+                    .slice(0, 10)
+                    .map(([id, location]: [string, ILocation], index: number) => {
+                        if (location) {
+                            setLocations((existing) => [
+                                ...existing,
+                                <MenuItem
+                                    text={
+                                        <Card
+                                            style={
+                                                location.isPublished === "TRUE"
+                                                    ? { margin: "2rem", backgroundColor: OLD_WHITE }
+                                                    : {
+                                                        margin: "2rem",
+                                                        backgroundColor: OLD_WHITE,
+                                                        opacity: 0.5,
+                                                    }
+                                            }
+                                            onClick={() => {
+                                                dispatch(
+                                                    setSelectedLocation({
+                                                        id: id,
+                                                        location: location,
+                                                    })
+                                                );
+                                                history.push(
+                                                    `/${selectedCampaign.campaign.slug}/locations/${location.slug}`
+                                                );
+                                            }}
+                                        >
+                                            <CardActionArea>
+                                                <CardHeader
+                                                    avatar={
+                                                        <Avatar aria-label="recipe">
+                                                            {location.name[0]}
+                                                        </Avatar>
+                                                    }
+                                                    style={{ width: "15rem" }}
+                                                    title={location.name}
+                                                />
+                                                <CardContent>
+                                                    <p>{location.summary}</p>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    }
+                                    key={index}
+                                    selected={selectedLocationMenu}
+                                />,
+                            ]);
+                        }
+                        return undefined;
+                    });
+            }
             if (characters) {
                 characters
                     .slice(0, 10)
-                    .map(([id, character]: [string, ICharacter], index) => {
+                    .map(([id, character]: [string, ICharacter], index: number) => {
                         if (character) {
                             if (
                                 character.isPlayer === "TRUE" &&
@@ -207,6 +269,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         return () => {
             setSessions([]);
             setPlayers([]);
+            setLocations([])
             setNpc([]);
         };
     }, [
@@ -216,6 +279,10 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         selectedSessionMenu,
         selectedPlayerMenu,
         characters,
+        selectedLocationMenu,
+        campaignLocations,
+        campaignSessions
+
     ]);
     return (
         <>
@@ -318,6 +385,41 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                     onSelect={(key) => {
                         if (typeof key === "string") {
                             setSelectedNpcMenu(key);
+                        }
+                    }}
+                />
+            </Overview>
+
+            <Overview>
+                <Link to={`/${selectedCampaign?.campaign.slug}/locations`}>
+                    <Button
+                        variant="contained"
+                        style={{
+                            backgroundColor: OLD_WHITE,
+                            textTransform: "none",
+                            width: "100%",
+                        }}
+                    >
+                        <h3 style={{ textAlign: "end" }}>Locations</h3>
+                    </Button>
+                </Link>
+                <ScrollMenu
+                    data={locations}
+                    arrowLeft={
+                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                    }
+                    arrowRight={
+                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                            <ArrowForwardIcon />
+                        </IconButton>
+                    }
+                    selected={selectedLocationMenu}
+                    wheel={false}
+                    onSelect={(key) => {
+                        if (typeof key === "string") {
+                            setSelectedLocationMenu(key);
                         }
                     }}
                 />

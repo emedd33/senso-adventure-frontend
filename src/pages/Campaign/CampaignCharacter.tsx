@@ -88,6 +88,9 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                         ) : null}
                     </div>
                     <NestedNestedContainer style={{ marginBottom: "1rem" }}>
+                        {selectedCharacter.character.nickNames ? renderArrayOfString(selectedCharacter.character.nickNames) : null}
+                    </NestedNestedContainer>
+                    <NestedNestedContainer style={{ marginBottom: "1rem" }}>
 
                         {selectedCharacter.character.isPlayer === "TRUE"
                             ? `Played by: ${selectedCharacter.character.playerName}`

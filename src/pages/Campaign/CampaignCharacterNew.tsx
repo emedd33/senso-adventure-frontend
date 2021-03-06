@@ -2,7 +2,7 @@ import { Button, TextField } from "@material-ui/core";
 import React, { FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { OLD_WHITE } from "../../assets/constants/Constants";
+import { NEW_CHARACTER, OLD_WHITE } from "../../assets/constants/Constants";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -12,53 +12,7 @@ import {
 } from "../../store/selected/selectedSelectors";
 import { setSelectedCharacter } from "../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
-export const NEW_CHARACTER: ICharacter = {
-    name: "",
-    isPublished: "FALSE",
-    summary: "A short summary",
-    slug: "",
-    race: "Human",
-    isPlayer: "TRUE",
-    alignment: "True neutral",
-    isUnique: "TRUE",
-    languages: ["Common"],
-    isDead: "FALSE",
-    actions: [],
-    description: "",
-    stats: {
-        armorClass: 12,
-        speed: 30,
-        hitPoints: 10,
-        proficiency: 2,
-        passivePerception: 10,
-        strength: { value: 10, isProficient: "FALSE" },
-        dexterity: { value: 10, isProficient: "FALSE" },
-        wisdom: { value: 10, isProficient: "FALSE" },
-        constitution: { value: 10, isProficient: "FALSE" },
-        intelligence: { value: 10, isProficient: "FALSE" },
-        charisma: { value: 10, isProficient: "FALSE" },
-        skills: {
-            athletics: { proficient: "FALSE" },
-            acrobatics: { proficient: "FALSE" },
-            sleightOfHand: { proficient: "FALSE" },
-            stealth: { proficient: "FALSE" },
-            arcana: { proficient: "FALSE" },
-            history: { proficient: "FALSE" },
-            investigation: { proficient: "FALSE" },
-            nature: { proficient: "FALSE" },
-            religion: { proficient: "FALSE" },
-            animalHandling: { proficient: "FALSE" },
-            insight: { proficient: "FALSE" },
-            medicine: { proficient: "FALSE" },
-            perception: { proficient: "FALSE" },
-            survival: { proficient: "FALSE" },
-            deception: { proficient: "FALSE" },
-            intimidation: { proficient: "FALSE" },
-            performance: { proficient: "FALSE" },
-            persuasion: { proficient: "FALSE" },
-        },
-    },
-};
+
 type CampaignCharacterNewProps = {};
 const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () => {
     const history = useHistory();
@@ -77,10 +31,12 @@ const CampaignCharacterNew: FunctionComponent<CampaignCharacterNewProps> = () =>
         if (campaignRef) {
             let isPlayer = characterType === "player" ? "TRUE" : "FALSE";
 
-            let newCharacter: ICharacter = NEW_CHARACTER;
-            newCharacter.name = characterName;
-            newCharacter.slug = characterName.replace(/\s/g, "");
-            newCharacter.isPlayer = isPlayer;
+            let newCharacter: ICharacter = {
+                ...NEW_CHARACTER,
+                name: characterName,
+                slug: characterName.replace(/\s/g, ""),
+                isPlayer: isPlayer
+            }
             if (isPlayer) {
                 newCharacter.playerName = playerName;
                 newCharacter.level = 1;
