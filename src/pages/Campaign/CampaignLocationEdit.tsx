@@ -96,7 +96,7 @@ const CampaignLocationEdit: React.FC = () => {
             ? selectedLocation?.location.characters
             : []
     );
-    const [newCharacter, setNewCharacter] = useState<{ title: string, character: ICharacter } | null>()
+    const [newCharacter, setNewCharacter] = useState<{ character: ICharacter, role: string } | null>()
     const [newCharacterInputValue, setNewCharacterInputValue] = useState<string>("")
     const [newLocationImages, setNewLocationImages] = useState<any[]>([]);
 
@@ -155,7 +155,7 @@ const CampaignLocationEdit: React.FC = () => {
 
     useInterval(async () => {
         // Your custom logic here
-
+        console.log("characters", characters)
         if (databaseRef) {
             if (!isSavedIsPublished) {
                 saveIsPublished();
@@ -192,7 +192,7 @@ const CampaignLocationEdit: React.FC = () => {
 
         }
     }, 1000);
-
+    console.log("newCharacter", newCharacter)
     const submitImages = async () => {
         setIsUploadingImages(true);
         if (storageRef) {
@@ -248,8 +248,13 @@ const CampaignLocationEdit: React.FC = () => {
             characters ? characters.map((character: { character: ICharacter, role: string }, index: number) => {
                 return (
                     <Accordion style={{ width: "90%", backgroundColor: "transparent", margin: "1rem" }}>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ backgroundColor: OLD_WHITE_DARK }}>
-                            <Typography>{character.character.name}</Typography>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ backgroundColor: OLD_WHITE_DARK, }}>
+                            <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
+                                {character.character.name}
+                            </Typography>
+                            <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
+                                {character.role}
+                            </Typography>
                         </AccordionSummary>
                         <AccordionDetails
                             style={{
@@ -260,20 +265,8 @@ const CampaignLocationEdit: React.FC = () => {
                             }}
                         >
                             <div>
-                                <div>
-                                    <TextField
-                                        style={{ margin: "1rem", marginLeft: 0, width: "25rem" }}
-                                        variant="outlined"
-                                        onChange={(event) => {
 
-                                        }}
-                                        label={`The characters role in ${selectedLocation?.location.name}`}
-                                        value={character.role ? character.role : ""}
-                                    />
-                                </div>
-                                <div>
-                                    {character.character.summary}
-                                </div>
+                                {character.character.summary}
                             </div>
                             <Button color="primary" variant="outlined">
                                 <DeleteIcon
@@ -304,7 +297,7 @@ const CampaignLocationEdit: React.FC = () => {
                     </Accordion>
                 );
             }) : null,
-        [setCharacters, selectedCampaign, selectedLocation]
+        [setCharacters, selectedCampaign]
     );
     const renderResourceAccordian = useCallback(
         () =>
@@ -419,9 +412,10 @@ const CampaignLocationEdit: React.FC = () => {
                             flexDirection: "row",
                             flexWrap: "wrap",
                             margin: "0.3rem",
+                            alignItems: "center"
                         }}
                     >
-                        <b>Also known as: </b>
+                        <h3>Also known as: </h3>
                         {nickNames
                             ? nickNames.map((nickName: string, index: number) => (
                                 <Chip
@@ -536,56 +530,65 @@ const CampaignLocationEdit: React.FC = () => {
                 <h1 style={{ flex: 2, textAlign: "center" }}>{`Characters in ${selectedLocation.location.name}`} </h1>
             </div>
 
-            <div style={{ margin: "1rem", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-
+            <div style={{ display: "flex", width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <Autocomplete
                     id="combo-box-demo"
                     options={campaignCharacters ? campaignCharacters.map(([, character]: [string, ICharacter]) => ({ title: character.name, character: character })) : []}
                     getOptionLabel={(option: { title: any; }) => option.title}
                     style={{ width: "15rem" }}
                     onChange={(event: any, newValue: { title: string, character: ICharacter } | null) => {
-                        setNewCharacter(newValue);
-                    }}
-                    onKeyDown={(event) => {
-
-                        if (newCharacter && event.key === "Enter") {
-                            setCharacters((existingCharacters: ICharacter[]) => [
-                                ...existingCharacters,
-                                newCharacter,
-                            ])
-                            setNewCharacter(null)
-                            setNewCharacterInputValue("")
+                        if (newValue) {
+                            setNewCharacter({ character: newValue?.character, role: "" });
+                        } else {
+                            setNewCharacter(undefined)
                         }
                     }}
-
                     inputValue={newCharacterInputValue}
                     onInputChange={(event, newInputValue) => {
                         setNewCharacterInputValue(newInputValue);
                     }}
                     renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} style={{ backgroundColor: OLD_WHITE_DARK }} label="Add Characters" variant="outlined" />}
                 />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ height: "2rem", margin: "1rem" }}
-                    onClick={() => {
-                        if (newCharacter) {
-                            setCharacters((existingCharacters: ICharacter[]) => [
-                                ...existingCharacters,
-                                newCharacter,
-                            ])
-                            setNewCharacter(null)
-                            setNewCharacterInputValue("")
-                        }
-                    }
-                    }
-                >
-                    Add
-                        </Button>
             </div>
+            {newCharacter ?
+                <>
+                    <TextField
+                        style={{ width: "100%" }}
+                        label={`Role of ${newCharacter.character.name} in ${selectedLocation.location.name}`}
+                        multiline
+                        rows={2}
+                        value={newCharacter ? newCharacter.role : ""}
+                        onChange={(event) => {
+                            setNewCharacter({ ...newCharacter, role: event.target.value });
+                        }}
+                        defaultValue=""
+                        variant="filled"
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ height: "2rem", margin: "1rem" }}
+                        onClick={() => {
+                            if (newCharacter) {
+                                setCharacters((existingCharacters: ICharacter[]) => [
+                                    ...existingCharacters,
+                                    newCharacter,
+                                ])
+                                setNewCharacter(null)
+                                setNewCharacterInputValue("")
+                            }
+                        }
+                        }
+                    >
+                        Add
+                        </Button>
+                </>
+                : null}
+
             <div style={{ width: "100%", display: "flex", flexWrap: "wrap", flexDirection: "row" }}>
                 {renderCharacterAccordian(characters)}
             </div>
+
             <Divider style={{ width: "100%", margin: "1rem" }} />
             <div
                 style={{

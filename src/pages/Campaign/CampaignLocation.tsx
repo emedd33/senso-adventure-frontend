@@ -25,6 +25,7 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link } from "react-router-dom";
+import renderArrayOfString from "../../utils/renderArrayToString";
 
 export interface CampaignLocationNewProps { }
 
@@ -77,13 +78,39 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                     </>
                 ) : null}
             </div>
+            <div style={{ gridColumn: "1/3" }}>
+                <b>Also known as: </b>
+                <i>
+                    {renderArrayOfString(selectedLocation.location.nickNames)}
+                </i>
+            </div>
+            <div>
+                <b>Religion/Belief system: </b>
+                <i>{selectedLocation.location.religion}</i>
+            </div>
+
+            <div>
+                <b>Governedrule: </b>
+                <i>
+                    {selectedLocation.location.governRule}
+                </i>
+            </div>
+            <div style={{ gridColumn: "1/3" }}>
+                <h3>Summary</h3>
+                {selectedLocation.location.summary}
+            </div>
+
+            <div style={{ gridColumn: "1/3" }}>
+                <h3>{`Characters in ${selectedLocation.location.name}`}</h3>
+
+            </div>
             {selectedLocation.location.characters && selectedCampaign
                 ? Object.values(selectedLocation.location.characters).map((character: { role: string, character: ICharacter }) => (
                     <Accordion
                         style={
                             character.character.isPublished === "TRUE"
-                                ? { backgroundColor: OLD_WHITE }
-                                : { backgroundColor: OLD_WHITE, opacity: 0.5 }
+                                ? { backgroundColor: OLD_WHITE, gridColumn: "1/3" }
+                                : { backgroundColor: OLD_WHITE, opacity: 0.5, gridColumn: "1/3" }
                         }
                     >
                         <AccordionSummary
@@ -150,7 +177,7 @@ const Container = styled.div`
   box-shadow: 5px 0px 15px 2px #000000;
   background-color: ${OLD_WHITE};
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   justify-content: space-between;
   align-center: center;
   flex-wrap: wrap;
