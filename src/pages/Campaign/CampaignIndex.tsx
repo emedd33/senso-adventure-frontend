@@ -170,11 +170,11 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
 
     }
   }, [dispatch, selectedCampaignSlug]);
-
-  if (location.pathname.split("/").length >= 2 && !selectedCampaign) {
+  let locationArray = location.pathname.split("/")
+  if (locationArray.length >= 2 && !selectedCampaign) {
     return <IsLoading />;
   }
-  if (location.pathname.split("/").length >= 4) {
+  if (locationArray.length >= 4 && locationArray[3] !== "new") {
     if (!selectedSession && !selectedCharacter && !selectedLocation) {
       return <IsLoading />;
     }
