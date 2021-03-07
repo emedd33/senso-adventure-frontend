@@ -148,11 +148,8 @@ const Container = styled.div`
 
 const CampaignImg = styled.img`
   max-height: 10rem;
-  min-heitgh:10rem;
-  width: 90%;
-  &:hover {
-    width: 100%;
-  }
+  max-width:15rem;
+ 
 `;
 
 export default Home;

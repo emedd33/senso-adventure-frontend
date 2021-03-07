@@ -69,6 +69,7 @@ const ScrollButton = styled(Button)`
 const StoryImage = styled.img`
   margin-top: 1rem;
   width: 70%;
+  max-height:5rem;
   max-width: 25rem;
 `;
 const ScrollContainer = styled.div`

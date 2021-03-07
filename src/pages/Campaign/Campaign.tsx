@@ -1,12 +1,15 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Scroll from "../../components/Scroll/Scroll";
 import { Link, useHistory } from "react-router-dom";
+import { storage } from "../../firebase";
+
 import {
     getSelectedCampaign,
     getSelectedCampaignCharacters,
     getSelectedCampaignLocations,
     getSelectedCampaignSessions,
+    getSelectedCampaignSlug,
 } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import {
@@ -51,9 +54,12 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
 
     const dispatch = useDispatch();
+    const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
+
     const selectedCampaign = useSelector(getSelectedCampaign);
     const characters = useSelector(getSelectedCampaignCharacters);
     const campaignSessions = useSelector(getSelectedCampaignSessions)
+    const selectedCampaignSlug = useSelector(getSelectedCampaignSlug)
     const campaignLocations = useSelector(getSelectedCampaignLocations)
     const [sessions, setSessions] = useState<any[]>([]);
     const [players, setPlayers] = useState<any[]>([]);
@@ -284,43 +290,71 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         campaignSessions
 
     ]);
+    useMemo(() => {
+        if (selectedCampaignSlug) {
+            let campaignRef = storage
+                .ref("Campaigns")
+                .child(selectedCampaignSlug);
+
+            // Fetching BackgroundImage
+            campaignRef
+                .child("TitleImage")
+                .getDownloadURL()
+                .then((url) => {
+                    setCampaignTitleImage(url);
+                })
+                .catch((e) => console.log("Could not fetch Campaign image"))
+        }
+    }, [selectedCampaignSlug]);
+
     return (
-        <>  {sessions.length > 0 ?
-            <Overview>
-                <Link to={`/${selectedCampaign?.campaign.slug}/sessions`}>
-                    <Button
-                        variant="contained"
-                        style={{
-                            backgroundColor: OLD_WHITE,
-                            textTransform: "none",
-                            width: "100%",
-                        }}
-                    >
-                        <h3 style={{ textAlign: "end" }}>Sessions</h3>
-                    </Button>
-                </Link>
-                <ScrollMenu
-                    data={sessions}
-                    arrowLeft={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                            <ArrowBackIcon />
-                        </IconButton>
-                    }
-                    arrowRight={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                            <ArrowForwardIcon />
-                        </IconButton>
-                    }
-                    selected={selectedSessionMenu}
-                    wheel={false}
-                    onSelect={(key) => {
-                        if (typeof key === "string") {
-                            setSelectedSessionMenu(key);
-                        }
+        <>
+            {campaignTitleImage ? (
+                <img
+                    src={campaignTitleImage}
+                    alt="Campaign title"
+                    style={{
+                        maxHeight: "20rem",
+                        marginBottom: "1rem",
                     }}
                 />
-            </Overview>
-            : null}
+            ) : null}
+            {sessions.length > 0 ?
+                <Overview>
+                    <Link to={`/${selectedCampaign?.campaign.slug}/sessions`}>
+                        <Button
+                            variant="contained"
+                            style={{
+                                backgroundColor: OLD_WHITE,
+                                textTransform: "none",
+                                width: "100%",
+                            }}
+                        >
+                            <h3 style={{ textAlign: "end" }}>Sessions</h3>
+                        </Button>
+                    </Link>
+                    <ScrollMenu
+                        data={sessions}
+                        arrowLeft={
+                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                <ArrowBackIcon />
+                            </IconButton>
+                        }
+                        arrowRight={
+                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                <ArrowForwardIcon />
+                            </IconButton>
+                        }
+                        selected={selectedSessionMenu}
+                        wheel={false}
+                        onSelect={(key) => {
+                            if (typeof key === "string") {
+                                setSelectedSessionMenu(key);
+                            }
+                        }}
+                    />
+                </Overview>
+                : null}
             {players.length > 0 ?
                 <Overview>
                     <Link to={`/${selectedCampaign?.campaign.slug}/characters`}>

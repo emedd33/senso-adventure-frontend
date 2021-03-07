@@ -238,13 +238,16 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 width: "5rem",
                             }}
                         >
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>STR:</b>
-                            {selectedCharacter.character.stats.strength.value}(
+                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>STR</b>
+                            <h3>
+
+                                {selectedCharacter.character.stats.strength.value}(
               {getAbilityModifier(
-                                selectedCharacter.character.stats.strength.value
-                            )}
-              ),
-              <div
+                                    selectedCharacter.character.stats.strength.value
+                                )}
+              )
+                  </h3>
+                            <div
                                 style={{
                                     paddingLeft: "0.2rem",
                                     paddingRight: "0.2rem",
@@ -273,13 +276,16 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 width: "5rem",
                             }}
                         >
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>DEX:</b>
-                            {selectedCharacter.character.stats.dexterity.value}(
+                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>DEX</b>
+                            <h3>
+
+                                {selectedCharacter.character.stats.dexterity.value}(
               {getAbilityModifier(
-                                selectedCharacter.character.stats.dexterity.value
-                            )}
-              ),
-              <div
+                                    selectedCharacter.character.stats.dexterity.value
+                                )}
+              )
+                  </h3>
+                            <div
                                 style={{
                                     paddingLeft: "0.2rem",
                                     paddingRight: "0.2rem",
@@ -308,13 +314,16 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 width: "5rem",
                             }}
                         >
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CON:</b>
-                            {selectedCharacter.character.stats.constitution.value}(
+                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CON</b>
+                            <h3>
+
+                                {selectedCharacter.character.stats.constitution.value}(
               {getAbilityModifier(
-                                selectedCharacter.character.stats.constitution.value
-                            )}
-              ),
-              <div
+                                    selectedCharacter.character.stats.constitution.value
+                                )}
+              )
+                  </h3>
+                            <div
                                 style={{
                                     paddingLeft: "0.2rem",
                                     paddingRight: "0.2rem",
@@ -344,13 +353,16 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 width: "5rem",
                             }}
                         >
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>INT:</b>
-                            {selectedCharacter.character.stats.intelligence.value}(
+                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>INT</b>
+                            <h3>
+
+                                {selectedCharacter.character.stats.intelligence.value}(
               {getAbilityModifier(
-                                selectedCharacter.character.stats.intelligence.value
-                            )}
-              ),
-              <div
+                                    selectedCharacter.character.stats.intelligence.value
+                                )}
+              )
+                  </h3>
+                            <div
                                 style={{
                                     paddingLeft: "0.2rem",
                                     paddingRight: "0.2rem",
@@ -379,13 +391,16 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 width: "5rem",
                             }}
                         >
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>WIS:</b>
-                            {selectedCharacter.character.stats.wisdom.value}(
+                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>WIS</b>
+                            <h3>
+
+                                {selectedCharacter.character.stats.wisdom.value}(
               {getAbilityModifier(
-                                selectedCharacter.character.stats.wisdom.value
-                            )}
-              ),
-              <div
+                                    selectedCharacter.character.stats.wisdom.value
+                                )}
+              )
+                  </h3>
+                            <div
                                 style={{
                                     paddingLeft: "0.2rem",
                                     paddingRight: "0.2rem",
@@ -414,13 +429,16 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 width: "5rem",
                             }}
                         >
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CHA:</b>
-                            {selectedCharacter.character.stats.charisma.value}(
+                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CHA</b>
+                            <h3>
+
+                                {selectedCharacter.character.stats.charisma.value}(
               {getAbilityModifier(
-                                selectedCharacter.character.stats.charisma.value
-                            )}
-              ),
-              <div
+                                    selectedCharacter.character.stats.charisma.value
+                                )}
+              )
+                  </h3>
+                            <div
                                 style={{
                                     paddingLeft: "0.2rem",
                                     paddingRight: "0.2rem",

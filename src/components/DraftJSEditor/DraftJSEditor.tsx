@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 import createMentionPlugin, {
@@ -83,7 +83,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
     }
   }, 10000);
 
-  useEffect(() => {
+  useMemo(() => {
     if (JSONRef) {
       JSONRef.getDownloadURL()
         .then((url: string) =>

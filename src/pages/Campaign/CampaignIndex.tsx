@@ -64,7 +64,6 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const selectedCampaignSlug = useSelector(getSelectedCampaignSlug)
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
   const [imageUrl, setImageUrl] = useState("");
-  const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
 
   useEffect(() => {
     let pathArray = location.pathname.split("/");
@@ -166,16 +165,9 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         .then((url: string) => {
           setImageUrl(url);
         })
-        .catch((e) => console.log("could not fetch background image"));
-      // Fetching Title Image
-      campaignRef
-        .child("TitleImage")
-        .getDownloadURL()
-        .then((url) => {
-          setCampaignTitleImage(url);
-        })
-        .catch((e) => console.log("Could not fetch Campaign image"))
+        .catch((e) => console.log("could not fetch background image"))
         .finally(() => dispatch(setIsLoading(false)));
+
     }
   }, [dispatch, selectedCampaignSlug]);
 
@@ -189,18 +181,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   }
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      {campaignTitleImage ? (
-        <img
-          src={campaignTitleImage}
-          alt="Campaign title"
-          style={{
-            minWidth: "20rem",
-            width: "40%",
-            maxHeight: "30rem",
-            marginBottom: "1rem",
-          }}
-        />
-      ) : null}
+
       <>
         <Switch>
           <Route exact path="/:campaignSlug/Edit">

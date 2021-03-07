@@ -1866,10 +1866,10 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                                         ...existingActions,
                                         { name: newActionName, description: "" },
                                     ]);
-                                    setNewActionName("");
                                 } else {
                                     setActions([{ name: newActionName, description: "" }]);
                                 }
+                                setNewActionName("");
                             }
                         }}
                     >
