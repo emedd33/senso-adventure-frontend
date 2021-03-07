@@ -200,7 +200,7 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                 )) : null}
             {isDungeonMaster && locationRef ?
                 <div style={{ gridColumn: "1/3" }}>
-                    <DraftJSEditor readOnly={true} JSONRef={locationRef.child("LocationDescription.json")} characterMentionList={[]} />
+                    <DraftJSEditor readOnly={true} JSONRef={locationRef.child("LocationDescription.json")} />
                 </div>
                 : null}
 

@@ -153,7 +153,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     {selectedSession?.session.subTitle}
                 </h3>
                 <DraftJSEditor
-                    characterMentionList={[]}
+
                     readOnly={true}
                     JSONRef={storageRef?.child("SessionStory.json")}
                 />
