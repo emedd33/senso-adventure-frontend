@@ -99,7 +99,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
             })
         )
         .catch((e: any) => {
-          console.log("Could not fetch from firebase", e);
+          console.log("Could not fetch character description from firebase");
         });
     }
   }, [JSONRef]);

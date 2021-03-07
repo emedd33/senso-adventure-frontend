@@ -1850,7 +1850,6 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     <TextField
                         variant="outlined"
                         label="New action"
-                        style={{ backgroundColor: OLD_WHITE_DARK }}
                         value={newActionName}
                         onChange={(event) => {
                             setNewActionName(event.target.value);

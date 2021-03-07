@@ -285,7 +285,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
     ]);
     return (
-        <>
+        <>  {sessions.length > 0 ?
             <Overview>
                 <Link to={`/${selectedCampaign?.campaign.slug}/sessions`}>
                     <Button
@@ -320,110 +320,116 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                     }}
                 />
             </Overview>
-            <Overview>
-                <Link to={`/${selectedCampaign?.campaign.slug}/characters`}>
-                    <Button
-                        variant="contained"
-                        style={{
-                            backgroundColor: OLD_WHITE,
-                            textTransform: "none",
-                            width: "100%",
-                        }}
-                    >
-                        <h3 style={{ textAlign: "end" }}>Players</h3>
-                    </Button>
-                </Link>
-                <ScrollMenu
-                    data={players}
-                    arrowLeft={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                            <ArrowBackIcon />
-                        </IconButton>
-                    }
-                    arrowRight={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                            <ArrowForwardIcon />
-                        </IconButton>
-                    }
-                    selected={selectedPlayerMenu}
-                    wheel={false}
-                    menuStyle={{ justifyContent: "center" }}
-                    onSelect={(key) => {
-                        if (typeof key === "string") {
-                            setSelectedPlayerMenu(key);
+            : null}
+            {players.length > 0 ?
+                <Overview>
+                    <Link to={`/${selectedCampaign?.campaign.slug}/characters`}>
+                        <Button
+                            variant="contained"
+                            style={{
+                                backgroundColor: OLD_WHITE,
+                                textTransform: "none",
+                                width: "100%",
+                            }}
+                        >
+                            <h3 style={{ textAlign: "end" }}>Players</h3>
+                        </Button>
+                    </Link>
+                    <ScrollMenu
+                        data={players}
+                        arrowLeft={
+                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                <ArrowBackIcon />
+                            </IconButton>
                         }
-                    }}
-                />
-            </Overview>
-            <Overview>
-                <Link to={`/${selectedCampaign?.campaign.slug}/characters`}>
-                    <Button
-                        variant="contained"
-                        style={{
-                            backgroundColor: OLD_WHITE,
-                            textTransform: "none",
-                            width: "100%",
-                        }}
-                    >
-                        <h3 style={{ textAlign: "end" }}>Npc</h3>
-                    </Button>
-                </Link>
-                <ScrollMenu
-                    data={npc}
-                    arrowLeft={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                            <ArrowBackIcon />
-                        </IconButton>
-                    }
-                    arrowRight={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                            <ArrowForwardIcon />
-                        </IconButton>
-                    }
-                    selected={selectedNpcMenu}
-                    wheel={false}
-                    onSelect={(key) => {
-                        if (typeof key === "string") {
-                            setSelectedNpcMenu(key);
+                        arrowRight={
+                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                <ArrowForwardIcon />
+                            </IconButton>
                         }
-                    }}
-                />
-            </Overview>
-
-            <Overview>
-                <Link to={`/${selectedCampaign?.campaign.slug}/locations`}>
-                    <Button
-                        variant="contained"
-                        style={{
-                            backgroundColor: OLD_WHITE,
-                            textTransform: "none",
-                            width: "100%",
+                        selected={selectedPlayerMenu}
+                        wheel={false}
+                        menuStyle={{ justifyContent: "center" }}
+                        onSelect={(key) => {
+                            if (typeof key === "string") {
+                                setSelectedPlayerMenu(key);
+                            }
                         }}
-                    >
-                        <h3 style={{ textAlign: "end" }}>Locations</h3>
-                    </Button>
-                </Link>
-                <ScrollMenu
-                    data={locations}
-                    arrowLeft={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                            <ArrowBackIcon />
-                        </IconButton>
-                    }
-                    arrowRight={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                            <ArrowForwardIcon />
-                        </IconButton>
-                    }
-                    selected={selectedLocationMenu}
-                    wheel={false}
-                    onSelect={(key) => {
-                        if (typeof key === "string") {
-                            setSelectedLocationMenu(key);
+                    />
+                </Overview>
+                : null}
+            {npc.length > 0 ?
+                <Overview>
+                    <Link to={`/${selectedCampaign?.campaign.slug}/characters`}>
+                        <Button
+                            variant="contained"
+                            style={{
+                                backgroundColor: OLD_WHITE,
+                                textTransform: "none",
+                                width: "100%",
+                            }}
+                        >
+                            <h3 style={{ textAlign: "end" }}>Npc</h3>
+                        </Button>
+                    </Link>
+                    <ScrollMenu
+                        data={npc}
+                        arrowLeft={
+                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                <ArrowBackIcon />
+                            </IconButton>
                         }
-                    }}
-                />
-            </Overview>
+                        arrowRight={
+                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                <ArrowForwardIcon />
+                            </IconButton>
+                        }
+                        selected={selectedNpcMenu}
+                        wheel={false}
+                        onSelect={(key) => {
+                            if (typeof key === "string") {
+                                setSelectedNpcMenu(key);
+                            }
+                        }}
+                    />
+                </Overview>
+                : null}
+            {locations.length > 0 ?
+                <Overview>
+                    <Link to={`/${selectedCampaign?.campaign.slug}/locations`}>
+                        <Button
+                            variant="contained"
+                            style={{
+                                backgroundColor: OLD_WHITE,
+                                textTransform: "none",
+                                width: "100%",
+                            }}
+                        >
+                            <h3 style={{ textAlign: "end" }}>Locations</h3>
+                        </Button>
+                    </Link>
+                    <ScrollMenu
+                        data={locations}
+                        arrowLeft={
+                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                <ArrowBackIcon />
+                            </IconButton>
+                        }
+                        arrowRight={
+                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                <ArrowForwardIcon />
+                            </IconButton>
+                        }
+                        selected={selectedLocationMenu}
+                        wheel={false}
+                        onSelect={(key) => {
+                            if (typeof key === "string") {
+                                setSelectedLocationMenu(key);
+                            }
+                        }}
+                    />
+                </Overview>
+                : null}
             <Overview>
                 <Link to={`/${selectedCampaign?.campaign.slug}/edit`}>
                     <Button
