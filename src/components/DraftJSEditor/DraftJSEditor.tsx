@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 import createMentionPlugin, {
@@ -51,8 +51,8 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
   }, []);
   const onSearchChange = useCallback(({ value }: { value: string }) => {
     if (characterMentionList) {
-
       setCharacterSuggestions(defaultSuggestionsFilter(value, characterMentionList));
+
     }
   }, [characterMentionList]);
   useInterval(() => {
@@ -105,7 +105,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
   }, [JSONRef]);
 
 
-  if (!characterSuggestions) {
+  if (characterMentionList && !characterSuggestions) {
     return <IsLoading />
   }
   return (
@@ -150,12 +150,14 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
         ref={ref}
         readOnly={readOnly}
       />
-      <MentionSuggestions
-        open={open}
-        onOpenChange={onOpenChange}
-        suggestions={characterSuggestions}
-        onSearchChange={onSearchChange}
-      />
+      {characterSuggestions ?
+        <MentionSuggestions
+          open={open}
+          onOpenChange={onOpenChange}
+          suggestions={characterSuggestions}
+          onSearchChange={onSearchChange}
+        />
+        : null}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import {
     useSelector
 } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { OLD_WHITE } from "../../assets/constants/Constants";
+import { OLD_WHITE, OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import styled from "styled-components";
 import {
@@ -139,9 +139,7 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                 ? Object.values(selectedLocation.location.characters).map((character: { role: string, character: ICharacter }) => (
                     <Accordion
                         style={
-                            character.character.isPublished === "TRUE"
-                                ? { backgroundColor: OLD_WHITE, gridColumn: "1/3" }
-                                : { backgroundColor: OLD_WHITE, opacity: 0.5, gridColumn: "1/3" }
+                            { backgroundColor: OLD_WHITE_DARK, gridColumn: "1/3" }
                         }
                     >
                         <AccordionSummary

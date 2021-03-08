@@ -148,7 +148,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                                     title={location.name}
                                                 />
                                                 <CardContent>
-                                                    <p>{location.summary}</p>
+                                                    <p>{location.summary.slice(0, 40)}...</p>
                                                 </CardContent>
                                             </CardActionArea>
                                         </Card>
@@ -209,7 +209,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                                             },${character.class ? character.class : ""}`}
                                                     />
                                                     <CardContent>
-                                                        <p>{character.summary}</p>
+                                                        <p>{character.summary.slice(0, 40)}...</p>
                                                     </CardContent>
                                                 </CardActionArea>
                                             </Card>
@@ -257,7 +257,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                                         subheader={`${character.race}`}
                                                     />
                                                     <CardContent>
-                                                        <p>{character.summary}</p>
+                                                        <p>{character.summary.slice(0, 40)}...</p>
                                                     </CardContent>
                                                 </CardActionArea>
                                             </Card>
