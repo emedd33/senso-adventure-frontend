@@ -1,11 +1,14 @@
 const getAbilityModifier = (
   ability: number | string,
   isProficient?: boolean | string,
-  proficiency?: number,
+  proficiency?: number | string,
   toValue?: boolean
 ) => {
   if (typeof ability === "string") {
     ability = parseInt(ability);
+  }
+  if (typeof proficiency === "string") {
+    proficiency = parseInt(proficiency);
   }
   let parsedAbility = -5;
 

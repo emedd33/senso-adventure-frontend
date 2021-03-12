@@ -19,7 +19,7 @@ const config = {
   measurementId: "G-REHMWKJQBX",
 };
 firebase.initializeApp(config);
-const databaseRef = firebase.database().ref();
+export const databaseRef = firebase.database().ref();
 export const storage = firebase.storage();
 export const firebaseStorageRef = storage.ref();
 export const campaignsRef = databaseRef.child("campaigns");
