@@ -111,6 +111,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
   return (
     <div
       className={editorStyles.editor}
+      style={{ width: "100%" }}
       onClick={() => {
         ref.current!.focus();
       }}

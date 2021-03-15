@@ -10,6 +10,7 @@ import {
     getSelectedCampaignLocations,
     getSelectedCampaignSessions,
     getSelectedCampaignSlug,
+    isDungeonMasterSelector,
 } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import {
@@ -56,7 +57,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
     const dispatch = useDispatch();
     const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
-
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const selectedCampaign = useSelector(getSelectedCampaign);
     const characters = useSelector(getSelectedCampaignCharacters);
     const campaignSessions = useSelector(getSelectedCampaignSessions)
@@ -465,21 +466,23 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                     />
                 </Overview>
                 : null}
-            <Overview>
-                <Link to={`/${selectedCampaign?.campaign.slug}/edit`}>
-                    <Button
-                        variant="contained"
-                        style={{
-                            backgroundColor: OLD_WHITE,
-                            textTransform: "none",
-                            width: "100%",
-                        }}
-                    >
-                        <h3 style={{ textAlign: "end" }}>Edit Campaign Images</h3>
-                    </Button>
-                </Link>
+            {isDungeonMaster ?
+                <Overview>
+                    <Link to={`/${selectedCampaign?.campaign.slug}/edit`}>
+                        <Button
+                            variant="contained"
+                            style={{
+                                backgroundColor: OLD_WHITE,
+                                textTransform: "none",
+                                width: "100%",
+                            }}
+                        >
+                            <h3 style={{ textAlign: "end" }}>Edit Campaign Images</h3>
+                        </Button>
+                    </Link>
 
-            </Overview>
+                </Overview>
+                : null}
 
         </Container>
     );

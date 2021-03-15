@@ -4,16 +4,11 @@ import {
     CardMedia,
     IconButton,
     makeStyles,
-    Switch,
-    TextField,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import { DatePicker } from "@material-ui/pickers";
 import "react-markdown-editor-lite/lib/index.css";
 import styled from "styled-components";
 import ImageUploader from "react-images-upload";
@@ -21,15 +16,14 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import ClearIcon from "@material-ui/icons/Clear";
-import useInterval from "../../store/hooks/useInterval";
 import {
+    getSelectedCampaign,
     getSelectedCampaignCharacterMentionList,
-    getSelectedSessionDatabaseRef,
+    getSelectedSession,
     getSelectedSessionStorageRef,
 } from "../../store/selected/selectedSelectors";
-import { getIsLoading } from "../../store/admin/adminSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
-import useSavedState from "../../store/hooks/useSavedState";
+import { SensoDateInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../components/SensoInputs";
 
 const useStyles = makeStyles({
     root: {
@@ -45,31 +39,14 @@ const useStyles = makeStyles({
 
 const CampaignSessionEdit: React.FC = () => {
     const classes = useStyles();
-    const selectedSession = useSelector(
-        (state: RootReducerProp) => state.selected.selectedSession
-    );
+    const selectedSession = useSelector(getSelectedSession);
+    const selectedCampaign = useSelector(getSelectedCampaign)
     const [isUploadingImages, setIsUploadingImages] = useState(false);
-    const isLoading = useSelector(getIsLoading);
 
-    const [
-        isPublished,
-        setIsPublished,
-        saveIsPublished,
-        isSavedIsPublished,
-    ] = useSavedState(selectedSession?.session.isPublished === "TRUE");
-    const [sessionDate, setSessionDate] = useState<string>(
-        new Date().toDateString()
-    );
-    const [savedSessionDate, setSavedSessionDate] = useState<string>(
-        new Date().toDateString()
-    );
 
-    const [sessionSubTitle, setSessionSubTitle] = useState<string>("");
-    const [SavedSessionSubTitle, setSavedSessionSubTitle] = useState<string>("");
+
+
     const storageRef = useSelector(getSelectedSessionStorageRef);
-    const databaseRef = useSelector(getSelectedSessionDatabaseRef);
-    const [sessionDay, setSessionDay] = useState<number>(1);
-    const [savedSessionDay, setSavedSessionDay] = useState<number>(1);
 
     const [newSessionImages, setNewSessionImages] = useState<any[]>([]);
     const [ImageUploaderKey, setImageUploaderKey] = useState(0);
@@ -77,16 +54,7 @@ const CampaignSessionEdit: React.FC = () => {
     const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList)
     useEffect(() => {
         if (selectedSession && storageRef) {
-            setSessionDate(new Date(selectedSession.session.date).toDateString());
-            setSavedSessionDate(
-                new Date(selectedSession.session.date).toDateString()
-            );
-            if (selectedSession.session.subTitle) {
-                setSessionSubTitle(selectedSession.session.subTitle);
-                setSavedSessionSubTitle(selectedSession.session.subTitle);
-            }
-            setSessionDay(selectedSession.session.sessionDay);
-            setSavedSessionDay(selectedSession.session.sessionDay);
+
             storageRef
                 .child("SessionImages")
                 .listAll()
@@ -117,30 +85,7 @@ const CampaignSessionEdit: React.FC = () => {
         };
     }, [storageRef, selectedSession]);
 
-    useInterval(async () => {
-        // Your custom logic here
 
-        if (databaseRef) {
-            if (!isSavedIsPublished) {
-                saveIsPublished();
-                databaseRef.child("isPublished").set(isPublished ? "TRUE" : "FALSE");
-            }
-
-            if (sessionSubTitle !== SavedSessionSubTitle) {
-                databaseRef.child("subTitle").set(sessionSubTitle);
-                setSavedSessionSubTitle(sessionSubTitle);
-            }
-            if (sessionDate !== savedSessionDate) {
-                databaseRef.child("date").set(sessionDate);
-                setSavedSessionDate(sessionDate);
-            }
-
-            if (sessionDay !== savedSessionDay) {
-                databaseRef.child("sessionDay").set(sessionDay);
-                setSavedSessionDay(sessionDay);
-            }
-        }
-    }, 1000);
 
     const submitImages = async () => {
         setIsUploadingImages(true);
@@ -192,7 +137,7 @@ const CampaignSessionEdit: React.FC = () => {
                 .catch((e) => console.log("Could not remove image file", e));
         }
     };
-    if (isLoading || !selectedSession) {
+    if (!selectedSession || !selectedCampaign) {
         return <IsLoading />;
     }
     return (
@@ -210,58 +155,27 @@ const CampaignSessionEdit: React.FC = () => {
         >
             <TitleContainer>
                 <h2>{selectedSession.session.title}</h2>
-                <TextField
-                    id="outlined-multiline-static"
-                    placeholder="Write a fitting subtitle"
-                    style={{ width: "90%", margin: "1rem" }}
-                    variant="filled"
-                    label="Subtitle"
-                    value={sessionSubTitle}
-                    onChange={(event) => setSessionSubTitle(event.target.value)}
+                <SensoTextInput
+                    initValue={selectedSession.session.subTitle}
+                    firebasePath={`campaigns/${selectedCampaign.id}/sessions/${selectedSession.id}/subTitle`}
+                    label={"Subtitle"}
                 />
-                <TextField
-                    id="outlined-number"
-                    label="Session day"
-                    placeholder="Which session is this?"
-                    type="number"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    style={{ width: "90%", margin: "1rem" }}
-                    value={sessionDay}
-                    onChange={(event) => {
-                        let day =
-                            parseInt(event.target.value) < 0
-                                ? 0
-                                : parseInt(event.target.value);
-                        if (day) {
-                            setSessionDay(day);
-                        }
-                    }}
+                <SensoNumberInput
+                    initValue={selectedSession.session.sessionDay}
+                    firebasePath={`campaigns/${selectedCampaign.id}/sessions/${selectedSession.id}/sessionDay`}
+                    label={"Session day"}
+                    isNegativeValid={false}
                 />
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DatePicker
-                        autoOk
-                        style={{ margin: "1rem" }}
-                        clearable
-                        disableFuture
-                        value={sessionDate}
-                        onChange={(date) =>
-                            setSessionDate(
-                                date ? date.toDateString() : new Date().toDateString()
-                            )
-                        }
-                    />
-                </MuiPickersUtilsProvider>
-        Publish:
-        <Switch
-                    checked={isPublished}
-                    onChange={(event: { target: { checked: any } }) => {
-                        setIsPublished(event.target.checked);
-                    }}
-                    color="primary"
-                    name="checkedB"
-                    inputProps={{ "aria-label": "primary checkbox" }}
+
+                <SensoDateInput
+                    initValue={selectedSession.session.date}
+                    firebasePath={`campaigns/${selectedCampaign.id}/sessions/${selectedSession.id}/date`}
+                    label={"Date"}
+                />
+                <SensoSwitch
+                    initValue={selectedSession.session.isPublished}
+                    firebasePath={`campaigns/${selectedCampaign.id}/sessions/${selectedSession.id}/isPublished`}
+                    label={"Publish"}
                 />
             </TitleContainer>
             <div

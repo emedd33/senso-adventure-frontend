@@ -62,9 +62,10 @@ const Home: FunctionComponent<HomeProps> = () => {
   const renderScrolls = () => {
     if (sessions && selectedCampaign) {
       let sortedSessions = sortSessionsByDateValue(sessions);
+
       return sortedSessions
         .slice(0, MAX_NUM_SCROLLS_HOMEPAGE)
-        .map((session: any, index: number) => {
+        .map((session: any) => {
           return (
             <Scroll
               key={session.session.sessionId}
@@ -73,7 +74,7 @@ const Home: FunctionComponent<HomeProps> = () => {
               isOpaque={session.session.isPublished === "FALSE"}
               subTitle={session.session.subTitle}
               date={session.session.date}
-              campaignSlug={selectedCampaign.campaign.slug}
+              campaignSlug={session.session.campaignTitle.replace(/\s/g, "")}
               sessionDay={session.session.sessionDay}
               onClick={() => {
                 history.push(

@@ -70,7 +70,7 @@ const StoryImage = styled.img`
   margin-top: 1rem;
   width: 70%;
   max-height:5rem;
-  max-width: 25rem;
+  max-width: 15rem;
 `;
 const ScrollContainer = styled.div`
   background-image: url(${ScrollImage});

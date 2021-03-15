@@ -96,6 +96,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        width: "100%"
                     }}
                 >
                     <div
@@ -157,17 +158,18 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     readOnly={true}
                     JSONRef={storageRef?.child("SessionStory.json")}
                 />
+                {sessionImages
+                    ? sessionImages.map((url: string, index: number) => (
+                        <img
+                            src={url}
+                            key={index}
+                            alt="SessionImage"
+                            style={{ width: "10rem", height: "10rem" }}
+                        />
+                    ))
+                    : null}
             </Container>
 
-            {sessionImages
-                ? sessionImages.map((url) => (
-                    <img
-                        src={url}
-                        alt="SessionImage"
-                        style={{ width: "10rem", height: "10rem" }}
-                    />
-                ))
-                : null}
         </>
     );
 };
@@ -176,6 +178,9 @@ const Container = styled.div`
   min-width: 15rem;
   width: 50%;
   padding: 1rem;
+  display:grid;
+  grid-template-columns:1fr;
+  justify-items:center;
   -webkit-box-shadow: 5px 5px 15px 5px #000000;
   box-shadow: 5px 0px 15px 2px #000000;
   background-color: ${OLD_WHITE};

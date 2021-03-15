@@ -73,7 +73,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         style={{ maxHeight: "2rem", maxWidth: "3rem" }}
                                     >
                                         Edit
-                  </Button>
+                                    </Button>
                                 </NestedContainer>
                             </>
                         ) : null}
@@ -85,41 +85,40 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             ? " (Unpublished)"
                             : null}
                     </h1>
-
-                    <div style={{ marginBottom: "1rem", gridColumn: "1/3" }}>
-                        <b>Also known as: </b>{selectedCharacter.character.nickNames ? renderArrayOfString(selectedCharacter.character.nickNames) : null}
-                    </div>
-                    <b style={{ marginBottom: "1rem" }}>
+                    <h3 style={{ opacity: 0.7 }}>
                         {selectedCharacter.character.isPlayer === "TRUE"
                             ? `Played by: ${selectedCharacter.character.playerName}`
                             : "NPC"}
-                    </b>
-                    <div style={{ marginLeft: "0.5rem" }}>
-                        {selectedCharacter.character.isPlayer === "TRUE"
-                            ? `Level: ${parseValuesToString(
-                                selectedCharacter.character.level
-                            )}`
-                            : `CR: ${parseValuesToString(
-                                selectedCharacter.character.challengeRating
-                            )}`}
+                    </h3>
+
+                    <div style={{ gridColumn: "1/3" }}>
+                        <b>Also known as: </b>{selectedCharacter.character.nickNames ? renderArrayOfString(selectedCharacter.character.nickNames) : null}
                     </div>
-                </div>
-                <div >
+                    {isDungeonMaster ?
+                        <div >
+                            {` ${selectedCharacter.character.race}`}
+                            {selectedCharacter.character.class ? `, ${selectedCharacter.character.class}` : null}
+                            {`, ${selectedCharacter.character.alignment}`}
+                        </div>
+                        : null}
+                    {isDungeonMaster ?
+                        <div style={{ gridColumn: "1/3" }}>
+                            {selectedCharacter.character.isPlayer === "TRUE"
+                                ? `Level: ${parseValuesToString(
+                                    selectedCharacter.character.level
+                                )}`
+                                : `Challenge Rating: ${parseValuesToString(
+                                    selectedCharacter.character.challengeRating
+                                )}`}
+                        </div>
+                        : null}
 
-                    {selectedCharacter.character.race},
-                    {selectedCharacter.character.class ? selectedCharacter.character.class : null}
-                    {isDungeonMaster ? (
-                        <>
-                            {selectedCharacter.character.alignment},
-
-                        </>
-                    ) : null}
                 </div>
             </div>
             <div style={{ width: "100%" }}>
-                <div style={{ width: "100%", borderBottom: "double" }}></div>
-
                 <b>Summary: </b>
+                <div style={{ width: "100%" }}></div>
+
                 {selectedCharacter.character.summary}
                 <div style={{ width: "100%", borderBottom: "double" }}></div>
             </div>

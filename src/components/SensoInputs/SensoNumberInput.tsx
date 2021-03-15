@@ -6,6 +6,7 @@ import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
 import { databaseRef } from "../../firebase"
 import styled from "styled-components";
+import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 
 type SensoNumberInputProps = {
     initValue?: number,
@@ -44,7 +45,7 @@ const SensoNumberInput: React.FC<SensoNumberInputProps> = ({ initValue, firebase
     )
 }
 const Container = styled.div`
-
+    background-color:${OLD_WHITE_DARK}
 `
 
 
