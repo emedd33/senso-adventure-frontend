@@ -7,13 +7,13 @@ import useInterval from "../../store/hooks/useInterval";
 import { databaseRef } from "../../firebase"
 import styled from "styled-components";
 
-type ChaSwitchProps = {
+type SensoSwitchProps = {
     initValue?: string,
     firebasePath: string,
     label?: string,
     style?: React.CSSProperties
 }
-const ChaSwitch: React.FC<ChaSwitchProps> = ({ initValue, firebasePath, label, style }) => {
+const SensoSwitch: React.FC<SensoSwitchProps> = ({ initValue, firebasePath, label, style }) => {
     const [value, setValue, saveValue, isSavedValue] = useSavedState(initValue)
     useInterval(
         () => {
@@ -50,4 +50,4 @@ align-items:flex-start;
 justify-content:flex-start;
 `
 
-export default ChaSwitch
+export default SensoSwitch

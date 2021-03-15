@@ -33,20 +33,21 @@ import {
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ScrollMenu from "react-horizontal-scrolling-menu";
-const MenuItem: React.FC<{ text: any; selected: any }> = ({
+const MenuItem: React.FC<{ text: any; selected: any, key: number }> = ({
     text,
     selected,
+    key,
 }) => {
-    return <div className={`menu-item ${selected ? "active" : ""}`}>{text}</div>;
+    return <div className={`menu-item ${selected ? "active" : ""}`} key={key}>{text}</div>;
 };
 
 // All items component
 // Important! add unique key
 export const Menu = (list: any[], selected: any) =>
-    list.map((el) => {
+    list.map((el, index) => {
         const { name } = el;
 
-        return <MenuItem text={name} key={name} selected={selected} />;
+        return <MenuItem text={name} key={index} selected={selected} />;
     });
 
 type CampaignProps = {};
@@ -308,7 +309,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     }, [selectedCampaignSlug]);
 
     return (
-        <>
+        <Container>
             {campaignTitleImage ? (
                 <img
                     src={campaignTitleImage}
@@ -480,9 +481,15 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
             </Overview>
 
-        </>
+        </Container>
     );
 };
+const Container = styled.div`
+display:grid;
+grid-template-columns: 1fr;
+align-items: center;
+justify-items: center;
+`
 const Overview = styled.div`
   width: 90%;
   margin: 5rem;

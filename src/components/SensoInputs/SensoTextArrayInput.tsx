@@ -9,13 +9,13 @@ import useInterval from "../../store/hooks/useInterval";
 import { databaseRef } from "../../firebase"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
-type ChaTextArrayInputProps = {
+type SensoTextArrayInputProps = {
     initArray?: string[],
     firebasePath: string,
     label: string,
     style?: React.CSSProperties
 }
-const ChaTextArrayInput: React.FC<ChaTextArrayInputProps> = ({ initArray, firebasePath, label, style }) => {
+const SensoTextArrayInput: React.FC<SensoTextArrayInputProps> = ({ initArray, firebasePath, label, style }) => {
     const [array, setArray, saveArray, isSavedArray] = useSavedState(initArray)
     const [newValue, setNewValue] = useState<string>("")
 
@@ -93,4 +93,4 @@ gridTemplateRows: 1fr 1fr;
 alignItems: center;
 `
 
-export default ChaTextArrayInput
+export default SensoTextArrayInput

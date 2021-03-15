@@ -8,14 +8,14 @@ import { databaseRef } from "../../firebase"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
 
-type ChaMultilineTextInputProps = {
+type SensoMultilineTextInputProps = {
     initValue?: string,
     firebasePath: string,
     label: string,
     rows: number,
     style?: React.CSSProperties
 }
-const ChaMultilineTextInput: React.FC<ChaMultilineTextInputProps> = ({ initValue, firebasePath, label, rows, style }) => {
+const SensoMultilineTextInput: React.FC<SensoMultilineTextInputProps> = ({ initValue, firebasePath, label, rows, style }) => {
     const [value, setValue, saveValue, isSavedValue] = useSavedState(initValue)
 
     useInterval(
@@ -46,4 +46,4 @@ const Container = styled.div`
 
 `
 
-export default ChaMultilineTextInput
+export default SensoMultilineTextInput

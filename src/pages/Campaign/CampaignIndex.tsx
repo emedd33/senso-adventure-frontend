@@ -182,60 +182,58 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
 
-      <>
-        <Switch>
-          <Route exact path="/:campaignSlug/Edit">
-            <CampaignEdit isNew={false} />
-          </Route>
-          <Route exact path="/:campaignSlug/sessions/new">
-            {isDungeonMaster ? <CampaignSessionNew /> : <Redirect to={"/"} />}
-          </Route>
-          <Route exact path="/:campaignSlug/sessions/">
-            <CampaignSessions />
-          </Route>
-          <Route exact path="/:campaignSlug/sessions/:sessionSlug">
-            <CampaignSession />
-          </Route>
-        </Switch>
-        <Route exact path="/:campaignSlug/sessions/:sessionSlug/edit">
-          {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
+      <Switch>
+        <Route exact path="/:campaignSlug/Edit">
+          <CampaignEdit isNew={false} />
         </Route>
-        <Switch>
-          <Route exact path="/:campaignSlug/characters/">
-            <CampaignCharacters />
-          </Route>
-          <Route exact path="/:campaignSlug/characters/new">
-            {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
-          </Route>
-          <Route exact path="/:campaignSlug/characters/:characterSlug">
-            <CampaignCharacter />
-          </Route>
-          <Route exact path="/:campaignSlug/characters/:characterSlug/edit">
-            {isDungeonMaster ? (
-              <CampaignCharacterEdit />
-            ) : (
-              <Redirect to={"/"} />
-            )}
-          </Route>
-        </Switch>
-        <Switch>
-          <Route exact path="/:campaignSlug/locations/new">
-            {isDungeonMaster ? <CampaignLocationNew /> : <Redirect to={"/"} />}
-          </Route>
-          <Route exact path="/:campaignSlug/locations">
-            <CampaignLocations />
-          </Route>
-          <Route exact path="/:campaignSlug/locations/:locationSlug/edit">
-            {isDungeonMaster ? <CampaignLocationEdit /> : <Redirect to={"/"} />}
-          </Route>
-          <Route exact path="/:campaignSlug/locations/:locationSlug">
-            <CampaignLocation />
-          </Route>
-        </Switch>
-        <Route exact path="/:campaignSlug">
-          <Campaign />
+        <Route exact path="/:campaignSlug/sessions/new">
+          {isDungeonMaster ? <CampaignSessionNew /> : <Redirect to={"/"} />}
         </Route>
-      </>
+        <Route exact path="/:campaignSlug/sessions/">
+          <CampaignSessions />
+        </Route>
+        <Route exact path="/:campaignSlug/sessions/:sessionSlug">
+          <CampaignSession />
+        </Route>
+      </Switch>
+      <Route exact path="/:campaignSlug/sessions/:sessionSlug/edit">
+        {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
+      </Route>
+      <Switch>
+        <Route exact path="/:campaignSlug/characters/">
+          <CampaignCharacters />
+        </Route>
+        <Route exact path="/:campaignSlug/characters/new">
+          {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
+        </Route>
+        <Route exact path="/:campaignSlug/characters/:characterSlug">
+          <CampaignCharacter />
+        </Route>
+        <Route exact path="/:campaignSlug/characters/:characterSlug/edit">
+          {isDungeonMaster ? (
+            <CampaignCharacterEdit />
+          ) : (
+            <Redirect to={"/"} />
+          )}
+        </Route>
+      </Switch>
+      <Switch>
+        <Route exact path="/:campaignSlug/locations/new">
+          {isDungeonMaster ? <CampaignLocationNew /> : <Redirect to={"/"} />}
+        </Route>
+        <Route exact path="/:campaignSlug/locations">
+          <CampaignLocations />
+        </Route>
+        <Route exact path="/:campaignSlug/locations/:locationSlug/edit">
+          {isDungeonMaster ? <CampaignLocationEdit /> : <Redirect to={"/"} />}
+        </Route>
+        <Route exact path="/:campaignSlug/locations/:locationSlug">
+          <CampaignLocation />
+        </Route>
+      </Switch>
+      <Route exact path="/:campaignSlug">
+        <Campaign />
+      </Route>
       {isDungeonMaster ? (
         <Fab
           mainButtonStyles={{ backgroundColor: OLD_WHITE_TRANSPARENT }}

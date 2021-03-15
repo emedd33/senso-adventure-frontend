@@ -7,7 +7,7 @@ import useInterval from "../../store/hooks/useInterval";
 import { databaseRef } from "../../firebase"
 import getAbilityModifier from "../../utils/getAbilityModifier";
 
-type ChaSkillInputProps = {
+type SensoSkillInputProps = {
     abilityModifier: IAbility,
     initSkill: ISkillInfo,
     proficiencyBonus: number,
@@ -15,7 +15,7 @@ type ChaSkillInputProps = {
     label: string,
     style?: React.CSSProperties
 }
-const ChaSkillInput: React.FC<ChaSkillInputProps> = ({ abilityModifier, initSkill, proficiencyBonus = 0, firebasePath, label, style }) => {
+const SensoSkillInput: React.FC<SensoSkillInputProps> = ({ abilityModifier, initSkill, proficiencyBonus = 0, firebasePath, label, style }) => {
     const [skill, setSkill, saveSkill, isSavedSkill] = useSavedState(initSkill)
     const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
         setSkill({ ...skill, proficient: checked ? "TRUE" : "FALSE" })
@@ -55,4 +55,4 @@ const ChaSkillInput: React.FC<ChaSkillInputProps> = ({ abilityModifier, initSkil
 
 
 
-export default ChaSkillInput
+export default SensoSkillInput

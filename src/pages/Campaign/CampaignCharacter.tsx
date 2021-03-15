@@ -201,6 +201,14 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                     <NestedContainer>
                         <NestedNestedContainer>
                             <div>
+                                <b>Speed: </b>{" "}
+                            </div>
+                            <div style={{ paddingLeft: "0.3rem" }}>
+                                {selectedCharacter.character.stats.speed}'
+                            </div>
+                        </NestedNestedContainer>
+                        <NestedNestedContainer>
+                            <div>
                                 <b>Senses: </b>{" "}
                             </div>
                             <div style={{ paddingLeft: "0.3rem" }}>
@@ -476,119 +484,125 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 }}
                             >
                                 <Table>
-                                    <tr>
-                                        <TableHeader>Proficient</TableHeader>
-                                        <TableHeader>Modifier</TableHeader>
-                                        <TableHeader>Skill</TableHeader>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.acrobatics
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.dexterity.value,
-                                                selectedCharacter.character.stats.skills.acrobatics
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Acrobatics (Dex)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.animalHandling
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.dexterity.value,
-                                                selectedCharacter.character.stats.skills.animalHandling
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Animal Handling (Dex)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.arcana
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.intelligence.value,
-                                                selectedCharacter.character.stats.skills.arcana
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Arcana (Int)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.athletics
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.strength.value,
-                                                selectedCharacter.character.stats.skills.athletics
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Athletics (Str)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.deception
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.charisma.value,
-                                                selectedCharacter.character.stats.skills.deception
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Deception (Cha)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.history
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.intelligence.value,
-                                                selectedCharacter.character.stats.skills.history
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>History (Int)</TableElement>
-                                    </tr>
+                                    <thead>
+
+                                        <tr>
+                                            <TableHeader>Proficient</TableHeader>
+                                            <TableHeader>Modifier</TableHeader>
+                                            <TableHeader>Skill</TableHeader>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.acrobatics
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.dexterity.value,
+                                                    selectedCharacter.character.stats.skills.acrobatics
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Acrobatics (Dex)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.animalHandling
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.dexterity.value,
+                                                    selectedCharacter.character.stats.skills.animalHandling
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Animal Handling (Dex)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.arcana
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.intelligence.value,
+                                                    selectedCharacter.character.stats.skills.arcana
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Arcana (Int)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.athletics
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.strength.value,
+                                                    selectedCharacter.character.stats.skills.athletics
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Athletics (Str)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.deception
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.charisma.value,
+                                                    selectedCharacter.character.stats.skills.deception
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Deception (Cha)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.history
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.intelligence.value,
+                                                    selectedCharacter.character.stats.skills.history
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>History (Int)</TableElement>
+                                        </tr>
+                                    </tbody>
                                 </Table>
                             </div>
                             <div
@@ -599,119 +613,125 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 }}
                             >
                                 <Table>
-                                    <tr>
-                                        <TableHeader>Proficient</TableHeader>
-                                        <TableHeader>Modifier</TableHeader>
-                                        <TableHeader>Skill</TableHeader>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.insight
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.wisdom.value,
-                                                selectedCharacter.character.stats.skills.insight
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Insight (Wis)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.intimidation
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.charisma.value,
-                                                selectedCharacter.character.stats.skills.intimidation
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Intimidation (Cha)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.investigation
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.intelligence.value,
-                                                selectedCharacter.character.stats.skills.investigation
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Investigation (Int)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.medicine
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.wisdom.value,
-                                                selectedCharacter.character.stats.skills.medicine
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Medicine (Wis)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.nature
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.intelligence.value,
-                                                selectedCharacter.character.stats.skills.nature
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Nature (Int)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.perception
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.wisdom.value,
-                                                selectedCharacter.character.stats.skills.perception
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Perception (Wis)</TableElement>
-                                    </tr>
+                                    <thead>
+
+                                        <tr>
+                                            <TableHeader>Proficient</TableHeader>
+                                            <TableHeader>Modifier</TableHeader>
+                                            <TableHeader>Skill</TableHeader>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.insight
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.wisdom.value,
+                                                    selectedCharacter.character.stats.skills.insight
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Insight (Wis)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.intimidation
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.charisma.value,
+                                                    selectedCharacter.character.stats.skills.intimidation
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Intimidation (Cha)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.investigation
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.intelligence.value,
+                                                    selectedCharacter.character.stats.skills.investigation
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Investigation (Int)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.medicine
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.wisdom.value,
+                                                    selectedCharacter.character.stats.skills.medicine
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Medicine (Wis)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.nature
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.intelligence.value,
+                                                    selectedCharacter.character.stats.skills.nature
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Nature (Int)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.perception
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.wisdom.value,
+                                                    selectedCharacter.character.stats.skills.perception
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Perception (Wis)</TableElement>
+                                        </tr>
+                                    </tbody>
                                 </Table>
                             </div>
                             <div
@@ -722,119 +742,125 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 }}
                             >
                                 <Table>
-                                    <tr>
-                                        <TableHeader>Proficient</TableHeader>
-                                        <TableHeader>Modifier</TableHeader>
-                                        <TableHeader>Skill</TableHeader>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.performance
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.charisma.value,
-                                                selectedCharacter.character.stats.skills.performance
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Performance (Cha)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.persuasion
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.charisma.value,
-                                                selectedCharacter.character.stats.skills.persuasion
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Persuasion (Cha)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.religion
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.intelligence.value,
-                                                selectedCharacter.character.stats.skills.religion
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Religion (Int)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.sleightOfHand
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.dexterity.value,
-                                                selectedCharacter.character.stats.skills.sleightOfHand
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Sleight of Hand (Dex)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.stealth
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.dexterity.value,
-                                                selectedCharacter.character.stats.skills.stealth
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Stealth (Dex)</TableElement>
-                                    </tr>
-                                    <tr>
-                                        <TableElement>
-                                            {parseStringBooleanToCheckmark(
-                                                selectedCharacter.character.stats.skills.survival
-                                                    .proficient,
-                                                false
-                                            )}
-                                        </TableElement>
-                                        <TableElement>
-                                            {getAbilityModifier(
-                                                selectedCharacter.character.stats.wisdom.value,
-                                                selectedCharacter.character.stats.skills.survival
-                                                    .proficient === "TRUE",
-                                                selectedCharacter.character.stats.proficiency
-                                            )}
-                                        </TableElement>
-                                        <TableElement>Survival (Wis)</TableElement>
-                                    </tr>
+                                    <thead>
+
+                                        <tr>
+                                            <TableHeader>Proficient</TableHeader>
+                                            <TableHeader>Modifier</TableHeader>
+                                            <TableHeader>Skill</TableHeader>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.performance
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.charisma.value,
+                                                    selectedCharacter.character.stats.skills.performance
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Performance (Cha)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.persuasion
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.charisma.value,
+                                                    selectedCharacter.character.stats.skills.persuasion
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Persuasion (Cha)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.religion
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.intelligence.value,
+                                                    selectedCharacter.character.stats.skills.religion
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Religion (Int)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.sleightOfHand
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.dexterity.value,
+                                                    selectedCharacter.character.stats.skills.sleightOfHand
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Sleight of Hand (Dex)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.stealth
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.dexterity.value,
+                                                    selectedCharacter.character.stats.skills.stealth
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Stealth (Dex)</TableElement>
+                                        </tr>
+                                        <tr>
+                                            <TableElement>
+                                                {parseStringBooleanToCheckmark(
+                                                    selectedCharacter.character.stats.skills.survival
+                                                        .proficient,
+                                                    false
+                                                )}
+                                            </TableElement>
+                                            <TableElement>
+                                                {getAbilityModifier(
+                                                    selectedCharacter.character.stats.wisdom.value,
+                                                    selectedCharacter.character.stats.skills.survival
+                                                        .proficient === "TRUE",
+                                                    selectedCharacter.character.stats.proficiency
+                                                )}
+                                            </TableElement>
+                                            <TableElement>Survival (Wis)</TableElement>
+                                        </tr>
+                                    </tbody>
                                 </Table>
                             </div>
                         </div>
@@ -845,7 +871,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             <h3>
                                 Actions and Specials:
                     </h3>
-                            {selectedCharacter.character.actions.map((action: ICharacterAction) => <div><b >{action.name}:</b> {action.description}</div>)}
+                            {selectedCharacter.character.actions.map((action: ICharacterAction, index: number) => <div key={index}><b >{action.name}:</b> {action.description}</div>)}
                         </NestedContainer>
 
                         : null}
@@ -876,6 +902,7 @@ const NestedContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   justify-self: end;
+  margin:0.5rem;
   grid-gap: auto;
   min-width: 15rem;
 `;

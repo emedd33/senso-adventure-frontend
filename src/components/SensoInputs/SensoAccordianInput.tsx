@@ -8,13 +8,13 @@ import styled from "styled-components";
 import useInterval from '../../store/hooks/useInterval';
 import { databaseRef } from '../../firebase';
 
-type ChaAccordianInputProps = {
+type SensoAccordianInputProps = {
     initArray?: any[],
     firebasePath: string,
     label: string,
     style?: React.CSSProperties
 }
-const ChaAccordianInput: React.FC<ChaAccordianInputProps> = ({ initArray = [], firebasePath, label, style }) => {
+const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({ initArray = [], firebasePath, label, style }) => {
     const [array, setArray, saveArray, isSavedArray] = useSavedState(Object.values(initArray))
     const [newValue, setNewValue] = useState<{ name: string, description: string }>({ name: "", description: "" })
     const handleAddNewValue = () => {
@@ -114,4 +114,4 @@ display: grid;
 gridTemplateRows: 1fr 1fr;
 alignItems: center;
 `
-export default ChaAccordianInput
+export default SensoAccordianInput

@@ -10,7 +10,7 @@ import { dispatchLogout, setAlertDialog } from "../../store/admin/adminCreator";
 import TextField from "@material-ui/core/TextField";
 import firebase from "firebase";
 
-export interface ProfileIndexProps {}
+export interface ProfileIndexProps { }
 
 const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   const dispatch = useDispatch();
@@ -134,10 +134,10 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
               style={
                 isChangingPassword
                   ? {
-                      height: "20rem",
-                      borderStyle: "dotted",
-                      overflow: "hidden",
-                    }
+                    height: "20rem",
+                    borderStyle: "dotted",
+                    overflow: "hidden",
+                  }
                   : { height: "0rem" }
               }
             >
@@ -146,17 +146,17 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                   style={
                     isChangingPassword
                       ? {
-                          opacity: 1,
-                          padding: "1rem",
-                          display: "initial",
-                          transition: "200ms",
-                        }
+                        opacity: 1,
+                        padding: "1rem",
+                        display: "initial",
+                        transition: "200ms",
+                      }
                       : {
-                          opacity: 0,
-                          padding: "0",
-                          display: "none",
-                          transition: "200ms",
-                        }
+                        opacity: 0,
+                        padding: "0",
+                        display: "none",
+                        transition: "200ms",
+                      }
                   }
                 >
                   <div
@@ -272,7 +272,6 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
 };
 
 const ProfileRowString = styled.h2`
-  font-size: 2rem;
 `;
 const ChangePasswordContainer = styled.div`
   height: 0rem;

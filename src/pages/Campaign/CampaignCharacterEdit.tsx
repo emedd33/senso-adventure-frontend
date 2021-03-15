@@ -2,7 +2,7 @@ import React, {
     FunctionComponent,
 } from "react";
 import { useSelector } from "react-redux";
-import { ChaTextInput, ChaNumberInput, ChaSwitch, ChaTextArrayInput, ChaMultilineTextInput, ChaAccordianInput, ChaAbilityInput, ChaSkillInput } from "../../components/CharacterEditSheet"
+import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, SensoMultilineTextInput, SensoAccordianInput, SensoAbilityInput, SensoSkillInput } from "../../components/SensoInputs"
 
 import {
     getSelectedCampaign,
@@ -47,12 +47,12 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
 
 
 
-            <ChaTextArrayInput
+            <SensoTextArrayInput
                 initArray={selectedCharacter.character.nickNames}
                 label="Also known as"
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/nickNames`}
             />
-            <ChaSwitch
+            <SensoSwitch
                 initValue={selectedCharacter.character.isPublished}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/isPublished`}
                 label="Is published"
@@ -62,26 +62,26 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 <Divider />
             </div>
             <h2 style={{ gridColumn: "1/3", textAlign: "center" }}>Basic info</h2>
-            <ChaTextInput
+            <SensoTextInput
                 initValue={selectedCharacter.character.race}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/race`}
                 label="Race"
 
             />
-            <ChaTextInput
+            <SensoTextInput
                 initValue={selectedCharacter.character.class}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/class`}
                 label="Class"
 
             />
-            <ChaTextInput
+            <SensoTextInput
                 initValue={selectedCharacter.character.alignment}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/alignment`}
                 label="Alignment"
 
             />
             {isPlayer ? (
-                <ChaNumberInput
+                <SensoNumberInput
                     initValue={selectedCharacter.character.level}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/level`}
                     label="Level"
@@ -91,7 +91,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
 
                 />
             ) : (
-                <ChaTextInput
+                <SensoTextInput
                     initValue={selectedCharacter.character.challengeRating}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/challengeRating`}
                     label="Challenge rating"
@@ -102,7 +102,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
             )}
 
             <div style={{ gridColumn: "1/3" }}>
-                <ChaMultilineTextInput
+                <SensoMultilineTextInput
                     initValue={selectedCharacter.character.summary}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/summary`}
                     label="Summary"
@@ -114,37 +114,37 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 <Divider />
             </div>
             <h2 style={{ gridColumn: "1/3", textAlign: "center" }}>Character Stats</h2>
-            <ChaNumberInput
+            <SensoNumberInput
                 initValue={selectedCharacter.character.stats.armorClass}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/armorClass`}
                 label="Armor class"
                 isNegativeValid={false} />
-            <ChaNumberInput
+            <SensoNumberInput
                 initValue={selectedCharacter.character.stats.speed}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/speed/`}
                 label="Speed"
                 isNegativeValid={false}
             />
-            <ChaNumberInput
+            <SensoNumberInput
                 initValue={selectedCharacter.character.stats.proficiency}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/proficiency`}
                 label="Proficiency bonus"
                 isNegativeValid={false}
 
             />
-            <ChaNumberInput
+            <SensoNumberInput
                 initValue={selectedCharacter.character.stats.hitPoints}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/hitpoints`}
                 label="Hit points"
                 isNegativeValid={false}
             />
-            <ChaSwitch
+            <SensoSwitch
                 initValue={selectedCharacter.character.stats.inspiration}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/inspiration`}
                 label="Inspiration"
             />
 
-            <ChaSwitch
+            <SensoSwitch
                 initValue={selectedCharacter.character.isUnique}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/isUnique`}
                 label="is Unique" />
@@ -155,53 +155,53 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     </p>
                 <i>Calculated from Wisdom</i>
             </div>
-            <ChaTextArrayInput
+            <SensoTextArrayInput
                 initArray={selectedCharacter.character.senses}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/senses`}
                 label="Senses"
             />
-            <ChaTextArrayInput
+            <SensoTextArrayInput
                 initArray={selectedCharacter.character.immunities}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/immunities`}
                 label="Immunities"
             />
             <div style={{ display: "flex", gridColumn: "1/3", justifyContent: "flex-start", flexWrap: "wrap" }}>
 
-                <ChaAbilityInput
+                <SensoAbilityInput
                     initAbilityValue={selectedCharacter.character.stats.strength}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/strength`}
                     label="STR"
                     proficiencyBonus={selectedCharacter.character.stats.proficiency}
                 />
-                <ChaAbilityInput
+                <SensoAbilityInput
                     initAbilityValue={selectedCharacter.character.stats.dexterity}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/dexterity`}
                     label="DEX"
                     proficiencyBonus={selectedCharacter.character.stats.proficiency}
                 />
 
-                <ChaAbilityInput
+                <SensoAbilityInput
                     initAbilityValue={selectedCharacter.character.stats.constitution}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/constitution`}
                     label="CON"
                     proficiencyBonus={selectedCharacter.character.stats.proficiency}
                 />
 
-                <ChaAbilityInput
+                <SensoAbilityInput
                     initAbilityValue={selectedCharacter.character.stats.intelligence}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/intelligence`}
                     label="INT"
                     proficiencyBonus={selectedCharacter.character.stats.proficiency}
                 />
 
-                <ChaAbilityInput
+                <SensoAbilityInput
                     initAbilityValue={selectedCharacter.character.stats.wisdom}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/wisdom`}
                     label="WIS"
                     proficiencyBonus={selectedCharacter.character.stats.proficiency}
                 />
 
-                <ChaAbilityInput
+                <SensoAbilityInput
                     initAbilityValue={selectedCharacter.character.stats.charisma}
                     firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/charisma`}
                     label="CHA"
@@ -232,42 +232,42 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
 
                     </thead>
                     <tbody>
-                        <ChaSkillInput
+                        <SensoSkillInput
                             abilityModifier={selectedCharacter.character.stats.dexterity}
                             initSkill={selectedCharacter.character.stats.skills.acrobatics}
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/acrobatics`}
                             label="Acrobatics (DEX)"
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.animalHandling}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/animalHandling`}
                             abilityModifier={selectedCharacter.character.stats.dexterity}
                             label="Animal Handling (DEX)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.arcana}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/arcana`}
                             abilityModifier={selectedCharacter.character.stats.intelligence}
                             label="Arcana (INT)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.athletics}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/athletics`}
                             abilityModifier={selectedCharacter.character.stats.strength}
                             label="Athletics (STR)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.deception}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/deception`}
                             abilityModifier={selectedCharacter.character.stats.charisma}
                             label="Deception (CHA)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.history}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/history`}
                             abilityModifier={selectedCharacter.character.stats.intelligence}
@@ -299,42 +299,42 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     </thead>
                     <tbody>
 
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.insight}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/insight`}
                             abilityModifier={selectedCharacter.character.stats.wisdom}
                             label="Insight (WIS)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.intimidation}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/intimidation`}
                             abilityModifier={selectedCharacter.character.stats.charisma}
                             label="Intimidation (CHA)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.investigation}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/investigation`}
                             abilityModifier={selectedCharacter.character.stats.intelligence}
                             label="Investigation (INT)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.medicine}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/medicine`}
                             abilityModifier={selectedCharacter.character.stats.wisdom}
                             label="Medicine (Wis)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.nature}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/nature`}
                             abilityModifier={selectedCharacter.character.stats.intelligence}
                             label="Nature (INT)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.perception}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/perception`}
                             abilityModifier={selectedCharacter.character.stats.wisdom}
@@ -366,42 +366,42 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     </thead>
                     <tbody>
 
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.performance}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/performance`}
                             abilityModifier={selectedCharacter.character.stats.charisma}
                             label="Performance (CHA)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.persuasion}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/persuasion`}
                             abilityModifier={selectedCharacter.character.stats.charisma}
                             label="Persuasion (CHA)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.religion}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/religion`}
                             abilityModifier={selectedCharacter.character.stats.intelligence}
                             label="Religion (INT)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.sleightOfHand}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/sleightOfHand`}
                             abilityModifier={selectedCharacter.character.stats.dexterity}
                             label="	Sleight of Hand (DEX)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.stealth}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/stealth`}
                             abilityModifier={selectedCharacter.character.stats.dexterity}
                             label="Stealth (DEX)"
                             proficiencyBonus={selectedCharacter.character.stats.proficiency}
                         />
-                        <ChaSkillInput
+                        <SensoSkillInput
                             initSkill={selectedCharacter.character.stats.skills.survival}
                             firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/stats/skills/survival`}
                             abilityModifier={selectedCharacter.character.stats.wisdom}
@@ -412,7 +412,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 </table>
 
             </div>
-            <ChaAccordianInput
+            <SensoAccordianInput
                 style={{ gridColumn: "1/3" }}
                 initArray={selectedCharacter.character.actions}
                 firebasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}/actions`}

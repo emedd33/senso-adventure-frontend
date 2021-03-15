@@ -5,17 +5,23 @@ import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
 import { databaseRef } from "../../firebase"
-import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
 
-type ChaTextInputProps = {
-    initValue?: string,
+type SensoNumberInputProps = {
+    initValue?: number,
     firebasePath: string,
     label: string,
+    isNegativeValid: boolean,
     style?: React.CSSProperties
 }
-const ChaTextInput: React.FC<ChaTextInputProps> = ({ initValue, firebasePath, label, style }) => {
+const SensoNumberInput: React.FC<SensoNumberInputProps> = ({ initValue, firebasePath, label, isNegativeValid, style }) => {
     const [value, setValue, saveValue, isSavedValue] = useSavedState(initValue)
+    const handleValueChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        if (!isNegativeValid && parseInt(event.target.value) < 0) {
+            return
+        }
+        setValue(event.target.value)
+    }
     useInterval(
         () => {
             if (!isSavedValue && value) {
@@ -30,19 +36,16 @@ const ChaTextInput: React.FC<ChaTextInputProps> = ({ initValue, firebasePath, la
             <TextField
                 variant="outlined"
                 label={label}
+                type="number"
                 value={value}
-                style={{ backgroundColor: OLD_WHITE_DARK }}
-                onChange={(event) => setValue(event.target.value)}
+                onChange={handleValueChange}
             />
         </Container>
     )
 }
-
-
 const Container = styled.div`
-display: grid;
-gridTemplateRows: 1fr 1fr;
-alignItems: center;
+
 `
 
-export default ChaTextInput
+
+export default SensoNumberInput

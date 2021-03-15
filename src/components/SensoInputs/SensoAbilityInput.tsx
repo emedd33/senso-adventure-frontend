@@ -9,7 +9,7 @@ import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
 import getAbilityModifier from "../../utils/getAbilityModifier";
 
-type ChaAbilityInputProps = {
+type SensoAbilityInputProps = {
     initAbilityValue: IAbility,
     firebasePath: string,
     label: string,
@@ -17,7 +17,7 @@ type ChaAbilityInputProps = {
     isNegativeValid?: boolean,
     proficiencyBonus?: number,
 }
-const ChaAbilityInput: React.FC<ChaAbilityInputProps> = ({ initAbilityValue, firebasePath, label, isNegativeValid = true, proficiencyBonus = 0, style }) => {
+const SensoAbilityInput: React.FC<SensoAbilityInputProps> = ({ initAbilityValue, firebasePath, label, isNegativeValid = true, proficiencyBonus = 0, style }) => {
     const [abilityValue, setAbilityValue, saveAbilityValue, isSavedAbilityValue] = useSavedState(initAbilityValue)
     const handleValueChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         if (!isNegativeValid && parseInt(event.target.value) < 0) {
@@ -72,4 +72,4 @@ justify-items: center;
 align-items: center;
 `
 
-export default ChaAbilityInput
+export default SensoAbilityInput
