@@ -102,6 +102,12 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
           console.log("Could not fetch character description from firebase");
         });
     }
+    return () => {
+      setSavedEditorState(undefined)
+      setEditorState(EditorState.createEmpty())
+      setCharacterSuggestions([])
+
+    }
   }, [JSONRef]);
 
 

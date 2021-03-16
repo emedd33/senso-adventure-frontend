@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, IconButton, TextField } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Button, IconButton, TextField, TextFieldProps, } from '@material-ui/core';
 import React, { useState } from 'react'
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useSavedState from '../../store/hooks/useSavedState';
@@ -7,16 +7,21 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import styled from "styled-components";
 import useInterval from '../../store/hooks/useInterval';
 import { databaseRef } from '../../firebase';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 type SensoAccordianInputProps = {
     initArray?: any[],
     firebasePath: string,
     label: string,
+    choices?: { title: string, content: any }[],
     style?: React.CSSProperties
 }
-const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({ initArray = [], firebasePath, label, style }) => {
+
+const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({ initArray = [], firebasePath, label, style, choices }) => {
     const [array, setArray, saveArray, isSavedArray] = useSavedState(Object.values(initArray))
-    const [newValue, setNewValue] = useState<{ name: string, description: string }>({ name: "", description: "" })
+    const [newValue, setNewValue] = useState<{ name: string, description: string } | undefined>({ name: "", description: "" })
+    const [newInputValue, setNewInputValue] = useState<string>("")
+
     const handleAddNewValue = () => {
         if (newValue) {
             if (array) {
@@ -39,16 +44,36 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({ initArray = [
         , 1000)
     return (
         <Container style={style}>
-
-            <TextField
-                variant="outlined"
-                label={label}
-                value={newValue.name}
-                style={{ backgroundColor: OLD_WHITE_DARK }}
-                onChange={(event) => {
-                    setNewValue({ name: event.target.value, description: "" });
-                }}
-            />
+            {choices ?
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={choices ? choices : []}
+                    getOptionLabel={(option: { title: any; }) => option.title}
+                    style={{ width: "15rem" }}
+                    onChange={(event: any, newValue: { title: string, content: any } | null) => {
+                        if (newValue) {
+                            setNewValue({ name: newValue.title, description: "" });
+                        } else {
+                            setNewValue(undefined)
+                        }
+                    }}
+                    inputValue={newInputValue}
+                    onInputChange={(event, newInputValue) => {
+                        setNewInputValue(newInputValue);
+                    }}
+                    renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} style={{ backgroundColor: OLD_WHITE_DARK }} label="" variant="outlined" />}
+                />
+                :
+                <TextField
+                    variant="outlined"
+                    label={label}
+                    value={newValue ? newValue.name : ""}
+                    style={{ backgroundColor: OLD_WHITE_DARK }}
+                    onChange={(event) => {
+                        setNewValue({ name: event.target.value, description: "" });
+                    }}
+                />
+            }
             <Button
                 variant="contained"
                 color="primary"
