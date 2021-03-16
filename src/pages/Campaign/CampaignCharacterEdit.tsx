@@ -7,6 +7,7 @@ import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, Sen
 import {
     getSelectedCampaign,
     getSelectedCampaignCharacterMentionList,
+    getSelectedCampaignLocationMentionList,
     getSelectedCharacter,
     getSelectedCharacterIsPlayer,
     getSelectedCharacterStorageRef,
@@ -27,6 +28,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
     );
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(getSelectedCampaign)
     const characerMentionList = useSelector(getSelectedCampaignCharacterMentionList);
+    const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
     const storageRef = useSelector(getSelectedCharacterStorageRef);
     const isPlayer = useSelector(getSelectedCharacterIsPlayer);
 
@@ -425,6 +427,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 <h3>Description and history:</h3>
                 <DraftJSEditor
                     characterMentionList={characerMentionList}
+                    locationMentionList={locationMentionList}
                     readOnly={false}
                     JSONRef={storageRef?.child("CharacterDescription.json")}
                 />

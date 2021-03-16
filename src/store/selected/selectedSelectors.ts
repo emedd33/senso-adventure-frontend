@@ -140,7 +140,21 @@ export const getSelectedCampaignCharacterMentionList = (state: RootReducerProp) 
     }
     return mentions
 }
+export const getSelectedCampaignLocationMentionList = (state: RootReducerProp) => {
+    const host = getHost()
+    let mentions: MentionData[] = []
+    if (state.selected.selectedCampaign) {
+        if (state.selected.selectedCampaign?.campaign.locations) {
 
+            mentions = Object.values(state.selected.selectedCampaign?.campaign.locations).map((location: ILocation) => ({
+                name: location.name,
+                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/locations/${location.slug}`
+            }))
+
+        }
+    }
+    return mentions
+}
 export const getSelectedCharacterStorageRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedCharacter) {
         return storage

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw, Modifier } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 import createMentionPlugin, {
   defaultSuggestionsFilter, MentionData,
@@ -23,39 +23,74 @@ import {
   BlockquoteButton,
   CodeBlockButton,
 } from "@draft-js-plugins/buttons";
-import { CircularProgress } from "@material-ui/core";
+import { Button, CircularProgress, Tooltip } from "@material-ui/core";
 import IsLoading from "../IsLoading/IsLoading";
+import characterIcon from "../../assets/icons/character_icon.png"
+import locationIcon from "../../assets/icons/location_icon.png"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
+import styled from "styled-components";
+import sleep from "../../utils/sleep";
 type DraftJSEditorProps = {
   JSONRef: any | undefined;
   readOnly: boolean;
   characterMentionList?: MentionData[]
+  locationMentionList?: MentionData[]
 };
-const mentionPlugin = createMentionPlugin();
 const staticToolbarPlugin = createToolbarPlugin();
 const { Toolbar } = staticToolbarPlugin;
-const { MentionSuggestions } = mentionPlugin;
-const plugins = [mentionPlugin, staticToolbarPlugin];
+const characterMentionPlugin = createMentionPlugin();
+const locationMentionPlugin = createMentionPlugin({
+  mentionTrigger: "#"
+});
+const CharacterMentionSuggestions = characterMentionPlugin.MentionSuggestions;
+const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
 
-const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, characterMentionList }) => {
+const plugins = [characterMentionPlugin, staticToolbarPlugin, locationMentionPlugin];
+
+const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, characterMentionList = [], locationMentionList = [] }) => {
   const [isUploading, setIsUploading] = useState(false);
   const ref = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
   const [savedEditorState, setSavedEditorState] = useState<any>(editorState);
-  const [open, setOpen] = useState(true);
+  const [characterOpen, setCharacterOpen] = useState(true);
+  const [locationOpen, setLocationOpen] = useState(true);
   const [characterSuggestions, setCharacterSuggestions] = useState(characterMentionList);
+  const [locationSuggestions, setLocationSuggestions] = useState(characterMentionList);
 
-  const onOpenChange = useCallback((_open: boolean) => {
-    setOpen(_open);
+  const onCharacterOpenChange = useCallback((_open: boolean) => {
+    setCharacterOpen(_open);
   }, []);
-  const onSearchChange = useCallback(({ value }: { value: string }) => {
+  const onCharacterSearchChange = useCallback(({ value }: { value: string }) => {
     if (characterMentionList) {
       setCharacterSuggestions(defaultSuggestionsFilter(value, characterMentionList));
-
     }
   }, [characterMentionList]);
+
+  const onLocationOpenChange = useCallback((_open: boolean) => {
+    setLocationOpen(_open);
+  }, []);
+  const onLocationSearchChange = useCallback(({ value }: { value: string }) => {
+    if (locationMentionList) {
+      setLocationSuggestions(defaultSuggestionsFilter(value, locationMentionList));
+    }
+  }, [locationMentionList]);
+
+  function insertCharacter(characterToInsert: string, editorState: EditorState) {
+    const currentContent = editorState.getCurrentContent(),
+      currentSelection = editorState.getSelection();
+
+    const newContent = Modifier.replaceText(
+      currentContent,
+      currentSelection,
+      characterToInsert
+    );
+
+    const newEditorState = EditorState.push(editorState, newContent, 'insert-characters');
+
+    return newEditorState;
+  }
   useInterval(() => {
     if (!readOnly) {
       if (JSONRef && savedEditorState) {
@@ -77,12 +112,11 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
             .catch((e: any) => {
               console.log("Could not update session story", e);
             });
-        } else {
-          setIsUploading(false);
         }
+        sleep(2000).then(() => setIsUploading(false))
       }
     }
-  }, 10000);
+  }, 5000);
 
   useMemo(() => {
     if (JSONRef) {
@@ -111,19 +145,15 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
     }
   }, [JSONRef]);
 
-
-  if (characterMentionList && !characterSuggestions) {
-    return <IsLoading />
-  }
-  return (
-    <div
-      className={editorStyles.editor}
-      style={readOnly ? { width: "100%" } : { width: "100%", backgroundColor: OLD_WHITE_DARK }}
-      onClick={() => {
-        ref.current!.focus();
-      }}
-    >
-      {readOnly ? null : (
+  const renderEditor = useCallback(() => <div
+    className={editorStyles.editor}
+    style={readOnly ? { width: "100%" } : { width: "100%", backgroundColor: OLD_WHITE_DARK }}
+    onClick={() => {
+      ref.current!.focus();
+    }}
+  >
+    {
+      readOnly ? null : (
         <>
           <Toolbar>
             {
@@ -142,32 +172,75 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
                   <OrderedListButton {...externalProps} />
                   <BlockquoteButton {...externalProps} />
                   <CodeBlockButton {...externalProps} />
-                  {isUploading ? <CircularProgress size={20} /> : null}
                 </div>
               )
             }
           </Toolbar>
           <div style={{ width: "auto", height: "1rem" }}></div>
         </>
-      )}
-      <Editor
-        editorKey={"editor"}
-        editorState={editorState}
-        onChange={setEditorState}
-        plugins={plugins}
-        ref={ref}
-        readOnly={readOnly}
-      />
-      {characterSuggestions ?
-        <MentionSuggestions
-          open={open}
-          onOpenChange={onOpenChange}
+      )
+    }
+    < Editor
+      editorKey={"editor"}
+      editorState={editorState}
+      onChange={setEditorState}
+      plugins={plugins}
+      ref={ref}
+      readOnly={readOnly}
+    />
+    {
+      characterSuggestions ?
+        <CharacterMentionSuggestions
+          open={characterOpen}
+          onOpenChange={onCharacterOpenChange}
           suggestions={characterSuggestions}
-          onSearchChange={onSearchChange}
+          onSearchChange={onCharacterSearchChange}
         />
         : null}
-    </div>
+    {
+      locationSuggestions ?
+        <LocationMentionSuggestions
+          open={locationOpen}
+          onOpenChange={onLocationOpenChange}
+          suggestions={locationSuggestions}
+          onSearchChange={onLocationSearchChange}
+        />
+        : null}
+  </div >, [editorState, characterOpen, characterSuggestions, locationOpen, locationSuggestions, onCharacterSearchChange, onLocationOpenChange, onLocationSearchChange, readOnly, onCharacterOpenChange])
+  if (characterMentionList && !characterSuggestions) {
+    return <IsLoading />
+  }
+  return (
+    <Container>
+      {readOnly ? null :
+        <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr", width: "100%", padding: "0.3rem" }}>
+
+          <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>
+            <Tooltip title="To add character type @">
+              <Button onClick={() => setEditorState(insertCharacter("@", editorState))} style={{ width: "3rem" }}> <img src={characterIcon} style={{ width: "inherit" }} alt="New Character" />
+              </Button>
+            </Tooltip>
+            <Tooltip title="To add location type #">
+              <Button onClick={() => setEditorState(insertCharacter("#", editorState))} style={{ width: "3rem" }}> <img src={locationIcon} style={{ width: "inherit" }} alt="New Character" />
+              </Button>
+            </Tooltip>
+          </div>
+          <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
+
+            {isUploading ? <CircularProgress size={30} /> : null}
+          </div>
+
+        </div>
+      }
+      { renderEditor()}
+
+    </Container>
   );
 };
 
+const Container = styled.div`
+display:grid;
+width:100%;
+justify-items:start;
+`
 export default DraftJSEditor;

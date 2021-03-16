@@ -149,9 +149,9 @@ const SensoImageInput: React.FC<SensoImageInputProps> = ({ storagePath, style })
                     margin: "1rem",
                 }}
             >
-                {existingLocationImages.map((img) => {
+                {existingLocationImages.map((img, index) => {
                     return (
-                        <Card className={classes.root}>
+                        <Card className={classes.root} key={index}>
                             <CardActionArea>
                                 <CardActions
                                     style={{

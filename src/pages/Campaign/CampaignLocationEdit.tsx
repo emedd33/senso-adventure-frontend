@@ -12,6 +12,7 @@ import {
     getSelectedCampaign,
     getSelectedCampaignCharacterMentionList,
     getSelectedCampaignCharacters,
+    getSelectedCampaignLocationMentionList,
     getSelectedLocationStorageRef,
 } from "../../store/selected/selectedSelectors";
 import { getIsLoading } from "../../store/admin/adminSelectors";
@@ -30,6 +31,7 @@ const CampaignLocationEdit: React.FC = () => {
 
 
     const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList)
+    const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
 
 
     if (isLoading || !selectedLocation || !selectedCampaign) {
@@ -157,6 +159,7 @@ const CampaignLocationEdit: React.FC = () => {
                 characterMentionList={characterMentionList}
                 readOnly={false}
                 JSONRef={storageRef?.child("LocationDescription.json")}
+                locationMentionList={locationMentionList}
             />
 
             <h1>Images</h1>

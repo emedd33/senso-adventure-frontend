@@ -9,6 +9,7 @@ import styled from "styled-components";
 import {
     getSelectedCampaign,
     getSelectedCampaignCharacterMentionList,
+    getSelectedCampaignLocationMentionList,
     getSelectedSession,
     getSelectedSessionStorageRef,
 } from "../../store/selected/selectedSelectors";
@@ -29,6 +30,7 @@ const CampaignSessionEdit: React.FC = () => {
 
 
     const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList)
+    const locationMentionList = useSelector(getSelectedCampaignLocationMentionList)
 
 
 
@@ -85,6 +87,7 @@ const CampaignSessionEdit: React.FC = () => {
             </div>
             <DraftJSEditor
                 characterMentionList={characterMentionList}
+                locationMentionList={locationMentionList}
                 readOnly={false}
                 JSONRef={storageRef?.child("SessionStory.json")}
             />
