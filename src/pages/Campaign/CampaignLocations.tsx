@@ -26,8 +26,9 @@ const CampaignLocations: FunctionComponent<CampaignLocationsProps> = () => {
     return (
         <Container>
             {locations && selectedCampaign
-                ? locations.map(([, location]: [string, ILocation]) => (
+                ? locations.map(([, location]: [string, ILocation], index: number) => (
                     <Accordion
+                        key={index}
                         style={
                             location.isPublished === "TRUE"
                                 ? { backgroundColor: OLD_WHITE }

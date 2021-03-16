@@ -26,7 +26,7 @@ export default function App() {
   return (
     <Router>
       <Navbar />
-      <>
+      <div style={{ minHeight: "100%" }}>
         <AlertDialog />
         <Switch>
           <Route exact path="/login">
@@ -45,8 +45,8 @@ export default function App() {
             <Home />
           </Route>
         </Switch>
-        <StickyFooter />
-      </>
+      </div>
+      <StickyFooter />
     </Router>
   );
 }

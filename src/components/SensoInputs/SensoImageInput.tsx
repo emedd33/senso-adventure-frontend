@@ -6,7 +6,6 @@ import {
     CardMedia,
 
     CircularProgress,
-    IconButton,
     makeStyles,
 
 } from "@material-ui/core";
@@ -15,6 +14,7 @@ import { storage } from "../../firebase"
 import ImageUploader from "react-images-upload";
 import styled from "styled-components";
 import ClearIcon from "@material-ui/icons/Clear";
+import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 type SensoImageInputProps = {
     storagePath: string,
     style?: React.CSSProperties
@@ -121,6 +121,7 @@ const SensoImageInput: React.FC<SensoImageInputProps> = ({ storagePath, style })
             <ImageUploader
                 key={ImageUploaderKey}
                 withIcon={true}
+                fileContainerStyle={{ backgroundColor: OLD_WHITE_DARK }}
                 label="Max file size: 10mb, accepted: jpg|gif|png"
                 buttonText="Choose images"
                 onChange={(newImages: any) =>
@@ -129,6 +130,7 @@ const SensoImageInput: React.FC<SensoImageInputProps> = ({ storagePath, style })
                 imgExtension={[".jpg", ".gif", ".png"]}
                 maxFileSize={10485760}
                 withPreview={true}
+                buttonStyles={{ backgroundColor: "#3F51B5" }}
             />
             {isUploadingImages ?
                 <CircularProgress />
@@ -157,13 +159,9 @@ const SensoImageInput: React.FC<SensoImageInputProps> = ({ storagePath, style })
                                         justifyContent: "center",
                                         height: "2rem",
                                     }}
+                                    onClick={() => removeImage(img)}
                                 >
-                                    <IconButton
-                                        aria-label="delete"
-                                        onClick={() => removeImage(img)}
-                                    >
-                                        <ClearIcon color="secondary" />
-                                    </IconButton>
+                                    <ClearIcon color="secondary" />
                                 </CardActions>
                                 <CardMedia
                                     className={classes.media}

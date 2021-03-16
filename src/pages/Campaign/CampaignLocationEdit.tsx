@@ -51,7 +51,7 @@ const CampaignLocationEdit: React.FC = () => {
         >
             <h1 style={{ width: "100%", textAlign: "center" }}>{selectedLocation.location.name}</h1>
             <SensoSwitch
-                firebasePath={`campaigns/${selectedCampaign.id}/locations/${selectedLocation.id}/isPublised`}
+                firebasePath={`campaigns/${selectedCampaign.id}/locations/${selectedLocation.id}/isPublished`}
                 initValue={selectedLocation.location.isPublished}
                 label={"Publish"}
                 style={{ width: "100%", display: "flex", justifyContent: "center" }}
@@ -60,7 +60,7 @@ const CampaignLocationEdit: React.FC = () => {
 
 
             <SensoTextArrayInput
-                firebasePath={`campaigns/${selectedCampaign.id}/locations/${selectedLocation.id}/nicknames`}
+                firebasePath={`campaigns/${selectedCampaign.id}/locations/${selectedLocation.id}/nickNames`}
                 initArray={selectedLocation.location.nickNames}
                 label={"Also known as"}
             />

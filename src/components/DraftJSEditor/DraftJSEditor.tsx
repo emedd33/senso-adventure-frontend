@@ -25,6 +25,7 @@ import {
 } from "@draft-js-plugins/buttons";
 import { CircularProgress } from "@material-ui/core";
 import IsLoading from "../IsLoading/IsLoading";
+import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 type DraftJSEditorProps = {
   JSONRef: any | undefined;
   readOnly: boolean;
@@ -117,7 +118,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
   return (
     <div
       className={editorStyles.editor}
-      style={{ width: "100%" }}
+      style={readOnly ? { width: "100%" } : { width: "100%", backgroundColor: OLD_WHITE_DARK }}
       onClick={() => {
         ref.current!.focus();
       }}
