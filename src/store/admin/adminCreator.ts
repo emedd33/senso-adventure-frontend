@@ -47,7 +47,7 @@ export const dispatchSignup = (payload: any) => {
         if (user) {
           user
             .updateProfile({
-              displayName: payload.username,
+              displayName: payload.displayName,
             })
             .catch(function (error) {
               console.log("An error has occured while updating username");
@@ -58,7 +58,7 @@ export const dispatchSignup = (payload: any) => {
         let errorMessage = "Could not create user";
         dispatch(setAlertDialog(errorMessage, true, true));
       })
-      .finally(() => {});
+      .finally(() => { });
   };
 };
 

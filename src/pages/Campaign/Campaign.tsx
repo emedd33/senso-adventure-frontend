@@ -396,7 +396,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 : null}
             {npc.length > 0 ?
                 <Overview>
-                    <Link to={`/${selectedCampaign?.campaign.slug}/characters`}>
+                    <Link to={`/${selectedCampaign?.campaign.slug}/characters`} style={{ textTransform: "none" }}>
                         <Button
                             variant="contained"
                             style={{

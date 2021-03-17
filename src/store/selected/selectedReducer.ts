@@ -12,7 +12,7 @@ export const initialSelectedCampaignState = {
   title: "",
   subTitle: "",
   slug: "",
-  dungeonMaster: "",
+  dungeonMaster: { username: "", uid: "" },
   sessions: [],
   locations: [],
   characters: [],

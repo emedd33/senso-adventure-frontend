@@ -23,7 +23,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   const [firstNewPassword, setFirstNewPassword] = useState("");
   const [secondNewPassword, setSecondNewPassword] = useState("");
   const username = useSelector(
-    (state: RootReducerProp) => state.admin.authUser?.username
+    (state: RootReducerProp) => state.admin.authUser?.displayName
   );
   const email = useSelector(
     (state: RootReducerProp) => state.admin.authUser?.email

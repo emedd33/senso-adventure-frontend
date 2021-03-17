@@ -25,6 +25,7 @@ import useWindowSize from "../../store/hooks/useWindowSize";
 import IsLoading from "../IsLoading/IsLoading";
 import { LIGHT_PINK } from "../../assets/constants/Constants";
 import { initialSelectedCampaignState } from "../../store/selected/selectedReducer";
+import { getAuthUser } from "../../store/admin/adminSelectors";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     backdrop: {
@@ -47,9 +48,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   const rootCampaigns = useSelector(
     (state: RootReducerProp) => state.rootCampaigns
   );
-  const authUser = useSelector(
-    (state: RootReducerProp) => state.admin.authUser
-  );
+  const authUser = useSelector(getAuthUser);
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
 

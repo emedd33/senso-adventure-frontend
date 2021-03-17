@@ -22,9 +22,9 @@ export const getSelectedCharacterIsPlayer = (state: RootReducerProp) => {
 };
 
 export const isDungeonMasterSelector = (state: RootReducerProp) => {
-    let username = state.admin.authUser?.username;
-    if (username) {
-        return state.selected.selectedCampaign?.campaign.dungeonMaster === username;
+    let uid = state.admin.authUser?.uid;
+    if (uid) {
+        return state.selected.selectedCampaign?.campaign.dungeonMaster.uid === uid;
     }
     return false;
 };

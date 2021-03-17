@@ -18,10 +18,7 @@ export async function fetchFromFirebase(dispatch: any) {
     if (user) {
       dispatch({
         type: SET_AUTH_USER,
-        payload: {
-          username: user.displayName,
-          email: user.email,
-        },
+        payload: user,
       });
     }
   });

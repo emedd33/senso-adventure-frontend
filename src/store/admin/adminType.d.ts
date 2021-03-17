@@ -1,10 +1,4 @@
-interface IAuthUser {
-  user: any;
-  username: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-}
+
 interface IError {
   message: string;
   isError: boolean;
@@ -12,7 +6,7 @@ interface IError {
 }
 type AdminState = {
   isLoading: boolean;
-  authUser?: IAuthUser;
+  authUser?: firebase.User;
   error: IError;
   env: string,
   port: string,

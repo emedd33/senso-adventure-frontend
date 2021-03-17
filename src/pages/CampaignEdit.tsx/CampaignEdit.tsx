@@ -77,7 +77,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
         title = campaignTitle
         slug = campaignTitle.replace(/\s/g, "");
         let newCampaign = {
-          dungeonMaster: user.username,
+          dungeonMaster: { username: user.displayName, uid: user.uid },
           title: title,
           slug: slug,
         };

@@ -118,7 +118,7 @@ export default function MenuListComposition() {
             aria-haspopup="true"
             onClick={handleToggle}
           >
-            {authUser.username}
+            {authUser.displayName}
             <AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
           </Button>
           <Popper

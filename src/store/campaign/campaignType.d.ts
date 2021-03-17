@@ -6,7 +6,7 @@ interface ICampaign {
   slug: string;
   isNew: boolean;
   id: string;
-  dungeonMaster: string;
+  dungeonMaster: { username: string, uid: string };
   sessions?: ISession[];
   characters?: ICharacter[];
   locations?: ILocation[];
