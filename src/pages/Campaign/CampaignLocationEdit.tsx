@@ -14,6 +14,7 @@ import {
     getSelectedCampaignCharacters,
     getSelectedCampaignLocationMentionList,
     getSelectedLocationStorageRef,
+    isDungeonMasterSelector,
 } from "../../store/selected/selectedSelectors";
 import { getIsLoading } from "../../store/admin/adminSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
@@ -24,7 +25,7 @@ const CampaignLocationEdit: React.FC = () => {
         (state: RootReducerProp) => state.selected.selectedLocation
     );
     const selectedCampaign = useSelector(getSelectedCampaign);
-
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const isLoading = useSelector(getIsLoading);
     const storageRef = useSelector(getSelectedLocationStorageRef);
     const campaignCharacters = useSelector(getSelectedCampaignCharacters)
@@ -158,6 +159,7 @@ const CampaignLocationEdit: React.FC = () => {
             <DraftJSEditor
                 characterMentionList={characterMentionList}
                 readOnly={false}
+                isDungeonMaster={isDungeonMaster}
                 JSONRef={storageRef?.child("LocationDescription.json")}
                 locationMentionList={locationMentionList}
             />

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { EditorState, convertToRaw, convertFromRaw, Modifier } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw, Modifier, AtomicBlockUtils, EditorBlock } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 import createMentionPlugin, {
   defaultSuggestionsFilter, MentionData,
@@ -27,12 +27,14 @@ import { Button, CircularProgress, Tooltip } from "@material-ui/core";
 import IsLoading from "../IsLoading/IsLoading";
 import characterIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
+import secretIcon from "../../assets/icons/hush_icon.png"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import sleep from "../../utils/sleep";
 type DraftJSEditorProps = {
   JSONRef: any | undefined;
   readOnly: boolean;
+  isDungeonMaster?: boolean
   characterMentionList?: MentionData[]
   locationMentionList?: MentionData[]
 };
@@ -47,7 +49,7 @@ const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
 
 const plugins = [characterMentionPlugin, staticToolbarPlugin, locationMentionPlugin];
 
-const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, characterMentionList = [], locationMentionList = [] }) => {
+const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDungeonMaster = false, characterMentionList = [], locationMentionList = [] }) => {
   const [isUploading, setIsUploading] = useState(false);
   const ref = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
@@ -87,10 +89,43 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
       characterToInsert
     );
 
+
     const newEditorState = EditorState.push(editorState, newContent, 'insert-characters');
 
     return newEditorState;
   }
+  const insertSecretBlock = () => {
+
+    const contentState = editorState.getCurrentContent();
+
+    const contentStateWithEntity = contentState.createEntity(
+      "SECRET",
+      "MUTABLE",
+      { a: "b" }
+    );
+
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity
+    });
+
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(
+        newEditorState,
+        entityKey,
+        " "
+      ))
+  }
+
+  const blockRenderer = useCallback((contentBlock: { getType: () => any; }) => {
+    const type = contentBlock.getType();
+    if (type === "atomic" && isDungeonMaster) {
+      return {
+        component: SecretComponent,
+        editable: readOnly ? false : true,
+      };
+    }
+  }, [isDungeonMaster, readOnly]);
   useInterval(() => {
     if (!readOnly) {
       if (JSONRef && savedEditorState) {
@@ -187,6 +222,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
       plugins={plugins}
       ref={ref}
       readOnly={readOnly}
+      blockRendererFn={blockRenderer}
     />
     {
       characterSuggestions ?
@@ -206,7 +242,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
           onSearchChange={onLocationSearchChange}
         />
         : null}
-  </div >, [editorState, characterOpen, characterSuggestions, locationOpen, locationSuggestions, onCharacterSearchChange, onLocationOpenChange, onLocationSearchChange, readOnly, onCharacterOpenChange])
+  </div >, [editorState, characterOpen, characterSuggestions, locationOpen, locationSuggestions, onCharacterSearchChange, onLocationOpenChange, onLocationSearchChange, readOnly, onCharacterOpenChange, blockRenderer])
   if (characterMentionList && !characterSuggestions) {
     return <IsLoading />
   }
@@ -222,6 +258,10 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, charac
             </Tooltip>
             <Tooltip title="To add location type #">
               <Button onClick={() => setEditorState(insertCharacter("#", editorState))} style={{ width: "3rem" }}> <img src={locationIcon} style={{ width: "inherit" }} alt="New Character" />
+              </Button>
+            </Tooltip>
+            <Tooltip title="Insert secret note">
+              <Button onClick={() => insertSecretBlock()} style={{ width: "3rem" }}> <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
               </Button>
             </Tooltip>
           </div>
@@ -243,4 +283,18 @@ display:grid;
 width:100%;
 justify-items:start;
 `
+const SecretComponent = (props: any) => {
+
+  return (
+    <div style={{ backgroundColor: "#bdbdbd", borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
+      <Tooltip title="Secret note">
+
+        <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
+      </Tooltip>
+      <EditorBlock {...props} />
+    </div>
+  );
+};
+
+
 export default DraftJSEditor;

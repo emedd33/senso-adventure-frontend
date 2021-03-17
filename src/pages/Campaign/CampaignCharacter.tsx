@@ -876,7 +876,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                         : null}
                     <NestedContainer style={{ width: "100%" }} >
                         <h3>Description and history: </h3>
-                        <DraftJSEditor readOnly={true} JSONRef={storageRef?.child("CharacterDescription.json")} />
+                        <DraftJSEditor readOnly={true} JSONRef={storageRef?.child("CharacterDescription.json")} isDungeonMaster={isDungeonMaster} />
 
                     </NestedContainer>
 

@@ -154,7 +154,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     {selectedSession?.session.subTitle}
                 </h3>
                 <DraftJSEditor
-
+                    isDungeonMaster={isDungeonMaster}
                     readOnly={true}
                     JSONRef={storageRef?.child("SessionStory.json")}
                 />

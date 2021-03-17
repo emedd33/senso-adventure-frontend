@@ -11,6 +11,7 @@ import {
     getSelectedCharacter,
     getSelectedCharacterIsPlayer,
     getSelectedCharacterStorageRef,
+    isDungeonMasterSelector,
 } from "../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
@@ -27,6 +28,8 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
         getSelectedCharacter
     );
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(getSelectedCampaign)
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
+
     const characerMentionList = useSelector(getSelectedCampaignCharacterMentionList);
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
     const storageRef = useSelector(getSelectedCharacterStorageRef);
@@ -429,6 +432,7 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     characterMentionList={characerMentionList}
                     locationMentionList={locationMentionList}
                     readOnly={false}
+                    isDungeonMaster={isDungeonMaster}
                     JSONRef={storageRef?.child("CharacterDescription.json")}
                 />
             </div>

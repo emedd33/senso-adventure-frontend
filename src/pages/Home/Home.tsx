@@ -14,7 +14,7 @@ import {
 } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import { storage } from "../../firebase";
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 type HomeProps = {};
@@ -31,10 +31,7 @@ const Home: FunctionComponent<HomeProps> = () => {
     if (campaigns) {
       Object.values(campaigns).map((campaign: ICampaign) =>
         storage
-          .ref()
-          .child("Campaigns")
-          .child(campaign.slug)
-          .child("TitleImage")
+          .ref(`Campaigns/${campaign.slug}/TitleImage`)
           .getDownloadURL()
           .then((url) =>
             setCampaignUrls(
@@ -116,7 +113,7 @@ const Home: FunctionComponent<HomeProps> = () => {
               </Link>
             )
           )
-          : null}
+          : <CircularProgress />}
       </div>
       <div
         style={{

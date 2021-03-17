@@ -12,6 +12,7 @@ import {
     getSelectedCampaignLocationMentionList,
     getSelectedSession,
     getSelectedSessionStorageRef,
+    isDungeonMasterSelector,
 } from "../../store/selected/selectedSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 import { SensoDateInput, SensoImageInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../components/SensoInputs";
@@ -24,6 +25,7 @@ const CampaignSessionEdit: React.FC = () => {
     const selectedCampaign = useSelector(getSelectedCampaign)
 
 
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
 
 
     const storageRef = useSelector(getSelectedSessionStorageRef);
@@ -86,6 +88,7 @@ const CampaignSessionEdit: React.FC = () => {
                 <h1 style={{ flex: 2, textAlign: "center" }}>Session story</h1>
             </div>
             <DraftJSEditor
+                isDungeonMaster={isDungeonMaster}
                 characterMentionList={characterMentionList}
                 locationMentionList={locationMentionList}
                 readOnly={false}
