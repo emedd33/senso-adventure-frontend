@@ -5,11 +5,10 @@ interface ILocation {
     isPublished: string,
     nickNames: string[],
     summary: string,
-    characters: { character: ICharacter, role: string }[],
+    characters: { name: string, description: string }[],
     religion?: string,
     governRule?: string,
     resources: { name: string, description: string }[],
     connectedPlaces: { location: ILocation, distance: string }[],
     keyElements: { name: string, description: string }[],
-
 }

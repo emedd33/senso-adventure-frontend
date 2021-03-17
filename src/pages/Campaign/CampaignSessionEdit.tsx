@@ -15,12 +15,11 @@ import {
     isDungeonMasterSelector,
 } from "../../store/selected/selectedSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
-import { SensoDateInput, SensoImageInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../components/SensoInputs";
+import { SensoDateInput, SensoDelete, SensoImageInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../components/SensoInputs";
 
 
 
 const CampaignSessionEdit: React.FC = () => {
-
     const selectedSession = useSelector(getSelectedSession);
     const selectedCampaign = useSelector(getSelectedCampaign)
 
@@ -100,6 +99,12 @@ const CampaignSessionEdit: React.FC = () => {
             <SensoImageInput
                 style={{ width: "100%" }}
                 storagePath={`Campaigns/${selectedCampaign.campaign.slug}/Sessions/${selectedSession.session.slug}/SessionImages`}
+            />
+            <SensoDelete
+                storagePath={`Campaigns/${selectedCampaign.campaign.slug}/Sessions/${selectedSession.session.slug}`}
+                databasePath={`campaigns/${selectedCampaign.id}/sessions/${selectedSession.id}`}
+                instanceType="Session"
+                linkPath={`/${selectedCampaign.campaign.slug}/sessions`}
             />
         </div>
     );

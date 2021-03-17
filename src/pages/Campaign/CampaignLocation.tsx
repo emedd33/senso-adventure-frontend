@@ -136,7 +136,7 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
 
             </div>
             {selectedLocation.location.characters && selectedCampaign
-                ? Object.values(selectedLocation.location.characters).map((character: { role: string, character: ICharacter }) => (
+                ? Object.values(selectedLocation.location.characters).map((character: { name: string, description: string }) => (
                     <Accordion
                         style={
                             { backgroundColor: OLD_WHITE_DARK, gridColumn: "1/3" }
@@ -148,46 +148,21 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                             id="panel1bh-header"
                         >
                             <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
-                                {character.character.name}
+                                {character.name}
                             </Typography>
-                            <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
-                                {character.role}
-                            </Typography>
+
                         </AccordionSummary>
                         <AccordionDetails
                             style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
                         >
-                            {isDungeonMaster ?
-                                <>
-                                    <div
-                                        style={{
-                                            display: "grid",
-                                            gridTemplateColumns: "repeat(6,1fr) ",
-                                        }}
-                                    >
-                                        <div>STR</div>
-                                        <div>DEX</div>
-                                        <div>CON</div>
-                                        <div>INT</div>
-                                        <div>WIS</div>
-                                        <div>CHA</div>
-                                        <div>{character.character.stats.strength.value}</div>
-                                        <div>{character.character.stats.dexterity.value}</div>
-                                        <div>{character.character.stats.constitution.value}</div>
-                                        <div>{character.character.stats.intelligence.value}</div>
-                                        <div>{character.character.stats.wisdom.value}</div>
-                                        <div>{character.character.stats.charisma.value}</div>
-                                    </div>
-                                    <Divider orientation="vertical" />
-                                </>
-                                : null}
+
                             <div>
-                                <p>{character.character.summary}</p>
+                                <p>{character.description}</p>
                             </div>
                         </AccordionDetails>
                         <AccordionActions>
                             <Link
-                                to={`/${selectedCampaign.campaign.slug}/characters/${character.character.slug}`}
+                                to={`/${selectedCampaign.campaign.slug}/characters/${character.name.replace(/\s/g, "")}`}
                             >
                                 <Button size="small" color="primary">
                                     <ArrowForwardIcon />
@@ -198,6 +173,8 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                 )) : null}
             {isDungeonMaster && locationRef ?
                 <div style={{ gridColumn: "1/3" }}>
+                    <h3>{`Description and history to ${selectedLocation.location.name}`}</h3>
+
                     <DraftJSEditor readOnly={true} JSONRef={locationRef.child("LocationDescription.json")}
                         isDungeonMaster={isDungeonMaster}
                     />

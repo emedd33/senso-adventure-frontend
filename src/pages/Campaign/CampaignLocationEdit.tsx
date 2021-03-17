@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import "react-markdown-editor-lite/lib/index.css";
-import { SensoAccordianInput, SensoImageInput, SensoMultilineTextInput, SensoSwitch, SensoTextArrayInput, SensoTextInput } from "../../components/SensoInputs"
+import { SensoAccordianInput, SensoImageInput, SensoMultilineTextInput, SensoSwitch, SensoTextArrayInput, SensoTextInput, SensoDelete } from "../../components/SensoInputs"
 import {
     getSelectedCampaign,
     getSelectedCampaignCharacterMentionList,
@@ -168,6 +168,13 @@ const CampaignLocationEdit: React.FC = () => {
             <SensoImageInput
                 style={{ width: "100%" }}
                 storagePath={`Campaigns/${selectedCampaign.campaign.slug}/Locations/${selectedLocation.location.slug}/LocationImages`}
+            />
+
+            <SensoDelete
+                storagePath={`Campaigns/${selectedCampaign.campaign.slug}/Locations/${selectedLocation.location.slug}`}
+                databasePath={`campaigns/${selectedCampaign.id}/locations/${selectedLocation.id}`}
+                instanceType="Location"
+                linkPath={`/${selectedCampaign.campaign.slug}/locations`}
             />
         </div >
     );

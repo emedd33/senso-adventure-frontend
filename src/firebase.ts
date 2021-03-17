@@ -20,6 +20,7 @@ const config = {
 };
 firebase.initializeApp(config);
 export const databaseRef = firebase.database().ref();
+export const database = firebase.database()
 export const storage = firebase.storage();
 export const firebaseStorageRef = storage.ref();
 export const campaignsRef = databaseRef.child("campaigns");

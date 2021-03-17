@@ -2,7 +2,7 @@ import React, {
     FunctionComponent,
 } from "react";
 import { useSelector } from "react-redux";
-import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, SensoMultilineTextInput, SensoAccordianInput, SensoAbilityInput, SensoSkillInput } from "../../components/SensoInputs"
+import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, SensoMultilineTextInput, SensoAccordianInput, SensoAbilityInput, SensoSkillInput, SensoDelete } from "../../components/SensoInputs"
 
 import {
     getSelectedCampaign,
@@ -436,6 +436,12 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                     JSONRef={storageRef?.child("CharacterDescription.json")}
                 />
             </div>
+            <SensoDelete
+                storagePath={`Campaigns/${selectedCampaign.campaign.slug}/Characters/${selectedCharacter.character.slug}`}
+                databasePath={`campaigns/${selectedCampaign.id}/characters/${selectedCharacter.id}`}
+                instanceType="Character"
+                linkPath={`/${selectedCampaign.campaign.slug}/characters`}
+            />
 
         </Container >
     );
