@@ -6,6 +6,7 @@ import {
   SET_SELECTED_CHARACTER,
   SET_SELECTED_LOCATION,
   SET_SELECTED_SESSION,
+  SET_SELECTED_PLAYER
 } from "./selectedActions";
 import { initialSelectedCampaignState } from "./selectedReducer";
 
@@ -34,6 +35,15 @@ export const setSelectedCharacter = (
   return {
     type: SET_SELECTED_CHARACTER,
     payload: selectedCharacter,
+  };
+};
+
+export const setSelectedPlayer = (
+  selectedPlayer?: ISelectedPlayer
+) => {
+  return {
+    type: SET_SELECTED_PLAYER,
+    payload: selectedPlayer,
   };
 };
 export const setSelectedCampaign = (selectedCampaign?: ISelectedCampaign) => {

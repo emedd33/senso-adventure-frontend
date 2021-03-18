@@ -2,6 +2,7 @@ type SelectedState = {
   selectedCampaign?: { id: string; campaign: ICampaign };
   selectedSession?: ISelectedSession;
   selectedCharacter?: ISelectedCharacter;
+  selectedPlayer?: ISelectedPlayer;
   selectedLocation?: ISelectedLocation,
   backgroundImage?: string;
 };
@@ -26,6 +27,10 @@ type ISelectedCharacter = {
   id: string;
 };
 
+type ISelectedPlayer = {
+  player: IPlayer;
+  id: string;
+}
 type ISelectedLocation = {
   location: ILocation;
   id: string;

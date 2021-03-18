@@ -52,6 +52,31 @@ export const getSelectedCampaignCharacters = (state: RootReducerProp) => {
     }
 };
 
+export const getSelectedCampaignPlayers = (state: RootReducerProp) => {
+    if (isDungeonMasterSelector(state)) {
+        if (state.selected.selectedCampaign) {
+            if (state.selected.selectedCampaign.campaign.players) {
+                return Object.entries(
+                    state.selected.selectedCampaign.campaign.players
+                );
+            }
+        }
+    } else {
+        if (state.selected.selectedCampaign) {
+            if (state.selected.selectedCampaign.campaign.players) {
+                return Object.entries(
+                    state.selected.selectedCampaign.campaign.players
+                ).filter(
+                    ([id, player]: [string, IPlayer]) =>
+                        player.isPublished === "TRUE"
+                );
+            }
+        }
+    }
+};
+
+
+
 
 export const getSelectedCampaignSessions = (state: RootReducerProp) => {
     if (isDungeonMasterSelector(state)) {

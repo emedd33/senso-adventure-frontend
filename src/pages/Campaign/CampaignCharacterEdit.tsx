@@ -442,7 +442,6 @@ const CampaignCharacterEdit: FunctionComponent<CampaignProps> = () => {
                 instanceType="Character"
                 linkPath={`/${selectedCampaign.campaign.slug}/characters`}
             />
-
         </Container >
     );
 };
