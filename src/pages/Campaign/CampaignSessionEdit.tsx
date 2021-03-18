@@ -13,6 +13,7 @@ import {
     getSelectedSession,
     getSelectedSessionStorageRef,
     isDungeonMasterSelector,
+    getSelectedCampaignPlayerMentionList
 } from "../../store/selected/selectedSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
 import { SensoDateInput, SensoDelete, SensoImageInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../components/SensoInputs";
@@ -30,7 +31,9 @@ const CampaignSessionEdit: React.FC = () => {
     const storageRef = useSelector(getSelectedSessionStorageRef);
 
 
-    const characterMentionList = useSelector(getSelectedCampaignMonsterMentionList)
+    const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList)
+
+    const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList)
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList)
 
 
@@ -88,7 +91,8 @@ const CampaignSessionEdit: React.FC = () => {
             </div>
             <DraftJSEditor
                 isDungeonMaster={isDungeonMaster}
-                characterMentionList={characterMentionList}
+                monsterMentionList={monsterMentionList}
+                playerMentionList={playerMentionList}
                 locationMentionList={locationMentionList}
                 readOnly={false}
                 JSONRef={storageRef?.child("SessionStory.json")}

@@ -15,6 +15,7 @@ import {
     getSelectedCampaignLocationMentionList,
     getSelectedLocationStorageRef,
     isDungeonMasterSelector,
+    getSelectedCampaignPlayerMentionList
 } from "../../store/selected/selectedSelectors";
 import { getIsLoading } from "../../store/admin/adminSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
@@ -31,8 +32,10 @@ const CampaignLocationEdit: React.FC = () => {
     const CampaignMonsters = useSelector(getSelectedCampaignMonsters)
 
 
-    const characterMentionList = useSelector(getSelectedCampaignMonsterMentionList)
+    const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList)
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
+    const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
+
 
 
     if (isLoading || !selectedLocation || !selectedCampaign) {
@@ -157,7 +160,8 @@ const CampaignLocationEdit: React.FC = () => {
 
             <h1 style={{ flex: 2, textAlign: "center" }}>Description and history</h1>
             <DraftJSEditor
-                characterMentionList={characterMentionList}
+                playerMentionList={playerMentionList}
+                monsterMentionList={monsterMentionList}
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}
                 JSONRef={storageRef?.child("LocationDescription.json")}

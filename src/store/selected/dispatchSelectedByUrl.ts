@@ -17,23 +17,23 @@ const dispatchSelectedByUrl = (pathArray: string[], dispatch: any, campaigns: an
             dispatch(setSelectedCampaign(campaign));
             if (pathArray.length >= 4) {
                 if (pathArray[2] === "monsters") {
-                    if (isValidSlug(pathArray[3]) && campaign.campaign.characters) {
+                    if (isValidSlug(pathArray[3]) && campaign.campaign.monsters) {
                         let filteredMonster = Object.entries(
-                            campaign.campaign.characters
+                            campaign.campaign.monsters
                         )
                             .filter(
-                                ([, character]: [string, IMonster]) =>
-                                    character.slug === pathArray[3]
+                                ([, monster]: [string, IMonster]) =>
+                                    monster.slug === pathArray[3]
                             )
-                            .map(([id, character]: [string, IMonster]) => {
-                                return { id: id, character: character };
+                            .map(([id, monster]: [string, IMonster]) => {
+                                return { id: id, monster: monster };
                             });
                         if (filteredMonster.length >= 1) {
-                            let character: ISelectedMonster = {
+                            let monster: ISelectedMonster = {
                                 id: filteredMonster[0].id,
-                                monster: filteredMonster[0].character,
+                                monster: filteredMonster[0].monster,
                             };
-                            dispatch(setSelectedMonster(character));
+                            dispatch(setSelectedMonster(monster));
                         }
                     }
                 }

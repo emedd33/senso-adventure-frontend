@@ -25,8 +25,9 @@ import {
 } from "@draft-js-plugins/buttons";
 import { Button, CircularProgress, Tooltip } from "@material-ui/core";
 import IsLoading from "../IsLoading/IsLoading";
-import characterIcon from "../../assets/icons/character_icon.png"
+import playerIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
+import monsterIcon from "../../assets/icons/monster_icon.png"
 import secretIcon from "../../assets/icons/hush_icon.png"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import styled from "styled-components";
@@ -35,40 +36,56 @@ type DraftJSEditorProps = {
   JSONRef: any | undefined;
   readOnly: boolean;
   isDungeonMaster?: boolean
-  characterMentionList?: MentionData[]
+  playerMentionList?: MentionData[]
   locationMentionList?: MentionData[]
+  monsterMentionList?: MentionData[]
 };
 const staticToolbarPlugin = createToolbarPlugin();
 const { Toolbar } = staticToolbarPlugin;
-const characterMentionPlugin = createMentionPlugin();
+const playerMentionPlugin = createMentionPlugin();
 const locationMentionPlugin = createMentionPlugin({
   mentionTrigger: "#"
 });
-const CharacterMentionSuggestions = characterMentionPlugin.MentionSuggestions;
+const monsterMentionPlugin = createMentionPlugin({
+  mentionTrigger: "$"
+});
+const PlayerMentionSuggestions = playerMentionPlugin.MentionSuggestions;
+const MonsterMentionSuggestions = monsterMentionPlugin.MentionSuggestions;
 const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
 
-const plugins = [characterMentionPlugin, staticToolbarPlugin, locationMentionPlugin];
+const plugins = [playerMentionPlugin, staticToolbarPlugin, locationMentionPlugin, monsterMentionPlugin];
 
-const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDungeonMaster = false, characterMentionList = [], locationMentionList = [] }) => {
+const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDungeonMaster = false, playerMentionList = [], locationMentionList = [], monsterMentionList = [] }) => {
   const [isUploading, setIsUploading] = useState(false);
   const ref = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
   const [savedEditorState, setSavedEditorState] = useState<any>(editorState);
-  const [characterOpen, setCharacterOpen] = useState(true);
+  const [playerOpen, setPlayerOpen] = useState(true);
+  const [monsterOpen, setMonsterOpen] = useState(true);
   const [locationOpen, setLocationOpen] = useState(true);
-  const [characterSuggestions, setCharacterSuggestions] = useState(characterMentionList);
-  const [locationSuggestions, setLocationSuggestions] = useState(characterMentionList);
+  const [playerSuggestions, setPlayerSuggestions] = useState(playerMentionList);
+  const [monsterSuggestions, setMonsterSuggestions] = useState(monsterMentionList);
+  const [locationSuggestions, setLocationSuggestions] = useState(playerMentionList);
 
-  const onCharacterOpenChange = useCallback((_open: boolean) => {
-    setCharacterOpen(_open);
+  const onPlayerOpenChange = useCallback((_open: boolean) => {
+    setPlayerOpen(_open);
   }, []);
-  const onCharacterSearchChange = useCallback(({ value }: { value: string }) => {
-    if (characterMentionList) {
-      setCharacterSuggestions(defaultSuggestionsFilter(value, characterMentionList));
+  const onPlayerSearchChange = useCallback(({ value }: { value: string }) => {
+    if (playerMentionList) {
+      setPlayerSuggestions(defaultSuggestionsFilter(value, playerMentionList));
     }
-  }, [characterMentionList]);
+  }, [playerMentionList]);
+
+  const onMonsterOpenChange = useCallback((_open: boolean) => {
+    setMonsterOpen(_open);
+  }, []);
+  const onMonsterSearchChange = useCallback(({ value }: { value: string }) => {
+    if (monsterMentionList) {
+      setMonsterSuggestions(defaultSuggestionsFilter(value, monsterMentionList));
+    }
+  }, [monsterMentionList]);
 
   const onLocationOpenChange = useCallback((_open: boolean) => {
     setLocationOpen(_open);
@@ -169,13 +186,15 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDung
             })
         )
         .catch((e: any) => {
-          console.log("Could not fetch character description from firebase");
+          console.log("Could not fetch description from firebase");
         });
     }
     return () => {
       setSavedEditorState(undefined)
       setEditorState(EditorState.createEmpty())
-      setCharacterSuggestions([])
+      setPlayerSuggestions([])
+      setLocationSuggestions([])
+      setMonsterSuggestions([])
 
     }
   }, [JSONRef]);
@@ -225,12 +244,12 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDung
       blockRendererFn={blockRenderer}
     />
     {
-      characterSuggestions ?
-        <CharacterMentionSuggestions
-          open={characterOpen}
-          onOpenChange={onCharacterOpenChange}
-          suggestions={characterSuggestions}
-          onSearchChange={onCharacterSearchChange}
+      playerSuggestions ?
+        <PlayerMentionSuggestions
+          open={playerOpen}
+          onOpenChange={onPlayerOpenChange}
+          suggestions={playerSuggestions}
+          onSearchChange={onPlayerSearchChange}
         />
         : null}
     {
@@ -242,8 +261,17 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDung
           onSearchChange={onLocationSearchChange}
         />
         : null}
-  </div >, [editorState, characterOpen, characterSuggestions, locationOpen, locationSuggestions, onCharacterSearchChange, onLocationOpenChange, onLocationSearchChange, readOnly, onCharacterOpenChange, blockRenderer])
-  if (characterMentionList && !characterSuggestions) {
+    {
+      monsterSuggestions ?
+        <MonsterMentionSuggestions
+          open={monsterOpen}
+          onOpenChange={onMonsterOpenChange}
+          suggestions={monsterSuggestions}
+          onSearchChange={onMonsterSearchChange}
+        />
+        : null}
+  </div >, [editorState, playerOpen, playerSuggestions, locationOpen, locationSuggestions, onPlayerSearchChange, onLocationOpenChange, onLocationSearchChange, readOnly, onPlayerOpenChange, blockRenderer, monsterOpen, monsterSuggestions, onMonsterOpenChange, onMonsterSearchChange])
+  if (playerMentionList && !playerSuggestions) {
     return <IsLoading />
   }
   return (
@@ -252,8 +280,12 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDung
         <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr", width: "100%", padding: "0.3rem" }}>
 
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>
-            <Tooltip title="To add character type @">
-              <Button onClick={() => setEditorState(insertCharacter("@", editorState))} style={{ width: "3rem" }}> <img src={characterIcon} style={{ width: "inherit" }} alt="New Character" />
+            <Tooltip title="To add player type @">
+              <Button onClick={() => setEditorState(insertCharacter("@", editorState))} style={{ width: "3rem" }}> <img src={playerIcon} style={{ width: "inherit" }} alt="New Character" />
+              </Button>
+            </Tooltip>
+            <Tooltip title="To add monster/npc type $">
+              <Button onClick={() => setEditorState(insertCharacter("$", editorState))} style={{ width: "3rem" }}> <img src={monsterIcon} style={{ width: "inherit" }} alt="New Character" />
               </Button>
             </Tooltip>
             <Tooltip title="To add location type #">

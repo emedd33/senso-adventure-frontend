@@ -20,17 +20,17 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 type CampaignMonstersProps = {};
 const CampaignMonsters: FunctionComponent<CampaignMonstersProps> = () => {
-  const characters = useSelector(getSelectedCampaignMonsters);
+  const monsters = useSelector(getSelectedCampaignMonsters);
   const selectedCampaign = useSelector(getSelectedCampaign);
 
   return (
     <Container>
-      {characters && selectedCampaign
-        ? characters.map(([, character]: [string, IMonster], index: number) => (
+      {monsters && selectedCampaign
+        ? monsters.map(([, monster]: [string, IMonster], index: number) => (
           <Accordion
             key={index}
             style={
-              character.isPublished === "TRUE"
+              monster.isPublished === "TRUE"
                 ? { backgroundColor: OLD_WHITE }
                 : { backgroundColor: OLD_WHITE, opacity: 0.7 }
             }
@@ -41,18 +41,18 @@ const CampaignMonsters: FunctionComponent<CampaignMonstersProps> = () => {
               id="panel1bh-header"
             >
               <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
-                {character.name}
+                {monster.name}
               </Typography>
 
             </AccordionSummary>
             <AccordionDetails
               style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
             >
-              <p>{character.summary}</p>
+              <p>{monster.summary}</p>
             </AccordionDetails>
             <AccordionActions>
               <Link
-                to={`/${selectedCampaign.campaign.slug}/monsters/${character.slug}`}
+                to={`/${selectedCampaign.campaign.slug}/monsters/${monster.slug}`}
               >
                 <Button size="small" color="primary">
                   <ArrowForwardIcon />

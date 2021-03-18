@@ -32,20 +32,20 @@ export const isDungeonMasterSelector = (state: RootReducerProp) => {
 export const getSelectedCampaignMonsters = (state: RootReducerProp) => {
     if (isDungeonMasterSelector(state)) {
         if (state.selected.selectedCampaign) {
-            if (state.selected.selectedCampaign.campaign.characters) {
+            if (state.selected.selectedCampaign.campaign.monsters) {
                 return Object.entries(
-                    state.selected.selectedCampaign.campaign.characters
+                    state.selected.selectedCampaign.campaign.monsters
                 );
             }
         }
     } else {
         if (state.selected.selectedCampaign) {
-            if (state.selected.selectedCampaign.campaign.characters) {
+            if (state.selected.selectedCampaign.campaign.monsters) {
                 return Object.entries(
-                    state.selected.selectedCampaign.campaign.characters
+                    state.selected.selectedCampaign.campaign.monsters
                 ).filter(
-                    ([id, character]: [string, IMonster]) =>
-                        character.isPublished === "TRUE"
+                    ([id, monster]: [string, IMonster]) =>
+                        monster.isPublished === "TRUE"
                 );
             }
         }
@@ -154,11 +154,26 @@ export const getSelectedCampaignMonsterMentionList = (state: RootReducerProp) =>
     const host = getHost()
     let mentions: MentionData[] = []
     if (state.selected.selectedCampaign) {
-        if (state.selected.selectedCampaign?.campaign.characters) {
+        if (state.selected.selectedCampaign?.campaign.monsters) {
 
-            mentions = Object.values(state.selected.selectedCampaign?.campaign.characters).map((character: IMonster) => ({
-                name: character.name,
-                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/monsters/${character.slug}`
+            mentions = Object.values(state.selected.selectedCampaign?.campaign.monsters).map((monster: IMonster) => ({
+                name: monster.name,
+                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/monsters/${monster.slug}`
+            }))
+
+        }
+    }
+    return mentions
+}
+export const getSelectedCampaignPlayerMentionList = (state: RootReducerProp) => {
+    const host = getHost()
+    let mentions: MentionData[] = []
+    if (state.selected.selectedCampaign) {
+        if (state.selected.selectedCampaign?.campaign.players) {
+
+            mentions = Object.values(state.selected.selectedCampaign?.campaign.players).map((player: IPlayer) => ({
+                name: player.name,
+                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/players/${player.slug}`
             }))
 
         }
@@ -247,18 +262,4 @@ export const getPlayerCharacters = (state: RootReducerProp) => {
             });
     }
     return players ? players : [];
-};
-export const getUniqueNpc = (state: RootReducerProp) => {
-    let npcs;
-    if (
-        state.selected.selectedCampaign &&
-        state.selected.selectedCampaign.campaign.characters
-    ) {
-        npcs = Object.entries(state.selected.selectedCampaign.campaign.characters)
-            .filter(([, character]) => character.isUnique === "TRUE")
-            .map(([id, character]) => {
-                return { id: id, character: character };
-            });
-    }
-    return npcs ? npcs : [];
 };

@@ -11,6 +11,7 @@ import {
     getSelectedMonster,
     getSelectedMonsterStorageRef,
     isDungeonMasterSelector,
+    getSelectedCampaignPlayerMentionList
 } from "../../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../../assets/constants/Constants";
@@ -29,7 +30,8 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(getSelectedCampaign)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
 
-    const characerMentionList = useSelector(getSelectedCampaignMonsterMentionList);
+    const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
+    const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList);
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
     const storageRef = useSelector(getSelectedMonsterStorageRef);
 
@@ -416,15 +418,16 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
             <div style={{ gridColumn: "1/3" }}>
                 <h3>Description and history:</h3>
                 <DraftJSEditor
-                    characterMentionList={characerMentionList}
+                    playerMentionList={playerMentionList}
+                    monsterMentionList={monsterMentionList}
                     locationMentionList={locationMentionList}
                     readOnly={false}
                     isDungeonMaster={isDungeonMaster}
-                    JSONRef={storageRef?.child("CharacterDescription.json")}
+                    JSONRef={storageRef?.child("MonsterDescription.json")}
                 />
             </div>
             <SensoDelete
-                storagePath={`Campaigns/${selectedCampaign.campaign.slug}/Characters/${selectedMonster.monster.slug}`}
+                storagePath={`Campaigns/${selectedCampaign.campaign.slug}/Monsters/${selectedMonster.monster.slug}`}
                 databasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}`}
                 instanceType="Character"
                 linkPath={`/${selectedCampaign.campaign.slug}/monsters`}

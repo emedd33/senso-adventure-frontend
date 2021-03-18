@@ -37,7 +37,7 @@ const CampaignMonsterNew: FunctionComponent<CampaignMonsterNewProps> = () => {
             newMonster.challengeRating = "1";
             setMonsterNameError(false);
             campaignRef
-                .child("characters")
+                .child("monsters")
                 .push(newMonster)
                 .then((snapshot) => {
                     let characterId = snapshot.key;

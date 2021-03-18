@@ -8,7 +8,7 @@ interface ICampaign {
   id: string;
   dungeonMaster: { username: string, uid: string };
   sessions?: ISession[];
-  characters?: IMonster[];
+  monsters?: IMonster[];
   players?: IPlayer[];
   locations?: ILocation[];
 

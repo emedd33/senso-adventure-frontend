@@ -11,6 +11,7 @@ import {
     getSelectedPlayer,
     getSelectedPlayerStorageRef,
     isDungeonMasterSelector,
+    getSelectedCampaignPlayerMentionList
 } from "../../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../../assets/constants/Constants";
@@ -29,7 +30,9 @@ const CampaignPlayerEdit: FunctionComponent<CampaignProps> = () => {
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(getSelectedCampaign)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
 
-    const characterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
+    const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList);
+
+    const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
     const storageRef = useSelector(getSelectedPlayerStorageRef);
 
@@ -413,8 +416,9 @@ const CampaignPlayerEdit: FunctionComponent<CampaignProps> = () => {
             <div style={{ gridColumn: "1/3" }}>
                 <h3>Description and history:</h3>
                 <DraftJSEditor
-                    characterMentionList={characterMentionList}
+                    playerMentionList={playerMentionList}
                     locationMentionList={locationMentionList}
+                    monsterMentionList={monsterMentionList}
                     readOnly={false}
                     isDungeonMaster={isDungeonMaster}
                     JSONRef={storageRef?.child("PlayerDescription.json")}
