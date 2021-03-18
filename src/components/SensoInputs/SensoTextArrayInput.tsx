@@ -6,9 +6,9 @@ import {
 import React, { useState } from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
-import { databaseRef } from "../../firebase"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
+import { database } from "../../firebase";
 type SensoTextArrayInputProps = {
     initArray?: string[],
     firebasePath: string,
@@ -43,7 +43,7 @@ const SensoTextArrayInput: React.FC<SensoTextArrayInputProps> = ({ initArray, fi
         () => {
             if (!isSavedArray && array) {
                 saveArray()
-                databaseRef.child(firebasePath).set(array)
+                database.ref(firebasePath).set(array)
             }
         }
         , 1000)

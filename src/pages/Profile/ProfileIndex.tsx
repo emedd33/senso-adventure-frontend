@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { firebaseAuth, storage } from "../../firebase";
+import { authentication, storage, firebaseAuth } from "../../firebase";
 import { Route } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import { dispatchLogout, setAlertDialog } from "../../store/admin/adminCreator";
 import TextField from "@material-ui/core/TextField";
-import firebase from "firebase";
 
 export interface ProfileIndexProps { }
 
@@ -28,7 +27,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   const email = useSelector(
     (state: RootReducerProp) => state.admin.authUser?.email
   );
-  var user = firebaseAuth.currentUser;
+  var user = authentication.currentUser;
 
   const handleChangePassword = () => {
     if (!firstNewPassword || !secondNewPassword) {
@@ -47,7 +46,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
     }
     if (user) {
       if (email) {
-        var credential = firebase.auth.EmailAuthProvider.credential(
+        var credential = firebaseAuth.EmailAuthProvider.credential(
           email, // references the user's email address
           currentPassword
         );

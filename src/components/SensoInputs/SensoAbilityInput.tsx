@@ -4,10 +4,10 @@ import {
 import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
-import { databaseRef } from "../../firebase"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
 import getAbilityModifier from "../../utils/getAbilityModifier";
+import { database } from "../../firebase";
 
 type SensoAbilityInputProps = {
     initAbilityValue: IAbility,
@@ -29,7 +29,7 @@ const SensoAbilityInput: React.FC<SensoAbilityInputProps> = ({ initAbilityValue,
         () => {
             if (!isSavedAbilityValue && abilityValue) {
                 saveAbilityValue()
-                databaseRef.child(firebasePath).set(abilityValue)
+                database.ref(firebasePath).set(abilityValue)
             }
         }
         , 1000)

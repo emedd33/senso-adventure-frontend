@@ -6,8 +6,8 @@ import { OLD_WHITE_DARK } from '../../assets/constants/Constants';
 import DeleteIcon from "@material-ui/icons/Delete";
 import styled from "styled-components";
 import useInterval from '../../store/hooks/useInterval';
-import { databaseRef } from '../../firebase';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { database } from '../../firebase';
 
 type SensoAccordianInputProps = {
     initArray?: any[],
@@ -38,7 +38,7 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({ initArray = [
         () => {
             if (!isSavedArray && array) {
                 saveArray()
-                databaseRef.child(firebasePath).set(array)
+                database.ref(firebasePath).set(array)
             }
         }
         , 1000)

@@ -1,11 +1,11 @@
-import { campaignsRef, firebaseAuth } from "../../firebase";
+import { database, authentication } from "../../firebase";
 import { SET_AUTH_USER } from "../admin/adminActions";
 import { SET_CAMPAIGNS } from "./campaignActions";
 
 // Thunk function
 export async function fetchFromFirebase(dispatch: any) {
   // Database
-  campaignsRef.on("value", (snapshot) => {
+  database.ref("campaigns").on("value", (snapshot) => {
     let campaigns = snapshot.val();
     if (campaigns) {
       dispatch({ type: SET_CAMPAIGNS, payload: campaigns });
@@ -13,7 +13,7 @@ export async function fetchFromFirebase(dispatch: any) {
   });
 
   // Auth 
-  firebaseAuth.onAuthStateChanged(function (user) {
+  authentication.onAuthStateChanged(function (user) {
     if (user) {
       dispatch({
         type: SET_AUTH_USER,

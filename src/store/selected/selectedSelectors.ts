@@ -1,5 +1,5 @@
 import { MentionData } from "@draft-js-plugins/mention";
-import { campaignsRef, storage } from "../../firebase";
+import { database, storage } from "../../firebase";
 import { getHost } from "../../utils/getHost";
 
 export const getSelectedSession = (state: RootReducerProp) =>
@@ -126,30 +126,59 @@ export const getSelectedCampaignLocations = (state: RootReducerProp) => {
     }
 };
 
+// STORAGE REF
 export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
-        return storage
-            .ref()
-            .child("Campaigns")
-            .child(state.selected.selectedCampaign?.campaign?.slug)
-            .child("Sessions")
-            .child(state.selected.selectedSession?.session?.title); // TODO: Change to slug
+        return storage.ref(`Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/session/${state.selected.selectedSession?.session.slug}`)
+
     }
 };
 
 export const getSelectedLocationStorageRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedLocation) {
-        return storage
-            .ref()
-            .child("Campaigns")
-            .child(state.selected.selectedCampaign?.campaign?.slug)
-            .child("Locations")
-            .child(state.selected.selectedLocation?.location?.slug)
-
+        return storage.ref(`Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/locations/${state.selected.selectedLocation?.location.slug}`)
     }
 };
 
 
+export const getSelectedMonsterStorageRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
+        return storage.ref(`Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/monsters/${state.selected.selectedMonster?.monster.slug}`)
+
+    }
+};
+
+export const getSelectedPlayerStorageRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedPlayer) {
+        return storage.ref(`Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/players/${state.selected.selectedPlayer?.player.slug}`)
+    }
+};
+
+
+
+// DATABASE REF
+export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedSession) {
+        return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/sessions/${state.selected?.selectedSession?.id}`)
+    }
+};
+
+export const getSelectedLocationDatabaseRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedLocation) {
+        return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/location/${state.selected?.selectedLocation?.id}`)
+    }
+};
+export const getSelectedCampaignDatabaseRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign) {
+        return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}`)
+    }
+};
+
+export const getSelectedMonsterDatabaseRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
+        return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/monsters/${state.selected?.selectedMonster?.id}`)
+    }
+};
 export const getSelectedCampaignMonsterMentionList = (state: RootReducerProp) => {
     const host = getHost()
     let mentions: MentionData[] = []
@@ -195,71 +224,3 @@ export const getSelectedCampaignLocationMentionList = (state: RootReducerProp) =
     }
     return mentions
 }
-export const getSelectedMonsterStorageRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
-        return storage
-            .ref()
-            .child("Campaigns")
-            .child(state.selected.selectedCampaign?.campaign?.slug)
-            .child("characters")
-            .child(state.selected.selectedMonster?.monster.name);
-    }
-};
-
-export const getSelectedPlayerStorageRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedPlayer) {
-        return storage
-            .ref()
-            .child("Campaigns")
-            .child(state.selected.selectedCampaign?.campaign?.slug)
-            .child("players")
-            .child(state.selected.selectedPlayer?.player.name);
-    }
-};
-export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedSession) {
-        return campaignsRef
-            .child(state.selected?.selectedCampaign?.id)
-            .child("sessions")
-            .child(state.selected?.selectedSession?.id);
-    }
-};
-
-export const getSelectedLocationDatabaseRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedLocation) {
-        return campaignsRef
-            .child(state.selected?.selectedCampaign?.id)
-            .child("locations")
-            .child(state.selected?.selectedLocation?.id);
-    }
-};
-export const getSelectedCampaignDatabaseRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign) {
-        return campaignsRef.child(state.selected?.selectedCampaign?.id);
-    }
-};
-
-export const getSelectedMonsterDatabaseRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
-        return campaignsRef
-            .child(state.selected?.selectedCampaign?.id)
-            .child("characters")
-            .child(state.selected.selectedMonster.id);
-    }
-};
-
-export const getPlayerCharacters = (state: RootReducerProp) => {
-    let players;
-    if (
-        state.selected.selectedCampaign &&
-        state.selected.selectedCampaign.campaign.players
-    ) {
-        players = Object.entries(
-            state.selected.selectedCampaign.campaign.players
-        )
-            .map((player) => {
-                return { id: player[0], character: player[1] };
-            });
-    }
-    return players ? players : [];
-};

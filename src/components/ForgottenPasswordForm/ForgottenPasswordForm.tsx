@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useDispatch } from "react-redux";
-import { firebaseAuth } from "../../firebase";
+import { authentication } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
   },
 }));
-export interface SignUpProps {}
+export interface SignUpProps { }
 
 const ForgottenPasswordForm: React.FC<SignUpProps> = () => {
   const classes = useStyles();
@@ -49,7 +49,7 @@ const ForgottenPasswordForm: React.FC<SignUpProps> = () => {
     }
     setEmailError(false);
 
-    firebaseAuth
+    authentication
       .sendPasswordResetEmail(email)
       .then(function () {
         dispatch(

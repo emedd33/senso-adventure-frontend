@@ -4,9 +4,9 @@ import {
 import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
-import { databaseRef } from "../../firebase"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
+import { database } from "../../firebase";
 
 type SensoMultilineTextInputProps = {
     initValue?: string,
@@ -22,7 +22,7 @@ const SensoMultilineTextInput: React.FC<SensoMultilineTextInputProps> = ({ initV
         () => {
             if (!isSavedValue && value) {
                 saveValue()
-                databaseRef.child(firebasePath).set(value)
+                database.ref(firebasePath).set(value)
             }
         }
         , 1000)

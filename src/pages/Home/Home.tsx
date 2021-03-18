@@ -21,11 +21,10 @@ type HomeProps = {};
 const Home: FunctionComponent<HomeProps> = () => {
   const history = useHistory();
   const campaigns = useSelector(getAllCampaigns);
+  const [campaignUrls, setCampaignUrls] = useState<any[]>([])
   const sessions = useSelector(getAllSessions);
   const selectedCampaign = useSelector(getSelectedCampaign)
-  const [campaignUrls, setCampaignUrls] = useState<
-    { campaignSlug: string; url?: string }[]
-  >([]);
+
 
   useEffect(() => {
     if (campaigns) {

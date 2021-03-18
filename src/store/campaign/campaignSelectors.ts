@@ -1,3 +1,4 @@
+
 export const getNewSessionDay = (state: RootReducerProp) => {
   if (state.selected.selectedCampaign?.campaign.sessions) {
     return (
@@ -10,6 +11,8 @@ export const getNewSessionDay = (state: RootReducerProp) => {
 export const getAllCampaigns = (state: RootReducerProp) => {
   return state.rootCampaigns?.campaigns;
 };
+
+
 
 export const getAllSessions = (state: RootReducerProp) => {
   let sessions: (

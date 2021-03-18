@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NEW_LOCATION, OLD_WHITE } from "../../assets/constants/Constants";
 import IsLoading from "../../components/IsLoading/IsLoading";
-import { campaignsRef } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import styled from "styled-components";
 import { setSelectedLocation } from "../../store/selected/selectedCreators";
+import { database } from "../../firebase";
 export interface CampaignLocationNewProps { }
 
 
@@ -38,9 +38,7 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                 slug: locationName.replace(/\s/g, ""),
 
             };
-            campaignsRef
-                .child(selectedCampaign.id)
-                .child("locations")
+            database.ref(`campaigns/${selectedCampaign.id}/locations`)
                 .push(toUpload)
                 .then((snap) => {
                     snap.once("value", async (snapshot: any) => {

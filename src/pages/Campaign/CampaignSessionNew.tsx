@@ -7,11 +7,11 @@ import IsLoading from "../../components/IsLoading/IsLoading";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker } from "@material-ui/pickers";
-import { campaignsRef } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import styled from "styled-components";
 import { getNewSessionDay } from "../../store/campaign/campaignSelectors";
 import { setSelectedSession } from "../../store/selected/selectedCreators";
+import { database } from "../../firebase";
 export interface CampaignSessionNewProps { }
 
 const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
@@ -50,9 +50,7 @@ const CampaignSessionNew: React.FC<CampaignSessionNewProps> = () => {
         sessionDay: sessionDay ? sessionDay : 1,
         slug: sessionTitle.replace(/\s/g, ""),
       };
-      campaignsRef
-        .child(selectedCampaign.id)
-        .child("sessions")
+      database.ref(`campaigns/${selectedCampaign.id}/sessions`)
         .push(toUpload)
         .then((snap) => {
           snap.once("value", async (snapshot: any) => {

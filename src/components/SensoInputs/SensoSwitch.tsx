@@ -4,8 +4,8 @@ import {
 import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
-import { databaseRef } from "../../firebase"
 import styled from "styled-components";
+import { database } from "../../firebase";
 
 type SensoSwitchProps = {
     initValue?: string,
@@ -19,7 +19,7 @@ const SensoSwitch: React.FC<SensoSwitchProps> = ({ initValue, firebasePath, labe
         () => {
             if (!isSavedValue && value) {
                 saveValue()
-                databaseRef.child(firebasePath).set(value)
+                database.ref(firebasePath).set(value)
             }
         }
         , 1000)

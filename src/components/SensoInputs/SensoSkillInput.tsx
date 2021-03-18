@@ -4,8 +4,8 @@ import {
 import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
-import { databaseRef } from "../../firebase"
 import getAbilityModifier from "../../utils/getAbilityModifier";
+import { database } from "../../firebase";
 
 type SensoSkillInputProps = {
     abilityModifier: IAbility,
@@ -24,7 +24,7 @@ const SensoSkillInput: React.FC<SensoSkillInputProps> = ({ abilityModifier, init
         () => {
             if (!isSavedSkill && skill) {
                 saveSkill()
-                databaseRef.child(firebasePath).set(skill)
+                database.ref(firebasePath).set(skill)
             }
         }
         , 1000)

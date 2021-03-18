@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import IsLoading from "../../components/IsLoading/IsLoading";
-import { campaignsRef, firebaseStorageRef, storage } from "../../firebase";
+import { database, storage } from "../../firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import { getAuthUser } from "../../store/admin/adminSelectors";
 import { useImageFile } from "../../store/hooks/useImageFile";
@@ -81,9 +81,9 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
           title: title,
           slug: slug,
         };
-        await campaignsRef
+        await database.ref(`campaigns`)
           .push(newCampaign)
-          .catch((e) => console.log("Could not update campaing ", e));
+          .catch((e) => console.log("Could not update campaign ", e));
       }
 
 
@@ -96,17 +96,11 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
         };
 
         if (isValidImageFile(campaignBackgroundImageFile)) {
-          await firebaseStorageRef
-            .child("Campaigns")
-            .child(slug)
-            .child("BackgroundImage")
+          await storage.ref(`Campaigns/${slug}/BackgroundImage`)
             .put(campaignBackgroundImageFile.file.file, metadata);
         }
         if (isValidImageFile(campaignTitleImageFile)) {
-          await firebaseStorageRef
-            .child("Campaigns")
-            .child(slug)
-            .child("TitleImage")
+          await storage.ref(`Campaigns/${slug}/BackgroundImage`)
             .put(campaignTitleImageFile.file.file, metadata);
         }
         history.push(`/${slug}`);

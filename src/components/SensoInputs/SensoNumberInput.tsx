@@ -4,9 +4,9 @@ import {
 import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
-import { databaseRef } from "../../firebase"
 import styled from "styled-components";
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
+import { database } from "../../firebase";
 
 type SensoNumberInputProps = {
     initValue?: number,
@@ -27,7 +27,7 @@ const SensoNumberInput: React.FC<SensoNumberInputProps> = ({ initValue, firebase
         () => {
             if (!isSavedValue && value) {
                 saveValue()
-                databaseRef.child(firebasePath).set(value)
+                database.ref(firebasePath).set(value)
             }
         }
         , 1000)

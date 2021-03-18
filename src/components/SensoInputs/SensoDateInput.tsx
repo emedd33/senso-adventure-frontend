@@ -1,12 +1,12 @@
 import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
-import { databaseRef } from "../../firebase"
 import styled from "styled-components";
 import { DatePicker } from "@material-ui/pickers";
 
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { database } from '../../firebase';
 type SensoDateInputProps = {
     initValue?: string,
     firebasePath: string,
@@ -20,7 +20,7 @@ const SensoDateInput: React.FC<SensoDateInputProps> = ({ initValue, firebasePath
         () => {
             if (!isSavedValue && value) {
                 saveValue()
-                databaseRef.child(firebasePath).set(value)
+                database.ref(firebasePath).set(value)
             }
         }
         , 1000)
