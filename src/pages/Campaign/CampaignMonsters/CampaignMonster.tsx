@@ -1,28 +1,28 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import {
-    getSelectedCharacter,
+    getSelectedMonster,
     isDungeonMasterSelector,
-    getSelectedCharacterStorageRef,
-} from "../../store/selected/selectedSelectors";
+    getSelectedMonsterStorageRef,
+} from "../../../store/selected/selectedSelectors";
 import styled from "styled-components";
-import { OLD_WHITE } from "../../assets/constants/Constants";
-import IsLoading from "../../components/IsLoading/IsLoading";
-import getAbilityModifier from "../../utils/getAbilityModifier";
-import parseValuesToString from "../../utils/parseValuesToString";
+import { OLD_WHITE } from "../../../assets/constants/Constants";
+import IsLoading from "../../../components/IsLoading/IsLoading";
+import getAbilityModifier from "../../../utils/getAbilityModifier";
+import parseValuesToString from "../../../utils/parseValuesToString";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import renderArrayOfString from "../../utils/renderArrayToString";
-import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
+import renderArrayOfString from "../../../utils/renderArrayToString";
+import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
 
 type CampaignProps = {};
-const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
+const CampaignMonster: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
-    const selectedCharacter = useSelector(getSelectedCharacter);
+    const selectedMonster = useSelector(getSelectedMonster);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
-    const storageRef = useSelector(getSelectedCharacterStorageRef);
+    const storageRef = useSelector(getSelectedMonsterStorageRef);
     const parseStringBooleanToCheckmark = (
         proficient: any,
         setCross: boolean
@@ -36,7 +36,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
         return null;
     };
 
-    if (selectedCharacter === undefined) {
+    if (selectedMonster === undefined) {
         return (
             <Container>
                 <IsLoading />
@@ -66,7 +66,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 >
                                     <Button
                                         onClick={() =>
-                                            history.push(`${selectedCharacter.character.slug}/edit`)
+                                            history.push(`${selectedMonster.monster.slug}/edit`)
                                         }
                                         variant="contained"
                                         color="primary"
@@ -80,36 +80,26 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                     </div>
 
                     <h1 style={{ marginBottom: "0", gridColumn: "1/3" }}>
-                        {selectedCharacter.character.name}
-                        {selectedCharacter.character.isPublished === "FALSE"
+                        {selectedMonster.monster.name}
+                        {selectedMonster.monster.isPublished === "FALSE"
                             ? " (Unpublished)"
                             : null}
                     </h1>
-                    <h3 style={{ opacity: 0.7 }}>
-                        {selectedCharacter.character.isPlayer === "TRUE"
-                            ? `Played by: ${selectedCharacter.character.playerName}`
-                            : "NPC"}
-                    </h3>
+
 
                     <div style={{ gridColumn: "1/3" }}>
-                        <b>Also known as: </b>{selectedCharacter.character.nickNames ? renderArrayOfString(selectedCharacter.character.nickNames) : null}
+                        <b>Also known as: </b>{selectedMonster.monster.nickNames ? renderArrayOfString(selectedMonster.monster.nickNames) : null}
                     </div>
                     {isDungeonMaster ?
                         <div >
-                            {` ${selectedCharacter.character.race}`}
-                            {selectedCharacter.character.class ? `, ${selectedCharacter.character.class}` : null}
-                            {`, ${selectedCharacter.character.alignment}`}
+                            {` ${selectedMonster.monster.race}`}
+                            {selectedMonster.monster.class ? `, ${selectedMonster.monster.class}` : null}
+                            {`, ${selectedMonster.monster.alignment}`}
                         </div>
                         : null}
                     {isDungeonMaster ?
                         <div style={{ gridColumn: "1/3" }}>
-                            {selectedCharacter.character.isPlayer === "TRUE"
-                                ? `Level: ${parseValuesToString(
-                                    selectedCharacter.character.level
-                                )}`
-                                : `Challenge Rating: ${parseValuesToString(
-                                    selectedCharacter.character.challengeRating
-                                )}`}
+                            {`Challenge Rating: ${parseValuesToString(selectedMonster.monster.challengeRating)}`}
                         </div>
                         : null}
 
@@ -119,10 +109,10 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                 <b>Summary: </b>
                 <div style={{ width: "100%" }}></div>
 
-                {selectedCharacter.character.summary}
+                {selectedMonster.monster.summary}
                 <div style={{ width: "100%", borderBottom: "double" }}></div>
             </div>
-            {isDungeonMaster || selectedCharacter.character.isPlayer === "TRUE" ? (
+            {isDungeonMaster ? (
                 <>
                     <NestedContainer>
                         <NestedNestedContainer>
@@ -130,7 +120,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <b>Armor class: </b>{" "}
                             </div>
                             <div style={{ paddingLeft: "0.3rem" }}>
-                                {selectedCharacter.character.stats.armorClass}
+                                {selectedMonster.monster.stats.armorClass}
                             </div>
                         </NestedNestedContainer>
                         <NestedNestedContainer>
@@ -138,7 +128,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <b>Proficiency: </b>
                             </div>
                             <div style={{ paddingLeft: "0.3rem" }}>
-                                {selectedCharacter.character.stats.proficiency}
+                                {selectedMonster.monster.stats.proficiency}
                             </div>
                         </NestedNestedContainer>
                         <NestedNestedContainer>
@@ -146,7 +136,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <b>Hit points: </b>
                             </div>
                             <div style={{ paddingLeft: "0.3rem" }}>
-                                {selectedCharacter.character.stats.hitPoints}
+                                {selectedMonster.monster.stats.hitPoints}
                             </div>
                         </NestedNestedContainer>
                     </NestedContainer>
@@ -157,7 +147,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <b>Passive Perception: </b>{" "}
                             </div>
                             <div style={{ paddingLeft: "0.3rem" }}>
-                                {selectedCharacter.character.stats.passivePerception}
+                                {selectedMonster.monster.stats.passivePerception}
                             </div>
                         </NestedNestedContainer>
 
@@ -173,7 +163,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 }}
                             >
                                 {parseStringBooleanToCheckmark(
-                                    selectedCharacter.character.stats.inspiration,
+                                    selectedMonster.monster.stats.inspiration,
                                     true
                                 )}
                             </div>
@@ -190,7 +180,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 }}
                             >
                                 {parseStringBooleanToCheckmark(
-                                    selectedCharacter.character.isUnique,
+                                    selectedMonster.monster.isUnique,
                                     true
                                 )}
                             </div>
@@ -203,7 +193,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <b>Speed: </b>{" "}
                             </div>
                             <div style={{ paddingLeft: "0.3rem" }}>
-                                {selectedCharacter.character.stats.speed}'
+                                {selectedMonster.monster.stats.speed}'
                             </div>
                         </NestedNestedContainer>
                         <NestedNestedContainer>
@@ -211,7 +201,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <b>Senses: </b>{" "}
                             </div>
                             <div style={{ paddingLeft: "0.3rem" }}>
-                                {renderArrayOfString(selectedCharacter.character.senses)}
+                                {renderArrayOfString(selectedMonster.monster.senses)}
                             </div>
                         </NestedNestedContainer>
                         <NestedNestedContainer>
@@ -219,7 +209,7 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                 <b>Immunities : </b>
                             </div>
                             <div style={{ paddingLeft: "0.3rem" }}>
-                                {renderArrayOfString(selectedCharacter.character.immunities)}
+                                {renderArrayOfString(selectedMonster.monster.immunities)}
                             </div>
                         </NestedNestedContainer>
                     </NestedContainer>
@@ -248,9 +238,9 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>STR</b>
                             <h3>
 
-                                {selectedCharacter.character.stats.strength.value}(
+                                {selectedMonster.monster.stats.strength.value}(
               {getAbilityModifier(
-                                    selectedCharacter.character.stats.strength.value
+                                    selectedMonster.monster.stats.strength.value
                                 )}
               )
                   </h3>
@@ -262,15 +252,15 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                     justifyContent: "center",
                                 }}
                             >
-                                {selectedCharacter.character.stats.strength.isProficient ===
+                                {selectedMonster.monster.stats.strength.isProficient ===
                                     "TRUE" ? (
                                     <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                                 ) : null}
                 Saving:
                 {getAbilityModifier(
-                                    selectedCharacter.character.stats.strength.value,
-                                    selectedCharacter.character.stats.strength.isProficient,
-                                    selectedCharacter.character.stats.proficiency
+                                    selectedMonster.monster.stats.strength.value,
+                                    selectedMonster.monster.stats.strength.isProficient,
+                                    selectedMonster.monster.stats.proficiency
                                 )}
                             </div>
                         </div>
@@ -286,9 +276,9 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>DEX</b>
                             <h3>
 
-                                {selectedCharacter.character.stats.dexterity.value}(
+                                {selectedMonster.monster.stats.dexterity.value}(
               {getAbilityModifier(
-                                    selectedCharacter.character.stats.dexterity.value
+                                    selectedMonster.monster.stats.dexterity.value
                                 )}
               )
                   </h3>
@@ -300,15 +290,15 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                     justifyContent: "center",
                                 }}
                             >
-                                {selectedCharacter.character.stats.dexterity.isProficient ===
+                                {selectedMonster.monster.stats.dexterity.isProficient ===
                                     "TRUE" ? (
                                     <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                                 ) : null}
                 Saving:
                 {getAbilityModifier(
-                                    selectedCharacter.character.stats.dexterity.value,
-                                    selectedCharacter.character.stats.dexterity.isProficient,
-                                    selectedCharacter.character.stats.proficiency
+                                    selectedMonster.monster.stats.dexterity.value,
+                                    selectedMonster.monster.stats.dexterity.isProficient,
+                                    selectedMonster.monster.stats.proficiency
                                 )}
                             </div>
                         </div>
@@ -324,9 +314,9 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CON</b>
                             <h3>
 
-                                {selectedCharacter.character.stats.constitution.value}(
+                                {selectedMonster.monster.stats.constitution.value}(
               {getAbilityModifier(
-                                    selectedCharacter.character.stats.constitution.value
+                                    selectedMonster.monster.stats.constitution.value
                                 )}
               )
                   </h3>
@@ -338,15 +328,15 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                     justifyContent: "center",
                                 }}
                             >
-                                {selectedCharacter.character.stats.constitution.isProficient ===
+                                {selectedMonster.monster.stats.constitution.isProficient ===
                                     "TRUE" ? (
                                     <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                                 ) : null}
                 Saving:
                 {getAbilityModifier(
-                                    selectedCharacter.character.stats.constitution.value,
-                                    selectedCharacter.character.stats.constitution.isProficient,
-                                    selectedCharacter.character.stats.proficiency
+                                    selectedMonster.monster.stats.constitution.value,
+                                    selectedMonster.monster.stats.constitution.isProficient,
+                                    selectedMonster.monster.stats.proficiency
                                 )}
                             </div>
                         </div>
@@ -363,9 +353,9 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>INT</b>
                             <h3>
 
-                                {selectedCharacter.character.stats.intelligence.value}(
+                                {selectedMonster.monster.stats.intelligence.value}(
               {getAbilityModifier(
-                                    selectedCharacter.character.stats.intelligence.value
+                                    selectedMonster.monster.stats.intelligence.value
                                 )}
               )
                   </h3>
@@ -377,15 +367,15 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                     justifyContent: "center",
                                 }}
                             >
-                                {selectedCharacter.character.stats.intelligence.isProficient ===
+                                {selectedMonster.monster.stats.intelligence.isProficient ===
                                     "TRUE" ? (
                                     <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                                 ) : null}
                 Saving:
                 {getAbilityModifier(
-                                    selectedCharacter.character.stats.intelligence.value,
-                                    selectedCharacter.character.stats.intelligence.isProficient,
-                                    selectedCharacter.character.stats.proficiency
+                                    selectedMonster.monster.stats.intelligence.value,
+                                    selectedMonster.monster.stats.intelligence.isProficient,
+                                    selectedMonster.monster.stats.proficiency
                                 )}
                             </div>
                         </div>
@@ -401,9 +391,9 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>WIS</b>
                             <h3>
 
-                                {selectedCharacter.character.stats.wisdom.value}(
+                                {selectedMonster.monster.stats.wisdom.value}(
               {getAbilityModifier(
-                                    selectedCharacter.character.stats.wisdom.value
+                                    selectedMonster.monster.stats.wisdom.value
                                 )}
               )
                   </h3>
@@ -415,15 +405,15 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                     justifyContent: "center",
                                 }}
                             >
-                                {selectedCharacter.character.stats.wisdom.isProficient ===
+                                {selectedMonster.monster.stats.wisdom.isProficient ===
                                     "TRUE" ? (
                                     <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                                 ) : null}
                 Saving:
                 {getAbilityModifier(
-                                    selectedCharacter.character.stats.wisdom.value,
-                                    selectedCharacter.character.stats.wisdom.isProficient,
-                                    selectedCharacter.character.stats.proficiency
+                                    selectedMonster.monster.stats.wisdom.value,
+                                    selectedMonster.monster.stats.wisdom.isProficient,
+                                    selectedMonster.monster.stats.proficiency
                                 )}
                             </div>
                         </div>
@@ -439,9 +429,9 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                             <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CHA</b>
                             <h3>
 
-                                {selectedCharacter.character.stats.charisma.value}(
+                                {selectedMonster.monster.stats.charisma.value}(
               {getAbilityModifier(
-                                    selectedCharacter.character.stats.charisma.value
+                                    selectedMonster.monster.stats.charisma.value
                                 )}
               )
                   </h3>
@@ -453,15 +443,15 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                     justifyContent: "center",
                                 }}
                             >
-                                {selectedCharacter.character.stats.charisma.isProficient ===
+                                {selectedMonster.monster.stats.charisma.isProficient ===
                                     "TRUE" ? (
                                     <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                                 ) : null}
                 Saving:
                 {getAbilityModifier(
-                                    selectedCharacter.character.stats.charisma.value,
-                                    selectedCharacter.character.stats.charisma.isProficient,
-                                    selectedCharacter.character.stats.proficiency
+                                    selectedMonster.monster.stats.charisma.value,
+                                    selectedMonster.monster.stats.charisma.isProficient,
+                                    selectedMonster.monster.stats.proficiency
                                 )}
                             </div>
                         </div>
@@ -496,17 +486,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.acrobatics
+                                                    selectedMonster.monster.stats.skills.acrobatics
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.dexterity.value,
-                                                    selectedCharacter.character.stats.skills.acrobatics
+                                                    selectedMonster.monster.stats.dexterity.value,
+                                                    selectedMonster.monster.stats.skills.acrobatics
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Acrobatics (Dex)</TableElement>
@@ -514,17 +504,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.animalHandling
+                                                    selectedMonster.monster.stats.skills.animalHandling
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.dexterity.value,
-                                                    selectedCharacter.character.stats.skills.animalHandling
+                                                    selectedMonster.monster.stats.dexterity.value,
+                                                    selectedMonster.monster.stats.skills.animalHandling
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Animal Handling (Dex)</TableElement>
@@ -532,17 +522,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.arcana
+                                                    selectedMonster.monster.stats.skills.arcana
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.intelligence.value,
-                                                    selectedCharacter.character.stats.skills.arcana
+                                                    selectedMonster.monster.stats.intelligence.value,
+                                                    selectedMonster.monster.stats.skills.arcana
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Arcana (Int)</TableElement>
@@ -550,17 +540,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.athletics
+                                                    selectedMonster.monster.stats.skills.athletics
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.strength.value,
-                                                    selectedCharacter.character.stats.skills.athletics
+                                                    selectedMonster.monster.stats.strength.value,
+                                                    selectedMonster.monster.stats.skills.athletics
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Athletics (Str)</TableElement>
@@ -568,17 +558,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.deception
+                                                    selectedMonster.monster.stats.skills.deception
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.charisma.value,
-                                                    selectedCharacter.character.stats.skills.deception
+                                                    selectedMonster.monster.stats.charisma.value,
+                                                    selectedMonster.monster.stats.skills.deception
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Deception (Cha)</TableElement>
@@ -586,17 +576,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.history
+                                                    selectedMonster.monster.stats.skills.history
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.intelligence.value,
-                                                    selectedCharacter.character.stats.skills.history
+                                                    selectedMonster.monster.stats.intelligence.value,
+                                                    selectedMonster.monster.stats.skills.history
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>History (Int)</TableElement>
@@ -625,17 +615,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.insight
+                                                    selectedMonster.monster.stats.skills.insight
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.wisdom.value,
-                                                    selectedCharacter.character.stats.skills.insight
+                                                    selectedMonster.monster.stats.wisdom.value,
+                                                    selectedMonster.monster.stats.skills.insight
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Insight (Wis)</TableElement>
@@ -643,17 +633,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.intimidation
+                                                    selectedMonster.monster.stats.skills.intimidation
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.charisma.value,
-                                                    selectedCharacter.character.stats.skills.intimidation
+                                                    selectedMonster.monster.stats.charisma.value,
+                                                    selectedMonster.monster.stats.skills.intimidation
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Intimidation (Cha)</TableElement>
@@ -661,17 +651,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.investigation
+                                                    selectedMonster.monster.stats.skills.investigation
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.intelligence.value,
-                                                    selectedCharacter.character.stats.skills.investigation
+                                                    selectedMonster.monster.stats.intelligence.value,
+                                                    selectedMonster.monster.stats.skills.investigation
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Investigation (Int)</TableElement>
@@ -679,17 +669,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.medicine
+                                                    selectedMonster.monster.stats.skills.medicine
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.wisdom.value,
-                                                    selectedCharacter.character.stats.skills.medicine
+                                                    selectedMonster.monster.stats.wisdom.value,
+                                                    selectedMonster.monster.stats.skills.medicine
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Medicine (Wis)</TableElement>
@@ -697,17 +687,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.nature
+                                                    selectedMonster.monster.stats.skills.nature
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.intelligence.value,
-                                                    selectedCharacter.character.stats.skills.nature
+                                                    selectedMonster.monster.stats.intelligence.value,
+                                                    selectedMonster.monster.stats.skills.nature
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Nature (Int)</TableElement>
@@ -715,17 +705,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.perception
+                                                    selectedMonster.monster.stats.skills.perception
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.wisdom.value,
-                                                    selectedCharacter.character.stats.skills.perception
+                                                    selectedMonster.monster.stats.wisdom.value,
+                                                    selectedMonster.monster.stats.skills.perception
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Perception (Wis)</TableElement>
@@ -754,17 +744,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.performance
+                                                    selectedMonster.monster.stats.skills.performance
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.charisma.value,
-                                                    selectedCharacter.character.stats.skills.performance
+                                                    selectedMonster.monster.stats.charisma.value,
+                                                    selectedMonster.monster.stats.skills.performance
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Performance (Cha)</TableElement>
@@ -772,17 +762,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.persuasion
+                                                    selectedMonster.monster.stats.skills.persuasion
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.charisma.value,
-                                                    selectedCharacter.character.stats.skills.persuasion
+                                                    selectedMonster.monster.stats.charisma.value,
+                                                    selectedMonster.monster.stats.skills.persuasion
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Persuasion (Cha)</TableElement>
@@ -790,17 +780,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.religion
+                                                    selectedMonster.monster.stats.skills.religion
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.intelligence.value,
-                                                    selectedCharacter.character.stats.skills.religion
+                                                    selectedMonster.monster.stats.intelligence.value,
+                                                    selectedMonster.monster.stats.skills.religion
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Religion (Int)</TableElement>
@@ -808,17 +798,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.sleightOfHand
+                                                    selectedMonster.monster.stats.skills.sleightOfHand
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.dexterity.value,
-                                                    selectedCharacter.character.stats.skills.sleightOfHand
+                                                    selectedMonster.monster.stats.dexterity.value,
+                                                    selectedMonster.monster.stats.skills.sleightOfHand
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Sleight of Hand (Dex)</TableElement>
@@ -826,17 +816,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.stealth
+                                                    selectedMonster.monster.stats.skills.stealth
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.dexterity.value,
-                                                    selectedCharacter.character.stats.skills.stealth
+                                                    selectedMonster.monster.stats.dexterity.value,
+                                                    selectedMonster.monster.stats.skills.stealth
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Stealth (Dex)</TableElement>
@@ -844,17 +834,17 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                                         <tr>
                                             <TableElement>
                                                 {parseStringBooleanToCheckmark(
-                                                    selectedCharacter.character.stats.skills.survival
+                                                    selectedMonster.monster.stats.skills.survival
                                                         .proficient,
                                                     false
                                                 )}
                                             </TableElement>
                                             <TableElement>
                                                 {getAbilityModifier(
-                                                    selectedCharacter.character.stats.wisdom.value,
-                                                    selectedCharacter.character.stats.skills.survival
+                                                    selectedMonster.monster.stats.wisdom.value,
+                                                    selectedMonster.monster.stats.skills.survival
                                                         .proficient === "TRUE",
-                                                    selectedCharacter.character.stats.proficiency
+                                                    selectedMonster.monster.stats.proficiency
                                                 )}
                                             </TableElement>
                                             <TableElement>Survival (Wis)</TableElement>
@@ -865,12 +855,12 @@ const CampaignCharacter: FunctionComponent<CampaignProps> = () => {
                         </div>
 
                     </div>
-                    {selectedCharacter.character.actions ?
+                    {selectedMonster.monster.actions ?
                         <NestedContainer style={{ width: "100%" }} >
                             <h3>
                                 Actions and Specials:
                     </h3>
-                            {selectedCharacter.character.actions.map((action: ICharacterAction, index: number) => <div key={index}><b >{action.name}:</b> {action.description}</div>)}
+                            {selectedMonster.monster.actions.map((action: IMonsterAction, index: number) => <div key={index}><b >{action.name}:</b> {action.description}</div>)}
                         </NestedContainer>
 
                         : null}
@@ -927,4 +917,4 @@ const TableHeader = styled.th`
 const TableElement = styled.td`
   text-align: center;
 `;
-export default CampaignCharacter;
+export default CampaignMonster;

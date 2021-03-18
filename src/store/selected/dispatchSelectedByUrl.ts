@@ -1,4 +1,4 @@
-import { setSelectedCampaign, setSelectedCharacter, setSelectedLocation, setSelectedPlayer, setSelectedSession } from "./selectedCreators";
+import { setSelectedCampaign, setSelectedMonster, setSelectedLocation, setSelectedPlayer, setSelectedSession } from "./selectedCreators";
 
 const dispatchSelectedByUrl = (pathArray: string[], dispatch: any, campaigns: any[],) => {
     if (pathArray.length >= 2) {
@@ -16,24 +16,24 @@ const dispatchSelectedByUrl = (pathArray: string[], dispatch: any, campaigns: an
             };
             dispatch(setSelectedCampaign(campaign));
             if (pathArray.length >= 4) {
-                if (pathArray[2] === "characters") {
+                if (pathArray[2] === "monsters") {
                     if (isValidSlug(pathArray[3]) && campaign.campaign.characters) {
-                        let filteredCharacter = Object.entries(
+                        let filteredMonster = Object.entries(
                             campaign.campaign.characters
                         )
                             .filter(
-                                ([, character]: [string, ICharacter]) =>
+                                ([, character]: [string, IMonster]) =>
                                     character.slug === pathArray[3]
                             )
-                            .map(([id, character]: [string, ICharacter]) => {
+                            .map(([id, character]: [string, IMonster]) => {
                                 return { id: id, character: character };
                             });
-                        if (filteredCharacter.length >= 1) {
-                            let character: ISelectedCharacter = {
-                                id: filteredCharacter[0].id,
-                                character: filteredCharacter[0].character,
+                        if (filteredMonster.length >= 1) {
+                            let character: ISelectedMonster = {
+                                id: filteredMonster[0].id,
+                                monster: filteredMonster[0].character,
                             };
-                            dispatch(setSelectedCharacter(character));
+                            dispatch(setSelectedMonster(character));
                         }
                     }
                 }

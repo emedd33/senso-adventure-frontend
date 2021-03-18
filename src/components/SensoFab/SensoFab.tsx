@@ -11,7 +11,7 @@ import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
 import { initialSelectedSessionState } from "../../store/selected/selectedReducer";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
-import { setSelectedCharacter, setSelectedPlayer, setSelectedSession } from "../../store/selected/selectedCreators";
+import { setSelectedMonster, setSelectedPlayer, setSelectedSession } from "../../store/selected/selectedCreators";
 import sessionIcon from "../../assets/icons/session_icon.png"
 import characterIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
@@ -47,15 +47,15 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                 <img src={sessionIcon} style={{ width: "inherit" }} alt="New Session" />
             </Action>
             <Action
-                text="New Character"
+                text="New Monster"
                 style={{ backgroundColor: "transparent" }}
                 onClick={() => {
                     if (selectedCampaign) {
                         dispatch(
-                            setSelectedCharacter()
+                            setSelectedMonster()
                         );
                         history.push(
-                            `/${selectedCampaign.campaign.slug}/characters/new`
+                            `/${selectedCampaign.campaign.slug}/monsters/new`
                         );
                     }
                 }}

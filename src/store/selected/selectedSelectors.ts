@@ -11,17 +11,14 @@ export const getSelectedCampaign = (state: RootReducerProp) => {
 export const getSelectedCampaignSlug = (state: RootReducerProp) => {
     return state.selected.selectedCampaign?.campaign.slug;
 };
-export const getSelectedCharacter = (state: RootReducerProp) => {
-    return state.selected.selectedCharacter;
+export const getSelectedMonster = (state: RootReducerProp) => {
+    return state.selected.selectedMonster;
 };
 export const getSelectedPlayer = (state: RootReducerProp) => {
     return state.selected.selectedPlayer;
 };
 export const getSelectedLocation = (state: RootReducerProp) => {
     return state.selected.selectedLocation;
-};
-export const getSelectedCharacterIsPlayer = (state: RootReducerProp) => {
-    return state.selected.selectedCharacter?.character.isPlayer === "TRUE";
 };
 
 export const isDungeonMasterSelector = (state: RootReducerProp) => {
@@ -32,7 +29,7 @@ export const isDungeonMasterSelector = (state: RootReducerProp) => {
     return false;
 };
 
-export const getSelectedCampaignCharacters = (state: RootReducerProp) => {
+export const getSelectedCampaignMonsters = (state: RootReducerProp) => {
     if (isDungeonMasterSelector(state)) {
         if (state.selected.selectedCampaign) {
             if (state.selected.selectedCampaign.campaign.characters) {
@@ -47,7 +44,7 @@ export const getSelectedCampaignCharacters = (state: RootReducerProp) => {
                 return Object.entries(
                     state.selected.selectedCampaign.campaign.characters
                 ).filter(
-                    ([id, character]: [string, ICharacter]) =>
+                    ([id, character]: [string, IMonster]) =>
                         character.isPublished === "TRUE"
                 );
             }
@@ -153,15 +150,15 @@ export const getSelectedLocationStorageRef = (state: RootReducerProp) => {
 };
 
 
-export const getSelectedCampaignCharacterMentionList = (state: RootReducerProp) => {
+export const getSelectedCampaignMonsterMentionList = (state: RootReducerProp) => {
     const host = getHost()
     let mentions: MentionData[] = []
     if (state.selected.selectedCampaign) {
         if (state.selected.selectedCampaign?.campaign.characters) {
 
-            mentions = Object.values(state.selected.selectedCampaign?.campaign.characters).map((character: ICharacter) => ({
+            mentions = Object.values(state.selected.selectedCampaign?.campaign.characters).map((character: IMonster) => ({
                 name: character.name,
-                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/characters/${character.slug}`
+                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/monsters/${character.slug}`
             }))
 
         }
@@ -183,14 +180,14 @@ export const getSelectedCampaignLocationMentionList = (state: RootReducerProp) =
     }
     return mentions
 }
-export const getSelectedCharacterStorageRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedCharacter) {
+export const getSelectedMonsterStorageRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
         return storage
             .ref()
             .child("Campaigns")
             .child(state.selected.selectedCampaign?.campaign?.slug)
             .child("characters")
-            .child(state.selected.selectedCharacter?.character.name);
+            .child(state.selected.selectedMonster?.monster.name);
     }
 };
 
@@ -227,12 +224,12 @@ export const getSelectedCampaignDatabaseRef = (state: RootReducerProp) => {
     }
 };
 
-export const getSelectedCharacterDatabaseRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedCharacter) {
+export const getSelectedMonsterDatabaseRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
         return campaignsRef
             .child(state.selected?.selectedCampaign?.id)
             .child("characters")
-            .child(state.selected.selectedCharacter.id);
+            .child(state.selected.selectedMonster.id);
     }
 };
 
@@ -240,12 +237,11 @@ export const getPlayerCharacters = (state: RootReducerProp) => {
     let players;
     if (
         state.selected.selectedCampaign &&
-        state.selected.selectedCampaign.campaign.characters
+        state.selected.selectedCampaign.campaign.players
     ) {
         players = Object.entries(
-            state.selected.selectedCampaign.campaign.characters
+            state.selected.selectedCampaign.campaign.players
         )
-            .filter(([, character]) => character.isPlayer === "TRUE")
             .map((player) => {
                 return { id: player[0], character: player[1] };
             });

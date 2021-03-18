@@ -6,7 +6,7 @@ import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, Sen
 
 import {
     getSelectedCampaign,
-    getSelectedCampaignCharacterMentionList,
+    getSelectedCampaignMonsterMentionList,
     getSelectedCampaignLocationMentionList,
     getSelectedPlayer,
     getSelectedPlayerStorageRef,
@@ -29,7 +29,7 @@ const CampaignPlayerEdit: FunctionComponent<CampaignProps> = () => {
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(getSelectedCampaign)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
 
-    const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList);
+    const characterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
     const storageRef = useSelector(getSelectedPlayerStorageRef);
 

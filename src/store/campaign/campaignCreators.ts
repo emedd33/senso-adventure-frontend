@@ -1,4 +1,3 @@
-import { Dispatch } from "redux";
 import { campaignsRef, firebaseAuth } from "../../firebase";
 import { SET_AUTH_USER } from "../admin/adminActions";
 import { SET_CAMPAIGNS } from "./campaignActions";
@@ -13,7 +12,7 @@ export async function fetchFromFirebase(dispatch: any) {
     }
   });
 
-  // Auth
+  // Auth 
   firebaseAuth.onAuthStateChanged(function (user) {
     if (user) {
       dispatch({
@@ -23,21 +22,3 @@ export async function fetchFromFirebase(dispatch: any) {
     }
   });
 }
-
-export const dispatchLevelUpCharacters = (selectedCampaign: any) => {
-  return async (dispatch: Dispatch) => {
-    Object.entries(selectedCampaign.campaign.players).forEach((elem: any) => {
-      let id = elem[0];
-      let player = elem[1];
-      if (player.isDead === "FALSE") {
-        let new_level = parseInt(player.level);
-        new_level += 1;
-        player.level = new_level;
-        campaignsRef
-          .child(selectedCampaign.id + "/players/")
-          .child(id)
-          .set(player);
-      }
-    });
-  };
-};

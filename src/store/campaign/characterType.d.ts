@@ -1,23 +1,20 @@
 
-interface ICharacter {
+interface IMonster {
     name: string;
     nickNames: string[];
     isPublished: string;
     summary: string;
     slug: string;
-    isPlayer: string;
     race: string;
     alignment: string;
     languages?: string[];
     isDead?: string;
     immunities?: string[];
     stats: IStats;
-    actions?: ICharacterAction[];
+    actions?: IMonsterAction[];
     senses?: string[];
     isUnique: string;
     challengeRating?: string;
-    playerName?: string;
-    level?: number;
     class?: string;
     description: string;
 }
@@ -36,7 +33,7 @@ interface IStats {
     charisma: IAbility;
     skills: ISkills;
 }
-interface ICharacterAction {
+interface IMonsterAction {
     name: string;
     description: string;
 }

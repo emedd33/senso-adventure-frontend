@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import {
     isDungeonMasterSelector,
-    getSelectedCharacterStorageRef,
+    getSelectedMonsterStorageRef,
     getSelectedPlayer,
 } from "../../../store/selected/selectedSelectors";
 import styled from "styled-components";
@@ -22,7 +22,7 @@ const CampaignPlayer: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
     const selectedPlayer = useSelector(getSelectedPlayer);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
-    const storageRef = useSelector(getSelectedCharacterStorageRef);
+    const storageRef = useSelector(getSelectedMonsterStorageRef);
     const parseStringBooleanToCheckmark = (
         proficient: any,
         setCross: boolean
@@ -848,7 +848,7 @@ const CampaignPlayer: FunctionComponent<CampaignProps> = () => {
                         <h3>
                             Actions and Specials:
                     </h3>
-                        {selectedPlayer.player.actions.map((action: ICharacterAction, index: number) => <div key={index}><b >{action.name}:</b> {action.description}</div>)}
+                        {selectedPlayer.player.actions.map((action: IMonsterAction, index: number) => <div key={index}><b >{action.name}:</b> {action.description}</div>)}
                     </NestedContainer>
 
                     : null}

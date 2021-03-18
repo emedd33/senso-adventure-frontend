@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 import {
     getSelectedCampaign,
-    getSelectedCampaignCharacterMentionList,
+    getSelectedCampaignMonsterMentionList,
     getSelectedCampaignLocationMentionList,
     getSelectedSession,
     getSelectedSessionStorageRef,
@@ -30,7 +30,7 @@ const CampaignSessionEdit: React.FC = () => {
     const storageRef = useSelector(getSelectedSessionStorageRef);
 
 
-    const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList)
+    const characterMentionList = useSelector(getSelectedCampaignMonsterMentionList)
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList)
 
 

@@ -162,7 +162,7 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                         </AccordionDetails>
                         <AccordionActions>
                             <Link
-                                to={`/${selectedCampaign.campaign.slug}/characters/${character.name.replace(/\s/g, "")}`}
+                                to={`/${selectedCampaign.campaign.slug}/monsters/${character.name.replace(/\s/g, "")}`}
                             >
                                 <Button size="small" color="primary">
                                     <ArrowForwardIcon />

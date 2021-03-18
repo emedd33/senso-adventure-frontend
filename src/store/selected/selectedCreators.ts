@@ -1,7 +1,7 @@
 
 import {
   SET_SELECTED_CAMPAIGN,
-  SET_SELECTED_CHARACTER,
+  SET_SELECTED_MONSTER,
   SET_SELECTED_LOCATION,
   SET_SELECTED_SESSION,
   SET_SELECTED_PLAYER
@@ -22,12 +22,12 @@ export const setSelectedLocation = (
   return { type: SET_SELECTED_LOCATION, payload: selectedLocation }
 
 }
-export const setSelectedCharacter = (
-  selectedCharacter?: ISelectedCharacter
+export const setSelectedMonster = (
+  selectedMonster?: ISelectedMonster
 ) => {
   return {
-    type: SET_SELECTED_CHARACTER,
-    payload: selectedCharacter,
+    type: SET_SELECTED_MONSTER,
+    payload: selectedMonster,
   };
 };
 

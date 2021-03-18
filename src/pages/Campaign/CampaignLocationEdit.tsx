@@ -10,8 +10,8 @@ import "react-markdown-editor-lite/lib/index.css";
 import { SensoAccordianInput, SensoImageInput, SensoMultilineTextInput, SensoSwitch, SensoTextArrayInput, SensoTextInput, SensoDelete } from "../../components/SensoInputs"
 import {
     getSelectedCampaign,
-    getSelectedCampaignCharacterMentionList,
-    getSelectedCampaignCharacters,
+    getSelectedCampaignMonsterMentionList,
+    getSelectedCampaignMonsters,
     getSelectedCampaignLocationMentionList,
     getSelectedLocationStorageRef,
     isDungeonMasterSelector,
@@ -28,10 +28,10 @@ const CampaignLocationEdit: React.FC = () => {
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const isLoading = useSelector(getIsLoading);
     const storageRef = useSelector(getSelectedLocationStorageRef);
-    const campaignCharacters = useSelector(getSelectedCampaignCharacters)
+    const CampaignMonsters = useSelector(getSelectedCampaignMonsters)
 
 
-    const characterMentionList = useSelector(getSelectedCampaignCharacterMentionList)
+    const characterMentionList = useSelector(getSelectedCampaignMonsterMentionList)
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
 
 
@@ -108,7 +108,7 @@ const CampaignLocationEdit: React.FC = () => {
             <SensoAccordianInput
                 firebasePath={`campaigns/${selectedCampaign.id}/locations/${selectedLocation.id}/characters`}
                 initArray={selectedLocation.location.characters}
-                choices={campaignCharacters ? campaignCharacters.map(([, character]: [string, ICharacter]) => ({ title: character.name, content: character })) : []}
+                choices={CampaignMonsters ? CampaignMonsters.map(([, character]: [string, IMonster]) => ({ title: character.name, content: character })) : []}
                 label={"Characters"}
                 style={{ width: "100%" }}
             />

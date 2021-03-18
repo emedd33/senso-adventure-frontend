@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   getSelectedCampaign,
-  getSelectedCampaignCharacters,
-} from "../../store/selected/selectedSelectors";
+  getSelectedCampaignMonsters,
+} from "../../../store/selected/selectedSelectors";
 import styled from "styled-components";
 
-import { OLD_WHITE } from "../../assets/constants/Constants";
+import { OLD_WHITE } from "../../../assets/constants/Constants";
 import {
   Accordion,
   AccordionActions,
@@ -18,15 +18,15 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-type CampaignCharactersProps = {};
-const CampaignCharacters: FunctionComponent<CampaignCharactersProps> = () => {
-  const characters = useSelector(getSelectedCampaignCharacters);
+type CampaignMonstersProps = {};
+const CampaignMonsters: FunctionComponent<CampaignMonstersProps> = () => {
+  const characters = useSelector(getSelectedCampaignMonsters);
   const selectedCampaign = useSelector(getSelectedCampaign);
 
   return (
     <Container>
       {characters && selectedCampaign
-        ? characters.map(([, character]: [string, ICharacter], index: number) => (
+        ? characters.map(([, character]: [string, IMonster], index: number) => (
           <Accordion
             key={index}
             style={
@@ -43,9 +43,7 @@ const CampaignCharacters: FunctionComponent<CampaignCharactersProps> = () => {
               <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
                 {character.name}
               </Typography>
-              <Typography style={{ fontSize: "1rem", opacity: 0.7 }}>
-                {character.isPlayer === "TRUE" ? "Player" : "NPC"}
-              </Typography>
+
             </AccordionSummary>
             <AccordionDetails
               style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
@@ -54,7 +52,7 @@ const CampaignCharacters: FunctionComponent<CampaignCharactersProps> = () => {
             </AccordionDetails>
             <AccordionActions>
               <Link
-                to={`/${selectedCampaign.campaign.slug}/characters/${character.slug}`}
+                to={`/${selectedCampaign.campaign.slug}/monsters/${character.slug}`}
               >
                 <Button size="small" color="primary">
                   <ArrowForwardIcon />
@@ -74,4 +72,4 @@ const Container = styled.div`
 
   display: grid;
 `;
-export default CampaignCharacters;
+export default CampaignMonsters;

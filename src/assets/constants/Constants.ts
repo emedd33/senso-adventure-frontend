@@ -28,14 +28,13 @@ export const NEW_SESSION: ISession = {
     sessionDay: 1,
     slug: "",
 }
-export const NEW_CHARACTER: ICharacter = {
+export const NEW_MONSTER: IMonster = {
     name: "",
     nickNames: [],
     isPublished: "FALSE",
     summary: "",
     slug: "",
     race: "Human",
-    isPlayer: "TRUE",
     alignment: "True neutral",
     isUnique: "TRUE",
     languages: ["Common"],

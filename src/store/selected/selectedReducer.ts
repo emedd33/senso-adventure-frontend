@@ -1,6 +1,6 @@
 import {
   SET_SELECTED_CAMPAIGN,
-  SET_SELECTED_CHARACTER,
+  SET_SELECTED_MONSTER,
   SET_SELECTED_LOCATION,
   SET_SELECTED_SESSION,
   SET_SELECTED_PLAYER,
@@ -37,8 +37,8 @@ const selectedReducer = (
     case SET_SELECTED_CAMPAIGN:
       state.selectedCampaign = action.payload;
       return state;
-    case SET_SELECTED_CHARACTER: {
-      state.selectedCharacter = action.payload;
+    case SET_SELECTED_MONSTER: {
+      state.selectedMonster = action.payload;
       return state;
     }
     case SET_SELECTED_PLAYER: {

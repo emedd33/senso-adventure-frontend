@@ -10,12 +10,11 @@ import {
 import Campaign from "./Campaign";
 import CampaignSessionEdit from "./CampaignSessionEdit";
 import CampaignSessionNew from "./CampaignSessionNew";
-import CampaignCharacterNew from "./CampaignCharacterNew";
 import CampaignSession from "./CampaignSession";
 import {
   getSelectedCampaign,
   getSelectedCampaignSlug,
-  getSelectedCharacter,
+  getSelectedMonster,
   getSelectedLocation,
   getSelectedPlayer,
   getSelectedSession,
@@ -26,10 +25,8 @@ import { storage } from "../../firebase";
 import { setIsLoading } from "../../store/admin/adminCreator";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import "react-tiny-fab/dist/styles.css";
-import CampaignCharacter from "./CampaignCharacter";
-import CampaignCharacterEdit from "./CampaignCharacterEdit";
 import CampaignSessions from "./CampaignSessions";
-import CampaignCharacters from "./CampaignCharacters";
+import { CampaignMonsterEdit, CampaignMonsterNew, CampaignMonster, CampaignMonsters } from "./CampaignMonsters";
 import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 import SensoFab from "../../components/SensoFab/SensoFab"
 import dispatchSelectedByUrl from "../../store/selected/dispatchSelectedByUrl"
@@ -37,7 +34,7 @@ import CampaignLocationNew from "./CampaignLocationNew";
 import CampaignLocations from "./CampaignLocations";
 import CampaignLocation from "./CampaignLocation";
 import CampaignLocationEdit from "./CampaignLocationEdit";
-import { CampaignPlayers, CampaignPlayerNew, CampaignPlayer } from "./CampaignPlayers";
+import { CampaignPlayers, CampaignPlayerNew, CampaignPlayer, CampaignPlayerEdit } from "./CampaignPlayers";
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
@@ -48,7 +45,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const selectedCampaign = useSelector(getSelectedCampaign);
   const selectedSession = useSelector(getSelectedSession);
   const selectedLocation = useSelector(getSelectedLocation);
-  const selectedCharacter = useSelector(getSelectedCharacter);
+  const selectedMonster = useSelector(getSelectedMonster);
   const selectedPlayer = useSelector(getSelectedPlayer);
   const selectedCampaignSlug = useSelector(getSelectedCampaignSlug)
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
@@ -82,7 +79,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     return <IsLoading />;
   }
   if (locationArray.length >= 4 && locationArray[3] !== "new") {
-    if (!selectedSession && !selectedCharacter && !selectedLocation && !selectedPlayer) {
+    if (!selectedSession && !selectedMonster && !selectedLocation && !selectedPlayer) {
       return <IsLoading />;
     }
   }
@@ -107,18 +104,18 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
       </Route>
       <Switch>
-        <Route exact path="/:campaignSlug/characters/">
-          <CampaignCharacters />
+        <Route exact path="/:campaignSlug/monsters/">
+          <CampaignMonsters />
         </Route>
-        <Route exact path="/:campaignSlug/characters/new">
-          {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
+        <Route exact path="/:campaignSlug/monsters/new">
+          {isDungeonMaster ? <CampaignMonsterNew /> : <Redirect to={"/"} />}
         </Route>
-        <Route exact path="/:campaignSlug/characters/:characterSlug">
-          <CampaignCharacter />
+        <Route exact path="/:campaignSlug/monsters/:monsterSlug">
+          <CampaignMonster />
         </Route>
-        <Route exact path="/:campaignSlug/characters/:characterSlug/edit">
+        <Route exact path="/:campaignSlug/monsters/:monsterSlug/edit">
           {isDungeonMaster ? (
-            <CampaignCharacterEdit />
+            <CampaignMonsterEdit />
           ) : (
             <Redirect to={"/"} />
           )}
@@ -134,14 +131,14 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         <Route exact path="/:campaignSlug/players/:playerSlug">
           <CampaignPlayer />
         </Route>
-        {/*
-        <Route exact path="/:campaignSlug/characters/:characterSlug/edit">
+
+        <Route exact path="/:campaignSlug/players/:playerSlug/edit">
           {isDungeonMaster ? (
-            <CampaignCharacterEdit />
+            <CampaignPlayerEdit />
           ) : (
             <Redirect to={"/"} />
           )}'
-        </Route> */}
+        </Route>
       </Switch>
       <Switch>
         <Route exact path="/:campaignSlug/locations/new">

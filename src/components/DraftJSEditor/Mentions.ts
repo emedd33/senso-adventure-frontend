@@ -3,7 +3,7 @@ import { MentionData } from "@draft-js-plugins/mention";
 const mentions: MentionData[] = [
   {
     name: "Liotro",
-    link: "http://localhost:3000/CurseOfStrahd/characters/Liotro",
+    link: "http://localhost:3000/CurseOfStrahd/players/Liotro",
     avatar:
       "https://pbs.twimg.com/profile_images/517863945/mattsailing_400x400.jpg",
   },
