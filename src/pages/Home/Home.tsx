@@ -61,26 +61,27 @@ const Home: FunctionComponent<HomeProps> = () => {
 
       return sortedSessions
         .slice(0, MAX_NUM_SCROLLS_HOMEPAGE)
-        .map((session: any) => {
+        .map((session: any, index: number) => {
           return (
-            <Scroll
-              key={session.session.sessionId}
-              id={session.sessionId}
-              title={session.session.title}
-              isOpaque={session.session.isPublished === "FALSE"}
-              subTitle={session.session.subTitle}
-              date={session.session.date}
-              campaignSlug={session.session.campaignTitle.replace(/\s/g, "")}
-              sessionDay={session.session.sessionDay}
-              onClick={() => {
-                history.push(
-                  `${session.session.campaignTitle.replace(
-                    /\s/g,
-                    ""
-                  )}/sessions/${session.session.slug}`
-                );
-              }}
-            />
+            <div key={index}>
+
+              <Scroll
+                title={session.session.title}
+                isOpaque={session.session.isPublished === "FALSE"}
+                subTitle={session.session.subTitle}
+                date={session.session.date}
+                campaignSlug={session.session.campaignTitle.replace(/\s/g, "")}
+                sessionDay={session.session.sessionDay}
+                onClick={() => {
+                  history.push(
+                    `${session.session.campaignTitle.replace(
+                      /\s/g,
+                      ""
+                    )}/sessions/${session.session.slug}`
+                  );
+                }}
+              />
+            </div>
           );
         });
     }

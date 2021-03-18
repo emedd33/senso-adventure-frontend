@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import {
     getSelectedMonster,
     isDungeonMasterSelector,
-    getSelectedMonsterStorageRef,
+    getSelectedMonsterStoragePath,
 } from "../../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../../assets/constants/Constants";
@@ -22,7 +22,7 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
     const selectedMonster = useSelector(getSelectedMonster);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
-    const storageRef = useSelector(getSelectedMonsterStorageRef);
+    const monsterPath = useSelector(getSelectedMonsterStoragePath);
     const parseStringBooleanToCheckmark = (
         proficient: any,
         setCross: boolean
@@ -866,7 +866,7 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
                         : null}
                     <NestedContainer style={{ width: "100%" }} >
                         <h3>Description and history: </h3>
-                        <DraftJSEditor readOnly={true} JSONRef={storageRef?.child("MonsterDescription.json")} isDungeonMaster={isDungeonMaster} />
+                        <DraftJSEditor readOnly={true} storagePath={`${monsterPath}/monsterDescription.json`} isDungeonMaster={isDungeonMaster} />
 
                     </NestedContainer>
 

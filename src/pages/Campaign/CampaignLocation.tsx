@@ -11,7 +11,7 @@ import {
     getSelectedLocation,
     getSelectedCampaign,
     isDungeonMasterSelector,
-    getSelectedLocationStorageRef
+    getSelectedLocationStoragePath
 } from "../../store/selected/selectedSelectors";
 import {
     Accordion,
@@ -39,7 +39,7 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
     const selectedCampaign = useSelector(getSelectedCampaign);
     const selectedLocation = useSelector(getSelectedLocation)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
-    const locationRef = useSelector(getSelectedLocationStorageRef);
+    const locationPath = useSelector(getSelectedLocationStoragePath);
 
 
     if (!selectedLocation) {
@@ -171,11 +171,11 @@ const CampaignLocationNew: React.FC<CampaignLocationNewProps> = () => {
                         </AccordionActions>
                     </Accordion>
                 )) : null}
-            {isDungeonMaster && locationRef ?
+            {isDungeonMaster ?
                 <div style={{ gridColumn: "1/3" }}>
                     <h3>{`Description and history to ${selectedLocation.location.name}`}</h3>
 
-                    <DraftJSEditor readOnly={true} JSONRef={locationRef.child("LocationDescription.json")}
+                    <DraftJSEditor readOnly={true} storagePath={`${locationPath}/locationDescription.json`}
                         isDungeonMaster={isDungeonMaster}
                     />
                 </div>

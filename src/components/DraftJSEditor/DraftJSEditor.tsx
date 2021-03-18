@@ -32,8 +32,9 @@ import secretIcon from "../../assets/icons/hush_icon.png"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import sleep from "../../utils/sleep";
+import { storage } from "../../firebase";
 type DraftJSEditorProps = {
-  JSONRef: any | undefined;
+  storagePath: string;
   readOnly: boolean;
   isDungeonMaster?: boolean
   playerMentionList?: MentionData[]
@@ -55,7 +56,7 @@ const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
 
 const plugins = [playerMentionPlugin, staticToolbarPlugin, locationMentionPlugin, monsterMentionPlugin];
 
-const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDungeonMaster = false, playerMentionList = [], locationMentionList = [], monsterMentionList = [] }) => {
+const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, isDungeonMaster = false, playerMentionList = [], locationMentionList = [], monsterMentionList = [] }) => {
   const [isUploading, setIsUploading] = useState(false);
   const ref = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
@@ -145,19 +146,18 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDung
   }, [isDungeonMaster, readOnly]);
   useInterval(() => {
     if (!readOnly) {
-      if (JSONRef && savedEditorState) {
+      if (savedEditorState) {
         if (
           JSON.stringify(editorState.getCurrentContent()) !==
           JSON.stringify(savedEditorState.getCurrentContent())
         ) {
           setIsUploading(true);
           let uploadedState = editorState;
-          console.log("uploading")
           var blob = new Blob(
             [JSON.stringify(convertToRaw(uploadedState.getCurrentContent()))],
             { type: "application/json" }
           );
-          JSONRef.put(blob)
+          storage.ref(storagePath).put(blob)
             .then(() => {
               setSavedEditorState(uploadedState);
             })
@@ -171,33 +171,30 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ JSONRef, readOnly, isDung
   }, 5000);
 
   useMemo(() => {
-    if (JSONRef) {
-      JSONRef.getDownloadURL()
-        .then((url: string) =>
-          fetch(url)
-            .then((res) => res.json())
-            .then((res) => {
-              let loadedEditorState = EditorState.createWithContent(
-                convertFromRaw(res)
-              );
+    storage.ref(storagePath).getDownloadURL()
+      .then((url: string) =>
+        fetch(url)
+          .then((res) => res.json())
+          .then((res) => {
+            let loadedEditorState = EditorState.createWithContent(
+              convertFromRaw(res)
+            );
 
-              setSavedEditorState(loadedEditorState);
-              setEditorState(loadedEditorState);
-            })
-        )
-        .catch((e: any) => {
-          console.log("Could not fetch description from firebase");
-        });
-    }
+            setSavedEditorState(loadedEditorState);
+            setEditorState(loadedEditorState);
+          })
+      )
+      .catch((e: any) => {
+        console.log("Could not fetch description from firebase");
+      });
     return () => {
       setSavedEditorState(undefined)
       setEditorState(EditorState.createEmpty())
       setPlayerSuggestions([])
       setLocationSuggestions([])
       setMonsterSuggestions([])
-
     }
-  }, [JSONRef]);
+  }, [storagePath]);
 
   const renderEditor = useCallback(() => <div
     className={editorStyles.editor}

@@ -13,7 +13,7 @@ import {
     getSelectedCampaignMonsterMentionList,
     getSelectedCampaignMonsters,
     getSelectedCampaignLocationMentionList,
-    getSelectedLocationStorageRef,
+    getSelectedLocationStoragePath,
     isDungeonMasterSelector,
     getSelectedCampaignPlayerMentionList
 } from "../../store/selected/selectedSelectors";
@@ -28,7 +28,7 @@ const CampaignLocationEdit: React.FC = () => {
     const selectedCampaign = useSelector(getSelectedCampaign);
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const isLoading = useSelector(getIsLoading);
-    const storageRef = useSelector(getSelectedLocationStorageRef);
+    const locationPath = useSelector(getSelectedLocationStoragePath);
     const CampaignMonsters = useSelector(getSelectedCampaignMonsters)
 
 
@@ -164,7 +164,7 @@ const CampaignLocationEdit: React.FC = () => {
                 monsterMentionList={monsterMentionList}
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}
-                JSONRef={storageRef?.child("LocationDescription.json")}
+                storagePath={`${locationPath}/locationDescription.json`}
                 locationMentionList={locationMentionList}
             />
 

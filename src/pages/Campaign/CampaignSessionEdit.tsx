@@ -11,7 +11,7 @@ import {
     getSelectedCampaignMonsterMentionList,
     getSelectedCampaignLocationMentionList,
     getSelectedSession,
-    getSelectedSessionStorageRef,
+    getSelectedSessionStoragePath,
     isDungeonMasterSelector,
     getSelectedCampaignPlayerMentionList
 } from "../../store/selected/selectedSelectors";
@@ -28,7 +28,7 @@ const CampaignSessionEdit: React.FC = () => {
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
 
 
-    const storageRef = useSelector(getSelectedSessionStorageRef);
+    const sessionPath = useSelector(getSelectedSessionStoragePath);
 
 
     const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList)
@@ -95,7 +95,7 @@ const CampaignSessionEdit: React.FC = () => {
                 playerMentionList={playerMentionList}
                 locationMentionList={locationMentionList}
                 readOnly={false}
-                JSONRef={storageRef?.child("SessionStory.json")}
+                storagePath={`${sessionPath}/SessionStory.json`}
             />
 
             <h1>Session Images</h1>

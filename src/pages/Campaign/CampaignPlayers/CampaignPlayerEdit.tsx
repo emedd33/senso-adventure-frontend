@@ -9,7 +9,7 @@ import {
     getSelectedCampaignMonsterMentionList,
     getSelectedCampaignLocationMentionList,
     getSelectedPlayer,
-    getSelectedPlayerStorageRef,
+    getSelectedPlayerStoragePath,
     isDungeonMasterSelector,
     getSelectedCampaignPlayerMentionList
 } from "../../../store/selected/selectedSelectors";
@@ -34,7 +34,7 @@ const CampaignPlayerEdit: FunctionComponent<CampaignProps> = () => {
 
     const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
-    const storageRef = useSelector(getSelectedPlayerStorageRef);
+    const playerPath = useSelector(getSelectedPlayerStoragePath);
 
     if (selectedPlayer === undefined || selectedCampaign === undefined) {
         return (
@@ -421,7 +421,7 @@ const CampaignPlayerEdit: FunctionComponent<CampaignProps> = () => {
                     monsterMentionList={monsterMentionList}
                     readOnly={false}
                     isDungeonMaster={isDungeonMaster}
-                    JSONRef={storageRef?.child("PlayerDescription.json")}
+                    storagePath={`${playerPath}/playerDescription.json`}
                 />
             </div>
             <SensoDelete

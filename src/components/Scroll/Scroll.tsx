@@ -6,7 +6,6 @@ import { storage } from "../../firebase";
 import px2vw from "../../utils/px2vw";
 
 type ScrollProps = {
-  id: any;
   title: string;
   subTitle: string;
   date: string;
@@ -17,7 +16,6 @@ type ScrollProps = {
 };
 
 function Scroll({
-  id,
   title,
   subTitle,
   date,
@@ -38,7 +36,7 @@ function Scroll({
       .catch((e) => console.log("could not fetch TitleImage for scroll"));
   }, [campaignSlug]);
   return (
-    <ScrollButton onClick={onClick}>
+    <ScrollButton onClick={onClick} >
       <ScrollContainer style={isOpaque ? { opacity: 0.5 } : {}}>
         <div>
           <h5 style={{ margin: 0, opacity: 0.7 }}>Session day: {sessionDay}</h5>

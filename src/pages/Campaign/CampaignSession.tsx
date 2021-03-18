@@ -13,10 +13,11 @@ import {
 import {
     getSelectedCampaign,
     getSelectedSession,
-    getSelectedSessionStorageRef,
+    getSelectedSessionStoragePath,
     isDungeonMasterSelector,
 } from "../../store/selected/selectedSelectors";
 import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
+import { storage } from "../../firebase";
 
 type CampaignSessionProps = {};
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
@@ -26,35 +27,32 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
 
     const selectedSession = useSelector(getSelectedSession);
     const selectedCampaign = useSelector(getSelectedCampaign);
-    const storageRef = useSelector(getSelectedSessionStorageRef);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const nextSession = useSelector(getNextSession);
+    const sessionPath = useSelector(getSelectedSessionStoragePath);
     const previousSession = useSelector(getPreviousSession);
     useEffect(() => {
-        if (selectedSession) {
-            if (storageRef) {
-                storageRef
-                    .child("SessionImages")
-                    .listAll()
-                    .then((res) => {
-                        res.items.forEach((itemRef) => {
-                            itemRef
-                                .getDownloadURL()
-                                .then((url) => {
-                                    setSessionImages((urls) => {
-                                        if (!urls.includes(url)) {
-                                            return [...urls, url];
-                                        }
-                                        return urls;
-                                    });
-                                })
-                                .catch((e) => console.log("Could not connect to firebase", e));
-                        });
-                    })
-                    .catch((error) => {
-                        console.log("Could not fetch session images");
+        if (selectedSession && selectedCampaign) {
+            storage.ref(`Campaigns/${selectedCampaign?.campaign.slug}/sessions/${selectedSession.session.slug}/SessionImages`)
+                .listAll()
+                .then((res) => {
+                    res.items.forEach((itemRef) => {
+                        itemRef
+                            .getDownloadURL()
+                            .then((url) => {
+                                setSessionImages((urls) => {
+                                    if (!urls.includes(url)) {
+                                        return [...urls, url];
+                                    }
+                                    return urls;
+                                });
+                            })
+                            .catch((e) => console.log("Could not connect to firebase", e));
                     });
-            }
+                })
+                .catch((error) => {
+                    console.log("Could not fetch session images");
+                });
         }
         return () => {
             setSessionImages([]);
@@ -64,7 +62,6 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
         selectedSession,
         isDungeonMaster,
         selectedCampaign,
-        storageRef,
     ]);
 
     return (
@@ -153,11 +150,13 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                 <h3 style={{ fontSize: "2rem", textAlign: "center", opacity: 0.5 }}>
                     {selectedSession?.session.subTitle}
                 </h3>
-                <DraftJSEditor
-                    isDungeonMaster={isDungeonMaster}
-                    readOnly={true}
-                    JSONRef={storageRef?.child("SessionStory.json")}
-                />
+                {selectedSession ?
+                    <DraftJSEditor
+                        isDungeonMaster={isDungeonMaster}
+                        readOnly={true}
+                        storagePath={`${sessionPath}/SessionStory.json`}
+                    />
+                    : null}
                 {sessionImages
                     ? sessionImages.map((url: string, index: number) => (
                         <img

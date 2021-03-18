@@ -1,5 +1,5 @@
 import { MentionData } from "@draft-js-plugins/mention";
-import { database, storage } from "../../firebase";
+import { database } from "../../firebase";
 import { getHost } from "../../utils/getHost";
 
 export const getSelectedSession = (state: RootReducerProp) =>
@@ -127,30 +127,30 @@ export const getSelectedCampaignLocations = (state: RootReducerProp) => {
 };
 
 // STORAGE REF
-export const getSelectedSessionStorageRef = (state: RootReducerProp) => {
+export const getSelectedSessionStoragePath = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
-        return storage.ref(`Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/session/${state.selected.selectedSession?.session.slug}`)
+        return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/session/${state.selected.selectedSession?.session.slug}`
 
     }
 };
 
-export const getSelectedLocationStorageRef = (state: RootReducerProp) => {
+export const getSelectedLocationStoragePath = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedLocation) {
-        return storage.ref(`Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/locations/${state.selected.selectedLocation?.location.slug}`)
+        return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/locations/${state.selected.selectedLocation?.location.slug}`
     }
 };
 
 
-export const getSelectedMonsterStorageRef = (state: RootReducerProp) => {
+export const getSelectedMonsterStoragePath = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedMonster) {
-        return storage.ref(`Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/monsters/${state.selected.selectedMonster?.monster.slug}`)
+        return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/monsters/${state.selected.selectedMonster?.monster.slug}`
 
     }
 };
 
-export const getSelectedPlayerStorageRef = (state: RootReducerProp) => {
+export const getSelectedPlayerStoragePath = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedPlayer) {
-        return storage.ref(`Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/players/${state.selected.selectedPlayer?.player.slug}`)
+        return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/players/${state.selected.selectedPlayer?.player.slug}`
     }
 };
 

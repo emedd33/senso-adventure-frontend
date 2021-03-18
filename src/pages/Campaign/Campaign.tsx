@@ -86,7 +86,6 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                 <MenuItem
                                     text={
                                         <Scroll
-                                            id={id}
                                             title={session.title}
                                             subTitle={session.subTitle ? session.subTitle : ""}
                                             date={session.date}

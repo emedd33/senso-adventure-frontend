@@ -15,23 +15,25 @@ const CampaignSessions: FunctionComponent<CampaignSessionsProps> = () => {
     return (
         <>
             {sessions && selectedCampaign ? sessions.map(
-                ([id, session]: [string, ISession]) => {
+                ([id, session]: [string, ISession], index: number) => {
                     return (
-                        <Scroll
-                            id={id}
-                            title={session.title}
-                            subTitle={session.subTitle ? session.subTitle : ""}
-                            date={session.date}
-                            campaignSlug={selectedCampaign.campaign.slug}
-                            sessionDay={session.sessionDay}
-                            isOpaque={session.isPublished === "FALSE"}
-                            onClick={() => {
-                                dispatch(setSelectedSession({ id: id, session: session }));
-                                history.push(
-                                    `/${selectedCampaign.campaign.slug}/sessions/${session.slug}`
-                                );
-                            }}
-                        />
+                        <div key={index}>
+
+                            <Scroll
+                                title={session.title}
+                                subTitle={session.subTitle ? session.subTitle : ""}
+                                date={session.date}
+                                campaignSlug={selectedCampaign.campaign.slug}
+                                sessionDay={session.sessionDay}
+                                isOpaque={session.isPublished === "FALSE"}
+                                onClick={() => {
+                                    dispatch(setSelectedSession({ id: id, session: session }));
+                                    history.push(
+                                        `/${selectedCampaign.campaign.slug}/sessions/${session.slug}`
+                                    );
+                                }}
+                            />
+                        </div>
                     );
                 }
             )
