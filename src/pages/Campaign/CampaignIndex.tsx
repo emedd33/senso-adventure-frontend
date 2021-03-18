@@ -17,6 +17,7 @@ import {
   getSelectedCampaignSlug,
   getSelectedCharacter,
   getSelectedLocation,
+  getSelectedPlayer,
   getSelectedSession,
   isDungeonMasterSelector,
 } from "../../store/selected/selectedSelectors";
@@ -36,7 +37,7 @@ import CampaignLocationNew from "./CampaignLocationNew";
 import CampaignLocations from "./CampaignLocations";
 import CampaignLocation from "./CampaignLocation";
 import CampaignLocationEdit from "./CampaignLocationEdit";
-import CampaignPlayers from "./CampaignPlayers/CampaignPlayers";
+import { CampaignPlayers, CampaignPlayerNew, CampaignPlayer } from "./CampaignPlayers";
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const location = useLocation();
@@ -48,6 +49,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
   const selectedSession = useSelector(getSelectedSession);
   const selectedLocation = useSelector(getSelectedLocation);
   const selectedCharacter = useSelector(getSelectedCharacter);
+  const selectedPlayer = useSelector(getSelectedPlayer);
   const selectedCampaignSlug = useSelector(getSelectedCampaignSlug)
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
   const [imageUrl, setImageUrl] = useState("");
@@ -80,7 +82,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
     return <IsLoading />;
   }
   if (locationArray.length >= 4 && locationArray[3] !== "new") {
-    if (!selectedSession && !selectedCharacter && !selectedLocation) {
+    if (!selectedSession && !selectedCharacter && !selectedLocation && !selectedPlayer) {
       return <IsLoading />;
     }
   }
@@ -126,18 +128,19 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         <Route exact path="/:campaignSlug/players/">
           <CampaignPlayers />
         </Route>
-        {/* <Route exact path="/:campaignSlug/characters/new">
-          {isDungeonMaster ? <CampaignCharacterNew /> : <Redirect to={"/"} />}
+        <Route exact path="/:campaignSlug/players/new">
+          {isDungeonMaster ? <CampaignPlayerNew /> : <Redirect to={"/"} />}
         </Route>
-        <Route exact path="/:campaignSlug/characters/:characterSlug">
-          <CampaignCharacter />
+        <Route exact path="/:campaignSlug/players/:playerSlug">
+          <CampaignPlayer />
         </Route>
+        {/*
         <Route exact path="/:campaignSlug/characters/:characterSlug/edit">
           {isDungeonMaster ? (
             <CampaignCharacterEdit />
           ) : (
             <Redirect to={"/"} />
-          )}
+          )}'
         </Route> */}
       </Switch>
       <Switch>

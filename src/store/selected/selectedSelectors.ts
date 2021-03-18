@@ -14,6 +14,9 @@ export const getSelectedCampaignSlug = (state: RootReducerProp) => {
 export const getSelectedCharacter = (state: RootReducerProp) => {
     return state.selected.selectedCharacter;
 };
+export const getSelectedPlayer = (state: RootReducerProp) => {
+    return state.selected.selectedPlayer;
+};
 export const getSelectedLocation = (state: RootReducerProp) => {
     return state.selected.selectedLocation;
 };
@@ -188,6 +191,17 @@ export const getSelectedCharacterStorageRef = (state: RootReducerProp) => {
             .child(state.selected.selectedCampaign?.campaign?.slug)
             .child("characters")
             .child(state.selected.selectedCharacter?.character.name);
+    }
+};
+
+export const getSelectedPlayerStorageRef = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedPlayer) {
+        return storage
+            .ref()
+            .child("Campaigns")
+            .child(state.selected.selectedCampaign?.campaign?.slug)
+            .child("players")
+            .child(state.selected.selectedPlayer?.player.name);
     }
 };
 export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {

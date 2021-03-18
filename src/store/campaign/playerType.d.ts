@@ -5,7 +5,6 @@ interface IPlayer {
     isPublished: string;
     summary: string;
     slug: string;
-    isPlayer: string;
     race: string;
     alignment: string;
     languages?: string[];
@@ -15,7 +14,6 @@ interface IPlayer {
     actions?: IAction[];
     senses?: string[];
     isUnique: string;
-    challengeRating?: string;
     playerName?: string;
     level?: number;
     class?: string;

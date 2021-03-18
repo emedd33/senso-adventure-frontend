@@ -1,7 +1,5 @@
-import { Dispatch } from "redux";
 
 import {
-  REFRESH_SELECTED_CAMPAIGN,
   SET_SELECTED_CAMPAIGN,
   SET_SELECTED_CHARACTER,
   SET_SELECTED_LOCATION,
@@ -10,11 +8,6 @@ import {
 } from "./selectedActions";
 import { initialSelectedCampaignState } from "./selectedReducer";
 
-export const refreshSelectedCampaign = (campaigns: ICampaign[]) => {
-  return async (dispatch: Dispatch) => {
-    dispatch({ type: REFRESH_SELECTED_CAMPAIGN, payload: campaigns });
-  };
-};
 
 export const clearSelectedCampaign = () => {
   return {

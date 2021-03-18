@@ -43,9 +43,7 @@ const CampaignPlayers: FunctionComponent<CampaignPlayersProps> = () => {
                             <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
                                 {player.name}
                             </Typography>
-                            <Typography style={{ fontSize: "1rem", opacity: 0.7 }}>
-                                {player.isPlayer === "TRUE" ? "Player" : "NPC"}
-                            </Typography>
+
                         </AccordionSummary>
                         <AccordionDetails
                             style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}

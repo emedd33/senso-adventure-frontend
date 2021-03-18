@@ -11,7 +11,7 @@ import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
 import { initialSelectedSessionState } from "../../store/selected/selectedReducer";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
-import { setSelectedCharacter, setSelectedSession } from "../../store/selected/selectedCreators";
+import { setSelectedCharacter, setSelectedPlayer, setSelectedSession } from "../../store/selected/selectedCreators";
 import sessionIcon from "../../assets/icons/session_icon.png"
 import characterIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
@@ -56,6 +56,23 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                         );
                         history.push(
                             `/${selectedCampaign.campaign.slug}/characters/new`
+                        );
+                    }
+                }}
+            >
+                <img src={characterIcon} style={{ width: "inherit" }} alt="New Character" />
+
+            </Action>
+            <Action
+                text="New Player"
+                style={{ backgroundColor: "transparent" }}
+                onClick={() => {
+                    if (selectedCampaign) {
+                        dispatch(
+                            setSelectedPlayer()
+                        );
+                        history.push(
+                            `/${selectedCampaign.campaign.slug}/players/new`
                         );
                     }
                 }}

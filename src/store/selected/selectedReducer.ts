@@ -1,10 +1,9 @@
 import {
-  REFRESH_SELECTED_CAMPAIGN,
-  SET_BACKGROUND_IMAGE,
   SET_SELECTED_CAMPAIGN,
   SET_SELECTED_CHARACTER,
   SET_SELECTED_LOCATION,
   SET_SELECTED_SESSION,
+  SET_SELECTED_PLAYER,
 } from "./selectedActions";
 
 export const initialSelectedCampaignState = {
@@ -16,6 +15,7 @@ export const initialSelectedCampaignState = {
   sessions: [],
   locations: [],
   characters: [],
+  players: [],
   isNew: true,
 };
 export const initialSelectedSessionState = {
@@ -41,6 +41,10 @@ const selectedReducer = (
       state.selectedCharacter = action.payload;
       return state;
     }
+    case SET_SELECTED_PLAYER: {
+      state.selectedPlayer = action.payload;
+      return state;
+    }
     case SET_SELECTED_SESSION: {
       state.selectedSession = action.payload;
       return state;
@@ -49,29 +53,7 @@ const selectedReducer = (
       state.selectedLocation = action.payload;
       return state;
     }
-    case SET_BACKGROUND_IMAGE: {
-      return {
-        ...state,
-        backgroundImage: action.payload,
-      };
-    }
-    case REFRESH_SELECTED_CAMPAIGN: {
-      if (state.selectedCampaign) {
-        let filteredCampaign = Object.entries(action.payload).filter(
-          ([id]) => id === state.selectedCampaign?.id
-        );
-        if (filteredCampaign.length > 0) {
-          let updatedCampaign: { id: string; campaign: any } = Object({
-            id: filteredCampaign[0][0],
-            campaign: filteredCampaign[0][1],
-          });
-          return {
-            ...state,
-            selectedCampaign: updatedCampaign,
-          };
-        }
-      }
-    }
+
   }
   return state;
 };
