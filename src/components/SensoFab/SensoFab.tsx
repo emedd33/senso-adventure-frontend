@@ -14,6 +14,7 @@ import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import { setSelectedMonster, setSelectedPlayer, setSelectedSession } from "../../store/selected/selectedCreators";
 import sessionIcon from "../../assets/icons/session_icon.png"
 import characterIcon from "../../assets/icons/character_icon.png"
+import monsterIcon from "../../assets/icons/monster_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
 type SensoFabProps = {
 
@@ -47,7 +48,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                 <img src={sessionIcon} style={{ width: "inherit" }} alt="New Session" />
             </Action>
             <Action
-                text="New Monster"
+                text="New NPC/Monster"
                 style={{ backgroundColor: "transparent" }}
                 onClick={() => {
                     if (selectedCampaign) {
@@ -60,7 +61,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                     }
                 }}
             >
-                <img src={characterIcon} style={{ width: "inherit" }} alt="New Character" />
+                <img src={monsterIcon} style={{ width: "inherit" }} alt="New Monster" />
 
             </Action>
             <Action
