@@ -45,7 +45,7 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
     }
     return (
         <Container>
-            <div style={{ flex: 1 }}>
+            {/* <div style={{ flex: 1 }}>
                 <div
                     style={{
                         display: "grid",
@@ -871,7 +871,7 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
                     </NestedContainer>
 
                 </>
-            ) : null}
+            ) : null} */}
         </Container >
     )
 };

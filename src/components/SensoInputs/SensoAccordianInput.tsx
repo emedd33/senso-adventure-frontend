@@ -47,7 +47,7 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({ initArray = [
             {choices ?
                 <Autocomplete
                     id="combo-box-demo"
-                    options={choices ? choices : []}
+                    options={choices}
                     getOptionLabel={(option: { title: any; }) => option.title}
                     style={{ width: "15rem" }}
                     onChange={(event: any, newValue: { title: string, content: any } | null) => {

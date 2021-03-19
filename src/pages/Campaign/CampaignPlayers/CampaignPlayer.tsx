@@ -848,7 +848,7 @@ const CampaignPlayer: FunctionComponent<CampaignProps> = () => {
                         <h3>
                             Actions and Specials:
                     </h3>
-                        {selectedPlayer.player.actions.map((action: IMonsterAction, index: number) => <div key={index}><b >{action.name}:</b> {action.description}</div>)}
+                        {selectedPlayer.player.actions.map((action: IAction, index: number) => <div key={index}><b >{action.name}:</b> {action.description}</div>)}
                     </NestedContainer>
 
                     : null}

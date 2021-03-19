@@ -26,7 +26,12 @@ import { setIsLoading } from "../../store/admin/adminCreator";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import "react-tiny-fab/dist/styles.css";
 import CampaignSessions from "./CampaignSessions";
-import { CampaignMonsterEdit, CampaignMonsterNew, CampaignMonster, CampaignMonsters } from "./CampaignMonsters";
+import {
+  // CampaignMonsterEdit, 
+  CampaignMonsterNew,
+  //  CampaignMonster, 
+  //  CampaignMonsters 
+} from "./CampaignMonsters";
 import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 import SensoFab from "../../components/SensoFab/SensoFab"
 import dispatchSelectedByUrl from "../../store/selected/dispatchSelectedByUrl"
@@ -104,13 +109,13 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
       </Route>
       <Switch>
-        <Route exact path="/:campaignSlug/monsters/">
+        {/* <Route exact path="/:campaignSlug/monsters/">
           <CampaignMonsters />
-        </Route>
+        </Route> */}
         <Route exact path="/:campaignSlug/monsters/new">
           {isDungeonMaster ? <CampaignMonsterNew /> : <Redirect to={"/"} />}
         </Route>
-        <Route exact path="/:campaignSlug/monsters/:monsterSlug">
+        {/* <Route exact path="/:campaignSlug/monsters/:monsterSlug">
           <CampaignMonster />
         </Route>
         <Route exact path="/:campaignSlug/monsters/:monsterSlug/edit">
@@ -119,7 +124,7 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           ) : (
             <Redirect to={"/"} />
           )}
-        </Route>
+        </Route> */}
       </Switch>
       <Switch>
         <Route exact path="/:campaignSlug/players/">

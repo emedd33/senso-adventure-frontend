@@ -22,7 +22,7 @@ type CampaignMonstersProps = {};
 const CampaignMonsters: FunctionComponent<CampaignMonstersProps> = () => {
   const monsters = useSelector(getSelectedCampaignMonsters);
   const selectedCampaign = useSelector(getSelectedCampaign);
-
+  console.log("monsters", monsters)
   return (
     <Container>
       {monsters && selectedCampaign

@@ -44,7 +44,7 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
     }
     return (
         <Container>
-            <div style={{ gridColumn: "1/3" }}>
+            {/* <div style={{ gridColumn: "1/3" }}>
                 <h1 style={{ marginBottom: "0" }}>
                     {selectedMonster.monster.name} {selectedMonster.monster.isPublished === "FALSE" ? "(Unpublished)" : null}
                 </h1>
@@ -431,7 +431,7 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
                 databasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}`}
                 instanceType="Character"
                 linkPath={`/${selectedCampaign.campaign.slug}/monsters`}
-            />
+            /> */}
         </Container >
     );
 };
