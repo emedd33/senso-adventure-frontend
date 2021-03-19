@@ -29,8 +29,8 @@ import CampaignSessions from "./CampaignSessions";
 import {
   // CampaignMonsterEdit, 
   CampaignMonsterNew,
-  //  CampaignMonster, 
-  //  CampaignMonsters 
+  CampaignMonster,
+  CampaignMonsters
 } from "./CampaignMonsters";
 import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 import SensoFab from "../../components/SensoFab/SensoFab"
@@ -109,15 +109,15 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
         {isDungeonMaster ? <CampaignSessionEdit /> : <Redirect to={"/"} />}
       </Route>
       <Switch>
-        {/* <Route exact path="/:campaignSlug/monsters/">
+        <Route exact path="/:campaignSlug/monsters/">
           <CampaignMonsters />
-        </Route> */}
+        </Route>
         <Route exact path="/:campaignSlug/monsters/new">
           {isDungeonMaster ? <CampaignMonsterNew /> : <Redirect to={"/"} />}
         </Route>
-        {/* <Route exact path="/:campaignSlug/monsters/:monsterSlug">
+        <Route exact path="/:campaignSlug/monsters/:monsterSlug">
           <CampaignMonster />
-        </Route>
+        </Route>{/*
         <Route exact path="/:campaignSlug/monsters/:monsterSlug/edit">
           {isDungeonMaster ? (
             <CampaignMonsterEdit />

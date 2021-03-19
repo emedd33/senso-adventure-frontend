@@ -19,7 +19,7 @@ interface IMonster {
     nickNames?: string[];
     senses?: ISenses;
     slug: string;
-    specialAbilities?: IMonsterLegendaryAction[];
+    specialAbilities?: IMonsterAction[];
     stats: IMonsterStats;
     size?: string;
     subtype?: string;
@@ -44,16 +44,10 @@ interface IMonsterAction {
     name: string;
     desc: string;
     damage?: IMonsterDamage[]
-    dc?: IMonsterDc
-    attack_options?: IChoose
-}
-interface IMonsterLegendaryAction {
-    name: string;
-    desc: string;
-    damage?: IMonsterDamage[]
-    dc?: IMonsterDc
-    usage?: { times: number, type: string }
-    attack_options?: IChoose
+    dc?: IMonsterDc;
+    attack_options?: IChoose;
+    attack_bonus: number;
+    usage: { type: string }
 }
 
 interface IMonsterDamage {

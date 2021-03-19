@@ -1,5 +1,5 @@
-import { Backdrop, Button, CircularProgress, TextField, TextFieldProps, Tooltip } from "@material-ui/core";
-import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
+import { Button, CircularProgress, TextField, TextFieldProps, Tooltip } from "@material-ui/core";
+import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { MONSTER_DATABASE_API, NEW_MONSTER, OLD_WHITE, OLD_WHITE_DARK } from "../../../assets/constants/Constants";
