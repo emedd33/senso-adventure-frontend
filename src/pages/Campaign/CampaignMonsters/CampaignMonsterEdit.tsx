@@ -189,18 +189,34 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
                 rows={4}
             />
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
-                <div>
 
-                    <h2> Proficiencies</h2>
-                    <SensoProficiencyInput
-                        initProficiencies={selectedMonster.monster.stats.proficiencies}
-                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/proficiencies`}
+                <SensoProficiencyInput
+                    initProficiencies={selectedMonster.monster.stats.proficiencies}
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/proficiencies`}
 
-                    />
-                </div>
-                <div>
+                />
+                <SensoTextArrayInput
+                    initArray={selectedMonster.monster.damageImmunities}
+                    label="Damage immunities"
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageImmunities`}
+                />
+                <SensoTextArrayInput
+                    initArray={selectedMonster.monster.conditionImmunities}
+                    label="Condition immunities"
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/conditionImmunities`}
+                />
+                <SensoTextArrayInput
+                    initArray={selectedMonster.monster.damageResistances}
+                    label="Damage resistance"
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageResistances`}
+                />
+                <SensoTextArrayInput
+                    initArray={selectedMonster.monster.damageVulnerabilities}
+                    label="Damage vulnerabilities"
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageVulnerabilities`}
+                />
 
-                </div>
+
             </div>
             {/*
             

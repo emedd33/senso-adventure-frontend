@@ -1,5 +1,6 @@
 import {
     Button,
+    Chip,
     TextField,
 } from "@material-ui/core";
 import React, { useState } from 'react'
@@ -56,19 +57,22 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({ initProfi
         , 1000)
     return (
         <Container style={style}>
-            {proficies ? proficies.map((prof: IMonsterProficiency) =>
-                <List component="nav" aria-label="main mailbox folders">
-                    <ListItem button>
-                        <ListItemText primary={`${prof.proficiency.name}`} />
-                        <ListItemText primary={`${prof.value}`} />
-                        <ListItemIcon onClick={() => deleteProfiency(prof)}>
-                            <DeleteIcon />
-                        </ListItemIcon>
-                    </ListItem>
-                </List>
-            ) : null}
+            <div style={{ display: "flex", gridColumn: "1/3", flexWrap: "wrap", alignItems: "center" }}>
+                <b>Proficiencies:</b>
+                {proficies ? proficies.map((prof: IMonsterProficiency, index: number) =>
+                    <Chip
+                        key={index}
+                        style={{ margin: "0.2rem", backgroundColor: OLD_WHITE_DARK }}
+                        label={`${prof.proficiency.name}:${prof.value}`}
+                        onDelete={() => deleteProfiency(prof)}
+
+
+                        variant="outlined"
+                    />
+                ) : null}
+            </div>
             <div style={{
-                display: "flex", justifyContent: "center",
+                display: "flex", justifyContent: "flex-start",
                 alignItems: "center"
             }}>
 
@@ -88,7 +92,7 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({ initProfi
                     style={{ backgroundColor: OLD_WHITE_DARK }}
                     onChange={(event) => setNewValue(parseInt(event.target.value))}
                 />
-                <Button onClick={handleAddNewValue}>Add</Button>
+                <Button variant={"contained"} color="primary" onClick={handleAddNewValue}>Add</Button>
             </div>
         </Container>
     )
