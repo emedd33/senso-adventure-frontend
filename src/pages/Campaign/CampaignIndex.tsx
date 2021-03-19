@@ -27,7 +27,7 @@ import IsLoading from "../../components/IsLoading/IsLoading";
 import "react-tiny-fab/dist/styles.css";
 import CampaignSessions from "./CampaignSessions";
 import {
-  // CampaignMonsterEdit, 
+  CampaignMonsterEdit,
   CampaignMonsterNew,
   CampaignMonster,
   CampaignMonsters
@@ -116,15 +116,17 @@ const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {
           {isDungeonMaster ? <CampaignMonsterNew /> : <Redirect to={"/"} />}
         </Route>
         <Route exact path="/:campaignSlug/monsters/:monsterSlug">
-          <CampaignMonster />
-        </Route>{/*
+          {isDungeonMaster ? (<CampaignMonster />) : (
+            <Redirect to={"/"} />
+          )}
+        </Route>
         <Route exact path="/:campaignSlug/monsters/:monsterSlug/edit">
           {isDungeonMaster ? (
             <CampaignMonsterEdit />
           ) : (
             <Redirect to={"/"} />
           )}
-        </Route> */}
+        </Route>
       </Switch>
       <Switch>
         <Route exact path="/:campaignSlug/players/">

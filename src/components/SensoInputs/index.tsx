@@ -9,6 +9,7 @@ import SensoDateInput from "./SensoDateInput"
 import SensoSkillInput from "./SensoSkillInput"
 import SensoImageInput from "./SensoImageInput"
 import SensoDelete from "./SensoDelete"
+import SensoProficiencyInput from "./SensoProficiencyInput"
 export {
     SensoDateInput,
     SensoNumberInput,
@@ -20,5 +21,6 @@ export {
     SensoAbilityInput,
     SensoSkillInput,
     SensoImageInput,
-    SensoDelete
+    SensoDelete,
+    SensoProficiencyInput
 }

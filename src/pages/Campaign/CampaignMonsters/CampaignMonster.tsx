@@ -10,7 +10,7 @@ import { OLD_WHITE, OLD_WHITE_DARK } from "../../../assets/constants/Constants";
 import IsLoading from "../../../components/IsLoading/IsLoading";
 import getAbilityModifier from "../../../utils/getAbilityModifier";
 
-import { Button, Divider } from "@material-ui/core";
+import { Button, Divider, Tooltip } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import renderArrayOfString from "../../../utils/renderArrayToString";
 import Accordion from '@material-ui/core/Accordion';
@@ -20,6 +20,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { parseActionUsage, parseSuccessType } from "../../../utils/Api/parseAction";
 import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 type CampaignProps = {};
 const CampaignMonster: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
@@ -39,8 +40,8 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", margin: "1rem" }}>
                 <div>
 
-                    <h1 style={{ marginBottom: 0 }}>{`${selectedMonster.monster.name} ${selectedMonster.monster.isPublished === "FALSE" ? "(Unpublished)" : null}`}</h1>
-                    {selectedMonster.monster.nickNames ? <h2>Also known as {selectedMonster.monster.nickNames.map((name: string) => name)}</h2> : null}
+                    <h1 style={{ marginBottom: 0 }}>{`${selectedMonster.monster.name} ${selectedMonster.monster.isPublished === "FALSE" ? "(Unpublished)" : ""}`}</h1>
+                    {selectedMonster.monster.nickNames ? <h3 style={{ opacity: 0.7 }}>Also known as: {renderArrayOfString(selectedMonster.monster.nickNames)}</h3> : null}
                     <P>
                         {selectedMonster.monster.size ? `${selectedMonster.monster.size} ` : null}
                         {selectedMonster.monster.type ? `${selectedMonster.monster.type}, ` : null}
@@ -88,6 +89,11 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
                         : null}</P>
                 </div>
             </div>
+            <DividerBlock />
+
+            <h3 style={{ marginBottom: 0 }}>Summary</h3>
+
+            {selectedMonster.monster.summary}
             <DividerBlock />
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", flexDirection: "row", justifyContent: "space-between", gap: "0.5rem", padding: "1rem", }}>
                 {/* STRENGTH */}

@@ -40,9 +40,7 @@ const SensoTextInput: React.FC<SensoTextInputProps> = ({ initValue, firebasePath
 
 
 const Container = styled.div`
-display: grid; 
-gridTemplateRows: 1fr 1fr;
-alignItems: center;
+
 `
 
 export default SensoTextInput

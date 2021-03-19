@@ -39,14 +39,15 @@ const SensoNumberInput: React.FC<SensoNumberInputProps> = ({ initValue, firebase
                 label={label}
                 type="number"
                 value={value}
+                style={{ backgroundColor: OLD_WHITE_DARK }}
                 onChange={handleValueChange}
             />
         </Container>
     )
 }
 const Container = styled.div`
-    background-color:${OLD_WHITE_DARK}
 `
+
 
 
 export default SensoNumberInput

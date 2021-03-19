@@ -2,7 +2,7 @@ import React, {
     FunctionComponent,
 } from "react";
 import { useSelector } from "react-redux";
-import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, SensoMultilineTextInput, SensoAccordianInput, SensoAbilityInput, SensoSkillInput, SensoDelete } from "../../../components/SensoInputs"
+import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, SensoMultilineTextInput, SensoAccordianInput, SensoAbilityInput, SensoSkillInput, SensoDelete, SensoProficiencyInput } from "../../../components/SensoInputs"
 
 import {
     getSelectedCampaign,
@@ -16,10 +16,11 @@ import {
 import styled from "styled-components";
 import { OLD_WHITE } from "../../../assets/constants/Constants";
 import IsLoading from "../../../components/IsLoading/IsLoading";
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 import {
 
-    Divider,
+    Divider, Tooltip,
 } from "@material-ui/core";
 import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
 type CampaignProps = {};
@@ -44,7 +45,7 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
     }
     return (
         <Container>
-            {/* <div style={{ gridColumn: "1/3" }}>
+            <div >
                 <h1 style={{ marginBottom: "0" }}>
                     {selectedMonster.monster.name} {selectedMonster.monster.isPublished === "FALSE" ? "(Unpublished)" : null}
                 </h1>
@@ -52,33 +53,157 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
 
 
 
-            <SensoTextArrayInput
-                initArray={selectedMonster.monster.nickNames}
-                label="Also known as"
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/nickNames`}
-            />
+
             <SensoSwitch
                 initValue={selectedMonster.monster.isPublished}
                 firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/isPublished`}
                 label="Is published"
             />
-            <div style={{ gridColumn: "1/3" }}>
+            <SensoTextArrayInput
+                initArray={selectedMonster.monster.nickNames}
+                label="Also known as"
+                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/nickNames`}
+            />
+            <div style={{ display: "flex", flexWrap: "wrap", flexDirection: "row" }}>
 
-                <Divider />
+                <SensoTextInput
+                    initValue={selectedMonster.monster.size}
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/size`}
+                    label="Size"
+
+                />
+                <SensoTextInput
+                    initValue={selectedMonster.monster.type}
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/type`}
+                    label="Type"
+
+                />
+                <SensoTextInput
+                    initValue={selectedMonster.monster.alignment}
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/alignment`}
+                    label="Alignment"
+
+                />
+
             </div>
-            <h2 style={{ gridColumn: "1/3", textAlign: "center" }}>Basic info</h2>
-            <SensoTextInput
-                initValue={selectedMonster.monster.race}
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/race`}
-                label="Race"
 
-            />
-            <SensoTextInput
-                initValue={selectedMonster.monster.class}
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/class`}
-                label="Class"
+            <DividerBlock style={{ width: "100%" }} />
 
+            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
+                <div style={{ display: "grid", gap: "0.5rem" }}>
+
+                    <SensoNumberInput
+                        initValue={selectedMonster.monster.stats.armorClass}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/armorClass`}
+                        label="Armor class"
+                        isNegativeValid={false} />
+                    <div style={{ display: "flex", flexWrap: "wrap" }}>
+
+                        <SensoNumberInput
+                            initValue={selectedMonster.monster.stats.hitPoints}
+                            firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/hitpoints`}
+                            label="Hit points"
+                            isNegativeValid={false}
+                        />
+                        <SensoTextInput
+                            initValue={selectedMonster.monster.stats.hitDice}
+                            firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/hitDice`}
+                            label="Hit dice"
+
+                        />
+                    </div>
+                    <h3>Speed</h3>
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.stats.speed.walk}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/walk`}
+                        label="Walking speed"
+                    />
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.stats.speed.swim}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/swim`}
+                        label="Swiming speed"
+                    />
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.stats.speed.climb}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/climb`}
+                        label="Climbing speed"
+                    />
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.stats.speed.fly}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/fly`}
+                        label="Flying speed"
+                    />
+                </div>
+                <div style={{ display: "grid", gap: "0.5rem" }}>
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.challengeRating}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/challengeRating`}
+                        label="Challenge rating"
+                        style={{ maxWidth: "10rem" }}
+                    />
+                    <SensoTextArrayInput
+                        initArray={selectedMonster.monster.languages}
+                        label="Languages"
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/languages`}
+                    />
+                    <h3>Senses</h3>
+                    <SensoNumberInput
+                        initValue={selectedMonster.monster.senses?.passive_perception}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/passive_perception`}
+                        label="Passive perception"
+                        isNegativeValid={false}
+                    />
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.senses?.darkvision}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/darkvision`}
+                        label="Darkvision"
+                    />
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.senses?.blindsight}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/blindsight`}
+                        label="Blindsight"
+                    />
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.senses?.truesight}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/truesight`}
+                        label="Truesight"
+                    />
+
+                    <SensoTextInput
+                        initValue={selectedMonster.monster.senses?.tremorsense}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/tremorsense`}
+                        label="Tremorsense"
+                    />
+
+                </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                <Tooltip title={"This summary is visible for players"}>
+                    <HelpOutlineIcon />
+                </Tooltip>
+            </div>
+            <SensoMultilineTextInput
+                initValue={selectedMonster.monster.summary}
+                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/summary`}
+                label="Summary"
+                rows={4}
             />
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
+                <div>
+
+                    <h2> Proficiencies</h2>
+                    <SensoProficiencyInput
+                        initProficiencies={selectedMonster.monster.stats.proficiencies}
+                        firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/proficiencies`}
+
+                    />
+                </div>
+                <div>
+
+                </div>
+            </div>
+            {/*
+            
             <SensoTextInput
                 initValue={selectedMonster.monster.alignment}
                 firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/alignment`}
@@ -86,33 +211,14 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
 
             />
 
-            <SensoTextInput
-                initValue={selectedMonster.monster.challengeRating}
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/challengeRating`}
-                label="Challenge rating"
-                style={{ maxWidth: "10rem" }}
+            
 
-
-            />
-
-            <div style={{ gridColumn: "1/3" }}>
-                <SensoMultilineTextInput
-                    initValue={selectedMonster.monster.summary}
-                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/summary`}
-                    label="Summary"
-                    rows={4}
-                />
-            </div>
             <div style={{ gridColumn: "1/3" }}>
 
                 <Divider />
             </div>
             <h2 style={{ gridColumn: "1/3", textAlign: "center" }}>Character Stats</h2>
-            <SensoNumberInput
-                initValue={selectedMonster.monster.stats.armorClass}
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/armorClass`}
-                label="Armor class"
-                isNegativeValid={false} />
+            
             <SensoNumberInput
                 initValue={selectedMonster.monster.stats.speed}
                 firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/`}
@@ -126,12 +232,7 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
                 isNegativeValid={false}
 
             />
-            <SensoNumberInput
-                initValue={selectedMonster.monster.stats.hitPoints}
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/hitpoints`}
-                label="Hit points"
-                isNegativeValid={false}
-            />
+            
             <SensoSwitch
                 initValue={selectedMonster.monster.stats.inspiration}
                 firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/inspiration`}
@@ -437,15 +538,18 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
 };
 
 const Container = styled.div`
-  width: 70%;
-  min-height: 20rem;
-  min-width:20rem;
+width: 70%;
   padding: 1rem;
+  display:grid;
+  gap:0.5rem;
+  grid-template-columns: auto-fit;
   -webkit-box-shadow: 5px 5px 15px 5px #000000;
   box-shadow: 5px 0px 15px 2px #000000;
   background-color: ${OLD_WHITE};
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap:0.5rem;
+  min-height: 20rem;
 `;
+const DividerBlock = styled(Divider)`
+margin-top:1rem;
+margin-bottom:1rem;
+`
 export default CampaignMonsterEdit;
