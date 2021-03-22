@@ -13,6 +13,7 @@ import { useImageFile } from "../../store/hooks/useImageFile";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import { isValidImageFile } from "../../utils/isValidImageFile";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
+import { SensoDelete } from "../../components/SensoInputs";
 
 export interface CampaignEditProps {
   isNew: boolean;
@@ -100,7 +101,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
             .put(campaignBackgroundImageFile.file.file, metadata);
         }
         if (isValidImageFile(campaignTitleImageFile)) {
-          await storage.ref(`Campaigns/${slug}/BackgroundImage`)
+          await storage.ref(`Campaigns/${slug}/TitleImage`)
             .put(campaignTitleImageFile.file.file, metadata);
         }
         history.push(`/${slug}`);
@@ -212,15 +213,25 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
                 />
               </div>
             </div>
+
             <Button
               variant="contained"
               onClick={submit}
-              style={{ marginTop: "1rem" }}
+              style={{ margin: "1rem", marginBottom: "5rem" }}
               color="primary"
             >
               Submit
             </Button>
+            {selectedCampaign && !isNew ?
+              <SensoDelete
+                storagePath={`Campaigns/${selectedCampaign.campaign.slug}`}
+                databasePath={`campaigns/${selectedCampaign.id}/`}
+                instanceType="Session"
+                linkPath={`/`}
+              />
+              : null}
           </>
+
         </Container>
       )}
     </ParentContainer>

@@ -15,6 +15,7 @@ import LoginIndex from "./pages/Login/LoginIndex";
 import StickyFooter from "./components/Footer/StickyFooter";
 import ProfileIndex from "./pages/Profile/ProfileIndex";
 import CampaignEdit from "./pages/CampaignEdit.tsx/CampaignEdit";
+import CampaignHome from "./pages/Campaign/CampaignHome"
 import Home from "./pages/Home/Home";
 import { getAuthUser } from "./store/admin/adminSelectors";
 export default function App() {
@@ -32,18 +33,29 @@ export default function App() {
           <Route exact path="/login">
             {authUser ? <Redirect to="/" /> : <LoginIndex />}
           </Route>
-          <Route exact path="/profile">
-            {!authUser ? <Redirect to="/login" /> : <ProfileIndex />}
-          </Route>
-          <Route exact path="/newcampaign">
-            <CampaignEdit isNew={true} />
-          </Route>
-          <Route path="/:id">
-            <CampaignIndex />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
+          {authUser ?
+            <Switch>
+              <Route exact path="/profile">
+                <ProfileIndex />
+              </Route>
+              <Route exact path="/newcampaign">
+                <CampaignEdit isNew={true} />
+              </Route>
+              <Route path="/:id">
+                <CampaignIndex />
+              </Route>
+              <Route path="/">
+                <CampaignHome />
+              </Route>
+
+            </Switch>
+            :
+            <Switch>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          }
         </Switch>
       </div>
       <StickyFooter />

@@ -356,16 +356,17 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             {monsters.length > 0 ?
                 <Overview>
                     <Link to={`/${selectedCampaign?.campaign.slug}/monsters`} style={{ textDecoration: "none" }}>
-                        <Button
-                            variant="contained"
-                            style={{
-                                backgroundColor: OLD_WHITE,
-                                textTransform: "none",
-                                width: "100%",
-                            }}
-                        >
-                            <h3 style={{ textAlign: "end" }}>Monsters</h3>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{
+                                    textTransform: "none",
+                                }}
+                            >
+                                Monsters
                         </Button>
+                        </div>
                     </Link>
                     <ScrollMenu
                         data={monsters}
@@ -392,16 +393,17 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             {players.length > 0 ?
                 <Overview>
                     <Link to={`/${selectedCampaign?.campaign.slug}/players`} style={{ textDecoration: "none" }}>
-                        <Button
-                            variant="contained"
-                            style={{
-                                backgroundColor: OLD_WHITE,
-                                textTransform: "none",
-                                width: "100%",
-                            }}
-                        >
-                            <h3 style={{ textAlign: "end" }}>Players</h3>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{
+                                    textTransform: "none",
+                                }}
+                            >
+                                Players
                         </Button>
+                        </div>
                     </Link>
                     <ScrollMenu
                         data={players}
@@ -428,16 +430,18 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             {locations.length > 0 ?
                 <Overview>
                     <Link to={`/${selectedCampaign?.campaign.slug}/locations`} style={{ textDecoration: "none" }}>
-                        <Button
-                            variant="contained"
-                            style={{
-                                backgroundColor: OLD_WHITE,
-                                textTransform: "none",
-                                width: "100%",
-                            }}
-                        >
-                            <h3 style={{ textAlign: "end" }}>Locations</h3>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{
+                                    textTransform: "none",
+                                }}
+                            >
+                                Locations
                         </Button>
+                        </div>
                     </Link>
                     <ScrollMenu
                         data={locations}
@@ -461,25 +465,29 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                     />
                 </Overview>
                 : null}
-            {isDungeonMaster ?
-                <Overview>
+            {isDungeonMaster ? <>
+                <div style={{ backgroundColor: OLD_WHITE_TRANSPARENT, display: "flex", justifyContent: "center", flexDirection: "row", padding: "2rem" }}>
+
                     <Link to={`/${selectedCampaign?.campaign.slug}/edit`} style={{ textDecoration: "none" }}>
-                        <Button
-                            variant="contained"
-                            style={{
-                                backgroundColor: OLD_WHITE,
-                                textTransform: "none",
-                                width: "100%",
-                            }}
-                        >
-                            <h3 style={{ textAlign: "end" }}>Edit Campaign Images</h3>
-                        </Button>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{
+                                    textTransform: "none",
+                                }}
+                            >
+                                Edit Campaign
+                            </Button>
+                        </div>
                     </Link>
 
-                </Overview>
+                </div>
+            </>
                 : null}
 
-        </Container>
+        </Container >
     );
 };
 const Container = styled.div`
