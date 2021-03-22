@@ -1,5 +1,5 @@
 import {
-    Switch,
+    Switch, Tooltip,
 } from "@material-ui/core";
 import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
@@ -12,8 +12,9 @@ type SensoSwitchProps = {
     firebasePath: string,
     label?: string,
     style?: React.CSSProperties
+    toolTip?: string
 }
-const SensoSwitch: React.FC<SensoSwitchProps> = ({ initValue, firebasePath, label, style }) => {
+const SensoSwitch: React.FC<SensoSwitchProps> = ({ initValue, firebasePath, label, toolTip, style }) => {
     const [value, setValue, saveValue, isSavedValue] = useSavedState(initValue)
     useInterval(
         () => {
@@ -29,15 +30,17 @@ const SensoSwitch: React.FC<SensoSwitchProps> = ({ initValue, firebasePath, labe
 
 
                 <h4 style={{ margin: "0" }}>{label ? `${label}:` : ""}</h4>
-                <Switch
-                    checked={value === "TRUE"}
-                    onChange={(event) => {
-                        setValue(event.target.checked ? "TRUE" : "FALSE");
-                    }}
-                    color="primary"
-                    name="checkedB"
-                    inputProps={{ "aria-label": "primary checkbox" }}
-                />
+                <Tooltip title={toolTip ? toolTip : ""}>
+                    <Switch
+                        checked={value === "TRUE"}
+                        onChange={(event) => {
+                            setValue(event.target.checked ? "TRUE" : "FALSE");
+                        }}
+                        color="primary"
+                        name="checkedB"
+                        inputProps={{ "aria-label": "primary checkbox" }}
+                    />
+                </Tooltip>
             </div>
         </Container>
     )

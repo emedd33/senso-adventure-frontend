@@ -2,7 +2,7 @@ import React, {
     FunctionComponent,
 } from "react";
 import { useSelector } from "react-redux";
-import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, SensoMultilineTextInput, SensoActionInputs, SensoAbilityInput, SensoSkillInput, SensoDelete, SensoProficiencyInput } from "../../../components/SensoInputs"
+import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, SensoMultilineTextInput, SensoActionInputs, SensoDelete, SensoProficiencyInput } from "../../../components/SensoInputs"
 
 import {
     getSelectedCampaign,
@@ -16,8 +16,7 @@ import {
 import styled from "styled-components";
 import { OLD_WHITE } from "../../../assets/constants/Constants";
 import IsLoading from "../../../components/IsLoading/IsLoading";
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-
+import secretIcon from "../../../assets/icons/hush_icon.png"
 import {
 
     Divider, Tooltip,
@@ -30,7 +29,6 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
     );
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(getSelectedCampaign)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
-    console.log("selectedMonster", selectedMonster?.monster)
     const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
     const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList);
     const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
@@ -53,12 +51,16 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
 
 
 
+            <div style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
 
-            <SensoSwitch
-                initValue={selectedMonster.monster.isPublished}
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/isPublished`}
-                label="Is published"
-            />
+                <SensoSwitch
+                    initValue={selectedMonster.monster.isPublished}
+                    firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/isPublished`}
+                    label="Is published"
+                    toolTip="Published monster are visible for players"
+                />
+
+            </div>
             <SensoTextArrayInput
                 initArray={selectedMonster.monster.nickNames}
                 label="Also known as"
@@ -87,6 +89,20 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
 
             </div>
 
+            <DividerBlock style={{ width: "100%" }} />
+
+            <SensoMultilineTextInput
+                initValue={selectedMonster.monster.summary}
+                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/summary`}
+                label="Summary"
+                rows={4}
+            />
+            <DividerBlock style={{ width: "100%" }} />
+            <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                <Tooltip title={"Everything below is hidden from players"}>
+                    <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
+                </Tooltip>
+            </div>
             <DividerBlock style={{ width: "100%" }} />
 
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
@@ -177,17 +193,7 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
 
                 </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                <Tooltip title={"This summary is visible for players"}>
-                    <HelpOutlineIcon />
-                </Tooltip>
-            </div>
-            <SensoMultilineTextInput
-                initValue={selectedMonster.monster.summary}
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/summary`}
-                label="Summary"
-                rows={4}
-            />
+
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
 
                 <SensoProficiencyInput
@@ -231,38 +237,28 @@ const CampaignMonsterEdit: FunctionComponent<CampaignProps> = () => {
                 label="Actions"
                 firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/actions`}
             />
-            {/*
-           
 
-           
-            
-   
-            <SensoAccordianInput
-                style={{ gridColumn: "1/3" }}
-                initArray={selectedMonster.monster.actions}
-                firebasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/actions`}
-                label="Action" />
-            <div style={{ gridColumn: "1/3" }}>
 
-                <Divider />
-            </div>
-            <div style={{ gridColumn: "1/3" }}>
-                <h3>Description and history:</h3>
-                <DraftJSEditor
-                    playerMentionList={playerMentionList}
-                    monsterMentionList={monsterMentionList}
-                    locationMentionList={locationMentionList}
-                    readOnly={false}
-                    isDungeonMaster={isDungeonMaster}
-                    storagePath={`${monsterPath}/monsterDescription.json`}
-                />
-            </div>
+
+
+
+
+            <Divider />
+            <h3>Description and history:</h3>
+            <DraftJSEditor
+                playerMentionList={playerMentionList}
+                monsterMentionList={monsterMentionList}
+                locationMentionList={locationMentionList}
+                readOnly={false}
+                isDungeonMaster={isDungeonMaster}
+                storagePath={`${monsterPath}/monsterDescription.json`}
+            />
             <SensoDelete
                 storagePath={`Campaigns/${selectedCampaign.campaign.slug}/Monsters/${selectedMonster.monster.slug}`}
                 databasePath={`campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}`}
                 instanceType="Character"
                 linkPath={`/${selectedCampaign.campaign.slug}/monsters`}
-            /> */}
+            />
         </Container >
     );
 };

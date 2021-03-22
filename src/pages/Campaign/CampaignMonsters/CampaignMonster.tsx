@@ -18,9 +18,10 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { parseActionUsage, parseSuccessType } from "../../../utils/Api/parseAction";
 import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import secretIcon from "../../../assets/icons/hush_icon.png"
+
+
 type CampaignProps = {};
 const CampaignMonster: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
@@ -60,6 +61,17 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
             </Button>
             </div>
             <DividerBlock />
+
+            <h3 style={{ marginBottom: 0 }}>Summary</h3>
+
+            {selectedMonster.monster.summary}
+            <DividerBlock />
+            <div style={{ width: "100%", display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
+                <Tooltip title={"Everything below is hidden from players. This includes evething except Name, Nicknames, size, type, alignemnt and"}>
+                    <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
+                </Tooltip>
+            </div>
+
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(10rem,20rem)" }}>
                 <div>
 
@@ -89,11 +101,7 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
                         : null}</P>
                 </div>
             </div>
-            <DividerBlock />
 
-            <h3 style={{ marginBottom: 0 }}>Summary</h3>
-
-            {selectedMonster.monster.summary}
             <DividerBlock />
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", flexDirection: "row", justifyContent: "space-between", gap: "0.5rem", padding: "1rem", }}>
                 {/* STRENGTH */}
@@ -160,25 +168,23 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
                 </div>
             </div>
             {selectedMonster.monster.specialAbilities ? <>
-                <h2 style={{ marginBottom: 0 }}>Special Abilities</h2>
-                <Divider />
+                <h2>Special abilities</h2>
                 {
                     selectedMonster.monster.specialAbilities.map((ability: IMonsterAction) => {
-                        return <div style={{ marginTop: "1rem" }}>
-                            <p><b>{ability.name}: </b>{ability.desc}</p>
-                            <ul style={{ margin: 0 }}>
-                                {ability.damage ? <li><b>Damage: </b>{`${ability.damage.map(dmg => `${dmg.damage_dice} (${dmg.damage_type.name}) `)}`} </li> : null}
-                                {ability.attack_bonus ? <li><b>Attack Bonus: </b>{ability.attack_bonus} </li> : null}
-                                {ability.dc ?
-                                    <ul style={{ margin: 0 }}>
-                                        <li><b>Saving throw: </b>{ability.dc.dc_type.name} </li>
-                                        <li><b>Dc value: </b>{ability.dc.dc_value} </li>
-                                        <li><b>Success: </b>{parseSuccessType(ability.dc.success_type)} </li>
-                                    </ul>
-                                    : null}
+                        return <div >
+                            <Accordion style={{ backgroundColor: OLD_WHITE, marginTop: "0.2rem" }}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <Typography >{ability.name}</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails style={{ backgroundColor: OLD_WHITE_DARK, display: "grid", gridTemplateColumns: "auto", gap: "1rem" }}>
+                                    {ability.desc}
+                                </AccordionDetails>
+                            </Accordion>
 
-                                {ability.usage ? <li><b>Usage: </b>{parseActionUsage(ability.usage)} </li> : null}
-                            </ul>
                         </div>
                     })
                 }
@@ -198,23 +204,7 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
                                     <Typography >{action.name}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails style={{ backgroundColor: OLD_WHITE_DARK, display: "grid", gridTemplateColumns: "auto", gap: "1rem" }}>
-                                    <div>
-                                        {action.desc}
-                                    </div>
-                                    <div>
-                                        {action.damage ? <li><b>Damage: </b>{`${action.damage.map(dmg => `${dmg.damage_dice} (${dmg.damage_type.name}) `)}`} </li> : null}
-                                        {action.attack_bonus ? <li><b>Attack Bonus: </b>{action.attack_bonus} </li> : null}
-                                        {action.dc ?
-                                            <ul style={{ margin: 0 }}>
-                                                <li><b>Saving throw: </b>{action.dc.dc_type.name} </li>
-                                                <li><b>Dc value: </b>{action.dc.dc_value} </li>
-                                                <li><b>Success: </b>{parseSuccessType(action.dc.success_type)} </li>
-
-                                            </ul>
-                                            : null}
-
-                                        {action.usage ? <li><b>Usage: </b>{parseActionUsage(action.usage)} </li> : null}
-                                    </div>
+                                    {action.desc}
                                 </AccordionDetails>
                             </Accordion>
 
@@ -236,23 +226,8 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
                                 <Typography >{action.name}</Typography>
                             </AccordionSummary>
                             <AccordionDetails style={{ backgroundColor: OLD_WHITE_DARK, display: "grid", gridTemplateColumns: "auto", gap: "1rem" }}>
-                                <div>
-                                    {action.desc}
-                                </div>
-                                <div>
-                                    {action.damage ? <li><b>Damage: </b>{`${action.damage.map(dmg => `${dmg.damage_dice} (${dmg.damage_type.name}) `)}`} </li> : null}
-                                    {action.attack_bonus ? <li><b>Attack Bonus: </b>{action.attack_bonus} </li> : null}
-                                    {action.dc ?
-                                        <ul style={{ margin: 0 }}>
-                                            <li><b>Saving throw: </b>{action.dc.dc_type.name} </li>
-                                            <li><b>Dc value: </b>{action.dc.dc_value} </li>
-                                            <li><b>Success: </b>{parseSuccessType(action.dc.success_type)} </li>
+                                {action.desc}
 
-                                        </ul>
-                                        : null}
-
-                                    {action.usage ? <li><b>Usage: </b>{parseActionUsage(action.usage)} </li> : null}
-                                </div>
                             </AccordionDetails>
                         </Accordion>
 

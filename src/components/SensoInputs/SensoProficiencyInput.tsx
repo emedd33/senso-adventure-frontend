@@ -9,12 +9,6 @@ import useInterval from "../../store/hooks/useInterval";
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
 import { database } from "../../firebase";
-import DeleteIcon from '@material-ui/icons/Delete';
-
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 
 type SensoProficiencyInputProps = {
     initProficiencies: IMonsterProficiency[],
@@ -25,7 +19,6 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({ initProfi
     const [proficies, setArray, saveArray, isSavedArray] = useSavedState(initProficiencies)
     const [newValue, setNewValue] = useState<number | undefined>()
     const [newKey, setNewKey] = useState<string | undefined>()
-    const [newKeyError, setNewKeyError] = useState(false)
 
     const handleAddNewValue = () => {
         if (newValue && newKey) {
@@ -80,7 +73,6 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({ initProfi
                     variant="outlined"
                     label={"Proficiency"}
                     value={newKey}
-                    error={newKeyError}
                     style={{ backgroundColor: OLD_WHITE_DARK }}
                     onChange={(event) => setNewKey(event.target.value)}
                 />
