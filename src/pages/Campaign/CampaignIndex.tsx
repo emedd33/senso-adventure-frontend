@@ -8,9 +8,12 @@ import {
   useLocation,
 } from "react-router-dom";
 import Campaign from "./Campaign";
-import CampaignSessionEdit from "./CampaignSessionEdit";
-import CampaignSessionNew from "./CampaignSessionNew";
-import CampaignSession from "./CampaignSession";
+import {
+  CampaignSessionEdit,
+  CampaignSessionNew,
+  CampaignSession,
+  CampaignSessions
+} from "./CampaignSession";
 import {
   getSelectedCampaign,
   getSelectedCampaignSlug,
@@ -25,7 +28,7 @@ import { storage } from "../../firebase";
 import { setIsLoading } from "../../store/admin/adminCreator";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import "react-tiny-fab/dist/styles.css";
-import CampaignSessions from "./CampaignSessions";
+
 import {
   CampaignMonsterEdit,
   CampaignMonsterNew,
@@ -35,10 +38,8 @@ import {
 import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 import SensoFab from "../../components/SensoFab/SensoFab"
 import dispatchSelectedByUrl from "../../store/selected/dispatchSelectedByUrl"
-import CampaignLocationNew from "./CampaignLocationNew";
-import CampaignLocations from "./CampaignLocations";
-import CampaignLocation from "./CampaignLocation";
-import CampaignLocationEdit from "./CampaignLocationEdit";
+import { CampaignLocation, CampaignLocations, CampaignLocationNew, CampaignLocationEdit } from "./CampaignLocation";
+
 import { CampaignPlayers, CampaignPlayerNew, CampaignPlayer, CampaignPlayerEdit } from "./CampaignPlayers";
 type CampaignIndexProps = {};
 const CampaignIndex: FunctionComponent<CampaignIndexProps> = () => {

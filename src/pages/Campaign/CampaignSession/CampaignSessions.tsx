@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getSelectedCampaign, getSelectedCampaignSessions } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign, getSelectedCampaignSessions } from "../../../store/selected/selectedSelectors";
 
-import Scroll from "../../components/Scroll/Scroll";
-import { setSelectedSession } from "../../store/selected/selectedCreators";
+import Scroll from "../../../components/Scroll/Scroll";
+import { setSelectedSession } from "../../../store/selected/selectedCreators";
 
 type CampaignSessionsProps = {};
 const CampaignSessions: FunctionComponent<CampaignSessionsProps> = () => {

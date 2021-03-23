@@ -67,7 +67,7 @@ const CampaignMonster: FunctionComponent<CampaignProps> = () => {
             {selectedMonster.monster.summary}
             <DividerBlock />
             <div style={{ width: "100%", display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
-                <Tooltip title={"Everything below is hidden from players. This includes evething except Name, Nicknames, size, type, alignemnt and"}>
+                <Tooltip title={"Everything below is hidden from players. This includes everything except Name, Nicknames, size, type, alignment and summary"}>
                     <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
                 </Tooltip>
             </div>

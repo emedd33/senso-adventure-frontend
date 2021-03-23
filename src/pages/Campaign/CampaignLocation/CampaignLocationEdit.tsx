@@ -4,10 +4,10 @@ import {
 
 import React from "react";
 import { useSelector } from "react-redux";
-import { OLD_WHITE } from "../../assets/constants/Constants";
-import IsLoading from "../../components/IsLoading/IsLoading";
+import { OLD_WHITE } from "../../../assets/constants/Constants";
+import IsLoading from "../../../components/IsLoading/IsLoading";
 import "react-markdown-editor-lite/lib/index.css";
-import { SensoAccordianInput, SensoImageInput, SensoMultilineTextInput, SensoSwitch, SensoTextArrayInput, SensoTextInput, SensoDelete } from "../../components/SensoInputs"
+import { SensoAccordianInput, SensoImageInput, SensoMultilineTextInput, SensoSwitch, SensoTextArrayInput, SensoTextInput, SensoDelete } from "../../../components/SensoInputs"
 import {
     getSelectedCampaign,
     getSelectedCampaignMonsterMentionList,
@@ -16,9 +16,9 @@ import {
     getSelectedLocationStoragePath,
     isDungeonMasterSelector,
     getSelectedCampaignPlayerMentionList
-} from "../../store/selected/selectedSelectors";
-import { getIsLoading } from "../../store/admin/adminSelectors";
-import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
+} from "../../../store/selected/selectedSelectors";
+import { getIsLoading } from "../../../store/admin/adminSelectors";
+import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
 
 
 const CampaignLocationEdit: React.FC = () => {

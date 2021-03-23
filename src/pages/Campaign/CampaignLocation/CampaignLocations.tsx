@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import {
     getSelectedCampaign,
     getSelectedCampaignLocations,
-} from "../../store/selected/selectedSelectors";
+} from "../../../store/selected/selectedSelectors";
 import styled from "styled-components";
 
-import { OLD_WHITE } from "../../assets/constants/Constants";
+import { OLD_WHITE } from "../../../assets/constants/Constants";
 import {
     Accordion,
     AccordionActions,

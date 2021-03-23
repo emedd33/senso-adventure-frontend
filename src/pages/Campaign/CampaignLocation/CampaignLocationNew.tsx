@@ -2,12 +2,12 @@ import { Button, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { NEW_LOCATION, OLD_WHITE } from "../../assets/constants/Constants";
-import IsLoading from "../../components/IsLoading/IsLoading";
-import { setAlertDialog } from "../../store/admin/adminCreator";
+import { NEW_LOCATION, OLD_WHITE } from "../../../assets/constants/Constants";
+import IsLoading from "../../../components/IsLoading/IsLoading";
+import { setAlertDialog } from "../../../store/admin/adminCreator";
 import styled from "styled-components";
-import { setSelectedLocation } from "../../store/selected/selectedCreators";
-import { database } from "../../firebase";
+import { setSelectedLocation } from "../../../store/selected/selectedCreators";
+import { database } from "../../../firebase";
 export interface CampaignLocationNewProps { }
 
 

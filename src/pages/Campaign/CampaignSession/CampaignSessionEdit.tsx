@@ -1,8 +1,8 @@
 
 import React from "react";
 import { useSelector } from "react-redux";
-import { OLD_WHITE } from "../../assets/constants/Constants";
-import IsLoading from "../../components/IsLoading/IsLoading";
+import { OLD_WHITE } from "../../../assets/constants/Constants";
+import IsLoading from "../../../components/IsLoading/IsLoading";
 import "react-markdown-editor-lite/lib/index.css";
 import styled from "styled-components";
 
@@ -14,9 +14,9 @@ import {
     getSelectedSessionStoragePath,
     isDungeonMasterSelector,
     getSelectedCampaignPlayerMentionList
-} from "../../store/selected/selectedSelectors";
-import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
-import { SensoDateInput, SensoDelete, SensoImageInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../components/SensoInputs";
+} from "../../../store/selected/selectedSelectors";
+import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
+import { SensoDateInput, SensoDelete, SensoImageInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../../components/SensoInputs";
 
 
 

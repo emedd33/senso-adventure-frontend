@@ -4,15 +4,15 @@ import {
     useSelector
 } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { OLD_WHITE, OLD_WHITE_DARK } from "../../assets/constants/Constants";
-import IsLoading from "../../components/IsLoading/IsLoading";
+import { OLD_WHITE, OLD_WHITE_DARK } from "../../../assets/constants/Constants";
+import IsLoading from "../../../components/IsLoading/IsLoading";
 import styled from "styled-components";
 import {
     getSelectedLocation,
     getSelectedCampaign,
     isDungeonMasterSelector,
     getSelectedLocationStoragePath
-} from "../../store/selected/selectedSelectors";
+} from "../../../store/selected/selectedSelectors";
 import {
     Accordion,
     AccordionActions,
@@ -26,8 +26,8 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link } from "react-router-dom";
-import renderArrayOfString from "../../utils/renderArrayToString";
-import DraftJSEditor from "../../components/DraftJSEditor/DraftJSEditor";
+import renderArrayOfString from "../../../utils/renderArrayToString";
+import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
 
 export interface CampaignLocationNewProps { }
 
