@@ -17,8 +17,8 @@ import { storage } from "../../services/Firebase/firebase";
 import { Button, CircularProgress } from "@material-ui/core";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
-type CampaignHomeProps = {};
-const CampaignHome: FunctionComponent<CampaignHomeProps> = () => {
+type UserHomeProps = {};
+const UserHome: FunctionComponent<UserHomeProps> = () => {
     const history = useHistory();
     const campaigns = useSelector(getAllCampaigns);
     const [campaignUrls, setCampaignUrls] = useState<any[]>([])
@@ -140,7 +140,7 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   height: 100%;
-  padding-top: 10rem;
+  width:100%;
   min-height: 100vh;
 `;
 
@@ -150,4 +150,4 @@ const CampaignImg = styled.img`
  
 `;
 
-export default CampaignHome;
+export default UserHome;

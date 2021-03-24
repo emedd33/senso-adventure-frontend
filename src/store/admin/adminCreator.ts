@@ -11,7 +11,7 @@ export const dispatchLogin = (payload: ILogin) => {
     dispatch(setIsLoading(true))
     login(payload.email, payload.password)
       .then((user: any) => {
-        dispatch(loginSuccess(user));
+        dispatch(setAuthUser(user));
       })
       .catch((error: { code: any }) => {
         let errorMessage = "An error has occured";
@@ -29,7 +29,7 @@ export const dispatchLogout = () => {
   return async (dispatch: Dispatch) => {
     logout()
       .then(() => {
-        dispatch({ type: SET_AUTH_USER, payload: null });
+        dispatch(setAuthUser());
       })
       .catch((error) => {
         dispatch({ type: SET_ALERT_DIALOG, payload: "An error has occured" });
@@ -37,18 +37,16 @@ export const dispatchLogout = () => {
   };
 };
 
-export const loginSuccess = (user: any) => ({
-  type: SET_AUTH_USER,
-  payload: {
-    ...user,
-  },
-});
 
 export const setIsLoading = (isLoading: boolean) => ({
   type: SET_IS_LOADING,
   payload: isLoading,
 });
 
+export const setAuthUser = (user?: any) => ({
+  type: SET_AUTH_USER,
+  payload: user,
+});
 export const setAlertDialog = (
   message: any,
   isError: boolean,
@@ -64,3 +62,4 @@ export const setAlertDialog = (
   isError: isError,
   isOpen: isOpen,
 });
+

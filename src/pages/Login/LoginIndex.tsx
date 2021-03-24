@@ -21,7 +21,7 @@ const LoginIndex: React.FC<LoginProps> = () => {
     getUrlFromStorage(LOGIN_BACKGROUND_IMAGE_STORAGE_PATH)
       .then((url: string) => setImageUrl(url));
   }, []);
-  if (authUser && authUser.displayName) {
+  if (authUser && authUser.user.displayName) {
     return <Redirect to="/" />
   }
 

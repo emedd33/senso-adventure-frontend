@@ -182,6 +182,8 @@ export const getSelectedCampaignDatabasePath = (state: RootReducerProp) => {
     }
 };
 
+// SESSION PATHS
+
 export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
         return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/sessions/${state.selected?.selectedSession?.id}`)

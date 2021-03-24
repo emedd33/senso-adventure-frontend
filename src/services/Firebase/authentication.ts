@@ -9,7 +9,7 @@ export const resetPassword = (email: string, dispatch: any) => {
 
 export const login = (email: string, password: string) => {
     return authentication
-        .signInWithEmailAndPassword(email, password)
+        .signInWithEmailAndPassword(email, password).then(user => user.user)
 }
 
 export const logout = () => {

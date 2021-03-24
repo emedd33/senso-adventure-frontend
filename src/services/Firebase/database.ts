@@ -14,6 +14,3 @@ export const getFromDatabase = (path: string) => {
     return database.ref(path).get()
 }
 
-export const onDatabaseChange = async (path: string) => {
-    return database.ref(path).on("value", (snapshot) => snapshot.val())
-}

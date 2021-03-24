@@ -2,33 +2,27 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { storage, firebaseAuth } from "../../services/Firebase/firebase";
-import { Route } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { OLD_WHITE, OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import { dispatchLogout, setAlertDialog } from "../../store/admin/adminCreator";
 import TextField from "@material-ui/core/TextField";
 import { getCurrentUser } from "../../services/Firebase/authentication";
+import { getAuthUser, getIsLoading } from "../../store/admin/adminSelectors";
 
 export interface ProfileIndexProps { }
 
 const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector(
-    (state: RootReducerProp) => state.admin.isLoading
-  );
+  const isLoading = useSelector(getIsLoading);
   const [imageUrl, setImageUrl] = useState("");
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [firstNewPassword, setFirstNewPassword] = useState("");
   const [secondNewPassword, setSecondNewPassword] = useState("");
   const currentUser = getCurrentUser()
-  const username = useSelector(
-    (state: RootReducerProp) => state.admin.authUser?.displayName
-  );
-  const email = useSelector(
-    (state: RootReducerProp) => state.admin.authUser?.email
-  );
+  const authUser = useSelector(getAuthUser)
+
 
 
   const handleChangePassword = () => {
@@ -46,10 +40,10 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
       );
       return;
     }
-    if (currentUser) {
-      if (email) {
+    if (currentUser && authUser) {
+      if (authUser.email) {
         var credential = firebaseAuth.EmailAuthProvider.credential(
-          email, // references the user's email address
+          authUser.email, // references the user's email address
           currentPassword
         );
         currentUser
@@ -111,7 +105,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
             }}
           >
             <ProfileRowString>Username: </ProfileRowString>
-            <p>{username}</p>
+            <p>{authUser.displayName}</p>
           </div>
           <div
             style={{
@@ -121,7 +115,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
             }}
           >
             <ProfileRowString>Email: </ProfileRowString>
-            <p>{email}</p>
+            <p>{authUser.email}</p>
           </div>
           <Button
             variant="contained"
@@ -189,7 +183,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                 >
                   <TextField
                     fullWidth
-                    id="second password"
+                    id="first password"
                     type="password"
                     label="New password"
                     placeholder="Write your new password"

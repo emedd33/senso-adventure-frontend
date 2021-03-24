@@ -15,7 +15,8 @@ import { isValidImageFile } from "../../utils/isValidImageFile";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 import { SensoDelete } from "../../components/SensoInputs";
 import { pushToDatabase } from "../../services/Firebase/database"
-import { getUrlFromStorage } from "../../services/Firebase/storage"
+import { getUrlFromStorage, pushToStorage } from "../../services/Firebase/storage"
+import { transformTitleToSlug } from "../../utils/StringProcessing"
 export interface CampaignEditProps {
   isNew: boolean;
 }
@@ -24,14 +25,14 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation()
-  const pathArray = location.pathname.split("/")
+  const owner = useLocation().pathname.split("/")[2]
+  const selectedCampaignStoragePath = useSelector(getSelectedCampaignStoragePath)
   const [imageUrl, setImageUrl] = useState("");
 
   const authUser = useSelector(getAuthUser)
   const [isLoading, setIsLoading] = useState(false);
   const selectedCampaign = useSelector(getSelectedCampaign);
   const campaignDatabasePath = useSelector(getSelectedCampaignDatabasePath)
-  const campaignStoragePath = useSelector(getSelectedCampaignStoragePath)
 
   const [campaignTitle, setCampaignTitle] = useState<string>();
   const user = useSelector(getAuthUser);
@@ -62,10 +63,13 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   }, [selectedCampaign]);
   const submit = async () => {
     setIsLoading(true);
-    if (user && campaignDatabasePath) {
+    if (user) {
+      // Checks if the inputs are valid
       let slug = selectedCampaign?.campaign.slug
       let title = selectedCampaign?.campaign.title
       if (isNew) {
+
+        // Creates instances of the campaign is a new one
         if (!campaignTitle) {
           setCampaignTitleError(true);
           dispatch(
@@ -77,17 +81,17 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
           setCampaignTitleError(false);
         }
         title = campaignTitle
-        slug = campaignTitle.replace(/\s/g, "");
+        slug = transformTitleToSlug(campaignTitle);
         let newCampaign = {
           dungeonMaster: { username: user.displayName, uid: user.uid },
           title: title,
           slug: slug,
         };
-        await pushToDatabase(campaignDatabasePath, newCampaign)
+        await pushToDatabase(`users/${user.displayName}/campaigns/`, newCampaign)
 
       }
 
-
+      // Updates storage files of title image and background image
       if (slug && title) {
         const metadata = {
           customMetadata: {
@@ -97,18 +101,16 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
         };
 
         if (isValidImageFile(campaignBackgroundImageFile)) {
-          await storage.ref(`Campaigns/${slug}/BackgroundImage`)
-            .put(campaignBackgroundImageFile.file.file, metadata);
+          pushToStorage(`${selectedCampaignStoragePath}/BackgroundImage`, campaignBackgroundImageFile.file.file, metadata)
         }
         if (isValidImageFile(campaignTitleImageFile)) {
-          await storage.ref(`Campaigns/${slug}/TitleImage`)
-            .put(campaignTitleImageFile.file.file, metadata);
+          pushToStorage(`${selectedCampaignStoragePath}/TitleImage`, campaignTitleImageFile.file.file, metadata)
         }
-        history.push(`/${slug}`);
+        history.push(`/user/${authUser.displayName}/campaigns/${slug}`);
       }
     }
   }
-  if (!authUser || pathArray[2] !== authUser.displayName) {
+  if (!authUser || owner !== authUser.displayName) {
     return <Redirect to="/" />
   }
   return (

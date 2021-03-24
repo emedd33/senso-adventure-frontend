@@ -9,28 +9,29 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.scss";
-import { fetchFromFirebase } from "./store/campaign/campaignCreators";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import LoginIndex from "./pages/Login/LoginIndex";
 import NotFound from "./pages/NotFound/NotFound"
 import StickyFooter from "./components/Footer/StickyFooter";
 import ProfileIndex from "./pages/Profile/ProfileIndex";
-import CampaignEdit from "./pages/CampaignEdit.tsx/CampaignEdit";
-import CampaignHome from "./pages/Campaign/CampaignHome"
 import Home from "./pages/Home/Home";
 import { getAuthUser, getAuthUserPath, getIsLoading } from "./store/admin/adminSelectors";
 import { isDungeonMasterSelector } from "./store/selected/selectedSelectors";
 import styled from "styled-components";
-import IsLoading from "./components/IsLoading/IsLoading";
+import { authentication } from "./services/Firebase/firebase";
+import { setAuthUser } from "./store/admin/adminCreator";
+import UserIndex from "./pages/User/UserIndex";
 export default function App() {
   const dispatch = useDispatch();
 
   const authUser = useSelector(getAuthUser);
   const authUserPath = useSelector(getAuthUserPath)
   useEffect(() => {
-    if (authUser.displayName) {
-      dispatch((dispatch: any) => fetchFromFirebase(dispatch, authUser.displayName));
-    }
+    authentication.onAuthStateChanged(function (user) {
+      if (user) {
+        dispatch(setAuthUser(user));
+      }
+    });
   }, [dispatch, authUser]);
   return (
     <Router>
@@ -46,13 +47,11 @@ export default function App() {
           {authUser && authUser.displayName ? <Redirect to="/" /> : <LoginIndex />}
         </Route>
         <Route path="/user/:username/">
+          <UserIndex />
+        </Route>
+        <Route path="/user/:username/">
           <Switch>
-            <Route exact path="/user/:username/">
-              <CampaignHome />
-            </Route>
-            <Route exact path="/user/:username/newcampaign">
-              <CampaignEdit isNew={true} />
-            </Route>
+
           </Switch>
         </Route>
         <Route exact path="/">
@@ -65,15 +64,10 @@ export default function App() {
       {/*
           <Switch>
             
-            <Route path="/user/:username/:campaignId">
-              <CampaignIndex />
-            </Route>
             <Route path="/user/:username/">
               <CampaignHome />
             </Route> 
-<Route path="/">
-            {authUser ? <Redirect to={`/user/${authUser.username}`} /> : <Home />}
-          </Route> 
+
         </Switch>*/}
       <StickyFooter />
     </Router >

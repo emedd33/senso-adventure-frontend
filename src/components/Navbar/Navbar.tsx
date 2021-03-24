@@ -18,15 +18,12 @@ import {
   createStyles,
   makeStyles,
   Theme,
-  Typography,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import useWindowSize from "../../store/hooks/useWindowSize";
 import IsLoading from "../IsLoading/IsLoading";
 import { LIGHT_PINK } from "../../assets/constants/Constants";
 import { initialSelectedCampaignState } from "../../store/selected/selectedReducer";
 import { getAuthUser } from "../../store/admin/adminSelectors";
-import { isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     backdrop: {
@@ -39,13 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
 type NavbarProps = {};
 const Navbar: FunctionComponent<NavbarProps> = () => {
   const classes = useStyles();
-  const size = useWindowSize();
   const location = useLocation();
   const dispatch = useDispatch();
-  const isDungeonMaster = useSelector((state: RootReducerProp) => isDungeonMasterSelector(state, location))
   const rootCampaigns = useSelector(
     (state: RootReducerProp) => state.rootCampaigns
   );
+  const owner = useLocation().pathname.split("/")[2]
   const authUser = useSelector(getAuthUser);
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
@@ -67,11 +63,11 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
           >
             <Route path="/user/:userid">
 
-              {isDungeonMaster ?
-                <NavBarOpenIcon to="#">
-                  <FaIcons.FaBars onClick={showSidebar} />
-                </NavBarOpenIcon>
-                : null}
+
+              <NavBarOpenIcon to="#">
+                <FaIcons.FaBars onClick={showSidebar} />
+              </NavBarOpenIcon>
+
             </Route>
             <Link
               to="/"
@@ -168,7 +164,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     }
                   )}
 
-                  {authUser ? (
+                  {authUser && authUser.displayName === owner ? (
                     <NavBarItem>
                       <Link
                         to={`/user/${authUser.displayName}/newcampaign`}
