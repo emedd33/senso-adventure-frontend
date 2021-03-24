@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { authentication } from "../../firebase";
+import { authentication, database } from "../../firebase";
 import {
   SET_IS_LOADING,
   SET_ALERT_DIALOG,
@@ -8,6 +8,7 @@ import {
 
 export const dispatchLogin = (payload: ILogin) => {
   return async (dispatch: Dispatch) => {
+    dispatch(setIsLoading(true))
     await authentication
       .signInWithEmailAndPassword(payload.email, payload.password)
       .then((user: any) => {
@@ -21,7 +22,8 @@ export const dispatchLogin = (payload: ILogin) => {
             errorMessage = "invalid email or password";
         }
         dispatch(setAlertDialog(errorMessage, true, true));
-      });
+      })
+      .finally(() => dispatch(setIsLoading(false)));
   };
 };
 export const dispatchLogout = () => {
@@ -36,31 +38,13 @@ export const dispatchLogout = () => {
       });
   };
 };
-export const dispatchSignup = (payload: any) => {
-  return async (dispatch: any) => {
-    await authentication
-      .createUserWithEmailAndPassword(payload.email, payload.password)
-      .then(async (user) => {
-        return authentication.currentUser;
-      })
-      .then((user) => {
-        if (user) {
-          user
-            .updateProfile({
-              displayName: payload.displayName,
-            })
-            .catch(function (error) {
-              console.log("An error has occured while updating username");
-            });
-        }
-      })
-      .catch((error) => {
-        let errorMessage = "Could not create user";
-        dispatch(setAlertDialog(errorMessage, true, true));
-      })
-      .finally(() => { });
-  };
-};
+// export const dispatchSignup = (payload: { email: string, password: string, username: string }) => {
+//   return async (dispatch: Dispatch) => {
+//     await 
+
+//   };
+
+// };
 
 export const loginSuccess = (user: any) => ({
   type: SET_AUTH_USER,

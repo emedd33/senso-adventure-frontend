@@ -1,4 +1,5 @@
 import { MentionData } from "@draft-js-plugins/mention";
+import { useLocation } from "react-router";
 import { database } from "../../firebase";
 import { getHost } from "../../utils/getHost";
 
@@ -21,10 +22,22 @@ export const getSelectedLocation = (state: RootReducerProp) => {
     return state.selected.selectedLocation;
 };
 
-export const isDungeonMasterSelector = (state: RootReducerProp) => {
-    let uid = state.admin.authUser?.uid;
-    if (uid) {
-        return state.selected.selectedCampaign?.campaign.dungeonMaster.uid === uid;
+export const isDungeonMasterSelector = (state: RootReducerProp, location?: any) => {
+    let authUser = state.admin.authUser;
+    if (authUser) {
+        let pathArray = location.pathname.split("/")
+        switch (pathArray.length) {
+            case 3:
+                if (pathArray[2] === authUser.displayName) {
+                    return true
+                }
+                break
+            default:
+                if (pathArray.length > 3 && pathArray[4] === "campaigns" && state.selected.selectedCampaign) {
+                    return state.selected.selectedCampaign?.campaign.dungeonMaster.uid === authUser.uid;
+                }
+                break
+        }
     }
     return false;
 };

@@ -1,7 +1,7 @@
 import { Button, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
@@ -22,10 +22,11 @@ export interface CampaignEditProps {
 const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-
+  const location = useLocation()
+  const pathArray = location.pathname.split(",")
   const [imageUrl, setImageUrl] = useState("");
 
-
+  const authUser = useSelector(getAuthUser)
   const [isLoading, setIsLoading] = useState(false);
   const selectedCampaign = useSelector(getSelectedCampaign);
   const [campaignTitle, setCampaignTitle] = useState<string>();
@@ -108,8 +109,9 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
       }
     }
   }
-
-
+  if (!authUser || pathArray[1] !== authUser.displayName) {
+    return <Redirect to="/" />
+  }
   return (
     <ParentContainer style={{ backgroundImage: "url(" + imageUrl + ")" }}>
       {isLoading ? (

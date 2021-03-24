@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import * as FaIcons from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Route, useLocation } from "react-router-dom";
 import HomeCrest from "../../assets/icons/home_crest.png";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
@@ -26,6 +26,7 @@ import IsLoading from "../IsLoading/IsLoading";
 import { LIGHT_PINK } from "../../assets/constants/Constants";
 import { initialSelectedCampaignState } from "../../store/selected/selectedReducer";
 import { getAuthUser } from "../../store/admin/adminSelectors";
+import { isDungeonMasterSelector } from "../../store/selected/selectedSelectors";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     backdrop: {
@@ -41,10 +42,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   const size = useWindowSize();
   const location = useLocation();
   const dispatch = useDispatch();
-  const urlPathArray = location.pathname.split("/");
-  if (urlPathArray.length === 2 && urlPathArray[0] === urlPathArray[1]) {
-    urlPathArray.pop();
-  }
+  const isDungeonMaster = useSelector((state: RootReducerProp) => isDungeonMasterSelector(state, location))
   const rootCampaigns = useSelector(
     (state: RootReducerProp) => state.rootCampaigns
   );
@@ -67,11 +65,14 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
               alignItems: "center",
             }}
           >
-            {authUser ?
-              <NavBarOpenIcon to="#">
-                <FaIcons.FaBars onClick={showSidebar} />
-              </NavBarOpenIcon>
-              : null}
+            <Route path="/user/:userid">
+
+              {isDungeonMaster ?
+                <NavBarOpenIcon to="#">
+                  <FaIcons.FaBars onClick={showSidebar} />
+                </NavBarOpenIcon>
+                : null}
+            </Route>
             <Link
               to="/"
               onClick={() => setSidebar(false)}
@@ -81,53 +82,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 <Title>Senso Adventure</Title>
               </span>
             </Link>
-            <div
-              style={{
-                display: "flex",
-                height: "5rem",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                flexWrap: "nowrap",
-              }}
-            >
-              {size.width && size.width! > 769 ? (
-                <Breadcrumbs aria-label="breadcrumb">
-                  {urlPathArray.map((path: string, index: any) => {
-                    let crumb = path.charAt(0).toUpperCase() + path.slice(1);
-                    let linkPath = urlPathArray.slice(0, index + 1).join("/");
-                    linkPath = !linkPath ? "/" : linkPath;
-                    if (urlPathArray.length - 1 !== index) {
-                      return (
-                        <Link
-                          to={linkPath}
-                          style={{
-                            textDecoration: "none",
-                            color: "black",
-                          }}
-                          key={index}
-                        >
-                          {crumb}
-                        </Link>
-                      );
-                    } else {
-                      return (
-                        <Typography
-                          color="textPrimary"
-                          style={{
-                            textDecoration: "none",
-                            color: "black",
-                            opacity: 0.5,
-                          }}
-                          key={index}
-                        >
-                          {crumb}
-                        </Typography>
-                      );
-                    }
-                  })}
-                </Breadcrumbs>
-              ) : null}
-            </div>
           </div>
           <MenuListComposition />
         </NavBarHeader>
@@ -163,7 +117,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                       >
                         <img
                           src={HomeCrest}
-                          alt={"Curse of strahd"}
+                          alt={"Home"}
                           style={{ width: "3rem", height: "3rem" }}
                         />
                         <CampaignTitle>Home</CampaignTitle>
@@ -217,7 +171,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   {authUser ? (
                     <NavBarItem>
                       <Link
-                        to="/newcampaign"
+                        to={`/user/${authUser.displayName}/newcampaign`}
                         onClick={() => dispatch(clearSelectedCampaign())}
                         style={{ textDecoration: "none" }}
                       >

@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import styled from "styled-components";
 import ForgottenPasswordForm from "../../components/ForgottenPasswordForm/ForgottenPasswordForm";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import SignupForm from "../../components/SignupForm/SignupForm";
 import { storage } from "../../firebase";
+import { getAuthUser } from "../../store/admin/adminSelectors";
 
-export interface LoginProps {}
+export interface LoginProps { }
 
 const LoginIndex: React.FC<LoginProps> = () => {
   const isLoading = useSelector(
     (state: RootReducerProp) => state.admin.isLoading
   );
   const [imageUrl, setImageUrl] = useState("");
-
+  const authUser = useSelector(getAuthUser)
+  console.log("authUser", authUser)
   useEffect(() => {
     storage
       .ref("Images/Background/dnd_login.jpg")
@@ -25,18 +27,18 @@ const LoginIndex: React.FC<LoginProps> = () => {
   if (isLoading) {
     return (
       <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-        <LeftGradientDiv style={{ left: 0 }} />
-        <RightGradientDiv style={{ right: 0 }} />
 
         <IsLoading />
       </Container>
     );
   }
+  if (authUser && authUser.displayName) {
+    return <Redirect to="/" />
+
+
+  }
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      <LeftGradientDiv style={{ left: 0 }} />
-      <RightGradientDiv style={{ right: 0 }} />
-
       <Route exact path="/login">
         <LoginForm />
       </Route>
@@ -63,21 +65,5 @@ const Container = styled.div`
   width: 100%;
   min-height: 100vh;
   margin: auto;
-`;
-const LeftGradientDiv = styled.div`
-  background: linear-gradient(to right, #000, transparent);
-  width: 10vw;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  backgroundcolor: black;
-`;
-const RightGradientDiv = styled.div`
-  background: linear-gradient(to left, #000, transparent);
-  width: 10vw;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  backgroundcolor: black;
 `;
 export default LoginIndex;

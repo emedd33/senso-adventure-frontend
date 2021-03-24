@@ -5,4 +5,8 @@ export const getAuthUser = (state: RootReducerProp) => {
   return state.admin.authUser;
 };
 
-
+export const getAuthUserPath = (state: RootReducerProp) => {
+  if (state.admin.authUser) {
+    return `/user/${state.admin.authUser.displayName}`
+  }
+}

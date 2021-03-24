@@ -1,7 +1,7 @@
 import { setSelectedCampaign, setSelectedMonster, setSelectedLocation, setSelectedPlayer, setSelectedSession } from "./selectedCreators";
 
 const dispatchSelectedByUrl = (pathArray: string[], dispatch: any, campaigns: any[],) => {
-    if (pathArray.length >= 2) {
+    if (pathArray.length >= 4) {
         let filteredCampaign = Object.entries(campaigns)
             .filter(([, campaign]: [string, ICampaign]) => {
                 return campaign.slug === pathArray[1];
@@ -15,9 +15,9 @@ const dispatchSelectedByUrl = (pathArray: string[], dispatch: any, campaigns: an
                 campaign: filteredCampaign[0].campaign,
             };
             dispatch(setSelectedCampaign(campaign));
-            if (pathArray.length >= 4) {
+            if (pathArray.length >= 6) {
                 if (pathArray[2] === "monsters") {
-                    if (isValidSlug(pathArray[3]) && campaign.campaign.monsters) {
+                    if (isValidSlug(pathArray[5]) && campaign.campaign.monsters) {
                         let filteredMonster = Object.entries(
                             campaign.campaign.monsters
                         )
@@ -38,7 +38,7 @@ const dispatchSelectedByUrl = (pathArray: string[], dispatch: any, campaigns: an
                     }
                 }
 
-                if (pathArray[2] === "players") {
+                if (pathArray[4] === "players") {
                     if (isValidSlug(pathArray[3]) && campaign.campaign.players) {
                         let filteredPlayers = Object.entries(
                             campaign.campaign.players
@@ -59,9 +59,9 @@ const dispatchSelectedByUrl = (pathArray: string[], dispatch: any, campaigns: an
                         }
                     }
                 }
-                if (pathArray[2] === "sessions") {
+                if (pathArray[4] === "sessions") {
                     if (
-                        isValidSlug(pathArray[3]) &&
+                        isValidSlug(pathArray[5]) &&
                         campaign.campaign.sessions
                     ) {
                         let filteredSession = Object.entries(campaign.campaign.sessions)
@@ -81,9 +81,9 @@ const dispatchSelectedByUrl = (pathArray: string[], dispatch: any, campaigns: an
                         }
                     }
                 }
-                if (pathArray[2] === "locations") {
+                if (pathArray[4] === "locations") {
                     if (
-                        isValidSlug(pathArray[3]) &&
+                        isValidSlug(pathArray[5]) &&
                         campaign.campaign.locations
                     ) {
                         let filteredLocation = Object.entries(campaign.campaign.locations)

@@ -10,6 +10,7 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { getAuthUser } from "../../store/admin/adminSelectors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,13 +24,10 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function MenuListComposition() {
-  const authUser = useSelector(
-    (state: RootReducerProp) => state.admin.authUser
-  );
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
-
+  const authUser = useSelector(getAuthUser);
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -144,7 +142,7 @@ export default function MenuListComposition() {
                       onKeyDown={handleListKeyDown}
                     >
                       <Link
-                        to="/profile"
+                        to={`/profile`}
                         style={{ textDecoration: "none", color: "black" }}
                       >
                         <MenuItem onClick={() => setOpen(false)}>

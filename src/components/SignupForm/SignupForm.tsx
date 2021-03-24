@@ -6,9 +6,11 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { dispatchSignup } from "../../store/admin/adminCreator";
+import { Link, Redirect, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { dispatchLogin, setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
+import { getAuthUser } from "../../store/admin/adminSelectors";
+import { authentication, database } from "../../firebase";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,11 +40,12 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
   },
 }));
-export interface SignUpProps {}
+export interface SignUpProps { }
 
 const SignupForm: React.FC<SignUpProps> = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory()
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [firstPassword, setFirstPassword] = useState("");
@@ -54,6 +57,8 @@ const SignupForm: React.FC<SignUpProps> = () => {
   const [confirmPasswordHelperText, setConfirmPasswordHelperText] = useState(
     ""
   );
+  const authUser = useSelector(getAuthUser)
+  console.log("autUser", authUser)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const handleSignup = () => {
     !username ? setUsernameError(true) : setUsernameError(false);
@@ -68,13 +73,40 @@ const SignupForm: React.FC<SignUpProps> = () => {
         setSecondPasswordError(true);
         return;
       }
-      dispatch(
-        dispatchSignup({
-          email: email,
-          password: firstPassword,
-          username: username,
-        })
-      );
+      database.ref().child("admin/usernames").get().then(function (snapshot) {
+
+        if (snapshot && Object.values(snapshot.val()).includes(username)) {
+          dispatch(setAlertDialog("Username already exists", true, true))
+        } else {
+          authentication.createUserWithEmailAndPassword(email, firstPassword)
+            .then((userCredential) => {
+              return userCredential.user;
+            })
+            .then(user => {
+              if (user) {
+                user.updateProfile({
+                  displayName: username,
+                }).then(() => {
+                  database.ref("admin/usernames").child(user.uid).set(username)
+                  history.push("/user/" + username)
+
+                })
+              }
+            })
+            .catch((error) => {
+              if (error.code === "auth/email-already-in-use") {
+                console.log(error)
+
+                dispatch(setAlertDialog("Email already exists", true, true))
+              }
+              else {
+                console.log(error)
+                dispatch(setAlertDialog("an error has occured", true, true))
+              }
+            })
+        }
+      });
+
     }
   };
   useEffect(() => {
@@ -89,6 +121,9 @@ const SignupForm: React.FC<SignUpProps> = () => {
       setIsButtonDisabled(true);
     }
   }, [username, firstPassword, secondPassword, email]);
+  if (authUser && authUser.displayName) {
+    return <Redirect to="/" />
+  }
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
