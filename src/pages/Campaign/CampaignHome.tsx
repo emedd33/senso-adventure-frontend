@@ -13,7 +13,7 @@ import {
     OLD_WHITE_TRANSPARENT,
 } from "../../assets/constants/Constants";
 import styled from "styled-components";
-import { storage } from "../../firebase";
+import { storage } from "../../services/Firebase/firebase";
 import { Button, CircularProgress } from "@material-ui/core";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";

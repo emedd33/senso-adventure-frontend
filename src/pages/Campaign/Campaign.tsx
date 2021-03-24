@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Scroll from "../../components/Scroll/Scroll";
 import { Link, useHistory } from "react-router-dom";
-import { storage } from "../../firebase";
+import { storage } from "../../services/Firebase/firebase";
 
 import {
     getSelectedCampaign,

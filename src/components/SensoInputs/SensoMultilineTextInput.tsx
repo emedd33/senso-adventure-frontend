@@ -6,7 +6,7 @@ import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
-import { database } from "../../firebase";
+import { database } from "../../services/Firebase/firebase";
 
 type SensoMultilineTextInputProps = {
     initValue?: string,

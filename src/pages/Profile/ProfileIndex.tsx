@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { authentication, storage, firebaseAuth } from "../../firebase";
+import { storage, firebaseAuth } from "../../services/Firebase/firebase";
 import { Route } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import IsLoading from "../../components/IsLoading/IsLoading";
-import { OLD_WHITE } from "../../assets/constants/Constants";
+import { OLD_WHITE, OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import { dispatchLogout, setAlertDialog } from "../../store/admin/adminCreator";
 import TextField from "@material-ui/core/TextField";
+import { getCurrentUser } from "../../services/Firebase/authentication";
 
 export interface ProfileIndexProps { }
 
@@ -21,13 +22,14 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [firstNewPassword, setFirstNewPassword] = useState("");
   const [secondNewPassword, setSecondNewPassword] = useState("");
+  const currentUser = getCurrentUser()
   const username = useSelector(
     (state: RootReducerProp) => state.admin.authUser?.displayName
   );
   const email = useSelector(
     (state: RootReducerProp) => state.admin.authUser?.email
   );
-  var user = authentication.currentUser;
+
 
   const handleChangePassword = () => {
     if (!firstNewPassword || !secondNewPassword) {
@@ -44,21 +46,25 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
       );
       return;
     }
-    if (user) {
+    if (currentUser) {
       if (email) {
         var credential = firebaseAuth.EmailAuthProvider.credential(
           email, // references the user's email address
           currentPassword
         );
-        user
+        currentUser
           .reauthenticateWithCredential(credential)
           .then(function () {
             // User re-authenticated.
-            if (user) {
-              user
+            if (currentUser) {
+              currentUser
                 .updatePassword(firstNewPassword)
                 .then(function () {
                   dispatch(setAlertDialog("Password was changed", false, true));
+                  setCurrentPassword("")
+                  setFirstNewPassword("")
+                  setSecondNewPassword("")
+                  setIsChangingPassword(false)
                 })
                 .catch(function (error) {
                   console.log(
@@ -129,7 +135,6 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
               isChangingPassword
                 ? {
                   height: "20rem",
-                  borderStyle: "dotted",
                   overflow: "hidden",
                 }
                 : { height: "0rem" }
@@ -165,7 +170,6 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     fullWidth
                     id="current password"
                     type="password"
-                    color="secondary"
                     label="Current password"
                     placeholder="Write your current password"
                     margin="normal"
@@ -187,7 +191,6 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     fullWidth
                     id="second password"
                     type="password"
-                    color="secondary"
                     label="New password"
                     placeholder="Write your new password"
                     margin="normal"
@@ -209,7 +212,6 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     fullWidth
                     id="second password"
                     type="password"
-                    color="secondary"
                     label="New password"
                     placeholder="Write your new password"
                     margin="normal"
@@ -270,7 +272,7 @@ const ChangePasswordContainer = styled.div`
   height: 0rem;
   margin: 1rem;
   transition: 200ms;
-  background-color: white;
+  background-color: ${OLD_WHITE_DARK};
   padding: 0rem;
 `;
 const ContentContainer = styled.div`

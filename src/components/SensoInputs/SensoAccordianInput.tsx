@@ -7,7 +7,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import styled from "styled-components";
 import useInterval from '../../store/hooks/useInterval';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { database } from '../../firebase';
+import { database } from '../../services/Firebase/firebase';
 
 type SensoAccordianInputProps = {
     initArray?: any[],

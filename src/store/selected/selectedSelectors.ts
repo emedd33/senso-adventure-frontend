@@ -1,6 +1,6 @@
 import { MentionData } from "@draft-js-plugins/mention";
 import { useLocation } from "react-router";
-import { database } from "../../firebase";
+import { database, storage } from "../../services/Firebase/firebase";
 import { getHost } from "../../utils/getHost";
 
 export const getSelectedSession = (state: RootReducerProp) =>
@@ -140,6 +140,8 @@ export const getSelectedCampaignLocations = (state: RootReducerProp) => {
 };
 
 // STORAGE REF
+
+
 export const getSelectedSessionStoragePath = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
         return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/session/${state.selected.selectedSession?.session.slug}`
@@ -167,9 +169,19 @@ export const getSelectedPlayerStoragePath = (state: RootReducerProp) => {
     }
 };
 
+// CAMPAIGN PATHS
+export const getSelectedCampaignStoragePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedSession) {
+        return `Users/${state.selected.selectedCampaign.campaign.dungeonMaster}/Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/session/${state.selected.selectedSession?.session.slug}`
+    }
+};
 
+export const getSelectedCampaignDatabasePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected?.selectedCampaign?.id}`
+    }
+};
 
-// DATABASE REF
 export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
         return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/sessions/${state.selected?.selectedSession?.id}`)
@@ -179,11 +191,6 @@ export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
 export const getSelectedLocationDatabaseRef = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedLocation) {
         return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/location/${state.selected?.selectedLocation?.id}`)
-    }
-};
-export const getSelectedCampaignDatabaseRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign) {
-        return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}`)
     }
 };
 

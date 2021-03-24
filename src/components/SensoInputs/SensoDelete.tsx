@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import styled from "styled-components"
-import { database, storage } from '../../firebase';
+import { database, storage } from '../../services/Firebase/firebase';
 import { useHistory } from 'react-router-dom';
 type SensoDeletePropbs = {
     storagePath: string,

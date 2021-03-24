@@ -6,15 +6,16 @@ import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import IsLoading from "../../components/IsLoading/IsLoading";
-import { database, storage } from "../../firebase";
+import { database, storage } from "../../services/Firebase/firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import { getAuthUser } from "../../store/admin/adminSelectors";
 import { useImageFile } from "../../store/hooks/useImageFile";
-import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign, getSelectedCampaignDatabasePath, getSelectedCampaignStoragePath } from "../../store/selected/selectedSelectors";
 import { isValidImageFile } from "../../utils/isValidImageFile";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 import { SensoDelete } from "../../components/SensoInputs";
-
+import { pushToDatabase } from "../../services/Firebase/database"
+import { getUrlFromStorage } from "../../services/Firebase/storage"
 export interface CampaignEditProps {
   isNew: boolean;
 }
@@ -23,12 +24,15 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation()
-  const pathArray = location.pathname.split(",")
+  const pathArray = location.pathname.split("/")
   const [imageUrl, setImageUrl] = useState("");
 
   const authUser = useSelector(getAuthUser)
   const [isLoading, setIsLoading] = useState(false);
   const selectedCampaign = useSelector(getSelectedCampaign);
+  const campaignDatabasePath = useSelector(getSelectedCampaignDatabasePath)
+  const campaignStoragePath = useSelector(getSelectedCampaignStoragePath)
+
   const [campaignTitle, setCampaignTitle] = useState<string>();
   const user = useSelector(getAuthUser);
   const [campaignTitleError, setCampaignTitleError] = useState<boolean>(false);
@@ -40,12 +44,8 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
     "TitleImage"
   );
   useEffect(() => {
-    if (!isNew && selectedCampaign) {
-      storage
-        .ref("Campaigns")
-        .child(selectedCampaign.campaign.slug)
-        .child("BackgroundImage")
-        .getDownloadURL()
+    if (!isNew && campaignDatabasePath) {
+      getUrlFromStorage(`${campaignDatabasePath}/BackgroundImage`)
         .then((url: string) => {
           setImageUrl(url);
         })
@@ -62,7 +62,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   }, [selectedCampaign]);
   const submit = async () => {
     setIsLoading(true);
-    if (user) {
+    if (user && campaignDatabasePath) {
       let slug = selectedCampaign?.campaign.slug
       let title = selectedCampaign?.campaign.title
       if (isNew) {
@@ -83,9 +83,8 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
           title: title,
           slug: slug,
         };
-        await database.ref(`campaigns`)
-          .push(newCampaign)
-          .catch((e) => console.log("Could not update campaign ", e));
+        await pushToDatabase(campaignDatabasePath, newCampaign)
+
       }
 
 
@@ -109,7 +108,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
       }
     }
   }
-  if (!authUser || pathArray[1] !== authUser.displayName) {
+  if (!authUser || pathArray[2] !== authUser.displayName) {
     return <Redirect to="/" />
   }
   return (
@@ -126,7 +125,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
               id="outlined-multiline-static"
               placeholder="Write a fitting title"
               style={{ width: "50%", textAlign: "center" }}
-              variant="filled"
+              variant="outlined"
               error={campaignTitleError}
               value={campaignTitle}
               disabled={!isNew}

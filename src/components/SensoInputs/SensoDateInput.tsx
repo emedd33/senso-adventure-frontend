@@ -6,7 +6,7 @@ import { DatePicker } from "@material-ui/pickers";
 
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { database } from '../../firebase';
+import { database } from '../../services/Firebase/firebase';
 type SensoDateInputProps = {
     initValue?: string,
     firebasePath: string,

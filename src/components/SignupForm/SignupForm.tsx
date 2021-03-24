@@ -10,8 +10,8 @@ import { Link, Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { dispatchLogin, setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
 import { getAuthUser } from "../../store/admin/adminSelectors";
-import { authentication, database } from "../../firebase";
-
+import { getFromDatabase } from "../../services/Firebase/database"
+import { createUserWithEmailPasswordAndUsername } from "../../services/Firebase/authentication";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -58,7 +58,6 @@ const SignupForm: React.FC<SignUpProps> = () => {
     ""
   );
   const authUser = useSelector(getAuthUser)
-  console.log("autUser", authUser)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const handleSignup = () => {
     !username ? setUsernameError(true) : setUsernameError(false);
@@ -73,40 +72,28 @@ const SignupForm: React.FC<SignUpProps> = () => {
         setSecondPasswordError(true);
         return;
       }
-      database.ref().child("admin/usernames").get().then(function (snapshot) {
+      dispatch(setIsLoading(true))
+      getFromDatabase("admin/usernames").then(function (snapshot) {
 
         if (snapshot && Object.values(snapshot.val()).includes(username)) {
           dispatch(setAlertDialog("Username already exists", true, true))
         } else {
-          authentication.createUserWithEmailAndPassword(email, firstPassword)
-            .then((userCredential) => {
-              return userCredential.user;
-            })
-            .then(user => {
-              if (user) {
-                user.updateProfile({
-                  displayName: username,
-                }).then(() => {
-                  database.ref("admin/usernames").child(user.uid).set(username)
-                  history.push("/user/" + username)
-
-                })
-              }
-            })
+          createUserWithEmailPasswordAndUsername(email, firstPassword, username).then(() => {
+            history.push("/user/" + username)
+            dispatch(setIsLoading(false))
+          })
             .catch((error) => {
               if (error.code === "auth/email-already-in-use") {
-                console.log(error)
-
                 dispatch(setAlertDialog("Email already exists", true, true))
               }
               else {
                 console.log(error)
                 dispatch(setAlertDialog("an error has occured", true, true))
               }
+              dispatch(setIsLoading(false))
             })
         }
-      });
-
+      }).catch(() => dispatch(setIsLoading(false)))
     }
   };
   useEffect(() => {

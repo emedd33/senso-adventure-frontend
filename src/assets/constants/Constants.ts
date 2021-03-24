@@ -7,6 +7,7 @@ export const LIGHT_PINK = "#AB9696";
 export const LIGHT_PURPLe = "#AB9696";
 export const HOST = "https://senso-adventure.web.app/"
 
+export const LOGIN_BACKGROUND_IMAGE_STORAGE_PATH = "Images/Background/dnd_login.jpg"
 export const MONSTER_DATABASE_API = "https://www.dnd5eapi.co"
 export const NEW_LOCATION: ILocation = {
     name: "",

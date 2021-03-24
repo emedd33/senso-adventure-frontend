@@ -11,7 +11,6 @@ import Navbar from "./components/Navbar/Navbar";
 import "./App.scss";
 import { fetchFromFirebase } from "./store/campaign/campaignCreators";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
-import CampaignIndex from "./pages/Campaign/CampaignIndex";
 import LoginIndex from "./pages/Login/LoginIndex";
 import NotFound from "./pages/NotFound/NotFound"
 import StickyFooter from "./components/Footer/StickyFooter";
@@ -28,11 +27,11 @@ export default function App() {
 
   const authUser = useSelector(getAuthUser);
   const authUserPath = useSelector(getAuthUserPath)
-  const isLoading = useSelector(getIsLoading)
-
   useEffect(() => {
-    dispatch(fetchFromFirebase);
-  }, [dispatch]);
+    if (authUser.displayName) {
+      dispatch((dispatch: any) => fetchFromFirebase(dispatch, authUser.displayName));
+    }
+  }, [dispatch, authUser]);
   return (
     <Router>
       <AlertDialog />
@@ -57,7 +56,7 @@ export default function App() {
           </Switch>
         </Route>
         <Route exact path="/">
-          {authUserPath && authUser.displayName ? <Redirect to={authUserPath} /> : <Home />}
+          {authUserPath ? <Redirect to={authUserPath} /> : <Home />}
         </Route>
         <Route>
           <NotFound />

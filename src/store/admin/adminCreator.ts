@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { authentication, database } from "../../firebase";
+import { login, logout } from "../../services/Firebase/authentication";
 import {
   SET_IS_LOADING,
   SET_ALERT_DIALOG,
@@ -9,8 +9,7 @@ import {
 export const dispatchLogin = (payload: ILogin) => {
   return async (dispatch: Dispatch) => {
     dispatch(setIsLoading(true))
-    await authentication
-      .signInWithEmailAndPassword(payload.email, payload.password)
+    login(payload.email, payload.password)
       .then((user: any) => {
         dispatch(loginSuccess(user));
       })
@@ -28,8 +27,7 @@ export const dispatchLogin = (payload: ILogin) => {
 };
 export const dispatchLogout = () => {
   return async (dispatch: Dispatch) => {
-    authentication
-      .signOut()
+    logout()
       .then(() => {
         dispatch({ type: SET_AUTH_USER, payload: null });
       })
@@ -38,13 +36,6 @@ export const dispatchLogout = () => {
       });
   };
 };
-// export const dispatchSignup = (payload: { email: string, password: string, username: string }) => {
-//   return async (dispatch: Dispatch) => {
-//     await 
-
-//   };
-
-// };
 
 export const loginSuccess = (user: any) => ({
   type: SET_AUTH_USER,

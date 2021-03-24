@@ -32,7 +32,7 @@ import secretIcon from "../../assets/icons/hush_icon.png"
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import sleep from "../../utils/sleep";
-import { storage } from "../../firebase";
+import { storage } from "../../services/Firebase/firebase";
 type DraftJSEditorProps = {
   storagePath: string;
   readOnly: boolean;

@@ -2,52 +2,45 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 import styled from "styled-components";
+import { LOGIN_BACKGROUND_IMAGE_STORAGE_PATH } from "../../assets/constants/Constants";
 import ForgottenPasswordForm from "../../components/ForgottenPasswordForm/ForgottenPasswordForm";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import SignupForm from "../../components/SignupForm/SignupForm";
-import { storage } from "../../firebase";
-import { getAuthUser } from "../../store/admin/adminSelectors";
+import { storage } from "../../services/Firebase/firebase";
+import { getUrlFromStorage } from "../../services/Firebase/storage";
+import { getAuthUser, getIsLoading } from "../../store/admin/adminSelectors";
 
 export interface LoginProps { }
 
 const LoginIndex: React.FC<LoginProps> = () => {
-  const isLoading = useSelector(
-    (state: RootReducerProp) => state.admin.isLoading
-  );
   const [imageUrl, setImageUrl] = useState("");
+  const isLoading = useSelector(getIsLoading)
   const authUser = useSelector(getAuthUser)
-  console.log("authUser", authUser)
   useEffect(() => {
-    storage
-      .ref("Images/Background/dnd_login.jpg")
-      .getDownloadURL()
+    getUrlFromStorage(LOGIN_BACKGROUND_IMAGE_STORAGE_PATH)
       .then((url: string) => setImageUrl(url));
   }, []);
-  if (isLoading) {
-    return (
-      <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-
-        <IsLoading />
-      </Container>
-    );
-  }
   if (authUser && authUser.displayName) {
     return <Redirect to="/" />
-
-
   }
+
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      <Route exact path="/login">
-        <LoginForm />
-      </Route>
-      <Route exact path="/login/signup">
-        <SignupForm />
-      </Route>
-      <Route exact path="/login/forgotten">
-        <ForgottenPasswordForm />
-      </Route>
+      {isLoading ? <IsLoading />
+        : <>
+
+          <Route exact path="/login">
+            <LoginForm />
+          </Route>
+          <Route exact path="/login/signup">
+            <SignupForm />
+          </Route>
+          <Route exact path="/login/forgotten">
+            <ForgottenPasswordForm />
+          </Route>
+        </>
+      }
     </Container>
   );
 };

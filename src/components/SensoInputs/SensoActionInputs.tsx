@@ -6,7 +6,7 @@ import { OLD_WHITE_DARK } from '../../assets/constants/Constants';
 import DeleteIcon from "@material-ui/icons/Delete";
 import styled from "styled-components";
 import useInterval from '../../store/hooks/useInterval';
-import { database } from '../../firebase';
+import { database } from '../../services/Firebase/firebase';
 
 type SensoActionInputsProps = {
     actions?: IMonsterAction[],

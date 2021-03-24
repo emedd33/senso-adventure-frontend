@@ -5,7 +5,7 @@ import React from 'react'
 import useSavedState from "../../store/hooks/useSavedState"
 import useInterval from "../../store/hooks/useInterval";
 import getAbilityModifier from "../../utils/getAbilityModifier";
-import { database } from "../../firebase";
+import { database } from "../../services/Firebase/firebase";
 
 type SensoSkillInputProps = {
     abilityModifier: IAbility,

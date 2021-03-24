@@ -10,7 +10,8 @@ import Button from "@material-ui/core/Button";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Link } from "react-router-dom";
 import { dispatchLogin } from "../../store/admin/adminCreator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getIsLoading } from "../../store/admin/adminSelectors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -84,7 +85,6 @@ const LoginForm = () => {
               fullWidth
               id="email"
               type="email"
-              color="secondary"
               label="Email"
               placeholder="Email"
               margin="normal"
@@ -97,7 +97,6 @@ const LoginForm = () => {
               id="password"
               type="password"
               label="Password"
-              color="secondary"
               placeholder="Password"
               margin="normal"
               helperText={helperText}

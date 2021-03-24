@@ -10,7 +10,7 @@ import {
 
 } from "@material-ui/core";
 import React, { useMemo, useState } from 'react'
-import { storage } from "../../firebase"
+import { storage } from "../../services/Firebase/firebase"
 import ImageUploader from "react-images-upload";
 import styled from "styled-components";
 import ClearIcon from "@material-ui/icons/Clear";
