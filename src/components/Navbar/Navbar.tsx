@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
 import { useDispatch, useSelector } from "react-redux";
