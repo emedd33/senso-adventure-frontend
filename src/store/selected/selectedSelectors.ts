@@ -168,14 +168,14 @@ export const getSelectedCampaignDatabasePath = (state: RootReducerProp) => {
 // PLAYER PATHS
 
 export const getSelectedPlayerStoragePath = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign) {
-        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign?.slug}`
+    if (state.selected.selectedCampaign && state.selected.selectedPlayer) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign?.slug}/players/${state.selected.selectedPlayer?.player.slug}`
     }
 };
 
 export const getSelectedPlayerDatabasePath = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign) {
-        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected?.selectedCampaign?.id}`
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.id}/players/${state.selected.selectedPlayer?.id}`
     }
 };
 

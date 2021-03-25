@@ -37,6 +37,7 @@ export default function App() {
       <Navbar />
       <LeftGradientDiv style={{ left: 0 }} />
       <RightGradientDiv style={{ right: 0 }} />
+
       <Switch>
         <Route exact path="/profile">
           {authUser ? <ProfileIndex /> : <Redirect to="/" />}

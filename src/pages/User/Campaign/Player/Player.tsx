@@ -865,6 +865,8 @@ const Player: FunctionComponent<PlayerProps> = () => {
 const Container = styled.div`
   width: 70%;
   padding: 1rem;
+  margin-top:10rem;
+  margin-bottom:10rem;
   -webkit-box-shadow: 5px 5px 15px 5px #000000;
   box-shadow: 5px 0px 15px 2px #000000;
   background-color: ${OLD_WHITE};
@@ -873,6 +875,7 @@ const Container = styled.div`
   align-center: center;
   flex-wrap: wrap;
   min-height: 20rem;
+  min-width:20rem;
 `;
 const NestedContainer = styled.div`
   display: grid;

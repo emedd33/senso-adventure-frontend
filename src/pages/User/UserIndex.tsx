@@ -38,8 +38,9 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
 
     return (
         <Container >
+
             <Switch>
-                <Route exact path="/user/:username/newcampaign">
+                < Route exact path="/user/:username/newcampaign">
                     <CampaignEdit isNew={true} />
                 </Route>
                 <Route path="/user/:username/campaigns/:campaignId">
@@ -52,7 +53,8 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                     <NotFound />
                 </Route>
             </Switch>
-        </Container>
+
+        </Container >
     );
 };
 const Container = styled.div`

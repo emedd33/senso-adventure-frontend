@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useMemo, useState } from "react";
+import React, { FunctionComponent, useMemo, useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import sortSessionsByDateValue from "../../utils/sortArrayDyDate";
 import { Link, useHistory } from "react-router-dom";
@@ -26,7 +26,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
     const owner = useOwner()
     const sessions = useSelector(getAllSessions);
     const selectedCampaign = useSelector(getSelectedCampaign)
-    useMemo(() => {
+    useEffect(() => {
         if (campaigns) {
 
             let urlPromises: Promise<any>[] = Object.values(campaigns).map((campaign: ICampaign) => {
@@ -44,8 +44,31 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
                 setCampaignUrls(val)
             })
         }
+        return () => setCampaignUrls([])
     }, [campaigns, owner]);
+    const renderCampaignUrls = useCallback(
+        () => {
+            if (campaignUrls) {
+                return Object.values(campaignUrls).map(
+                    (campaign: { campaignSlug: string; url?: string }, index: number) => (
+                        <Link to={`/user/${owner}/campaigns/${campaign.campaignSlug}`} key={index}>
+                            <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem" }}>
+                                {campaign.url ? (
+                                    <CampaignImg src={campaign.url} />
+                                ) : (
+                                    <h1>{campaign.campaignSlug}</h1>
+                                )}
+                            </Button>
+                        </Link>
+                    )
+                )
+            } else {
+                return null
+            }
 
+        },
+        [campaignUrls],
+    )
     const renderScrolls = () => {
         if (sessions && selectedCampaign) {
             let sortedSessions = sortSessionsByDateValue(sessions);
@@ -90,21 +113,8 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
                     minHeight: "15rem",
                 }}
             >
-                {campaignUrls
-                    ? Object.values(campaignUrls).map(
-                        (campaign: { campaignSlug: string; url?: string }, index: number) => (
-                            <Link to={`/user/${owner}/campaigns/${campaign.campaignSlug}`} key={index}>
-                                <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem" }}>
-                                    {campaign.url ? (
-                                        <CampaignImg src={campaign.url} />
-                                    ) : (
-                                        <h1>{campaign.campaignSlug}</h1>
-                                    )}
-                                </Button>
-                            </Link>
-                        )
-                    )
-                    : null}
+
+                {renderCampaignUrls()}
             </div>
             <div
                 style={{

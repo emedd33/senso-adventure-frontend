@@ -13,6 +13,7 @@ import {
 import { dispatchSelectedPlayerByUrl } from "../../../../store/selected/dispatchSelectedByUrl";
 import Players from "./Players";
 import Player from "./Player";
+import PlayerEdit from "./PlayerEdit"
 
 
 
@@ -41,6 +42,11 @@ const PlayerIndex: FunctionComponent<PlayerIndexProps> = () => {
             <Route exact path="/user/:username/campaigns/:campaignslug/players/:playerslug">
                 <Player />
             </Route>
+
+            <Route exact path="/user/:username/campaigns/:campaignslug/players/:playerslug/edit">
+                <PlayerEdit />
+            </Route>
+
 
         </Switch>
     );
