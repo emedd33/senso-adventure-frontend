@@ -43,7 +43,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                         })
                     );
                     if (selectedCampaign) {
-                        history.push(`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/sessions/new`);
+                        history.push(`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-session`);
                     }
                 }}
             >

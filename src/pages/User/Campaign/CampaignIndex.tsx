@@ -21,8 +21,10 @@ import { dispatchSelectedCampaignByUrl } from "../../../store/selected/dispatchS
 import { getAllCampaigns } from "../../../store/campaign/campaignSelectors";
 import PlayerNew from "./Player/PlayerNew"
 import MonsterNew from "./Monster/MonsterNew"
+import SessionNew from "./Session/SessionNew"
 import LocationNew from "./Location/LocationNew"
 import MonsterIndex from "./Monster/MonsterIndex"
+import SessionIndex from "./Session/SessionIndex"
 import PlayerIndex from "./Player/PlayerIndex"
 import LocationIndex from "./Location/LocationIndex"
 import NotFound from "../../NotFound/NotFound";
@@ -71,6 +73,9 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                 <Route exact path="/user/:username/campaigns/:campaignId/new-location">
                     <LocationNew />
                 </Route>
+                <Route exact path="/user/:username/campaigns/:campaignId/new-session">
+                    <SessionNew />
+                </Route>
                 <Route exact path="/user/:username/campaigns">
                     <Campaigns />
                 </Route>
@@ -85,6 +90,9 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                 </Route>
                 <Route path="/user/:username/campaigns/:campaignId/locations">
                     <LocationIndex />
+                </Route>
+                <Route path="/user/:username/campaigns/:campaignId/sessions">
+                    <SessionIndex />
                 </Route>
                 <Route>
                     <NotFound />

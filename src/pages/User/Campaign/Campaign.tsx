@@ -115,42 +115,37 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     )
     useMemo(() => {
         if (selectedCampaign && selectedCampaign.campaign.sessions) {
-            Object.entries(selectedCampaign.campaign.sessions)
+            setSessions(Object.entries(selectedCampaign.campaign.sessions)
                 .slice(0, 10)
-                .map(([id, session]: [string, ISession], index: number) => {
-                    if (session) {
-                        setSessions((existing) => [
-                            ...existing,
-                            <MenuItem
-                                text={
-                                    <Scroll
-                                        title={session.title}
-                                        subTitle={session.subTitle ? session.subTitle : ""}
-                                        date={session.date}
-                                        campaignSlug={selectedCampaign.campaign.slug}
-                                        sessionDay={session.sessionDay}
-                                        isOpaque={session.isPublished === "FALSE"}
-                                        onClick={() => {
+                .map(([id, session]: [string, ISession], index: number) =>
+                    <MenuItem
+                        text={
+                            <Scroll
+                                title={session.title}
+                                subTitle={session.subTitle ? session.subTitle : ""}
+                                date={session.date}
+                                campaignSlug={selectedCampaign.campaign.slug}
+                                sessionDay={session.sessionDay}
+                                isOpaque={session.isPublished === "FALSE"}
+                                onClick={() => {
 
-                                            history.push(
-                                                `/users/${owner}/${selectedCampaign.campaign.slug}/sessions/${session.slug}`
-                                            );
-                                        }}
-                                    />
-                                }
-                                key={index}
-                                selected={selectedSessionMenu}
-                            />,
-                        ]);
-                    }
-                    return undefined;
-                });
+                                    history.push(
+                                        `/users/${owner}/${selectedCampaign.campaign.slug}/sessions/${session.slug}`
+                                    );
+                                }}
+                            />
+                        }
+                        key={index}
+                        selected={selectedSessionMenu}
+                    />
+                ))
         }
         return () => {
             setSessions([])
-        }
-    }, [selectedCampaign, selectedSessionMenu, history, owner])
-
+        };
+    },
+        [selectedCampaign, owner, selectedSessionMenu, history,]
+    )
 
     return (
         <Container>
