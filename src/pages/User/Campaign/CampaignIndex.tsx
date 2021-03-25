@@ -7,6 +7,7 @@ import {
     useLocation,
 } from "react-router-dom";
 import Campaign from "./Campaign";
+import Campaigns from "./Campaigns";
 import SensoFab from "../../../components/SensoFab/SensoFab"
 
 import {
@@ -51,7 +52,6 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
 
         }
     }, [dispatch, selectedCampaignStoragePath]);
-    console.log("he")
 
 
     return (
@@ -59,6 +59,9 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
             <Switch>
                 <Route exact path="/user/:username/campaigns/:campaignId/new-player">
                     <PlayerNew />
+                </Route>
+                <Route exact path="/user/:username/campaigns">
+                    <Campaigns />
                 </Route>
                 <Route exact path="/user/:username/campaigns/:campaignId">
                     <Campaign />

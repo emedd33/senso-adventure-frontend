@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function MenuListComposition() {
+export default function NavbarHeaderMenu() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);

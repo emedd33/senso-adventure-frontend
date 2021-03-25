@@ -43,7 +43,7 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                 < Route exact path="/user/:username/newcampaign">
                     <CampaignEdit isNew={true} />
                 </Route>
-                <Route path="/user/:username/campaigns/:campaignId">
+                <Route path="/user/:username/campaigns">
                     <CampaignIndex />
                 </Route>
                 <Route exact path="/user/:username/">

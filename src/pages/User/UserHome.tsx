@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useMemo, useEffect, useState, useCallback } from "react";
+import React, { FunctionComponent, useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import sortSessionsByDateValue from "../../utils/sortArrayDyDate";
 import { Link, useHistory } from "react-router-dom";
@@ -67,7 +67,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
             }
 
         },
-        [campaignUrls],
+        [campaignUrls, owner],
     )
     const renderScrolls = () => {
         if (sessions && selectedCampaign) {
@@ -104,13 +104,14 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
         <Container>
             <div
                 style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr 1fr",
+                    display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
                     background: OLD_WHITE_TRANSPARENT,
                     margin: "5rem",
                     minHeight: "15rem",
+                    flexDirection: "row",
+                    flexWrap: "wrap"
                 }}
             >
 
@@ -123,6 +124,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
                     justifyContent: "center",
                     alignItems: "center",
                     flexDirection: "column",
+                    flexWrap: "wrap"
                 }}
             >
                 {sessions ? renderScrolls() : null}
