@@ -16,12 +16,14 @@ import sessionIcon from "../../assets/icons/session_icon.png"
 import characterIcon from "../../assets/icons/character_icon.png"
 import monsterIcon from "../../assets/icons/monster_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
+import useOwner from "../../store/hooks/useOwner";
 type SensoFabProps = {
 
 }
 const SensoFab: React.FC<SensoFabProps> = () => {
     const history = useHistory();
     const dispatch = useDispatch()
+    const owner = useOwner()
     const selectedCampaign = useSelector(getSelectedCampaign);
 
     return (
@@ -41,7 +43,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                         })
                     );
                     if (selectedCampaign) {
-                        history.push(`/${selectedCampaign.campaign.slug}/sessions/new`);
+                        history.push(`/user/${owner}/${selectedCampaign.campaign.slug}/sessions/new`);
                     }
                 }}
             >
@@ -56,7 +58,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                             setSelectedMonster()
                         );
                         history.push(
-                            `/${selectedCampaign.campaign.slug}/monsters/new`
+                            `/user/${owner}/${selectedCampaign.campaign.slug}/monsters/new`
                         );
                     }
                 }}
@@ -73,7 +75,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                             setSelectedPlayer()
                         );
                         history.push(
-                            `/${selectedCampaign.campaign.slug}/players/new`
+                            `/user/${owner}/${selectedCampaign.campaign.slug}/players/new`
                         );
                     }
                 }}
@@ -87,7 +89,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                 onClick={() => {
                     if (selectedCampaign) {
                         history.push(
-                            `/${selectedCampaign.campaign.slug}/locations/new`
+                            `/user/${owner}/${selectedCampaign.campaign.slug}/locations/new`
                         );
                     }
                 }}

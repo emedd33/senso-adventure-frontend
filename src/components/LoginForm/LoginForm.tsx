@@ -10,8 +10,7 @@ import Button from "@material-ui/core/Button";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Link } from "react-router-dom";
 import { dispatchLogin } from "../../store/admin/adminCreator";
-import { useDispatch, useSelector } from "react-redux";
-import { getIsLoading } from "../../store/admin/adminSelectors";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

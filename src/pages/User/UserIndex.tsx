@@ -1,102 +1,54 @@
-import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { FunctionComponent, useMemo, } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import {
-    Redirect,
     Route,
     Switch,
     useLocation,
 } from "react-router-dom";
-import Campaign from "./Campaign/Campaign";
 
-import {
-    getSelectedCampaign,
-    getSelectedCampaignSlug,
-    getSelectedMonster,
-    getSelectedLocation,
-    getSelectedPlayer,
-    getSelectedSession,
-} from "../../store/selected/selectedSelectors";
 
-import IsLoading from "../../components/IsLoading/IsLoading";
+
 import "react-tiny-fab/dist/styles.css";
 
 
 import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
-import SensoFab from "../../components/SensoFab/SensoFab"
 import UserHome from "./UserHome";
 import { setCampaigns } from "../../store/campaign/campaignCreator";
 import { database } from "../../services/Firebase/firebase";
 import CampaignIndex from "./Campaign/CampaignIndex";
+import useOwner from "../../store/hooks/useOwner";
 
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
     const location = useLocation();
     const dispatch = useDispatch();
+    const owner = useOwner()
 
-    const selectedCampaign = useSelector(getSelectedCampaign);
-    const selectedSession = useSelector(getSelectedSession);
-    const selectedLocation = useSelector(getSelectedLocation);
-    const selectedMonster = useSelector(getSelectedMonster);
-    const selectedPlayer = useSelector(getSelectedPlayer);
-    const selectedCampaignSlug = useSelector(getSelectedCampaignSlug)
-    const [imageUrl, setImageUrl] = useState("");
-
-    // useMemo(() => {
-    //     let pathArray = location.pathname.split("/");
-    //     // dispatchSelectedByUrl(pathArray, dispatch, campaigns)
-
-    // }, [dispatch, campaigns, location]);
-    useMemo(async () => {
+    useMemo(() => {
         if (location) {
-            let owner = location.pathname.split("/")[2]
-            database.ref(`users/${owner}/campaigns`).on("value", (campaigns) => dispatch(setCampaigns(campaigns.val()))
+            database.ref(`users/${owner}/campaigns`).on("value", (campaigns) => {
+                dispatch(setCampaigns(campaigns.val()))
+            }
             )
         }
-    }, [location])
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     if (selectedCampaignSlug) {
-    //         let campaignRef = storage
-    //             .ref("Campaigns")
-    //             .child(selectedCampaignSlug);
+    }, [location, owner, dispatch])
 
-    //         // Fetching BackgroundImage
-    //         campaignRef
-    //             .child("BackgroundImage")
-    //             .getDownloadURL()
-    //             .then((url: string) => {
-    //                 setImageUrl(url);
-    //             })
-    //             .catch((e) => console.log("could not fetch background image"))
-    //             .finally(() => dispatch(setIsLoading(false)));
 
-    //     }
-    // }, [dispatch, selectedCampaignSlug]);
-    let locationArray = location.pathname.split("/")
-    // if (locationArray.length >= 2 && !selectedCampaign) {
-    //     return <IsLoading />;
-    // }
-    // if (locationArray.length >= 4 && locationArray[3] !== "new") {
-    //     if (!selectedSession && !selectedMonster && !selectedLocation && !selectedPlayer) {
-    //         return <IsLoading />;
-    //     }
-    // }
     return (
-        <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+        <Container >
             <Switch>
-                <Route path="/user/:username/">
-                    <UserHome />
-                </Route>
                 <Route exact path="/user/:username/newcampaign">
                     <CampaignEdit isNew={true} />
                 </Route>
                 <Route path="/user/:username/campaigns/:campaignId">
                     <CampaignIndex />
                 </Route>
+                <Route exact path="/user/:username/">
+                    <UserHome />
+                </Route>
             </Switch>
 
-            <SensoFab />
 
         </Container>
     );

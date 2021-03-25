@@ -7,7 +7,6 @@ import ForgottenPasswordForm from "../../components/ForgottenPasswordForm/Forgot
 import IsLoading from "../../components/IsLoading/IsLoading";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import SignupForm from "../../components/SignupForm/SignupForm";
-import { storage } from "../../services/Firebase/firebase";
 import { getUrlFromStorage } from "../../services/Firebase/storage";
 import { getAuthUser, getIsLoading } from "../../store/admin/adminSelectors";
 

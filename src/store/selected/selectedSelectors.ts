@@ -1,6 +1,5 @@
 import { MentionData } from "@draft-js-plugins/mention";
-import { useLocation } from "react-router";
-import { database, storage } from "../../services/Firebase/firebase";
+import { database } from "../../services/Firebase/firebase";
 import { getHost } from "../../utils/getHost";
 
 export const getSelectedSession = (state: RootReducerProp) =>
@@ -22,22 +21,10 @@ export const getSelectedLocation = (state: RootReducerProp) => {
     return state.selected.selectedLocation;
 };
 
-export const isDungeonMasterSelector = (state: RootReducerProp, location?: any) => {
+export const isDungeonMasterSelector = (state: RootReducerProp) => {
     let authUser = state.admin.authUser;
     if (authUser) {
-        let pathArray = location.pathname.split("/")
-        switch (pathArray.length) {
-            case 3:
-                if (pathArray[2] === authUser.displayName) {
-                    return true
-                }
-                break
-            default:
-                if (pathArray.length > 3 && pathArray[4] === "campaigns" && state.selected.selectedCampaign) {
-                    return state.selected.selectedCampaign?.campaign.dungeonMaster.uid === authUser.uid;
-                }
-                break
-        }
+        return state.selected.selectedCampaign?.campaign.dungeonMaster.uid === authUser.uid;
     }
     return false;
 };
@@ -171,8 +158,8 @@ export const getSelectedPlayerStoragePath = (state: RootReducerProp) => {
 
 // CAMPAIGN PATHS
 export const getSelectedCampaignStoragePath = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedSession) {
-        return `Users/${state.selected.selectedCampaign.campaign.dungeonMaster}/Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/session/${state.selected.selectedSession?.session.slug}`
+    if (state.selected.selectedCampaign) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign?.slug}`
     }
 };
 

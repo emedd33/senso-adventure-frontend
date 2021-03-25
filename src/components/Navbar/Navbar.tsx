@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import * as FaIcons from "react-icons/fa";
-import { Link, Route, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import HomeCrest from "../../assets/icons/home_crest.png";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
@@ -8,6 +8,7 @@ import styled from "styled-components";
 import MenuListComposition from "../MenuList/MenuList";
 import CampaignCrest from "../../assets/icons/CampaignCrest.png";
 import { useDispatch, useSelector } from "react-redux";
+import useOwner from "../../store/hooks/useOwner"
 import {
   clearSelectedCampaign,
   setSelectedCampaign,
@@ -36,15 +37,14 @@ const useStyles = makeStyles((theme: Theme) =>
 type NavbarProps = {};
 const Navbar: FunctionComponent<NavbarProps> = () => {
   const classes = useStyles();
-  const location = useLocation();
   const dispatch = useDispatch();
   const rootCampaigns = useSelector(
     (state: RootReducerProp) => state.rootCampaigns
   );
-  const owner = useLocation().pathname.split("/")[2]
   const authUser = useSelector(getAuthUser);
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
+  const owner = useOwner()
 
   if (!rootCampaigns) {
     return <IsLoading />;
@@ -61,14 +61,12 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
               alignItems: "center",
             }}
           >
-            <Route path="/user/:userid">
 
 
-              <NavBarOpenIcon to="#">
-                <FaIcons.FaBars onClick={showSidebar} />
-              </NavBarOpenIcon>
+            <NavBarOpenIcon to="#">
+              <FaIcons.FaBars onClick={showSidebar} />
+            </NavBarOpenIcon>
 
-            </Route>
             <Link
               to="/"
               onClick={() => setSidebar(false)}
@@ -86,21 +84,89 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
           open={sidebar}
           onClick={showSidebar}
         >
-          {authUser ?
-            <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
-              <ul
-                style={{ width: "100%", paddingLeft: "1rem" }}
-                onClick={showSidebar}
-              >
-                <div className={"cos-navbar-container"}>
+          <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
+            <ul
+              style={{ width: "100%", paddingLeft: "1rem" }}
+              onClick={showSidebar}
+            >
+              <div className={"cos-navbar-container"}>
+                <NavBarItem>
+                  <Link
+                    to="/"
+                    style={{
+                      textDecoration: "none",
+                      color: "black",
+                      width: "100%",
+                    }}
+                  >
+                    <span
+                      style={{
+                        padding: "1rem",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        src={HomeCrest}
+                        alt={"Home"}
+                        style={{ width: "3rem", height: "3rem" }}
+                      />
+                      <CampaignTitle>Home</CampaignTitle>
+                    </span>
+                  </Link>
+                </NavBarItem>
+                {Object.entries(rootCampaigns.campaigns).map(
+                  ([id, campaign]) => {
+                    return (
+                      <NavBarItem
+                        key={id}
+                        onClick={() =>
+                          dispatch(
+                            setSelectedCampaign({
+                              id: "",
+                              campaign: initialSelectedCampaignState,
+                            })
+                          )
+                        }
+                      >
+                        <Link
+                          to={`/user/${authUser.displayName}/campaigns/${campaign.slug}`}
+                          style={{
+                            textDecoration: "none",
+                            color: "black",
+                            width: "100%",
+                          }}
+                        >
+                          <span
+                            style={{
+                              padding: "1rem",
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img
+                              style={{ width: "3rem", height: "2rem" }}
+                              src={CampaignCrest}
+                              alt="Crest symbol"
+                            />
+                            <CampaignTitle>{campaign.title}</CampaignTitle>
+                          </span>
+                        </Link>
+                      </NavBarItem>
+                    );
+                  }
+                )}
+
+                {authUser && authUser.displayName === owner ? (
                   <NavBarItem>
                     <Link
-                      to="/"
-                      style={{
-                        textDecoration: "none",
-                        color: "black",
-                        width: "100%",
-                      }}
+                      to={`/user/${authUser.displayName}/newcampaign`}
+                      onClick={() => dispatch(clearSelectedCampaign())}
+                      style={{ textDecoration: "none" }}
                     >
                       <span
                         style={{
@@ -109,88 +175,18 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                           flexDirection: "row",
                           justifyContent: "center",
                           alignItems: "center",
+                          textTransform: "none",
                         }}
                       >
-                        <img
-                          src={HomeCrest}
-                          alt={"Home"}
-                          style={{ width: "3rem", height: "3rem" }}
-                        />
-                        <CampaignTitle>Home</CampaignTitle>
+                        <AddIcon style={{ color: "black" }} />
+                        <CampaignTitle>Add new</CampaignTitle>
                       </span>
                     </Link>
                   </NavBarItem>
-                  {Object.entries(rootCampaigns.campaigns).map(
-                    ([id, campaign]) => {
-                      return (
-                        <NavBarItem
-                          key={id}
-                          onClick={() =>
-                            dispatch(
-                              setSelectedCampaign({
-                                id: "",
-                                campaign: initialSelectedCampaignState,
-                              })
-                            )
-                          }
-                        >
-                          <Link
-                            to={`/${campaign.slug}`}
-                            style={{
-                              textDecoration: "none",
-                              color: "black",
-                              width: "100%",
-                            }}
-                          >
-                            <span
-                              style={{
-                                padding: "1rem",
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <img
-                                style={{ width: "3rem", height: "2rem" }}
-                                src={CampaignCrest}
-                                alt="Crest symbol"
-                              />
-                              <CampaignTitle>{campaign.title}</CampaignTitle>
-                            </span>
-                          </Link>
-                        </NavBarItem>
-                      );
-                    }
-                  )}
-
-                  {authUser && authUser.displayName === owner ? (
-                    <NavBarItem>
-                      <Link
-                        to={`/user/${authUser.displayName}/newcampaign`}
-                        onClick={() => dispatch(clearSelectedCampaign())}
-                        style={{ textDecoration: "none" }}
-                      >
-                        <span
-                          style={{
-                            padding: "1rem",
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            textTransform: "none",
-                          }}
-                        >
-                          <AddIcon style={{ color: "black" }} />
-                          <CampaignTitle>Add new</CampaignTitle>
-                        </span>
-                      </Link>
-                    </NavBarItem>
-                  ) : null}
-                </div>
-              </ul>
-            </nav>
-            : null}
+                ) : null}
+              </div>
+            </ul>
+          </nav>
         </Backdrop>
       </IconContext.Provider>
     </>

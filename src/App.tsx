@@ -5,7 +5,6 @@ import {
   Switch,
   Route,
   Redirect,
-  useLocation,
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.scss";
@@ -15,8 +14,7 @@ import NotFound from "./pages/NotFound/NotFound"
 import StickyFooter from "./components/Footer/StickyFooter";
 import ProfileIndex from "./pages/Profile/ProfileIndex";
 import Home from "./pages/Home/Home";
-import { getAuthUser, getAuthUserPath, getIsLoading } from "./store/admin/adminSelectors";
-import { isDungeonMasterSelector } from "./store/selected/selectedSelectors";
+import { getAuthUser, getAuthUserPath } from "./store/admin/adminSelectors";
 import styled from "styled-components";
 import { authentication } from "./services/Firebase/firebase";
 import { setAuthUser } from "./store/admin/adminCreator";

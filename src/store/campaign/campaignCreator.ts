@@ -4,7 +4,6 @@ import {
 } from "./campaignActions";
 export const setCampaigns = (campaigns?: any[]) => {
     return async (dispatch: Dispatch) => {
-        console.log(campaigns)
         dispatch({ type: SET_CAMPAIGNS, payload: campaigns ? campaigns : [] })
     }
 }

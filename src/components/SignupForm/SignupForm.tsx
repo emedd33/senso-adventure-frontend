@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { dispatchLogin, setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
+import { setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
 import { getAuthUser } from "../../store/admin/adminSelectors";
 import { getFromDatabase } from "../../services/Firebase/database"
 import { createUserWithEmailPasswordAndUsername } from "../../services/Firebase/authentication";

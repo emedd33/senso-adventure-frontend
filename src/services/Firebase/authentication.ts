@@ -1,6 +1,4 @@
-import { Dispatch } from "react";
 import { authentication } from "./firebase"
-import { setAlertDialog } from "../../store/admin/adminCreator"
 import { setValueInDatabase } from "./database";
 export const resetPassword = (email: string, dispatch: any) => {
     return authentication

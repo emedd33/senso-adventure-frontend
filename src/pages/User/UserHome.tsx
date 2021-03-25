@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import sortSessionsByDateValue from "../../utils/sortArrayDyDate";
 import { Link, useHistory } from "react-router-dom";
@@ -13,47 +13,38 @@ import {
     OLD_WHITE_TRANSPARENT,
 } from "../../assets/constants/Constants";
 import styled from "styled-components";
-import { storage } from "../../services/Firebase/firebase";
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
+import { getUrlFromStorage } from "../../services/Firebase/storage";
+import useOwner from "../../store/hooks/useOwner";
 type UserHomeProps = {};
 const UserHome: FunctionComponent<UserHomeProps> = () => {
     const history = useHistory();
     const campaigns = useSelector(getAllCampaigns);
     const [campaignUrls, setCampaignUrls] = useState<any[]>([])
+    const owner = useOwner()
     const sessions = useSelector(getAllSessions);
     const selectedCampaign = useSelector(getSelectedCampaign)
-
-
-    useEffect(() => {
+    useMemo(() => {
         if (campaigns) {
-            Object.values(campaigns).map((campaign: ICampaign) =>
-                storage
-                    .ref(`Campaigns/${campaign.slug}/TitleImage`)
-                    .getDownloadURL()
-                    .then((url) =>
-                        setCampaignUrls(
-                            (existingUrls: { campaignSlug: string; url?: string }[]) => [
-                                ...existingUrls,
-                                { campaignSlug: campaign.slug, url: url },
-                            ]
-                        )
+
+            let urlPromises: Promise<any>[] = Object.values(campaigns).map((campaign: ICampaign) => {
+                return getUrlFromStorage(`users/${owner}/campaigns/${campaign.slug}/TitleImage`)
+                    .then((url) => {
+                        return { campaignSlug: campaign.slug, url: url }
+
+                    }
                     )
-                    .catch(() =>
-                        setCampaignUrls(
-                            (existingUrls: { campaignSlug: string; url?: string }[]) => [
-                                ...existingUrls,
-                                { campaignSlug: campaign.slug },
-                            ]
-                        )
-                    )
-            );
+                    .catch(() => ({ campaignSlug: campaign.slug, url: "" }))
+
+            }
+            )
+            Promise.all(urlPromises).then(val => {
+                setCampaignUrls(val)
+            })
         }
-        return () => {
-            setCampaignUrls([]);
-        };
-    }, [campaigns]);
+    }, [campaigns, owner]);
 
     const renderScrolls = () => {
         if (sessions && selectedCampaign) {
@@ -102,7 +93,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
                 {campaignUrls
                     ? Object.values(campaignUrls).map(
                         (campaign: { campaignSlug: string; url?: string }, index: number) => (
-                            <Link to={`/${campaign.campaignSlug}`} key={index}>
+                            <Link to={`/user/${owner}/campaigns/${campaign.campaignSlug}`} key={index}>
                                 <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem" }}>
                                     {campaign.url ? (
                                         <CampaignImg src={campaign.url} />
@@ -113,7 +104,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
                             </Link>
                         )
                     )
-                    : <CircularProgress />}
+                    : null}
             </div>
             <div
                 style={{

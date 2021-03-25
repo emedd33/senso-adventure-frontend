@@ -2,24 +2,22 @@ import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
-    Redirect,
     Route,
     Switch,
     useLocation,
 } from "react-router-dom";
 import Campaign from "./Campaign";
+import SensoFab from "../../../components/SensoFab/SensoFab"
 
 import {
-    getSelectedCampaign,
-    getSelectedCampaignSlug,
-    getSelectedMonster,
-    getSelectedLocation,
-    getSelectedPlayer,
-    getSelectedSession,
+    isDungeonMasterSelector,
+    getSelectedCampaignStoragePath,
 } from "../../../store/selected/selectedSelectors";
 
-import IsLoading from "../../../components/IsLoading/IsLoading";
-import "react-tiny-fab/dist/styles.css";
+import { setIsLoading } from "../../../store/admin/adminCreator";
+import { getUrlFromStorage } from "../../../services/Firebase/storage";
+import dispatchSelectedByUrl from "../../../store/selected/dispatchSelectedByUrl";
+import { getAllCampaigns } from "../../../store/campaign/campaignSelectors";
 
 
 
@@ -27,43 +25,33 @@ type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
     const location = useLocation();
     const dispatch = useDispatch();
-
-    const selectedCampaign = useSelector(getSelectedCampaign);
-    const selectedSession = useSelector(getSelectedSession);
-    const selectedLocation = useSelector(getSelectedLocation);
-    const selectedMonster = useSelector(getSelectedMonster);
-    const selectedPlayer = useSelector(getSelectedPlayer);
-    const selectedCampaignSlug = useSelector(getSelectedCampaignSlug)
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
+    const campaigns = useSelector(getAllCampaigns)
+    const selectedCampaignStoragePath = useSelector(getSelectedCampaignStoragePath)
     const [imageUrl, setImageUrl] = useState("");
 
-    // useMemo(() => {
-    //     let pathArray = location.pathname.split("/");
-    //     // dispatchSelectedByUrl(pathArray, dispatch, campaigns)
+    useMemo(() => {
+        if (campaigns) {
 
-    // }, [dispatch, campaigns, location]);
+            let pathArray = location.pathname.split("/");
+            dispatchSelectedByUrl(pathArray, dispatch, campaigns)
+        }
 
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     if (selectedCampaignSlug) {
-    //         let campaignRef = storage
-    //             .ref("Campaigns")
-    //             .child(selectedCampaignSlug);
+    }, [dispatch, campaigns, location]);
 
-    //         // Fetching BackgroundImage
-    //         campaignRef
-    //             .child("BackgroundImage")
-    //             .getDownloadURL()
-    //             .then((url: string) => {
-    //                 setImageUrl(url);
-    //             })
-    //             .catch((e) => console.log("could not fetch background image"))
-    //             .finally(() => dispatch(setIsLoading(false)));
+    useEffect(() => {
+        setIsLoading(true);
+        if (selectedCampaignStoragePath) {
+            getUrlFromStorage(selectedCampaignStoragePath + "/BackgroundImage")
+                .then((url: string) => {
+                    setImageUrl(url);
+                })
+                .catch((e) => console.log("could not fetch background image"))
+                .finally(() => dispatch(setIsLoading(false)));
 
-    //     }
-    // }, [dispatch, selectedCampaignSlug]);
-    // if (locationArray.length >= 2 && !selectedCampaign) {
-    //     return <IsLoading />;
-    // }
+        }
+    }, [dispatch, selectedCampaignStoragePath]);
+
     // if (locationArray.length >= 4 && locationArray[3] !== "new") {
     //     if (!selectedSession && !selectedMonster && !selectedLocation && !selectedPlayer) {
     //         return <IsLoading />;
@@ -78,6 +66,9 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                 </Route>
             </Switch>
 
+            {isDungeonMaster ?
+                <SensoFab />
+                : null}
 
         </Container>
     );

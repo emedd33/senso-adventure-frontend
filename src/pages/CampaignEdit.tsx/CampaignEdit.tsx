@@ -1,22 +1,22 @@
 import { Button, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory, useLocation } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../assets/constants/Constants";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import IsLoading from "../../components/IsLoading/IsLoading";
-import { database, storage } from "../../services/Firebase/firebase";
 import { setAlertDialog } from "../../store/admin/adminCreator";
 import { getAuthUser } from "../../store/admin/adminSelectors";
 import { useImageFile } from "../../store/hooks/useImageFile";
-import { getSelectedCampaign, getSelectedCampaignDatabasePath, getSelectedCampaignStoragePath } from "../../store/selected/selectedSelectors";
+import { getSelectedCampaign, getSelectedCampaignDatabasePath } from "../../store/selected/selectedSelectors";
 import { isValidImageFile } from "../../utils/isValidImageFile";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 import { SensoDelete } from "../../components/SensoInputs";
 import { pushToDatabase } from "../../services/Firebase/database"
 import { getUrlFromStorage, pushToStorage } from "../../services/Firebase/storage"
 import { transformTitleToSlug } from "../../utils/StringProcessing"
+import useOwner from "../../store/hooks/useOwner";
 export interface CampaignEditProps {
   isNew: boolean;
 }
@@ -24,9 +24,7 @@ export interface CampaignEditProps {
 const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation()
-  const owner = useLocation().pathname.split("/")[2]
-  const selectedCampaignStoragePath = useSelector(getSelectedCampaignStoragePath)
+  const owner = useOwner()
   const [imageUrl, setImageUrl] = useState("");
 
   const authUser = useSelector(getAuthUser)
@@ -54,7 +52,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
     } else {
       setImageUrl(BackgroundImage)
     }
-  }, [isNew, selectedCampaign]);
+  }, [isNew, selectedCampaign, campaignDatabasePath]);
 
   useEffect(() => {
     if (selectedCampaign) {
@@ -82,7 +80,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
         }
         title = campaignTitle
         slug = transformTitleToSlug(campaignTitle);
-        let newCampaign = {
+        var newCampaign = {
           dungeonMaster: { username: user.displayName, uid: user.uid },
           title: title,
           slug: slug,
@@ -101,10 +99,11 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
         };
 
         if (isValidImageFile(campaignBackgroundImageFile)) {
-          pushToStorage(`${selectedCampaignStoragePath}/BackgroundImage`, campaignBackgroundImageFile.file.file, metadata)
+
+          pushToStorage(`users/${user.displayName}/campaigns/${slug}/BackgroundImage`, campaignBackgroundImageFile.file.file, metadata)
         }
         if (isValidImageFile(campaignTitleImageFile)) {
-          pushToStorage(`${selectedCampaignStoragePath}/TitleImage`, campaignTitleImageFile.file.file, metadata)
+          pushToStorage(`users/${user.displayName}/campaigns/${slug}/TitleImage`, campaignTitleImageFile.file.file, metadata)
         }
         history.push(`/user/${authUser.displayName}/campaigns/${slug}`);
       }
