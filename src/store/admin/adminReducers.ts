@@ -2,6 +2,7 @@ import {
   SET_IS_LOADING,
   SET_ALERT_DIALOG,
   SET_AUTH_USER,
+  SET_IS_SIDEBAR_SHOWN
 } from "./adminActions";
 
 const initialState: AdminState = {
@@ -12,7 +13,8 @@ const initialState: AdminState = {
     isOpen: false,
   },
   env: "http://localhost",
-  port: "3000"
+  port: "3000",
+  isSidebarShown: false,
 };
 
 const adminReducer = (
@@ -35,6 +37,11 @@ const adminReducer = (
         ...state,
         authUser: action.payload,
       };
+    case SET_IS_SIDEBAR_SHOWN:
+      return {
+        ...state,
+        isSidebarShown: action.payload,
+      }
   }
   return state;
 };

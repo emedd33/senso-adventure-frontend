@@ -9,6 +9,7 @@ import { dispatchLogout, setAlertDialog } from "../../store/admin/adminCreator";
 import TextField from "@material-ui/core/TextField";
 import { getCurrentUser } from "../../services/Firebase/authentication";
 import { getAuthUser, getIsLoading } from "../../store/admin/adminSelectors";
+import { Redirect } from "react-router";
 
 export interface ProfileIndexProps { }
 
@@ -90,11 +91,14 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
       </Container>
     );
   }
+  if (!authUser) {
+    return <Redirect to="/" />
+  }
 
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
 
-      <ContentContainer>
+      < ContentContainer >
         <h1>My Profile</h1>
         <div style={{ flex: 8, width: "90%" }}>
           <div
@@ -105,7 +109,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
             }}
           >
             <ProfileRowString>Username: </ProfileRowString>
-            <p>{authUser.displayName}</p>
+            <p>{authUser.displayName ? authUser.displayName : ""}</p>
           </div>
           <div
             style={{
@@ -255,8 +259,8 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
               Log out
             </Button>
         </div>
-      </ContentContainer>
-    </Container>
+      </ContentContainer >
+    </Container >
   );
 };
 

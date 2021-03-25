@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NavbarHeader from "./NavbarHeader"
 import NavbarSidebar from "./NavbarSidebar"
 
@@ -12,6 +12,8 @@ import {
   Theme,
 } from "@material-ui/core";
 import IsLoading from "../IsLoading/IsLoading";
+import { setIsSidebarShown } from "../../store/admin/adminCreator";
+import { getIsSidebarShown } from "../../store/admin/adminSelectors";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     backdrop: {
@@ -24,25 +26,27 @@ const useStyles = makeStyles((theme: Theme) =>
 type NavbarProps = {};
 const Navbar: FunctionComponent<NavbarProps> = () => {
   const classes = useStyles();
+  const dispatch = useDispatch()
   const rootCampaigns = useSelector(
     (state: RootReducerProp) => state.rootCampaigns
   );
-  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
-  const showSidebar = () => setIsNavbarOpen(!isNavbarOpen);
-
+  const isSidebarOpen = useSelector(getIsSidebarShown)
   if (!rootCampaigns) {
     return <IsLoading />;
   }
   return (
     <>
       <IconContext.Provider value={{ color: "black" }}>
-        <NavbarHeader showSidebar={showSidebar} />
+        <NavbarHeader />
         <Backdrop
           className={classes.backdrop}
-          open={isNavbarOpen}
-          onClick={showSidebar}
+          open={isSidebarOpen}
+          onClick={() => dispatch(setIsSidebarShown(!isSidebarOpen))}
         >
-          <NavbarSidebar isOpen={isNavbarOpen} />
+          {isSidebarOpen ?
+            <NavbarSidebar />
+            : null
+          }
         </Backdrop>
       </IconContext.Provider>
     </>

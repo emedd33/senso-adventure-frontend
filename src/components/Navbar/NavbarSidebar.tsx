@@ -15,24 +15,26 @@ import AddIcon from "@material-ui/icons/Add";
 import IsLoading from "../IsLoading/IsLoading";
 import { LIGHT_PINK } from "../../assets/constants/Constants";
 import { initialSelectedCampaignState } from "../../store/selected/selectedReducer";
-import { getAuthUser } from "../../store/admin/adminSelectors";
+import { getAuthUser, getIsSidebarShown } from "../../store/admin/adminSelectors";
 
 
-type NavbarSidebarProps = { isOpen: boolean };
-const NavbarSidebar: FunctionComponent<NavbarSidebarProps> = ({ isOpen }) => {
+type NavbarSidebarProps = {};
+const NavbarSidebar: FunctionComponent<NavbarSidebarProps> = () => {
     const dispatch = useDispatch();
     const rootCampaigns = useSelector(
         (state: RootReducerProp) => state.rootCampaigns
     );
     const authUser = useSelector(getAuthUser);
     const owner = useOwner()
+    const isSidebarOpen = useSelector(getIsSidebarShown)
+
 
     if (!rootCampaigns) {
         return <IsLoading />;
     }
     return (
         <>
-            <nav className={isOpen ? "nav-menu active" : "nav-menu"}>
+            <nav className={isSidebarOpen ? "nav-menu active" : "nav-menu"}>
 
                 <div className={"cos-navbar-container"}>
                     <NavBarItem>

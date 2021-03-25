@@ -1,4 +1,3 @@
-import { getUrlFromStorage } from "../../services/Firebase/storage";
 
 export const getNewSessionDay = (state: RootReducerProp) => {
   if (state.selected.selectedCampaign?.campaign.sessions) {

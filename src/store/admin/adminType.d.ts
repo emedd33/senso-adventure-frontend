@@ -10,6 +10,7 @@ type AdminState = {
   error: IError;
   env: string,
   port: string,
+  isSidebarShown: boolean,
 };
 type ILogin = {
   email: string;

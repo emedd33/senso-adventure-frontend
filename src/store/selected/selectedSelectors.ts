@@ -1,5 +1,4 @@
 import { MentionData } from "@draft-js-plugins/mention";
-import { database } from "../../services/Firebase/firebase";
 import { getHost } from "../../utils/getHost";
 
 export const getSelectedSession = (state: RootReducerProp) =>

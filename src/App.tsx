@@ -34,13 +34,13 @@ export default function App() {
   return (
     <Router>
       <AlertDialog />
+      <Navbar />
       <LeftGradientDiv style={{ left: 0 }} />
       <RightGradientDiv style={{ right: 0 }} />
-      <Navbar />
 
       <Switch>
         <Route exact path="/profile">
-          {authUser ? <ProfileIndex /> : <Redirect to="/" />}
+          {authUser && authUser.displayName ? <ProfileIndex /> : <Redirect to="/" />}
         </Route>
         <Route path="/login">
           {authUser && authUser.displayName ? <Redirect to="/" /> : <LoginIndex />}

@@ -10,3 +10,7 @@ export const getAuthUserPath = (state: RootReducerProp) => {
     return `/user/${state.admin.authUser.displayName}`
   }
 }
+
+export const getIsSidebarShown = (state: RootReducerProp) => {
+  return state.admin.isSidebarShown
+}

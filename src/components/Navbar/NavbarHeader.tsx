@@ -8,10 +8,12 @@ import styled from "styled-components";
 import NavbarHeaderBreadCrumbs from "./NavbarHeaderBreadCrumbs"
 
 import NavbarHeaderMenu from "./NavbarHeaderMenu";
+import { useDispatch } from "react-redux";
+import { setIsSidebarShown } from "../../store/admin/adminCreator";
 
-type NavbarHeaderProps = { showSidebar: any };
-const NavbarHeader: FunctionComponent<NavbarHeaderProps> = ({ showSidebar }) => {
-
+type NavbarHeaderProps = {};
+const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
+    const dispatch = useDispatch()
     return (
         <>
             <IconContext.Provider value={{ color: "black" }}>
@@ -27,7 +29,7 @@ const NavbarHeader: FunctionComponent<NavbarHeaderProps> = ({ showSidebar }) => 
 
 
                         <NavBarOpenIcon to="#">
-                            <FaIcons.FaBars onClick={showSidebar} />
+                            <FaIcons.FaBars onClick={() => dispatch(setIsSidebarShown(true))} />
                         </NavBarOpenIcon>
 
                         <Link
