@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useMemo, useState } from "react";
+import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import Scroll from "../../../components/Scroll/Scroll";
 import { Link, useHistory } from "react-router-dom";
@@ -113,7 +113,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     },
         [selectedCampaign, owner, selectedLocationMenu, history,]
     )
-    useMemo(() => {
+    useEffect(() => {
         if (selectedCampaign && selectedCampaign.campaign.sessions) {
             setSessions(Object.entries(selectedCampaign.campaign.sessions)
                 .slice(0, 10)
@@ -127,10 +127,11 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                 campaignSlug={selectedCampaign.campaign.slug}
                                 sessionDay={session.sessionDay}
                                 isOpaque={session.isPublished === "FALSE"}
+                                owner={owner}
                                 onClick={() => {
 
                                     history.push(
-                                        `/users/${owner}/${selectedCampaign.campaign.slug}/sessions/${session.slug}`
+                                        `/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/sessions/${session.slug}`
                                     );
                                 }}
                             />

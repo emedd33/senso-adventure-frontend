@@ -13,6 +13,7 @@ type ScrollProps = {
   campaignSlug: string;
   onClick: any;
   isOpaque: boolean;
+  owner?: string
 };
 
 function Scroll({
@@ -23,18 +24,18 @@ function Scroll({
   campaignSlug,
   onClick,
   isOpaque,
+  owner
 }: ScrollProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
-    storage
-      .ref()
-      .child("Campaigns")
-      .child(campaignSlug)
-      .child("TitleImage")
-      .getDownloadURL()
-      .then((url) => setImageUrl(url))
-      .catch((e) => console.log("could not fetch TitleImage for scroll"));
-  }, [campaignSlug]);
+    if (owner && campaignSlug) {
+      storage
+        .ref(`users/${owner}/campaigns/${campaignSlug}/TitleImage`)
+        .getDownloadURL()
+        .then((url) => setImageUrl(url))
+        .catch((e) => console.log("could not fetch TitleImage for scroll"));
+    }
+  }, [campaignSlug, owner]);
   return (
     <ScrollButton onClick={onClick} >
       <ScrollContainer style={isOpaque ? { opacity: 0.5 } : {}}>

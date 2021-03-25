@@ -41,7 +41,7 @@ const NavbarHeaderBreadCrumbs: FunctionComponent<NavbarHeaderBreadCrumbsProps> =
                         path += `/${breadCrumbs[i]}`
                     }
                     return (
-                        <Link to={path} style={{ textDecoration: "none" }}>
+                        <Link to={path} style={{ textDecoration: "none" }} key={index}>
                             <Button style={{ textTransform: "none", padding: 0 }} disabled={index === breadCrumbs.length - 1} >{crumb}</Button>
                         </Link>
                     )

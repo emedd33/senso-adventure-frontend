@@ -28,6 +28,7 @@ const CampaignSessions: FunctionComponent<CampaignSessionsProps> = () => {
                                 campaignSlug={selectedCampaign.campaign.slug}
                                 sessionDay={session.sessionDay}
                                 isOpaque={session.isPublished === "FALSE"}
+                                owner={owner}
                                 onClick={() => {
                                     dispatch(setSelectedSession({ id: id, session: session }));
                                     history.push(
