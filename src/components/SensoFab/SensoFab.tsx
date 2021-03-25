@@ -75,7 +75,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                             setSelectedPlayer()
                         );
                         history.push(
-                            `/user/${owner}/${selectedCampaign.campaign.slug}/players/new`
+                            `/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-player`
                         );
                     }
                 }}

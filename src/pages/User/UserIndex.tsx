@@ -18,6 +18,7 @@ import { setCampaigns } from "../../store/campaign/campaignCreator";
 import { database } from "../../services/Firebase/firebase";
 import CampaignIndex from "./Campaign/CampaignIndex";
 import useOwner from "../../store/hooks/useOwner";
+import NotFound from "../NotFound/NotFound";
 
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
@@ -47,9 +48,10 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                 <Route exact path="/user/:username/">
                     <UserHome />
                 </Route>
+                <Route>
+                    <NotFound />
+                </Route>
             </Switch>
-
-
         </Container>
     );
 };

@@ -56,8 +56,7 @@ export const Menu = (list: any[], selected: any) =>
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
-
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
     const owner = useOwner()
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
@@ -75,235 +74,191 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const [selectedMonsterMenu, setSelectedMonsterMenu] = useState("");
     const [selectedLocationMenu, setSelectedLocationMenu] = useState("");
     useMemo(() => {
-        if (campaignSessions && selectedCampaign) {
-            campaignSessions
+        if (selectedCampaign && selectedCampaign.campaign.players) {
+            setPlayers(Object.entries(selectedCampaign.campaign.players)
                 .slice(0, 10)
-                .map(([id, session]: [string, ISession], index: number) => {
-                    if (session) {
-                        setSessions((existing) => [
-                            ...existing,
-                            <MenuItem
-                                text={
-                                    <Scroll
-                                        title={session.title}
-                                        subTitle={session.subTitle ? session.subTitle : ""}
-                                        date={session.date}
-                                        campaignSlug={selectedCampaign.campaign.slug}
-                                        sessionDay={session.sessionDay}
-                                        isOpaque={session.isPublished === "FALSE"}
-                                        onClick={() => {
-                                            dispatch(
-                                                setSelectedSession({ id: id, session: session })
-                                            );
-                                            history.push(
-                                                `/users/${owner}/${selectedCampaign.campaign.slug}/sessions/${session.slug}`
-                                            );
-                                        }}
-                                    />
-                                }
-                                key={index}
-                                selected={selectedSessionMenu}
-                            />,
-                        ]);
-                    }
-                    return undefined;
-                });
+                .map(([id, player]: [string, IPlayer], index: number) =>
+                    createMenuItem(index, selectedPlayerMenu, player.name[0], player.isPublished, () => {
+                        dispatch(setSelectedPlayer({ id: id, player: player })); history.push(`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/players/${player.slug}`);
+                    }, player.name, player.summary)
+                ))
         }
         return () => {
-            setSessions([])
-        }
-    }, [selectedCampaign, campaignSessions, selectedSessionMenu, dispatch, history, owner])
-    useMemo(() => {
-        if (campaignLocations && selectedCampaign) {
-            campaignLocations
-                .slice(0, 10)
-                .map(([id, location]: [string, ILocation], index: number) => {
-                    if (location) {
-                        setLocations((existing) => [
-                            ...existing,
-                            <MenuItem
-                                text={
-                                    <Card
-                                        style={
-                                            location.isPublished === "TRUE"
-                                                ? { margin: "2rem", backgroundColor: OLD_WHITE }
-                                                : {
-                                                    margin: "2rem",
-                                                    backgroundColor: OLD_WHITE,
-                                                    opacity: 0.5,
-                                                }
-                                        }
-                                        onClick={() => {
-                                            dispatch(
-                                                setSelectedLocation({
-                                                    id: id,
-                                                    location: location,
-                                                })
-                                            );
-                                            history.push(
-                                                `/user/${owner}/${selectedCampaign.campaign.slug}/locations/${location.slug}`
-                                            );
-                                        }}
-                                    >
-                                        <CardActionArea>
-                                            <CardHeader
-                                                avatar={
-                                                    <Avatar aria-label="recipe">
-                                                        {location.name[0]}
-                                                    </Avatar>
-                                                }
-                                                style={{ width: "15rem" }}
-                                                title={location.name}
-                                            />
-                                            <CardContent>
-                                                <p>{location.summary.slice(0, 40)}...</p>
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                }
-                                key={index}
-                                selected={selectedLocationMenu}
-                            />,
-                        ]);
-                    }
-                    return () => {
-                        setLocations([])
-                    };
-                });
-        }
-    }, [selectedCampaign, campaignLocations, selectedLocationMenu, dispatch, history, owner])
-    useMemo(() => {
-        if (campaignMonsters && selectedCampaign) {
-            campaignMonsters
-                .slice(0, 10)
-                .map(([id, monster]: [string, IMonster], index: number) => {
-                    if (monster) {
-                        setMonsters((existing) => [
-                            ...existing,
-                            <MenuItem
-                                text={
-                                    <Card
-                                        style={
-                                            monster.isPublished === "TRUE"
-                                                ? { margin: "2rem", backgroundColor: OLD_WHITE }
-                                                : {
-                                                    margin: "2rem",
-                                                    backgroundColor: OLD_WHITE,
-                                                    opacity: 0.5,
-                                                }
-                                        }
-                                        onClick={() => {
-                                            dispatch(
-                                                setSelectedMonster({
-                                                    id: id,
-                                                    monster: monster,
-                                                })
-                                            );
-                                            history.push(
-                                                `/user/${owner}/${selectedCampaign.campaign.slug}/monsters/${monster.slug}`
-                                            );
-                                        }}
-                                    >
-                                        <CardActionArea>
-                                            <CardHeader
-                                                avatar={
-                                                    <Avatar aria-label="recipe">
-                                                        {monster.name[0]}
-                                                    </Avatar>
-                                                }
-                                                style={{ width: "15rem" }}
-                                                title={monster.name}
-                                            />
-                                            <CardContent>
-                                                <p>{monster.summary.slice(0, 40)}...</p>
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                }
-                                key={index}
-                                selected={selectedMonsterMenu}
-                            />,
+            setPlayers([])
+        };
+    },
+        [selectedCampaign, owner, selectedPlayerMenu, dispatch, history,]
+    )
+    // useMemo(() => {
+    //     if (campaignSessions && selectedCampaign) {
+    //         campaignSessions
+    //             .slice(0, 10)
+    //             .map(([id, session]: [string, ISession], index: number) => {
+    //                 if (session) {
+    //                     setSessions((existing) => [
+    //                         ...existing,
+    //                         <MenuItem
+    //                             text={
+    //                                 <Scroll
+    //                                     title={session.title}
+    //                                     subTitle={session.subTitle ? session.subTitle : ""}
+    //                                     date={session.date}
+    //                                     campaignSlug={selectedCampaign.campaign.slug}
+    //                                     sessionDay={session.sessionDay}
+    //                                     isOpaque={session.isPublished === "FALSE"}
+    //                                     onClick={() => {
+    //                                         dispatch(
+    //                                             setSelectedSession({ id: id, session: session })
+    //                                         );
+    //                                         history.push(
+    //                                             `/users/${owner}/${selectedCampaign.campaign.slug}/sessions/${session.slug}`
+    //                                         );
+    //                                     }}
+    //                                 />
+    //                             }
+    //                             key={index}
+    //                             selected={selectedSessionMenu}
+    //                         />,
+    //                     ]);
+    //                 }
+    //                 return undefined;
+    //             });
+    //     }
+    //     return () => {
+    //         setSessions([])
+    //     }
+    // }, [selectedCampaign, campaignSessions, selectedSessionMenu, dispatch, history, owner])
+    // useMemo(() => {
+    //     if (campaignLocations && selectedCampaign) {
+    //         campaignLocations
+    //             .slice(0, 10)
+    //             .map(([id, location]: [string, ILocation], index: number) => {
+    //                 if (location) {
+    //                     setLocations((existing) => [
+    //                         ...existing,
+    //                         <MenuItem
+    //                             text={
+    //                                 <Card
+    //                                     style={
+    //                                         location.isPublished === "TRUE"
+    //                                             ? { margin: "2rem", backgroundColor: OLD_WHITE }
+    //                                             : {
+    //                                                 margin: "2rem",
+    //                                                 backgroundColor: OLD_WHITE,
+    //                                                 opacity: 0.5,
+    //                                             }
+    //                                     }
+    //                                     onClick={() => {
+    //                                         dispatch(
+    //                                             setSelectedLocation({
+    //                                                 id: id,
+    //                                                 location: location,
+    //                                             })
+    //                                         );
+    //                                         history.push(
+    //                                             `/user/${owner}/${selectedCampaign.campaign.slug}/locations/${location.slug}`
+    //                                         );
+    //                                     }}
+    //                                 >
+    //                                     <CardActionArea>
+    //                                         <CardHeader
+    //                                             avatar={
+    //                                                 <Avatar aria-label="recipe">
+    //                                                     {location.name[0]}
+    //                                                 </Avatar>
+    //                                             }
+    //                                             style={{ width: "15rem" }}
+    //                                             title={location.name}
+    //                                         />
+    //                                         <CardContent>
+    //                                             <p>{location.summary.slice(0, 40)}...</p>
+    //                                         </CardContent>
+    //                                     </CardActionArea>
+    //                                 </Card>
+    //                             }
+    //                             key={index}
+    //                             selected={selectedLocationMenu}
+    //                         />,
+    //                     ]);
+    //                 }
+    //                 return () => {
+    //                     setLocations([])
+    //                 };
+    //             });
+    //     }
+    // }, [selectedCampaign, campaignLocations, selectedLocationMenu, dispatch, history, owner])
+    // useMemo(() => {
+    //     if (campaignMonsters && selectedCampaign) {
+    //         campaignMonsters
+    //             .slice(0, 10)
+    //             .map(([id, monster]: [string, IMonster], index: number) => {
+    //                 if (monster) {
+    //                     setMonsters((existing) => [
+    //                         ...existing,
+    //                         <MenuItem
+    //                             text={
+    //                                 <Card
+    //                                     style={
+    //                                         monster.isPublished === "TRUE"
+    //                                             ? { margin: "2rem", backgroundColor: OLD_WHITE }
+    //                                             : {
+    //                                                 margin: "2rem",
+    //                                                 backgroundColor: OLD_WHITE,
+    //                                                 opacity: 0.5,
+    //                                             }
+    //                                     }
+    //                                     onClick={() => {
+    //                                         dispatch(
+    //                                             setSelectedMonster({
+    //                                                 id: id,
+    //                                                 monster: monster,
+    //                                             })
+    //                                         );
+    //                                         history.push(
+    //                                             `/user/${owner}/${selectedCampaign.campaign.slug}/monsters/${monster.slug}`
+    //                                         );
+    //                                     }}
+    //                                 >
+    //                                     <CardActionArea>
+    //                                         <CardHeader
+    //                                             avatar={
+    //                                                 <Avatar aria-label="recipe">
+    //                                                     {monster.name[0]}
+    //                                                 </Avatar>
+    //                                             }
+    //                                             style={{ width: "15rem" }}
+    //                                             title={monster.name}
+    //                                         />
+    //                                         <CardContent>
+    //                                             <p>{monster.summary.slice(0, 40)}...</p>
+    //                                         </CardContent>
+    //                                     </CardActionArea>
+    //                                 </Card>
+    //                             }
+    //                             key={index}
+    //                             selected={selectedMonsterMenu}
+    //                         />,
 
-                        ]);
-                    }
-                    return undefined;
-                })
+    //                     ]);
+    //                 }
+    //                 return undefined;
+    //             })
 
-        }
-        return () => {
-            setMonsters([])
-        }
-    }, [selectedCampaign, selectedMonsterMenu, campaignMonsters, dispatch, history, owner])
-    useMemo(() => {
-        if (campaignPlayers && selectedCampaign) {
-            campaignPlayers
-                .slice(0, 10)
-                .map(([id, player]: [string, IPlayer], index: number) => {
-                    if (player) {
-                        setPlayers((existing) => [
-                            ...existing,
-                            <MenuItem
-                                text={
-                                    <Card
-                                        style={
-                                            player.isPublished === "TRUE"
-                                                ? { margin: "2rem", backgroundColor: OLD_WHITE }
-                                                : {
-                                                    margin: "2rem",
-                                                    backgroundColor: OLD_WHITE,
-                                                    opacity: 0.5,
-                                                }
-                                        }
-                                        onClick={() => {
-                                            dispatch(
-                                                setSelectedPlayer({
-                                                    id: id,
-                                                    player: player,
-                                                })
-                                            );
-                                            history.push(
-                                                `/user/${owner}/${selectedCampaign.campaign.slug}/players/${player.slug}`
-                                            );
-                                        }}
-                                    >
-                                        <CardActionArea>
-                                            <CardHeader
-                                                avatar={
-                                                    <Avatar aria-label="recipe">
-                                                        {player.name[0]}
-                                                    </Avatar>
-                                                }
-                                                style={{ width: "15rem" }}
-                                                title={player.name}
-                                            />
-                                            <CardContent>
-                                                <p>{player.summary.slice(0, 40)}...</p>
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                }
-                                key={index}
-                                selected={selectedPlayerMenu}
-                            />,
+    //     }
+    //     return () => {
+    //         setMonsters([])
+    //     }
+    // }, [selectedCampaign, selectedMonsterMenu, campaignMonsters, dispatch, history, owner])
 
-                        ]);
-                    }
-                    return () => {
-                        setPlayers([])
-                    };
-                })
-
-        }
-    }, [selectedCampaign, campaignPlayers, selectedPlayerMenu, dispatch, history, owner])
-    useMemo(() => {
-        if (selectedCampaign) {
-            getUrlFromStorage(`users/${owner}/campaigns/${selectedCampaign.campaign.slug}/TitleImage`)
-                .then((url) => {
-                    setCampaignTitleImage(url);
-                })
-                .catch((e) => console.log("Could not fetch Campaign image"))
-        }
-    }, [owner, selectedCampaign]);
+    // useMemo(() => {
+    //     if (selectedCampaign) {
+    //         getUrlFromStorage(`users/${owner}/campaigns/${selectedCampaign.campaign.slug}/TitleImage`)
+    //             .then((url) => {
+    //                 setCampaignTitleImage(url);
+    //             })
+    //             .catch((e) => console.log("Could not fetch Campaign image"))
+    //     }
+    // }, [owner, selectedCampaign]);
 
     return (
         <Container>
@@ -393,7 +348,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 : null}
             {players.length > 0 ?
                 <Overview>
-                    <Link to={`/${selectedCampaign?.campaign.slug}/players`} style={{ textDecoration: "none" }}>
+                    <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/players`} style={{ textDecoration: "none" }}>
                         <div style={{ display: "flex", justifyContent: "center" }}>
                             <Button
                                 variant="contained"
@@ -491,6 +446,42 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
         </Container >
     );
 };
+
+const createMenuItem = (key: number, menu: any, playerInitial: string, isPublished: string, onClickAction: any, title: string, summary: string) => {
+    return (<MenuItem
+        text={
+            <Card
+                style={
+                    isPublished === "TRUE"
+                        ? { margin: "2rem", backgroundColor: OLD_WHITE }
+                        : {
+                            margin: "2rem",
+                            backgroundColor: OLD_WHITE,
+                            opacity: 0.5,
+                        }
+                }
+                onClick={onClickAction}
+            >
+                <CardActionArea>
+                    <CardHeader
+                        avatar={
+                            <Avatar aria-label="recipe">
+                                {playerInitial}
+                            </Avatar>
+                        }
+                        style={{ width: "15rem" }}
+                        title={title}
+                    />
+                    <CardContent>
+                        <p>{summary.slice(0, 40)}...</p>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        }
+        key={key}
+        selected={menu}
+    />)
+}
 const Container = styled.div`
 display:grid;
 grid-template-columns: 1fr;

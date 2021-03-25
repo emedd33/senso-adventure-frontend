@@ -13,6 +13,7 @@ const NotFound: FunctionComponent<NotFoundProps> = () => {
 const Container = styled.div`
   z-index: 300;
   display: flex;
+  width:100%;
   background-image: url(${BackgroundImage});
   background-repeat: no-repeat;
   background-attachment: fixed;

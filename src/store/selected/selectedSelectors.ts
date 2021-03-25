@@ -150,11 +150,7 @@ export const getSelectedMonsterStoragePath = (state: RootReducerProp) => {
     }
 };
 
-export const getSelectedPlayerStoragePath = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedPlayer) {
-        return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/players/${state.selected.selectedPlayer?.player.slug}`
-    }
-};
+
 
 // CAMPAIGN PATHS
 export const getSelectedCampaignStoragePath = (state: RootReducerProp) => {
@@ -168,6 +164,21 @@ export const getSelectedCampaignDatabasePath = (state: RootReducerProp) => {
         return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected?.selectedCampaign?.id}`
     }
 };
+
+// PLAYER PATHS
+
+export const getSelectedPlayerStoragePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign?.slug}`
+    }
+};
+
+export const getSelectedPlayerDatabasePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected?.selectedCampaign?.id}`
+    }
+};
+
 
 // SESSION PATHS
 

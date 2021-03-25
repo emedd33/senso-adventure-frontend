@@ -17,6 +17,7 @@ import { pushToDatabase } from "../../services/Firebase/database"
 import { getUrlFromStorage, pushToStorage } from "../../services/Firebase/storage"
 import { transformTitleToSlug } from "../../utils/StringProcessing"
 import useOwner from "../../store/hooks/useOwner";
+import { CircularProgress } from "material-ui";
 export interface CampaignEditProps {
   isNew: boolean;
 }
@@ -108,6 +109,9 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
         history.push(`/user/${authUser.displayName}/campaigns/${slug}`);
       }
     }
+  }
+  if (!owner) {
+    return <CircularProgress />
   }
   if (!authUser || owner !== authUser.displayName) {
     return <Redirect to="/" />

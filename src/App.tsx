@@ -47,11 +47,7 @@ export default function App() {
         <Route path="/user/:username/">
           <UserIndex />
         </Route>
-        <Route path="/user/:username/">
-          <Switch>
 
-          </Switch>
-        </Route>
         <Route exact path="/">
           {authUserPath ? <Redirect to={authUserPath} /> : <Home />}
         </Route>
@@ -59,14 +55,6 @@ export default function App() {
           <NotFound />
         </Route>
       </Switch>
-      {/*
-          <Switch>
-            
-            <Route path="/user/:username/">
-              <CampaignHome />
-            </Route> 
-
-        </Switch>*/}
       <StickyFooter />
     </Router >
   );

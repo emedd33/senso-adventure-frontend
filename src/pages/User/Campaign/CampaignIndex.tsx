@@ -16,10 +16,10 @@ import {
 
 import { setIsLoading } from "../../../store/admin/adminCreator";
 import { getUrlFromStorage } from "../../../services/Firebase/storage";
-import dispatchSelectedByUrl from "../../../store/selected/dispatchSelectedByUrl";
+import { dispatchSelectedCampaignByUrl } from "../../../store/selected/dispatchSelectedByUrl";
 import { getAllCampaigns } from "../../../store/campaign/campaignSelectors";
-
-
+import PlayerNew from "./Player/PlayerNew"
+import PlayerIndex from "./Player/PlayerIndex"
 
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
@@ -34,7 +34,7 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
         if (campaigns) {
 
             let pathArray = location.pathname.split("/");
-            dispatchSelectedByUrl(pathArray, dispatch, campaigns)
+            dispatchSelectedCampaignByUrl(pathArray, dispatch, campaigns)
         }
 
     }, [dispatch, campaigns, location]);
@@ -51,25 +51,25 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
 
         }
     }, [dispatch, selectedCampaignStoragePath]);
+    console.log("he")
 
-    // if (locationArray.length >= 4 && locationArray[3] !== "new") {
-    //     if (!selectedSession && !selectedMonster && !selectedLocation && !selectedPlayer) {
-    //         return <IsLoading />;
-    //     }
-    // }
+
     return (
         <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
             <Switch>
-
+                <Route exact path="/user/:username/campaigns/:campaignId/new-player">
+                    <PlayerNew />
+                </Route>
                 <Route exact path="/user/:username/campaigns/:campaignId">
                     <Campaign />
                 </Route>
+                <Route path="/user/:username/campaigns/:campaignId/players">
+                    <PlayerIndex />
+                </Route>
             </Switch>
-
             {isDungeonMaster ?
                 <SensoFab />
                 : null}
-
         </Container>
     );
 };
