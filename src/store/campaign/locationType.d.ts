@@ -4,7 +4,7 @@ interface ILocation {
     slug: string,
     isPublished: string,
     nickNames: string[],
-    summary: string,
+    description: string,
     characters: { name: string, description: string }[],
     religion?: string,
     governRule?: string,

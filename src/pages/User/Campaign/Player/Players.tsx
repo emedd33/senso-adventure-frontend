@@ -52,7 +52,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                         <AccordionDetails
                             style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
                         >
-                            <p>{player.summary}</p>
+                            <p>{player.description}</p>
                         </AccordionDetails>
                         <AccordionActions>
                             <Link

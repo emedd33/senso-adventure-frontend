@@ -3,7 +3,7 @@ interface IPlayer {
     name: string;
     nickNames: string[];
     isPublished: string;
-    summary: string;
+    description: string;
     slug: string;
     race: string;
     alignment: string;

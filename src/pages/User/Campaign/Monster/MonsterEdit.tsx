@@ -93,9 +93,9 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
             <DividerBlock style={{ width: "100%" }} />
 
             <SensoMultilineTextInput
-                initValue={selectedMonster.monster.summary}
-                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/summary`}
-                label="Summary"
+                initValue={selectedMonster.monster.description}
+                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/description`}
+                label="Description"
                 rows={4}
             />
             <DividerBlock style={{ width: "100%" }} />
@@ -245,14 +245,14 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
 
 
             <Divider />
-            <h3>Description and history:</h3>
+            <h3>Lore and history:</h3>
             <DraftJSEditor
                 playerMentionList={playerMentionList}
                 monsterMentionList={monsterMentionList}
                 locationMentionList={locationMentionList}
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}
-                storagePath={`${monsterPath}/monsterDescription.json`}
+                storagePath={`${monsterPath}/monsterLore.json`}
             />
             <SensoDelete
                 storagePath={`${monsterPath}`}

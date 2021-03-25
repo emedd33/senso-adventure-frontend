@@ -29,6 +29,7 @@ import { Link } from "react-router-dom";
 import renderArrayOfString from "../../../../utils/renderArrayToString";
 import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
 import useOwner from "../../../../store/hooks/useOwner";
+import { SensoDescription } from "../../../../components/SensoContainers";
 
 export interface LocationProps { }
 
@@ -99,11 +100,9 @@ const Location: React.FC<LocationProps> = () => {
                     {selectedLocation.location.governRule}
                 </i>
             </div>
-            <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
 
             <div style={{ gridColumn: "1/3" }}>
-                <h3>Summary</h3>
-                {selectedLocation.location.summary}
+    <SensoDescription content={selectedLocation.location.description}/>
             </div>
 
             {isDungeonMaster && selectedLocation.location.keyElements && selectedCampaign ? (
@@ -174,9 +173,9 @@ const Location: React.FC<LocationProps> = () => {
                 )) : null}
             {isDungeonMaster ?
                 <div style={{ gridColumn: "1/3" }}>
-                    <h3>{`Description and history to ${selectedLocation.location.name}`}</h3>
+                    <h3>{`Lore and history to ${selectedLocation.location.name}`}</h3>
 
-                    <DraftJSEditor readOnly={true} storagePath={`${locationPath}/locationDescription.json`}
+                    <DraftJSEditor readOnly={true} storagePath={`${locationPath}/locationLore.json`}
                         isDungeonMaster={isDungeonMaster}
                     />
                 </div>

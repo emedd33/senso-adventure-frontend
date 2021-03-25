@@ -92,11 +92,11 @@ const CampaignLocationEdit: React.FC = () => {
                 label={"Govern rule"}
             />
             <SensoMultilineTextInput
-                firebasePath={`${selectedLocationDatabasePath}/summary`}
-                initValue={selectedLocation.location.summary}
+                firebasePath={`${selectedLocationDatabasePath}/description`}
+                initValue={selectedLocation.location.description}
                 rows={4}
                 style={{ width: "100%" }}
-                label={"Summary"}
+                label={"Description"}
             />
             <Divider style={{ width: "100%", margin: "1rem" }} />
             <div
@@ -161,13 +161,13 @@ const CampaignLocationEdit: React.FC = () => {
             />
 
 
-            <h1 style={{ flex: 2, textAlign: "center" }}>Description and history</h1>
+            <h1 style={{ flex: 2, textAlign: "center" }}>Lore and history</h1>
             <DraftJSEditor
                 playerMentionList={playerMentionList}
                 monsterMentionList={monsterMentionList}
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}
-                storagePath={`${selectedLocationStoragePath}/locationDescription.json`}
+                storagePath={`${selectedLocationStoragePath}/locationLore.json`}
                 locationMentionList={locationMentionList}
             />
 

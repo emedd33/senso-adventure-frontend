@@ -72,7 +72,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 .map(([id, player]: [string, IPlayer], index: number) =>
                     createMenuItem(index, selectedPlayerMenu, player.name[0], player.isPublished, () => {
                         history.push(`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/players/${player.slug}`);
-                    }, player.name, player.summary)
+                    }, player.name, player.description)
                 ))
         }
         return () => {
@@ -88,7 +88,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 .map(([id, monster]: [string, IMonster], index: number) =>
                     createMenuItem(index, selectedMonsterMenu, monster.name[0], monster.isPublished, () => {
                         history.push(`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/${monster.slug}`);
-                    }, monster.name, monster.summary)
+                    }, monster.name, monster.description)
                 ))
         }
         return () => {
@@ -104,7 +104,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 .map(([id, location]: [string, ILocation], index: number) =>
                     createMenuItem(index, selectedLocationMenu, location.name[0], location.isPublished, () => {
                         history.push(`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/${location.slug}`);
-                    }, location.name, location.summary)
+                    }, location.name, location.description)
                 ))
         }
         return () => {
@@ -335,7 +335,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     );
 };
 
-const createMenuItem = (key: number, menu: any, playerInitial: string, isPublished: string, onClickAction: any, title: string, summary: string) => {
+const createMenuItem = (key: number, menu: any, playerInitial: string, isPublished: string, onClickAction: any, title: string, description: string) => {
     return (<MenuItem
         text={
             <Card
@@ -361,7 +361,7 @@ const createMenuItem = (key: number, menu: any, playerInitial: string, isPublish
                         title={title}
                     />
                     <CardContent>
-                        <p>{summary.slice(0, 40)}...</p>
+                        <p>{description? description.slice(0, 40) + "...":null}</p>
                     </CardContent>
                 </CardActionArea>
             </Card>

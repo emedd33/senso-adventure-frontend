@@ -23,7 +23,7 @@ interface IMonster {
     stats: IMonsterStats;
     size?: string;
     subtype?: string;
-    summary: string;
+    description: string;
     type?: string;
     xp?: number;
 }

@@ -49,7 +49,7 @@ const CampaignMonsters: FunctionComponent<CampaignMonstersProps> = () => {
                         <AccordionDetails
                             style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
                         >
-                            <p>{monster.summary}</p>
+                            <p>{monster.description}</p>
                         </AccordionDetails>
                         <AccordionActions>
                             <Link

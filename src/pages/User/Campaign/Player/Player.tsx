@@ -16,7 +16,7 @@ import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import renderArrayOfString from "../../../../utils/renderArrayToString";
 import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
-
+import {SensoDescription} from "../../../../components/SensoContainers";
 type PlayerProps = {};
 const Player: FunctionComponent<PlayerProps> = () => {
     const history = useHistory();
@@ -110,13 +110,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
 
                 </div>
             </div>
-            <div style={{ width: "100%" }}>
-                <b>Summary: </b>
-                <div style={{ width: "100%" }}></div>
-
-                {selectedPlayer.player.summary}
-                <div style={{ width: "100%", borderBottom: "double" }}></div>
-            </div>
+            <SensoDescription content={selectedPlayer.player.description}/>
             <>
                 <NestedContainer>
                     <NestedNestedContainer>
@@ -853,7 +847,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
 
                     : null}
                 <NestedContainer style={{ width: "100%" }} >
-                    <h3>Description and history: </h3>
+                    <h3>Lore: </h3>
                     <DraftJSEditor readOnly={true} storagePath={`${playerPath}/playerDescription.json`} isDungeonMaster={isDungeonMaster} />
 
                 </NestedContainer>

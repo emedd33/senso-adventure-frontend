@@ -15,7 +15,6 @@ import {
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
-import { getSelectedCampaign } from "../../store/selected/selectedSelectors";
 import { getUrlFromStorage } from "../../services/Firebase/storage";
 import useOwner from "../../store/hooks/useOwner";
 type UserHomeProps = {};
@@ -25,7 +24,6 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
     const [campaignUrls, setCampaignUrls] = useState<any[]>([])
     const owner = useOwner()
     const sessions = useSelector(getAllSessions);
-    const selectedCampaign = useSelector(getSelectedCampaign)
     useEffect(() => {
         if (campaigns) {
 
@@ -69,8 +67,8 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
         },
         [campaignUrls, owner],
     )
-    const renderScrolls = () => {
-        if (sessions && selectedCampaign) {
+    const renderScrolls = useCallback(() => {
+        if (sessions) {
             let sortedSessions = sortSessionsByDateValue(sessions);
 
             return sortedSessions
@@ -86,9 +84,10 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
                                 date={session.session.date}
                                 campaignSlug={session.session.campaignTitle.replace(/\s/g, "")}
                                 sessionDay={session.session.sessionDay}
+                                owner = {owner}
                                 onClick={() => {
                                     history.push(
-                                        `${session.session.campaignTitle.replace(
+                                        `/user/${owner}/campaigns/${session.session.campaignTitle.replace(
                                             /\s/g,
                                             ""
                                         )}/sessions/${session.session.slug}`
@@ -99,7 +98,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
                     );
                 });
         }
-    };
+    },[sessions, history, owner])
     return (
         <Container>
             <div

@@ -102,9 +102,9 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
 
             <div style={{ gridColumn: "1/3" }}>
                 <SensoMultilineTextInput
-                    initValue={selectedPlayer.player.summary}
-                    firebasePath={`${playerDatabsePath}/summary`}
-                    label="Summary"
+                    initValue={selectedPlayer.player.description}
+                    firebasePath={`${playerDatabsePath}/description`}
+                    label="Description"
                     rows={4}
                 />
             </div>
@@ -417,14 +417,14 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                 <Divider />
             </div>
             <div style={{ gridColumn: "1/3" }}>
-                <h3>Description and history:</h3>
+                <h3>Lore and history:</h3>
                 <DraftJSEditor
                     playerMentionList={playerMentionList}
                     locationMentionList={locationMentionList}
                     monsterMentionList={monsterMentionList}
                     readOnly={false}
                     isDungeonMaster={isDungeonMaster}
-                    storagePath={`${playerStoragePath}/playerDescription.json`}
+                    storagePath={`${playerStoragePath}/playerLore.json`}
                 />
             </div>
             <SensoDelete

@@ -50,7 +50,7 @@ const CampaignLocations: FunctionComponent<CampaignLocationsProps> = () => {
                             style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
                         >
                             <div>
-                                <p>{location.summary}</p>
+                                <p>{location.description}</p>
                             </div>
                         </AccordionDetails>
                         <AccordionActions>

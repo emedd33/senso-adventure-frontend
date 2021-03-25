@@ -1,5 +1,6 @@
 export const MAX_NUM_SCROLLS_HOMEPAGE = 10;
 export const OLD_WHITE = "#FAEBD7";
+export const OLD_WHITE_LIGHT = "#FCF7F0";
 export const OLD_WHITE_DARK = "#E4D6C4"
 export const OLD_WHITE_TRANSPARENT = "rgba(250, 235, 215,0.7)";
 export const DEEP_RED = "#750615";
@@ -14,7 +15,7 @@ export const NEW_LOCATION: ILocation = {
     nickNames: [],
     isPublished: "FALSE",
     slug: "",
-    summary: "",
+    description: "",
     characters: [],
     keyElements: [],
     resources: [],
@@ -55,7 +56,7 @@ export const NEW_MONSTER: IMonster = {
             { value: 0, proficiency: { index: "saving-throw-cha", name: "Saving Throw: CHA", url: "" } }
         ]
     },
-    summary: ""
+    description: ""
 };
 
 
@@ -63,7 +64,7 @@ export const NEW_PLAYER: IPlayer = {
     name: "",
     nickNames: [],
     isPublished: "FALSE",
-    summary: "",
+    description: "",
     slug: "",
     race: "Human",
     alignment: "True neutral",
@@ -72,7 +73,6 @@ export const NEW_PLAYER: IPlayer = {
     isDead: "FALSE",
     actions: [],
     level: 1,
-    description: "",
     stats: {
         armorClass: 12,
         speed: 30,
