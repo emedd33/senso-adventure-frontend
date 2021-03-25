@@ -865,8 +865,6 @@ const Player: FunctionComponent<PlayerProps> = () => {
 const Container = styled.div`
   width: 70%;
   padding: 1rem;
-  margin-top:10rem;
-  margin-bottom:10rem;
   -webkit-box-shadow: 5px 5px 15px 5px #000000;
   box-shadow: 5px 0px 15px 2px #000000;
   background-color: ${OLD_WHITE};

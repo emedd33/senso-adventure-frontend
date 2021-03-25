@@ -12,13 +12,13 @@ import {
 import "react-tiny-fab/dist/styles.css";
 
 
-import CampaignEdit from "../CampaignEdit.tsx/CampaignEdit";
 import UserHome from "./UserHome";
 import { setCampaigns } from "../../store/campaign/campaignCreator";
 import { database } from "../../services/Firebase/firebase";
 import CampaignIndex from "./Campaign/CampaignIndex";
 import useOwner from "../../store/hooks/useOwner";
 import NotFound from "../NotFound/NotFound";
+import CampaignNew from "./Campaign/CampaignNew";
 
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
@@ -41,7 +41,7 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
 
             <Switch>
                 < Route exact path="/user/:username/newcampaign">
-                    <CampaignEdit isNew={true} />
+                    <CampaignNew />
                 </Route>
                 <Route path="/user/:username/campaigns">
                     <CampaignIndex />

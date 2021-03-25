@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
-import styled from "styled-components";
 import { useSelector } from "react-redux";
 import NavbarHeader from "./NavbarHeader"
 import NavbarSidebar from "./NavbarSidebar"
@@ -13,7 +12,6 @@ import {
   Theme,
 } from "@material-ui/core";
 import IsLoading from "../IsLoading/IsLoading";
-import { LIGHT_PINK } from "../../assets/constants/Constants";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     backdrop: {
@@ -50,28 +48,5 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     </>
   );
 };
-const Title = styled.h2`
-margin-left: 2vh;
-  width: 15rem;
-  `;
-const CampaignTitle = styled.h1`
-padding;0;
-margin:0;
-width:100%;
-margin-left:2vw;
-:hover {
-    color: #ed1212;
-    cursor: pointer;
-}
-color:black;
-`;
-const NavBarItem = styled.ul`
-  background-color: ${LIGHT_PINK};
-  width: 100%;
-  height: 80px;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  padding: 0;
-`;
+
 export default Navbar;

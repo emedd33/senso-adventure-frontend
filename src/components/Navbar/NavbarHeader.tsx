@@ -7,7 +7,6 @@ import styled from "styled-components";
 
 import NavbarHeaderBreadCrumbs from "./NavbarHeaderBreadCrumbs"
 
-import { LIGHT_PINK } from "../../assets/constants/Constants";
 import NavbarHeaderMenu from "./NavbarHeaderMenu";
 
 type NavbarHeaderProps = { showSidebar: any };
@@ -68,13 +67,4 @@ const NavBarOpenIcon = styled(Link)`
   background: none;
 `;
 
-const NavBarItem = styled.ul`
-  background-color: ${LIGHT_PINK};
-  width: 100%;
-  height: 80px;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  padding: 0;
-`;
 export default NavbarHeader;

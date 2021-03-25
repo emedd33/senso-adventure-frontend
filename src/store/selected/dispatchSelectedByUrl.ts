@@ -42,89 +42,67 @@ export const dispatchSelectedPlayerByUrl = (pathArray: string[], dispatch: any, 
         }
     }
 }
-// if (pathArray.length >= 6) {
-//     if (pathArray[2] === "monsters") {
-//         if (isValidSlug(pathArray[5]) && campaign.campaign.monsters) {
-//             let filteredMonster = Object.entries(
-//                 campaign.campaign.monsters
-//             )
-//                 .filter(
-//                     ([, monster]: [string, IMonster]) =>
-//                         monster.slug === pathArray[3]
-//                 )
-//                 .map(([id, monster]: [string, IMonster]) => {
-//                     return { id: id, monster: monster };
-//                 });
-//             if (filteredMonster.length >= 1) {
-//                 let monster: ISelectedMonster = {
-//                     id: filteredMonster[0].id,
-//                     monster: filteredMonster[0].monster,
-//                 };
-//                 dispatch(setSelectedMonster(monster));
-//             }
-//         }
-//     }
-
-//     
-//     if (pathArray[4] === "sessions") {
-//         if (
-//             isValidSlug(pathArray[5]) &&
-//             campaign.campaign.sessions
-//         ) {
-//             let filteredSession = Object.entries(campaign.campaign.sessions)
-//                 .filter(
-//                     ([, session]: [string, ISession]) =>
-//                         session.slug === pathArray[3]
-//                 )
-//                 .map(([id, session]: [string, ISession]) => {
-//                     return { id: id, session: session };
-//                 });
-//             if (filteredSession.length >= 1) {
-//                 let session = {
-//                     id: filteredSession[0].id,
-//                     session: filteredSession[0].session,
-//                 };
-//                 dispatch(setSelectedSession(session));
-//             }
-//         }
-//     }
-//     if (pathArray[4] === "locations") {
-//         if (
-//             isValidSlug(pathArray[5]) &&
-//             campaign.campaign.locations
-//         ) {
-//             let filteredLocation = Object.entries(campaign.campaign.locations)
-//                 .filter(
-//                     ([, location]: [string, ILocation]) =>
-//                         location.slug === pathArray[3]
-//                 )
-//                 .map(([id, location]: [string, ILocation]) => {
-//                     return { id: id, location: location };
-//                 });
-//             if (filteredLocation.length >= 1) {
-//                 let location = {
-//                     id: filteredLocation[0].id,
-//                     location: filteredLocation[0].location,
-//                 };
-//                 dispatch(setSelectedLocation(location));
-//             }
-//         }
-//     }
-// }
-//         }
-//     }
-// }
-const dispatchSelectedCampaign = (pathArray: string[], dispatch: any, campaigns: any[],) => {
-
-}
-
-
-const isValidSlug = (slug: string) => {
-    if (slug) {
-        if (slug !== "new") {
-            return true;
+export const dispatchSelectedMonsterByUrl = (pathArray: string[], dispatch: any, monsters: any[],) => {
+    if (pathArray.length > 6 && monsters) {
+        if (pathArray[5] === "monsters") {
+            let filteredMonsters = Object.entries(
+                monsters
+            )
+                .filter(
+                    ([, monster]: [string, IMonster]) =>
+                        monster.slug === pathArray[6]
+                )
+                .map(([id, monster]: [string, IMonster]) => {
+                    return { id: id, monster: monster };
+                });
+            if (filteredMonsters.length >= 1) {
+                let monster: ISelectedMonster = {
+                    id: filteredMonsters[0].id,
+                    monster: filteredMonsters[0].monster,
+                };
+                dispatch(setSelectedMonster(monster));
+            }
         }
     }
-    return false;
-};
+}
 
+export const dispatchSelectedLocationByUrl = (pathArray: string[], dispatch: any, locations: any[],) => {
+    if (pathArray[5] === "locations" && locations) {
+
+        let filteredLocation = Object.entries(locations)
+            .filter(
+                ([, location]: [string, ILocation]) =>
+                    location.slug === pathArray[6]
+            )
+            .map(([id, location]: [string, ILocation]) => {
+                return { id: id, location: location };
+            });
+        if (filteredLocation.length >= 1) {
+            let location = {
+                id: filteredLocation[0].id,
+                location: filteredLocation[0].location,
+            };
+            dispatch(setSelectedLocation(location));
+        }
+    }
+}
+export const dispatchSelectedSessionByUrl = (pathArray: string[], dispatch: any, sessions: any[],) => {
+    if (pathArray[5] === "sessions" && sessions) {
+
+        let filteredSession = Object.entries(sessions)
+            .filter(
+                ([, session]: [string, ISession]) =>
+                    session.slug === pathArray[6]
+            )
+            .map(([id, session]: [string, ISession]) => {
+                return { id: id, session: session };
+            });
+        if (filteredSession.length >= 1) {
+            let session = {
+                id: filteredSession[0].id,
+                session: filteredSession[0].session,
+            };
+            dispatch(setSelectedSession(session));
+        }
+    }
+}

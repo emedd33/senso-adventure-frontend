@@ -1,37 +1,30 @@
 import { Button, TextField } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { OLD_WHITE } from "../../assets/constants/Constants";
-import ImageUpload from "../../components/ImageUpload/ImageUpload";
-import IsLoading from "../../components/IsLoading/IsLoading";
-import { setAlertDialog } from "../../store/admin/adminCreator";
-import { getAuthUser } from "../../store/admin/adminSelectors";
-import { useImageFile } from "../../store/hooks/useImageFile";
-import { getSelectedCampaign, getSelectedCampaignDatabasePath } from "../../store/selected/selectedSelectors";
-import { isValidImageFile } from "../../utils/isValidImageFile";
-import BackgroundImage from "../../assets/Images/background_home.jpg";
-import { SensoDelete } from "../../components/SensoInputs";
-import { pushToDatabase } from "../../services/Firebase/database"
-import { getUrlFromStorage, pushToStorage } from "../../services/Firebase/storage"
-import { transformTitleToSlug } from "../../utils/StringProcessing"
-import useOwner from "../../store/hooks/useOwner";
-import { CircularProgress } from "material-ui";
-export interface CampaignEditProps {
-  isNew: boolean;
+import { OLD_WHITE } from "../../../assets/constants/Constants";
+import ImageUpload from "../../../components/ImageUpload/ImageUpload";
+import IsLoading from "../../../components/IsLoading/IsLoading";
+import { setAlertDialog } from "../../../store/admin/adminCreator";
+import { getAuthUser } from "../../../store/admin/adminSelectors";
+import { useImageFile } from "../../../store/hooks/useImageFile";
+import { isValidImageFile } from "../../../utils/isValidImageFile";
+import { pushToDatabase } from "../../../services/Firebase/database"
+import { pushToStorage } from "../../../services/Firebase/storage"
+import { transformTitleToSlug } from "../../../utils/StringProcessing"
+import useOwner from "../../../store/hooks/useOwner";
+export interface CampaignNewProps {
+
 }
 
-const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
+const CampaignNew: React.FC<CampaignNewProps> = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const owner = useOwner()
-  const [imageUrl, setImageUrl] = useState("");
 
   const authUser = useSelector(getAuthUser)
   const [isLoading, setIsLoading] = useState(false);
-  const selectedCampaign = useSelector(getSelectedCampaign);
-  const campaignDatabasePath = useSelector(getSelectedCampaignDatabasePath)
 
   const [campaignTitle, setCampaignTitle] = useState<string>();
   const user = useSelector(getAuthUser);
@@ -43,52 +36,32 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
   const [campaignTitleImageFile, setCampaignTitleImageFile] = useImageFile(
     "TitleImage"
   );
-  useEffect(() => {
-    if (!isNew && campaignDatabasePath) {
-      getUrlFromStorage(`${campaignDatabasePath}/BackgroundImage`)
-        .then((url: string) => {
-          setImageUrl(url);
-        })
-        .catch((e) => console.log("could not fetch background image"));
-    } else {
-      setImageUrl(BackgroundImage)
-    }
-  }, [isNew, selectedCampaign, campaignDatabasePath]);
-
-  useEffect(() => {
-    if (selectedCampaign) {
-      setCampaignTitle(selectedCampaign.campaign.title);
-    }
-  }, [selectedCampaign]);
   const submit = async () => {
     setIsLoading(true);
     if (user) {
       // Checks if the inputs are valid
-      let slug = selectedCampaign?.campaign.slug
-      let title = selectedCampaign?.campaign.title
-      if (isNew) {
 
-        // Creates instances of the campaign is a new one
-        if (!campaignTitle) {
-          setCampaignTitleError(true);
-          dispatch(
-            setAlertDialog("Please fille out the Campaign Title", true, true)
-          );
-          setIsLoading(false);
-          return;
-        } else {
-          setCampaignTitleError(false);
-        }
-        title = campaignTitle
-        slug = transformTitleToSlug(campaignTitle);
-        var newCampaign = {
-          dungeonMaster: { username: user.displayName, uid: user.uid },
-          title: title,
-          slug: slug,
-        };
-        await pushToDatabase(`users/${user.displayName}/campaigns/`, newCampaign)
 
+      // Creates instances of the campaign is a new one
+      if (!campaignTitle) {
+        setCampaignTitleError(true);
+        dispatch(
+          setAlertDialog("Please fille out the Campaign Title", true, true)
+        );
+        setIsLoading(false);
+        return;
+      } else {
+        setCampaignTitleError(false);
       }
+      let title = campaignTitle
+      let slug = transformTitleToSlug(campaignTitle);
+      var newCampaign = {
+        dungeonMaster: { username: user.displayName, uid: user.uid },
+        title: title,
+        slug: slug,
+      };
+      await pushToDatabase(`users/${user.displayName}/campaigns/`, newCampaign)
+
 
       // Updates storage files of title image and background image
       if (slug && title) {
@@ -111,13 +84,15 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
     }
   }
   if (!owner) {
-    return <CircularProgress />
+    return <Container>
+      <IsLoading />
+    </Container>
   }
   if (!authUser || owner !== authUser.displayName) {
     return <Redirect to="/" />
   }
   return (
-    <ParentContainer style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+    <ParentContainer >
       {isLoading ? (
         <IsLoading />
       ) : (
@@ -133,7 +108,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
               variant="outlined"
               error={campaignTitleError}
               value={campaignTitle}
-              disabled={!isNew}
               onChange={(event: any) => setCampaignTitle(event.target.value)}
             />
             <div
@@ -228,14 +202,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
             >
               Submit
             </Button>
-            {selectedCampaign && !isNew ?
-              <SensoDelete
-                storagePath={`Campaigns/${selectedCampaign.campaign.slug}`}
-                databasePath={`campaigns/${selectedCampaign.id}/`}
-                instanceType="Session"
-                linkPath={`/`}
-              />
-              : null}
           </>
 
         </Container>
@@ -246,8 +212,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = ({ isNew }) => {
 const ParentContainer = styled.div`
   z-index: 300;
   display: flex;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
   background-size: cover;
   justify-content: center;
   align-items: center;
@@ -269,4 +233,4 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-export default CampaignEdit;
+export default CampaignNew;

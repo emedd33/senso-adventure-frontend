@@ -126,29 +126,6 @@ export const getSelectedCampaignLocations = (state: RootReducerProp) => {
     }
 };
 
-// STORAGE REF
-
-
-export const getSelectedSessionStoragePath = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedSession) {
-        return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/session/${state.selected.selectedSession?.session.slug}`
-
-    }
-};
-
-export const getSelectedLocationStoragePath = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedLocation) {
-        return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/locations/${state.selected.selectedLocation?.location.slug}`
-    }
-};
-
-
-export const getSelectedMonsterStoragePath = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
-        return `Campaigns/${state.selected.selectedCampaign?.campaign?.slug}/monsters/${state.selected.selectedMonster?.monster.slug}`
-
-    }
-};
 
 
 
@@ -164,6 +141,40 @@ export const getSelectedCampaignDatabasePath = (state: RootReducerProp) => {
         return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected?.selectedCampaign?.id}`
     }
 };
+
+// LOCATION PATH 
+
+export const getSelectedLocationStoragePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedLocation) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign?.slug}/locations/${state.selected.selectedLocation?.location.slug}`
+
+    }
+};
+
+export const getSelectedLocationDatabasePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedLocation) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.id}/locations/${state.selected.selectedLocation?.id}`
+
+    }
+};
+// MONSTER PATHS
+
+
+export const getSelectedMonsterStoragePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign?.slug}/monsters/${state.selected.selectedMonster?.monster.slug}`
+    }
+};
+
+
+export const getSelectedMonsterDatabasePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.id}/monster/${state.selected.selectedMonster?.id}`
+    }
+};
+
+
+
 
 // PLAYER PATHS
 
@@ -182,23 +193,21 @@ export const getSelectedPlayerDatabasePath = (state: RootReducerProp) => {
 
 // SESSION PATHS
 
-export const getSelectedSessionDatabaseRef = (state: RootReducerProp) => {
+export const getSelectedSessionDatabasePath = (state: RootReducerProp) => {
     if (state.selected.selectedCampaign && state.selected.selectedSession) {
-        return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/sessions/${state.selected?.selectedSession?.id}`)
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.id}/sessions/${state.selected.selectedSession?.id}`
+    }
+};
+export const getSelectedSessionStoragePath = (state: RootReducerProp) => {
+    if (state.selected.selectedCampaign && state.selected.selectedSession) {
+        return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign?.slug}/sessions/${state.selected.selectedSession?.session.slug}`
+
+
     }
 };
 
-export const getSelectedLocationDatabaseRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedLocation) {
-        return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/location/${state.selected?.selectedLocation?.id}`)
-    }
-};
+// MENTION LISTS
 
-export const getSelectedMonsterDatabaseRef = (state: RootReducerProp) => {
-    if (state.selected.selectedCampaign && state.selected.selectedMonster) {
-        return database.ref(`campaigns/${state.selected?.selectedCampaign?.id}/monsters/${state.selected?.selectedMonster?.id}`)
-    }
-};
 export const getSelectedCampaignMonsterMentionList = (state: RootReducerProp) => {
     const host = getHost()
     let mentions: MentionData[] = []

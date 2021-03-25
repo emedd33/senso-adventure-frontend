@@ -43,7 +43,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                         })
                     );
                     if (selectedCampaign) {
-                        history.push(`/user/${owner}/${selectedCampaign.campaign.slug}/sessions/new`);
+                        history.push(`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/sessions/new`);
                     }
                 }}
             >
@@ -58,7 +58,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                             setSelectedMonster()
                         );
                         history.push(
-                            `/user/${owner}/${selectedCampaign.campaign.slug}/monsters/new`
+                            `/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-monster`
                         );
                     }
                 }}
@@ -89,7 +89,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                 onClick={() => {
                     if (selectedCampaign) {
                         history.push(
-                            `/user/${owner}/${selectedCampaign.campaign.slug}/locations/new`
+                            `/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-location`
                         );
                     }
                 }}

@@ -20,7 +20,12 @@ import { getUrlFromStorage } from "../../../services/Firebase/storage";
 import { dispatchSelectedCampaignByUrl } from "../../../store/selected/dispatchSelectedByUrl";
 import { getAllCampaigns } from "../../../store/campaign/campaignSelectors";
 import PlayerNew from "./Player/PlayerNew"
+import MonsterNew from "./Monster/MonsterNew"
+import LocationNew from "./Location/LocationNew"
+import MonsterIndex from "./Monster/MonsterIndex"
 import PlayerIndex from "./Player/PlayerIndex"
+import LocationIndex from "./Location/LocationIndex"
+import NotFound from "../../NotFound/NotFound";
 
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
@@ -60,6 +65,12 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                 <Route exact path="/user/:username/campaigns/:campaignId/new-player">
                     <PlayerNew />
                 </Route>
+                <Route exact path="/user/:username/campaigns/:campaignId/new-monster">
+                    <MonsterNew />
+                </Route>
+                <Route exact path="/user/:username/campaigns/:campaignId/new-location">
+                    <LocationNew />
+                </Route>
                 <Route exact path="/user/:username/campaigns">
                     <Campaigns />
                 </Route>
@@ -68,6 +79,15 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                 </Route>
                 <Route path="/user/:username/campaigns/:campaignId/players">
                     <PlayerIndex />
+                </Route>
+                <Route path="/user/:username/campaigns/:campaignId/monsters">
+                    <MonsterIndex />
+                </Route>
+                <Route path="/user/:username/campaigns/:campaignId/locations">
+                    <LocationIndex />
+                </Route>
+                <Route>
+                    <NotFound />
                 </Route>
             </Switch>
             {isDungeonMaster ?
@@ -85,6 +105,8 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
+  padding-top:10rem;
+  padding-bottom:10rem;
   height: 100%;
   min-height: 100vh;
 `;

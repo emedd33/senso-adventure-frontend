@@ -101,7 +101,6 @@ const TitleContainer = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
   webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
   moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
   box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);

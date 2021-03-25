@@ -30,7 +30,7 @@ const SensoTextInput: React.FC<SensoTextInputProps> = ({ initValue, firebasePath
             <TextField
                 variant="outlined"
                 label={label}
-                value={value}
+                value={value ? value : ""}
                 style={{ backgroundColor: OLD_WHITE_DARK }}
                 onChange={(event) => setValue(event.target.value)}
             />
