@@ -350,13 +350,16 @@ justify-items:start;
 z-index:100;
 `
 const AtomicComponents = (props: any) => {
-   const {block, contentState} = props;
-    const entity = contentState.getEntity(block.getEntityAt(0));
-    const type = entity.getType();
-  switch (type){ 
-    case"SECRET":
-  return (
-    <div style={{ backgroundColor: OLD_WHITE_LIGHT, borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
+    
+    const {block, contentState} = props;
+    const initEntity = block.getEntityAt(0)
+    if (initEntity){
+      const entity = contentState.getEntity(initEntity);
+      const type = entity.getType();
+      switch (type){ 
+        case"SECRET":
+        return (
+          <div style={{ backgroundColor: OLD_WHITE_LIGHT, borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
       <Tooltip title="Secret note">
  
         <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
@@ -364,17 +367,19 @@ const AtomicComponents = (props: any) => {
       <EditorBlock {...props} />
     </div>
     )
-  case"DESCRIPTION":
+    case"DESCRIPTION":
     return (
       <div style={{ backgroundColor: "#bdbdbd", borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
         <SensoDescription content={block.getText()}/>
       </div>
       )
-    
-  default:
+      
+      default:
+        break      
+      }
+    }
     return null
-  }
+    
 };
-
 
 export default DraftJSEditor;
