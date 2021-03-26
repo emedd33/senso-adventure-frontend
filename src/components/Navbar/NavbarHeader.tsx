@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
 import styled from "styled-components";
+import engIcon from "../../assets/icons/eng_icon.png"
+import norIcon from "../../assets/icons/nor_icon.png"
 
 import NavbarHeaderBreadCrumbs from "./NavbarHeaderBreadCrumbs"
 
 import NavbarHeaderMenu from "./NavbarHeaderMenu";
 import { useDispatch } from "react-redux";
-import { setIsSidebarShown } from "../../store/admin/adminCreator";
+import { setIsSidebarShown, setLanguage } from "../../store/admin/adminCreator";
+import { Button } from "@material-ui/core";
 
 type NavbarHeaderProps = {};
 const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
@@ -43,6 +46,12 @@ const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
                         <NavbarHeaderBreadCrumbs />
                     </div>
                     <NavbarHeaderMenu />
+                    <div style={{display:"grid", gridTemplateRows:"repeat(1fr)"}}>
+
+                    <Button onClick={() => dispatch(setLanguage("eng"))}><img src={engIcon} style={{ width: "1.5rem" }} alt="English" /></Button>
+                    <Button  onClick={() => dispatch(setLanguage("nor"))}><img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" /></Button>
+
+                    </div>
                 </Container>
             </IconContext.Provider>
         </>

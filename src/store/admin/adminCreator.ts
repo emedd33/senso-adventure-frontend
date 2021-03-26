@@ -5,6 +5,7 @@ import {
   SET_ALERT_DIALOG,
   SET_AUTH_USER,
   SET_IS_SIDEBAR_SHOWN,
+  SET_LANGUAGE,
 } from "./adminActions";
 
 export const dispatchLogin = (payload: ILogin) => {
@@ -52,6 +53,10 @@ export const setAuthUser = (user?: any) => ({
 export const setIsSidebarShown = (shown: boolean) => ({
   type: SET_IS_SIDEBAR_SHOWN,
   payload: shown
+})
+export const setLanguage = (language: string) => ({
+  type: SET_LANGUAGE,
+  payload: language
 })
 
 export const setAlertDialog = (
