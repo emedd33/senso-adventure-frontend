@@ -7,6 +7,7 @@ import {
     useLocation,
 } from "react-router-dom";
 import Campaign from "./Campaign";
+import CampaignEdit from "./CampaignEdit";
 import Campaigns from "./Campaigns";
 import SensoFab from "../../../components/SensoFab/SensoFab"
 
@@ -81,6 +82,9 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
                 </Route>
                 <Route exact path="/user/:username/campaigns/:campaignId">
                     <Campaign />
+                </Route>
+                <Route exact path="/user/:username/campaigns/:campaignId/edit">
+                    <CampaignEdit />
                 </Route>
                 <Route path="/user/:username/campaigns/:campaignId/players">
                     <PlayerIndex />

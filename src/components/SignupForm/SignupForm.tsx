@@ -77,6 +77,8 @@ const SignupForm: React.FC<SignUpProps> = () => {
 
         if (snapshot && Object.values(snapshot.val()).includes(username)) {
           dispatch(setAlertDialog("Username already exists", true, true))
+            dispatch(setIsLoading(false))
+
         } else {
           createUserWithEmailPasswordAndUsername(email, firstPassword, username).then(() => {
             history.push("/user/" + username)

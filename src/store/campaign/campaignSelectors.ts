@@ -1,3 +1,5 @@
+import { filterUnpublished } from "../../utils/Database/filterUnpublished";
+import { isDungeonMasterSelector } from "../selected/selectedSelectors";
 
 export const getNewSessionDay = (state: RootReducerProp) => {
   if (state.selected.selectedCampaign?.campaign.sessions) {
@@ -24,7 +26,7 @@ export const getAllSessions = (state: RootReducerProp) => {
     sessions = Object.entries(state.rootCampaigns.campaigns)
       .map(([campaignId, campaign]) => {
         if (campaign.sessions) {
-          return Object.entries(campaign.sessions).map(
+          return filterUnpublished(Object.entries(campaign.sessions), isDungeonMasterSelector(state)).map(
             ([sessionId, session]) => {
               return {
                 campaignId: campaignId,

@@ -1,29 +1,23 @@
 import React, { FunctionComponent, useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
-import sortSessionsByDateValue from "../../utils/sortArrayDyDate";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import Scroll from "../../components/Scroll/Scroll";
 import {
-    getAllSessions,
     getAllCampaigns,
 } from "../../store/campaign/campaignSelectors";
 import {
-    MAX_NUM_SCROLLS_HOMEPAGE,
     OLD_WHITE_TRANSPARENT,
 } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 import { getUrlFromStorage } from "../../services/Firebase/storage";
-import useOwner from "../../store/hooks/useOwner";
+import useOwner from "../../store/hooks/useOwner"; 
 type UserHomeProps = {};
 const UserHome: FunctionComponent<UserHomeProps> = () => {
-    const history = useHistory();
     const campaigns = useSelector(getAllCampaigns);
     const [campaignUrls, setCampaignUrls] = useState<any[]>([])
     const owner = useOwner()
-    const sessions = useSelector(getAllSessions);
     useEffect(() => {
         if (campaigns) {
 
@@ -67,38 +61,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
         },
         [campaignUrls, owner],
     )
-    const renderScrolls = useCallback(() => {
-        if (sessions) {
-            let sortedSessions = sortSessionsByDateValue(sessions);
-
-            return sortedSessions
-                .slice(0, MAX_NUM_SCROLLS_HOMEPAGE)
-                .map((session: any, index: number) => {
-                    return (
-                        <div key={index}>
-
-                            <Scroll
-                                title={session.session.title}
-                                isOpaque={session.session.isPublished === "FALSE"}
-                                subTitle={session.session.subTitle}
-                                date={session.session.date}
-                                campaignSlug={session.session.campaignTitle.replace(/\s/g, "")}
-                                sessionDay={session.session.sessionDay}
-                                owner = {owner}
-                                onClick={() => {
-                                    history.push(
-                                        `/user/${owner}/campaigns/${session.session.campaignTitle.replace(
-                                            /\s/g,
-                                            ""
-                                        )}/sessions/${session.session.slug}`
-                                    );
-                                }}
-                            />
-                        </div>
-                    );
-                });
-        }
-    },[sessions, history, owner])
+  
     return (
         <Container>
             <div
@@ -116,18 +79,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
 
                 {renderCampaignUrls()}
             </div>
-            <div
-                style={{
-                    minWidth: "20rem",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    flexWrap: "wrap"
-                }}
-            >
-                {sessions ? renderScrolls() : null}
-            </div>
+
         </Container>
     );
 };

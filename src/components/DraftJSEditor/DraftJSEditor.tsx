@@ -29,10 +29,12 @@ import playerIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
 import monsterIcon from "../../assets/icons/monster_icon.png"
 import secretIcon from "../../assets/icons/hush_icon.png"
-import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
+import descriptionIcon from "../../assets/icons/description_icon.png"
+import { OLD_WHITE_DARK, OLD_WHITE_LIGHT } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import sleep from "../../utils/sleep";
 import { storage } from "../../services/Firebase/firebase";
+import { SensoDescription } from "../SensoContainers";
 type DraftJSEditorProps = {
   storagePath: string;
   readOnly: boolean;
@@ -40,6 +42,8 @@ type DraftJSEditorProps = {
   playerMentionList?: MentionData[]
   locationMentionList?: MentionData[]
   monsterMentionList?: MentionData[]
+  style?: React.CSSProperties,
+
 };
 const staticToolbarPlugin = createToolbarPlugin();
 const { Toolbar } = staticToolbarPlugin;
@@ -56,7 +60,7 @@ const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
 
 const plugins = [playerMentionPlugin, staticToolbarPlugin, locationMentionPlugin, monsterMentionPlugin];
 
-const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, isDungeonMaster = false, playerMentionList = [], locationMentionList = [], monsterMentionList = [] }) => {
+const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, isDungeonMaster = false, playerMentionList = [], locationMentionList = [], monsterMentionList = [], style }) => {
   const [isUploading, setIsUploading] = useState(false);
   const ref = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
@@ -134,12 +138,35 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
         " "
       ))
   }
+  
+  const insertDescriptionBlock = () => {
+
+    const contentState = editorState.getCurrentContent();
+
+    const contentStateWithEntity = contentState.createEntity(
+      "DESCRIPTION",
+      "MUTABLE",
+      { a: "b" }
+    );
+
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity
+    });
+
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(
+        newEditorState,
+        entityKey,
+        " "
+      ))
+  }
 
   const blockRenderer = useCallback((contentBlock: { getType: () => any; }) => {
     const type = contentBlock.getType();
     if (type === "atomic" && isDungeonMaster) {
       return {
-        component: SecretComponent,
+        component: AtomicComponents,
         editable: readOnly ? false : true,
       };
     }
@@ -272,7 +299,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
     return <IsLoading />
   }
   return (
-    <Container>
+    <Container style={style?style:{}}>
       {readOnly ? null :
         <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr", width: "100%", padding: "0.3rem" }}>
 
@@ -293,6 +320,10 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
               <Button onClick={() => insertSecretBlock()} style={{ width: "3rem" }}> <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
               </Button>
             </Tooltip>
+             <Tooltip title="Insert description block">
+              <Button onClick={() => insertDescriptionBlock()} style={{ width: "3rem" }}> <img src={descriptionIcon} style={{ width: "3rem" }} alt="Secret" />
+              </Button>
+            </Tooltip>
           </div>
           <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
 
@@ -311,18 +342,33 @@ const Container = styled.div`
 display:grid;
 width:100%;
 justify-items:start;
+z-index:100;
 `
-const SecretComponent = (props: any) => {
-
+const AtomicComponents = (props: any) => {
+   const {block, contentState} = props;
+    const entity = contentState.getEntity(block.getEntityAt(0));
+    const type = entity.getType();
+  switch (type){ 
+    case"SECRET":
   return (
-    <div style={{ backgroundColor: "#bdbdbd", borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
+    <div style={{ backgroundColor: OLD_WHITE_LIGHT, borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
       <Tooltip title="Secret note">
-
+ 
         <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
       </Tooltip>
       <EditorBlock {...props} />
     </div>
-  );
+    )
+  case"DESCRIPTION":
+    return (
+      <div style={{ backgroundColor: "#bdbdbd", borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <SensoDescription content={block.getText()}/>
+      </div>
+      )
+    
+  default:
+    return null
+  }
 };
 
 

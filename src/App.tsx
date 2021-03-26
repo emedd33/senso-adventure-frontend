@@ -68,6 +68,7 @@ const LeftGradientDiv = styled.div`
   height: 100%;
   position: fixed;
   top: 0;
+  z-index:0;
   backgroundcolor: black;
 `;
 const RightGradientDiv = styled.div`
