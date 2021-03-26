@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import styled from "styled-components"
 import { database, storage } from '../../services/Firebase/firebase';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 type SensoDeletePropbs = {
     storagePath: string,
     databasePath: string,
@@ -16,6 +17,7 @@ type SensoDeletePropbs = {
 }
 const SensoDelete: React.FC<SensoDeletePropbs> = ({ storagePath, databasePath, instanceType, linkPath }) => {
     const history = useHistory()
+    const translate = useTranslation()
 
     const [open, setOpen] = React.useState(false);
 
@@ -56,8 +58,8 @@ const SensoDelete: React.FC<SensoDeletePropbs> = ({ storagePath, databasePath, i
 
     return (
         <Container>
-            <Button variant="contained" color="secondary" onClick={handleClickOpen}>
-                {`Delete ${instanceType}`}
+            <Button variant="contained" color="secondary" onClick={handleClickOpen} style={{textTransform:"none"}}>
+                {translate.t('Delete')}
             </Button>
             <Dialog
                 open={open}
@@ -65,18 +67,18 @@ const SensoDelete: React.FC<SensoDeletePropbs> = ({ storagePath, databasePath, i
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{`Sure you want to delete this ${instanceType}?`}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{translate.t(`Sure you want to delete?`)}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {`Deleting this ${instanceType} includes deletion of images and stored data.`}
+                        {translate.t(`Deletion includes deletion of images and stored data`)}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
+                    <Button onClick={handleClose} color="primary"style={{textTransform:"none"}}>
+                        {translate.t('Cancel')}
           </Button>
-                    <Button onClick={submitDelete} color="primary" autoFocus>
-                        Delete
+                    <Button onClick={submitDelete} color="primary" autoFocus style={{textTransform:"none"}}>
+                        {translate.t('Delete')}
           </Button>
                 </DialogActions>
             </Dialog>

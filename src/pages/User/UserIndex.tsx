@@ -33,6 +33,7 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
             }
             )
         }
+    return ()=> setCampaigns()
     }, [location, owner, dispatch])
 
 
@@ -62,7 +63,7 @@ const Container = styled.div`
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   flex-direction: column;
   width: 100%;

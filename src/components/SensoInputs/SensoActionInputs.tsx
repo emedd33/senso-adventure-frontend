@@ -7,6 +7,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import styled from "styled-components";
 import useInterval from '../../store/hooks/useInterval';
 import { database } from '../../services/Firebase/firebase';
+import { useTranslation } from 'react-i18next';
 
 type SensoActionInputsProps = {
     actions?: IMonsterAction[],
@@ -18,7 +19,7 @@ type SensoActionInputsProps = {
 const NEW_ACTION = { name: "New Action", description: "" }
 const SensoActionInputs: React.FC<SensoActionInputsProps> = ({ actions = [], firebasePath, label, style }) => {
     const [array, setArray, saveArray, isSavedArray] = useSavedState(actions)
-
+    const translate = useTranslation()
     const handleAddNewValue = () => {
         if (array) {
             setArray((existingValues: any[]) => [
@@ -73,7 +74,7 @@ const SensoActionInputs: React.FC<SensoActionInputsProps> = ({ actions = [], fir
                         <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
                             <h3>Description</h3>
                             <TextField
-                                label="Description"
+                                label={translate.t('Description')}
                                 multiline
                                 style={{ backgroundColor: OLD_WHITE_DARK, width: "100%" }}
                                 rows={6}
@@ -118,10 +119,10 @@ const SensoActionInputs: React.FC<SensoActionInputsProps> = ({ actions = [], fir
             <Button
                 variant="contained"
                 color="primary"
-                style={{ height: "2rem", margin: "1rem", maxWidth: "10rem" }}
+                style={{ height: "2rem", margin: "1rem", maxWidth: "10rem", textTransform:"none" }}
                 onClick={handleAddNewValue}
             >
-                Add new
+                {translate.t('Add new')}
         </Button>
         </Container >)
 }

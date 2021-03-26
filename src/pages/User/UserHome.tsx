@@ -24,11 +24,11 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
             let urlPromises: Promise<any>[] = Object.values(campaigns).map((campaign: ICampaign) => {
                 return getUrlFromStorage(`users/${owner}/campaigns/${campaign.slug}/TitleImage`)
                     .then((url) => {
-                        return { campaignSlug: campaign.slug, url: url }
+                        return { slug: campaign.slug, title: campaign.title, url: url }
 
                     }
                     )
-                    .catch(() => ({ campaignSlug: campaign.slug, url: "" }))
+                    .catch(() => ({ slug: campaign.slug, title: campaign.title, url: "" }))
 
             }
             )
@@ -42,13 +42,13 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
         () => {
             if (campaignUrls) {
                 return Object.values(campaignUrls).map(
-                    (campaign: { campaignSlug: string; url?: string }, index: number) => (
-                        <Link to={`/user/${owner}/campaigns/${campaign.campaignSlug}`} key={index}>
-                            <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem" }}>
+                    (campaign: { slug: string; title: string, url?: string }, index: number) => (
+                        <Link to={`/user/${owner}/campaigns/${campaign.slug}`} key={index} style={{textDecoration:"none",}}>
+                            <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem",  textTransform:"none" }}>
                                 {campaign.url ? (
                                     <CampaignImg src={campaign.url} />
                                 ) : (
-                                    <h1>{campaign.campaignSlug}</h1>
+                                    <h1>{campaign.title}</h1>
                                 )}
                             </Button>
                         </Link>

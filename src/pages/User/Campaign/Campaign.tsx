@@ -32,6 +32,7 @@ import { getUrlFromStorage } from "../../../services/Firebase/storage";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useWindowSize from "../../../store/hooks/useWindowSize";
 import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
+import { useTranslation } from "react-i18next";
 
 const MenuItem: React.FC<{ text: any; selected: any, key: number }> = ({
     text,
@@ -54,6 +55,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
     const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
     const owner = useOwner()
+    const translate = useTranslation()
     const size  = useWindowSize()
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const selectedCampaignStoragePath = useSelector(getSelectedCampaignStoragePath)
@@ -320,8 +322,8 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                     textTransform: "none",
                                 }}
                             >
-                                Edit Campaign
-                            </Button>
+                                {translate.t('Edit Campaign')}
+                                </Button>
                         </div>
                     </Link>
 
@@ -343,6 +345,7 @@ const Container = styled.div`
 margin-top:10rem;
 margin-bottom:10rem;
 display:flex;
+width:90%;
 flex-direction:row;
 flex-wrap:wrap;
 justify-content:center;

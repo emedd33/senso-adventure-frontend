@@ -16,10 +16,12 @@ import IsLoading from "../IsLoading/IsLoading";
 import { LIGHT_PINK } from "../../assets/constants/Constants";
 import { initialSelectedCampaignState } from "../../store/selected/selectedReducer";
 import { getAuthUser, getIsSidebarShown } from "../../store/admin/adminSelectors";
+import { useTranslation } from "react-i18next";
 
 
 type NavbarSidebarProps = {};
 const NavbarSidebar: FunctionComponent<NavbarSidebarProps> = () => {
+    const translation = useTranslation()
     const dispatch = useDispatch();
     const rootCampaigns = useSelector(
         (state: RootReducerProp) => state.rootCampaigns
@@ -60,7 +62,7 @@ const NavbarSidebar: FunctionComponent<NavbarSidebarProps> = () => {
                                     alt={"Home"}
                                     style={{ width: "3rem", height: "3rem" }}
                                 />
-                                <CampaignTitle>Home</CampaignTitle>
+                                <CampaignTitle>{translation.t('Home')}</CampaignTitle>
                             </span>
                         </Link>
                     </NavBarItem>
@@ -126,7 +128,7 @@ const NavbarSidebar: FunctionComponent<NavbarSidebarProps> = () => {
                                     }}
                                 >
                                     <AddIcon style={{ color: "black" }} />
-                                    <CampaignTitle>Add new</CampaignTitle>
+                                    <CampaignTitle>{translation.t('Add new')}</CampaignTitle>
                                 </span>
                             </Link>
                         </NavBarItem>

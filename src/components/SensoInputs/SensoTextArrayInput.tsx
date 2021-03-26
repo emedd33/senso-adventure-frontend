@@ -9,6 +9,7 @@ import useInterval from "../../store/hooks/useInterval";
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
 import { database } from "../../services/Firebase/firebase";
+import { useTranslation } from "react-i18next";
 type SensoTextArrayInputProps = {
     initArray?: string[],
     firebasePath: string,
@@ -18,7 +19,7 @@ type SensoTextArrayInputProps = {
 const SensoTextArrayInput: React.FC<SensoTextArrayInputProps> = ({ initArray, firebasePath, label, style }) => {
     const [array, setArray, saveArray, isSavedArray] = useSavedState(initArray)
     const [newValue, setNewValue] = useState<string>("")
-
+    const translate = useTranslation()
     const handleAddNewValue = () => {
         if (newValue) {
             if (array) {
@@ -79,8 +80,9 @@ const SensoTextArrayInput: React.FC<SensoTextArrayInputProps> = ({ initArray, fi
                     variant="contained"
                     color="primary"
                     onClick={handleAddNewValue}
+                    style={{textTransform:"none"}}
                 >
-                    Add
+                    {translate.t('Add')}
             </Button>
             </div>
         </Container >

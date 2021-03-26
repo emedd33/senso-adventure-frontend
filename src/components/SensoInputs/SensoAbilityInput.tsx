@@ -8,6 +8,7 @@ import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
 import getAbilityModifier from "../../utils/getAbilityModifier";
 import { database } from "../../services/Firebase/firebase";
+import { useTranslation } from "react-i18next";
 
 type SensoAbilityInputProps = {
     initAbilityValue: IAbility,
@@ -19,6 +20,7 @@ type SensoAbilityInputProps = {
 }
 const SensoAbilityInput: React.FC<SensoAbilityInputProps> = ({ initAbilityValue, firebasePath, label, isNegativeValid = true, proficiencyBonus = 0, style }) => {
     const [abilityValue, setAbilityValue, saveAbilityValue, isSavedAbilityValue] = useSavedState(initAbilityValue)
+    const translate = useTranslation()
     const handleValueChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         if (!isNegativeValid && parseInt(event.target.value) < 0) {
             return
@@ -38,12 +40,12 @@ const SensoAbilityInput: React.FC<SensoAbilityInputProps> = ({ initAbilityValue,
 
             <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem", }}>{label}</b>
             <p>
-                Saving:{" "}
+                {translate.t('Saving')}:{" "}
                 {getAbilityModifier(abilityValue.value, abilityValue.isProficient, proficiencyBonus)}
             </p>
             <TextField
                 style={{ margin: "0.3rem", backgroundColor: OLD_WHITE_DARK, gridColumn: "1/3" }}
-                label="Value"
+                label={label}
                 type="number"
                 variant="outlined"
                 onChange={handleValueChange}
@@ -51,7 +53,7 @@ const SensoAbilityInput: React.FC<SensoAbilityInputProps> = ({ initAbilityValue,
                 value={abilityValue.value}
 
             />
-            <p>Proficient?</p>
+            <p>{translate.t('Proficiency')}</p>
             <Switch
                 checked={abilityValue.isProficient === "TRUE"}
                 onChange={(event) => setAbilityValue({ ...abilityValue, isProficient: event.target.checked ? "TRUE" : "FALSE" })}

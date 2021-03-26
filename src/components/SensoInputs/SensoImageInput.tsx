@@ -15,6 +15,7 @@ import ImageUploader from "react-images-upload";
 import styled from "styled-components";
 import ClearIcon from "@material-ui/icons/Clear";
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
+import { useTranslation } from "react-i18next";
 type SensoImageInputProps = {
     storagePath: string,
     style?: React.CSSProperties
@@ -39,7 +40,7 @@ const SensoImageInput: React.FC<SensoImageInputProps> = ({ storagePath, style })
     const [ImageUploaderKey, setImageUploaderKey] = useState(0);
     const [newLocationImages, setNewLocationImages] = useState<any[]>([]);
     const [existingLocationImages, setExistingLocationImages] = useState<any[]>([]);
-
+    const translate = useTranslation()
     useMemo(() => {
         storage.ref(storagePath)
             .listAll()
@@ -122,8 +123,8 @@ const SensoImageInput: React.FC<SensoImageInputProps> = ({ storagePath, style })
                 key={ImageUploaderKey}
                 withIcon={true}
                 fileContainerStyle={{ backgroundColor: OLD_WHITE_DARK }}
-                label="Max file size: 10mb, accepted: jpg|gif|png"
-                buttonText="Choose images"
+                label={`${translate.t('Max file size')}: 10mb ${translate.t('accepts')}: jpg|gif|png`}
+                buttonText={translate.t('Choose image')}
                 onChange={(newImages: any) =>
                     setNewLocationImages([...newLocationImages, ...newImages])
                 }
@@ -137,7 +138,7 @@ const SensoImageInput: React.FC<SensoImageInputProps> = ({ storagePath, style })
                 :
                 newLocationImages.length > 0 ?
                     <Button variant="contained" onClick={submitImages} color="primary">
-                        Upload Pictures
+                        {translate.t('Upload image')}
                         </Button>
                     : null
             }
@@ -166,7 +167,6 @@ const SensoImageInput: React.FC<SensoImageInputProps> = ({ storagePath, style })
                                 <CardMedia
                                     className={classes.media}
                                     image={img.url}
-                                    title="Contemplative Reptile"
                                 />
                             </CardActionArea>
                         </Card>

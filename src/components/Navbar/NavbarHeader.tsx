@@ -11,11 +11,13 @@ import NavbarHeaderBreadCrumbs from "./NavbarHeaderBreadCrumbs"
 
 import NavbarHeaderMenu from "./NavbarHeaderMenu";
 import { useDispatch } from "react-redux";
-import { setIsSidebarShown, setLanguage } from "../../store/admin/adminCreator";
+import { setIsSidebarShown } from "../../store/admin/adminCreator";
 import { Button } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 type NavbarHeaderProps = {};
 const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
+  const  translation  = useTranslation();
     const dispatch = useDispatch()
     return (
         <>
@@ -48,8 +50,8 @@ const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
                     <NavbarHeaderMenu />
                     <div style={{display:"grid", gridTemplateRows:"repeat(1fr)"}}>
 
-                    <Button onClick={() => dispatch(setLanguage("eng"))}><img src={engIcon} style={{ width: "1.5rem" }} alt="English" /></Button>
-                    <Button  onClick={() => dispatch(setLanguage("nor"))}><img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" /></Button>
+                    <Button onClick={() => translation.i18n.changeLanguage('en')}><img src={engIcon} style={{ width: "1.5rem" }} alt="English" /></Button>
+                    <Button  onClick={() => translation.i18n.changeLanguage('nor')}><img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" /></Button>
 
                     </div>
                 </Container>

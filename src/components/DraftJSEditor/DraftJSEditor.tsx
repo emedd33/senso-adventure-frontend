@@ -35,6 +35,7 @@ import styled from "styled-components";
 import sleep from "../../utils/sleep";
 import { storage } from "../../services/Firebase/firebase";
 import { SensoDescription } from "../SensoContainers";
+import { useTranslation } from "react-i18next";
 type DraftJSEditorProps = {
   storagePath: string;
   readOnly: boolean;
@@ -68,6 +69,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
   );
   const [savedEditorState, setSavedEditorState] = useState<any>(editorState);
   const [playerOpen, setPlayerOpen] = useState(true);
+  const translate = useTranslation()
   const [monsterOpen, setMonsterOpen] = useState(true);
   const [locationOpen, setLocationOpen] = useState(true);
   const [playerSuggestions, setPlayerSuggestions] = useState(playerMentionList);
@@ -298,29 +300,32 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
   if (playerMentionList && !playerSuggestions) {
     return <IsLoading />
   }
+  if (readOnly && !editorState.getCurrentContent().hasText()){
+    return null
+  }
   return (
     <Container style={style?style:{}}>
       {readOnly ? null :
         <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr", width: "100%", padding: "0.3rem" }}>
 
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>
-            <Tooltip title="To add player type @">
+            <Tooltip title={`${translate.t("To add player type")} @`}>
               <Button onClick={() => setEditorState(insertCharacter("@", editorState))} style={{ width: "3rem" }}> <img src={playerIcon} style={{ width: "inherit" }} alt="New Character" />
               </Button>
             </Tooltip>
-            <Tooltip title="To add monster/npc type $">
+            <Tooltip title={`${translate.t("To add monster/Npc type")} $`}>
               <Button onClick={() => setEditorState(insertCharacter("$", editorState))} style={{ width: "3rem" }}> <img src={monsterIcon} style={{ width: "inherit" }} alt="New Character" />
               </Button>
             </Tooltip>
-            <Tooltip title="To add location type #">
+            <Tooltip title={`${translate.t("To add location type")} #`}>
               <Button onClick={() => setEditorState(insertCharacter("#", editorState))} style={{ width: "3rem" }}> <img src={locationIcon} style={{ width: "inherit" }} alt="New Character" />
               </Button>
             </Tooltip>
-            <Tooltip title="Insert secret note">
+            <Tooltip title={`${translate.t('Insert secret note')} #`}>
               <Button onClick={() => insertSecretBlock()} style={{ width: "3rem" }}> <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
               </Button>
             </Tooltip>
-             <Tooltip title="Insert description block">
+             <Tooltip title={`${translate.t("Insert description")} #`}>
               <Button onClick={() => insertDescriptionBlock()} style={{ width: "3rem" }}> <img src={descriptionIcon} style={{ width: "3rem" }} alt="Secret" />
               </Button>
             </Tooltip>

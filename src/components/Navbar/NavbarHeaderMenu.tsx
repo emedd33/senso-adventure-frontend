@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { getAuthUser } from "../../store/admin/adminSelectors";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function NavbarHeaderMenu() {
   const classes = useStyles();
+  const translate = useTranslation()
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const authUser = useSelector(getAuthUser);
@@ -85,14 +87,8 @@ export default function NavbarHeaderMenu() {
               alignItems: "center",
             }}
           >
-            <h3
-              style={{
-                margin: "0",
-                paddingLeft: "1rem",
-              }}
-            >
-              Login
-            </h3>
+           
+              {translate.t('Login')}
           </span>
         </Link>
       </div>
@@ -115,6 +111,7 @@ export default function NavbarHeaderMenu() {
             aria-controls={open ? "menu-list-grow" : undefined}
             aria-haspopup="true"
             onClick={handleToggle}
+            style={{textTransform:"none"}}
           >
             {authUser.displayName}
             <AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
@@ -146,7 +143,7 @@ export default function NavbarHeaderMenu() {
                         style={{ textDecoration: "none", color: "black" }}
                       >
                         <MenuItem onClick={() => setOpen(false)}>
-                          Profile
+                          {translate.t('Profile')}
                         </MenuItem>
                       </Link>
                     </MenuList>

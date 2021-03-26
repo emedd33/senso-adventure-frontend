@@ -3,4 +3,3 @@ export const LOGIN = "LOGIN";
 export const SET_ALERT_DIALOG = "SET_ALERT_DIALOG";
 export const SET_AUTH_USER = "SET_AUTH_USER";
 export const SET_IS_SIDEBAR_SHOWN = "SET_IS_SIDEBAR_SHOWN"
-export const SET_LANGUAGE = "SET_LANGUAGE"

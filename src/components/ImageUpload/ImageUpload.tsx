@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ImageUploading from "react-images-uploading";
 
 export interface ImageUoloadProps {
@@ -13,6 +14,7 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({
   maxFiles,
 }) => {
   const imageFileArray = imageFile.dataURL ? [imageFile] : [];
+  const translate = useTranslation()
   return (
     <ImageUploading
       multiple
@@ -31,9 +33,9 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({
               variant="contained"
               color="primary"
               onClick={onImageUpload}
-              style={{ height: "3rem" }}
+              style={{ height: "3rem", textTransform:"none" }}
             >
-              Upload picture
+              {translate.t('Upload image')}
             </Button>
           ) : null}
           &nbsp;

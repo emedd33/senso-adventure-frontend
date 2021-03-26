@@ -10,11 +10,13 @@ import { setSelectedPlayer } from "../../../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
 import useOwner from "../../../../store/hooks/useOwner";
 import { database } from "../../../../services/Firebase/firebase";
+import { useTranslation } from "react-i18next";
 
 type PlayerNewProps = {};
 const PlayerNew: FunctionComponent<PlayerNewProps> = () => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const translate = useTranslation()
     const [playerName, setPlayerName] = useState("");
     const owner = useOwner()
     const [characterName, setCharacterName] = useState("");
@@ -58,22 +60,22 @@ const PlayerNew: FunctionComponent<PlayerNewProps> = () => {
         <TitleContainer>
             <TextField
                 id="outlined-multiline-static"
-                placeholder="Write a fitting character name"
+                placeholder= {translate.t('Write a character name')}
                 variant="filled"
                 error={characterNameError}
                 value={characterName}
                 disabled={false}
                 style={{ width: "90%", margin: "1rem" }}
-                label="Character Name"
+                label={translate.t('Character name')}
                 onChange={(event) => setCharacterName(event.target.value)}
             />
 
             <TextField
                 id="outlined-number"
-                label="Player Name"
+                label={translate.t('Player name')}
                 value={playerName}
                 onKeyDown={(e) => (e.key === "Enter" ? submitPlayer() : null)}
-                placeholder="Name of the person playing this player?"
+                placeholder={translate.t("Name of the person playing this character?")}
                 InputLabelProps={{
                     shrink: true,
                 }}
@@ -87,7 +89,7 @@ const PlayerNew: FunctionComponent<PlayerNewProps> = () => {
                 color="primary"
                 onClick={() => submitPlayer()}
             >
-                Submit
+                {translate.t('Submit')}
       </Button>
         </TitleContainer>
     )

@@ -17,11 +17,13 @@ import characterIcon from "../../assets/icons/character_icon.png"
 import monsterIcon from "../../assets/icons/monster_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
 import useOwner from "../../store/hooks/useOwner";
+import { useTranslation } from "react-i18next";
 type SensoFabProps = {
 
 }
 const SensoFab: React.FC<SensoFabProps> = () => {
     const history = useHistory();
+    const translate = useTranslation()
     const dispatch = useDispatch()
     const owner = useOwner()
     const selectedCampaign = useSelector(getSelectedCampaign);
@@ -34,7 +36,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
         >
             <Action
                 style={{ backgroundColor: "transparent" }}
-                text="New session"
+                text={translate.t('New session')}
                 onClick={() => {
                     dispatch(
                         setSelectedSession({
@@ -47,10 +49,10 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                     }
                 }}
             >
-                <img src={sessionIcon} style={{ width: "inherit" }} alt="New Session" />
+                <img src={sessionIcon} style={{ width: "inherit" }} alt={translate.t('New session')} />
             </Action>
             <Action
-                text="New NPC/Monster"
+                text={translate.t('New monster/NPC')}
                 style={{ backgroundColor: "transparent" }}
                 onClick={() => {
                     if (selectedCampaign) {
@@ -63,11 +65,11 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                     }
                 }}
             >
-                <img src={monsterIcon} style={{ width: "inherit" }} alt="New Monster" />
+                <img src={monsterIcon} style={{ width: "inherit" }} alt={translate.t('New monster/NPC')} />
 
             </Action>
             <Action
-                text="New Player"
+                text={translate.t('New player')}
                 style={{ backgroundColor: "transparent" }}
                 onClick={() => {
                     if (selectedCampaign) {
@@ -80,11 +82,11 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                     }
                 }}
             >
-                <img src={characterIcon} style={{ width: "inherit" }} alt="New Character" />
+                <img src={characterIcon} style={{ width: "inherit" }} alt={translate.t('New player')} />
 
             </Action>
             <Action
-                text="New Location"
+                text={translate.t('New location')}
                 style={{ backgroundColor: "transparent" }}
                 onClick={() => {
                     if (selectedCampaign) {
@@ -94,7 +96,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                     }
                 }}
             >
-                <img src={locationIcon} style={{ width: "inherit" }} alt="New Location" />
+                <img src={locationIcon} style={{ width: "inherit" }} alt={translate.t('New location')}/>
 
             </Action>
 

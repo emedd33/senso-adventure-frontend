@@ -30,6 +30,7 @@ export default function App() {
         dispatch(setAuthUser(user));
       }
     });
+    
   }, [dispatch, authUser]);
   return (
     <Router>

@@ -17,12 +17,14 @@ import { useHistory } from "react-router-dom";
 import renderArrayOfString from "../../../../utils/renderArrayToString";
 import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
 import {SensoDescription} from "../../../../components/SensoContainers";
+import { useTranslation } from "react-i18next";
 type PlayerProps = {};
 const Player: FunctionComponent<PlayerProps> = () => {
     const history = useHistory();
     const selectedPlayer = useSelector(getSelectedPlayer);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const playerPath = useSelector(getSelectedPlayerStoragePath);
+    const translate = useTranslation()
     const parseStringBooleanToCheckmark = (
         proficient: any,
         setCross: boolean
@@ -45,15 +47,20 @@ const Player: FunctionComponent<PlayerProps> = () => {
     }
     return (
         <Container>
-            <div style={{ flex: 1 }}>
+            <div style={{width:"100%" }}>
                 <div
                     style={{
                         display: "grid",
-                        width: "100%",
                         gridTemplateColumns: "1fr 1fr",
                     }}
                 >
-                    <div style={{ display: "flex", justifyContent: "flex-end", gridColumn: "1/3" }}>
+                                        <h1 style={{ marginBottom: "0" }}>
+                                            {selectedPlayer.player.name}
+                                            {selectedPlayer.player.isPublished === "FALSE"
+                                                ? `(${translate.t('Not published')})`
+                                                : null}
+                                        </h1>
+                    <div style={{ display: "flex", justifyContent: "flex-end", }}>
                         {isDungeonMaster ? (
                             <>
                                 <NestedContainer
@@ -70,28 +77,22 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                         }
                                         variant="contained"
                                         color="primary"
-                                        style={{ maxHeight: "2rem", maxWidth: "3rem" }}
+                                        style={{ maxHeight: "2rem", maxWidth: "3rem", textTransform:"none" }}
                                     >
-                                        Edit
+                                        {translate.t('Edit')}
                                     </Button>
                                 </NestedContainer>
                             </>
-                        ) : null}
+                        ) :null}
                     </div>
-
-                    <h1 style={{ marginBottom: "0", gridColumn: "1/3" }}>
-                        {selectedPlayer.player.name}
-                        {selectedPlayer.player.isPublished === "FALSE"
-                            ? " (Unpublished)"
-                            : null}
-                    </h1>
-                    <h3 style={{ opacity: 0.7 }}>
-                        {`Played by: ${selectedPlayer.player.playerName}`}
-                    </h3>
 
                     <div style={{ gridColumn: "1/3" }}>
-                        <b>Also known as: </b>{selectedPlayer.player.nickNames ? renderArrayOfString(selectedPlayer.player.nickNames) : null}
+                        <b> </b>{selectedPlayer.player.nickNames ? <>{translate.t('Also known as')}: {renderArrayOfString(selectedPlayer.player.nickNames)}</> : null}
                     </div>
+                    <h3 style={{ gridColumn: "1/3"  }}>
+                        {`${translate.t('Played by')}: ${selectedPlayer.player.playerName}`}
+                    </h3>
+
                     {isDungeonMaster ?
                         <div >
                             {` ${selectedPlayer.player.race}`}
@@ -101,7 +102,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                         : null}
                     {isDungeonMaster ?
                         <div style={{ gridColumn: "1/3" }}>
-                            {`Level: ${parseValuesToString(
+                            {translate.t('Level')}: {`${parseValuesToString(
                                 selectedPlayer.player.level
                             )}`}
 
@@ -115,7 +116,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                 <NestedContainer>
                     <NestedNestedContainer>
                         <div>
-                            <b>Armor class: </b>{" "}
+                            <b>{translate.t('Armor class')}: </b>{" "}
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
                             {selectedPlayer.player.stats.armorClass}
@@ -123,7 +124,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                     </NestedNestedContainer>
                     <NestedNestedContainer>
                         <div>
-                            <b>Proficiency: </b>
+                            <b>{translate.t('Proficiency')}: </b>
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
                             {selectedPlayer.player.stats.proficiency}
@@ -131,7 +132,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                     </NestedNestedContainer>
                     <NestedNestedContainer>
                         <div>
-                            <b>Hit points: </b>
+                            <b>Hp: </b>
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
                             {selectedPlayer.player.stats.hitPoints}
@@ -142,7 +143,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                 <NestedContainer>
                     <NestedNestedContainer>
                         <div>
-                            <b>Passive Perception: </b>{" "}
+                            <b>{translate.t('Passive Perception')}: </b>{" "}
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
                             {selectedPlayer.player.stats.passivePerception}
@@ -151,7 +152,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
 
                     <NestedNestedContainer>
                         <div>
-                            <b>Inspiration: </b>
+                            <b>{translate.t('Inspiration')}: </b>
                         </div>
                         <div
                             style={{
@@ -172,7 +173,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                 <NestedContainer>
                     <NestedNestedContainer>
                         <div>
-                            <b>Speed: </b>{" "}
+                            <b>{translate.t('Speed')}: </b>{" "}
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
                             {selectedPlayer.player.stats.speed}'
@@ -180,7 +181,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                     </NestedNestedContainer>
                     <NestedNestedContainer>
                         <div>
-                            <b>Senses: </b>{" "}
+                            <b>{translate.t('Senses')}: </b>{" "}
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
                             {renderArrayOfString(selectedPlayer.player.senses)}
@@ -188,7 +189,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                     </NestedNestedContainer>
                     <NestedNestedContainer>
                         <div>
-                            <b>Immunities : </b>
+                            <b>{translate.t('Immunities')} : </b>
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
                             {renderArrayOfString(selectedPlayer.player.immunities)}
@@ -217,7 +218,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             width: "5rem",
                         }}
                     >
-                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>STR</b>
+                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{translate.t('STR')}</b>
                         <h3>
 
                             {selectedPlayer.player.stats.strength.value}(
@@ -238,7 +239,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                Saving:
+                {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.strength.value,
                                 selectedPlayer.player.stats.strength.isProficient,
@@ -255,7 +256,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             width: "5rem",
                         }}
                     >
-                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>DEX</b>
+                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{translate.t('Dex')}</b>
                         <h3>
 
                             {selectedPlayer.player.stats.dexterity.value}(
@@ -276,7 +277,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                Saving:
+                {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.dexterity.value,
                                 selectedPlayer.player.stats.dexterity.isProficient,
@@ -293,7 +294,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             width: "5rem",
                         }}
                     >
-                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CON</b>
+                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{translate.t('Con')}</b>
                         <h3>
 
                             {selectedPlayer.player.stats.constitution.value}(
@@ -314,7 +315,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                Saving:
+                {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.constitution.value,
                                 selectedPlayer.player.stats.constitution.isProficient,
@@ -332,7 +333,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             width: "5rem",
                         }}
                     >
-                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>INT</b>
+                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{translate.t('Int')}</b>
                         <h3>
 
                             {selectedPlayer.player.stats.intelligence.value}(
@@ -353,7 +354,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                Saving:
+                {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.intelligence.value,
                                 selectedPlayer.player.stats.intelligence.isProficient,
@@ -370,7 +371,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             width: "5rem",
                         }}
                     >
-                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>WIS</b>
+                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{translate.t('Wis')}</b>
                         <h3>
 
                             {selectedPlayer.player.stats.wisdom.value}(
@@ -391,7 +392,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                Saving:
+                {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.wisdom.value,
                                 selectedPlayer.player.stats.wisdom.isProficient,
@@ -408,7 +409,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             width: "5rem",
                         }}
                     >
-                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>CHA</b>
+                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{translate.t('Cha')}</b>
                         <h3>
 
                             {selectedPlayer.player.stats.charisma.value}(
@@ -429,7 +430,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                Saving:
+                {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.charisma.value,
                                 selectedPlayer.player.stats.charisma.isProficient,
@@ -458,9 +459,9 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 <thead>
 
                                     <tr>
-                                        <TableHeader>Proficient</TableHeader>
-                                        <TableHeader>Modifier</TableHeader>
-                                        <TableHeader>Skill</TableHeader>
+                                        <TableHeader>{translate.t('Proficiency')}</TableHeader>
+                                        <TableHeader>{translate.t('Modifier')}</TableHeader>
+                                        <TableHeader>{translate.t('Skill')}</TableHeader>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -481,7 +482,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Acrobatics (Dex)</TableElement>
+                                        <TableElement>{translate.t('Acrobatics')} ({translate.t('Dex')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -499,7 +500,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Animal Handling (Dex)</TableElement>
+                                        <TableElement>{translate.t('Animal handling')} ({translate.t('Dex')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -517,7 +518,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Arcana (Int)</TableElement>
+                                        <TableElement>{translate.t('Arcana')} ({translate.t('Int')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -535,7 +536,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Athletics (Str)</TableElement>
+                                        <TableElement>{translate.t('Athletics')} ({translate.t('Str')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -553,7 +554,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Deception (Cha)</TableElement>
+                                        <TableElement>{translate.t('Deception')} ({translate.t('Cha')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -571,7 +572,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>History (Int)</TableElement>
+                                        <TableElement>{translate.t('History')} ({translate.t('Int')})</TableElement>
                                     </tr>
                                 </tbody>
                             </Table>
@@ -587,9 +588,9 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 <thead>
 
                                     <tr>
-                                        <TableHeader>Proficient</TableHeader>
-                                        <TableHeader>Modifier</TableHeader>
-                                        <TableHeader>Skill</TableHeader>
+                                          <TableHeader>{translate.t('Proficiency')}</TableHeader>
+                                        <TableHeader>{translate.t('Modifier')}</TableHeader>
+                                        <TableHeader>{translate.t('Skill')}</TableHeader>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -610,7 +611,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Insight (Wis)</TableElement>
+                                        <TableElement>{translate.t('Insight')} ({translate.t('Wis')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -628,7 +629,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Intimidation (Cha)</TableElement>
+                                        <TableElement>{translate.t('Intimidation')} ({translate.t('Cha')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -664,7 +665,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Medicine (Wis)</TableElement>
+                                        <TableElement>{translate.t('Medicine')} ({translate.t('Wis')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -682,7 +683,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Nature (Int)</TableElement>
+                                        <TableElement>{translate.t('Nature')} ({translate.t('Int')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -700,7 +701,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Perception (Wis)</TableElement>
+                                        <TableElement>{translate.t('Perception')} ({translate.t('Wis')})</TableElement>
                                     </tr>
                                 </tbody>
                             </Table>
@@ -716,9 +717,9 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 <thead>
 
                                     <tr>
-                                        <TableHeader>Proficient</TableHeader>
-                                        <TableHeader>Modifier</TableHeader>
-                                        <TableHeader>Skill</TableHeader>
+                                          <TableHeader>{translate.t('Proficiency')}</TableHeader>
+                                        <TableHeader>{translate.t('Modifier')}</TableHeader>
+                                        <TableHeader>{translate.t('Skill')}</TableHeader>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -739,7 +740,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Performance (Cha)</TableElement>
+                                        <TableElement>{translate.t('Performance')} ({translate.t('Cha')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -757,7 +758,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Persuasion (Cha)</TableElement>
+                                        <TableElement>{translate.t('Persuasion')} ({translate.t('Cha')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -775,7 +776,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Religion (Int)</TableElement>
+                                        <TableElement>{translate.t('Religion')} ({translate.t('Int')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -793,7 +794,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Sleight of Hand (Dex)</TableElement>
+                                        <TableElement>{translate.t('Sleight of hand')} ({translate.t('Dex')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -811,7 +812,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Stealth (Dex)</TableElement>
+                                        <TableElement>{translate.t('Stealth')} ({translate.t('Dex')})</TableElement>
                                     </tr>
                                     <tr>
                                         <TableElement>
@@ -829,7 +830,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                                 selectedPlayer.player.stats.proficiency
                                             )}
                                         </TableElement>
-                                        <TableElement>Survival (Wis)</TableElement>
+                                        <TableElement>{translate.t('Survival')} ({translate.t('Wis')})</TableElement>
                                     </tr>
                                 </tbody>
                             </Table>
@@ -840,14 +841,14 @@ const Player: FunctionComponent<PlayerProps> = () => {
                 {selectedPlayer.player.actions ?
                     <NestedContainer style={{ width: "100%" }} >
                         <h3>
-                            Actions and Specials:
+                            {translate.t('Actions and specials')}:
                     </h3>
                         {selectedPlayer.player.actions.map((action: IAction, index: number) => <div key={index}><b >{action.name}:</b> {action.description}</div>)}
                     </NestedContainer>
 
                     : null}
                 <NestedContainer style={{ width: "100%" }} >
-                    <h3>Lore: </h3>
+                    <h3>{translate.t('Lore')}: </h3>
                     <DraftJSEditor readOnly={true} storagePath={`${playerPath}/playerDescription.json`} isDungeonMaster={isDungeonMaster} />
 
                 </NestedContainer>
@@ -857,8 +858,9 @@ const Player: FunctionComponent<PlayerProps> = () => {
     )
 };
 const Container = styled.div`
-  width: 70%;
+  width: 90%;
   padding: 1rem;
+  z-index:100;
   -webkit-box-shadow: 5px 5px 15px 5px #000000;
   box-shadow: 5px 0px 15px 2px #000000;
   background-color: ${OLD_WHITE};

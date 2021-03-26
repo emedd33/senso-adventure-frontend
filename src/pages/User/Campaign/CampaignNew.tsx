@@ -14,6 +14,9 @@ import { pushToDatabase } from "../../../services/Firebase/database"
 import { pushToStorage } from "../../../services/Firebase/storage"
 import { transformTitleToSlug } from "../../../utils/StringProcessing"
 import useOwner from "../../../store/hooks/useOwner";
+import { useTranslation } from "react-i18next";
+import BackgroundImage from "../../../assets/Images/background_home.jpg";
+
 export interface CampaignNewProps {
 
 }
@@ -22,7 +25,7 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const owner = useOwner()
-
+  const translate = useTranslation()
   const authUser = useSelector(getAuthUser)
   const [isLoading, setIsLoading] = useState(false);
 
@@ -99,11 +102,11 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
         <Container>
           <>
             <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
-              Campaign Creator
+              {translate.t('New Campaign')}
             </h1>
             <TextField
               id="outlined-multiline-static"
-              placeholder="Write a fitting title"
+              placeholder={translate.t('Write a title')}
               style={{ width: "50%", textAlign: "center" }}
               variant="outlined"
               error={campaignTitleError}
@@ -131,7 +134,7 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
               >
                 <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
                   {" "}
-                  Background Image
+                  {translate.t('Background Image')}
                 </h3>
               </div>
               <div
@@ -173,7 +176,7 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
               >
                 <h3 style={{ fontFamily: "serif" }}>
                   {" "}
-                  Choose campaign title image
+                  {translate.t('Campaign title image')}
                 </h3>
               </div>
               <div
@@ -197,10 +200,10 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
             <Button
               variant="contained"
               onClick={submit}
-              style={{ margin: "1rem", marginBottom: "5rem" }}
+              style={{ margin: "1rem", marginBottom: "5rem", textTransform:"none"}}
               color="primary"
             >
-              Submit
+              {translate.t('Submit')}
             </Button>
           </>
 
@@ -214,6 +217,7 @@ const ParentContainer = styled.div`
   display: flex;
   background-size: cover;
   justify-content: center;
+  background-image: url(${BackgroundImage});
   align-items: center;
   flex-direction: column;
   padding-top: 5vh;

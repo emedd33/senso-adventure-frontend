@@ -9,6 +9,7 @@ import useInterval from "../../store/hooks/useInterval";
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import styled from "styled-components";
 import { database } from "../../services/Firebase/firebase";
+import { useTranslation } from "react-i18next";
 
 type SensoProficiencyInputProps = {
     initProficiencies: IMonsterProficiency[],
@@ -19,7 +20,7 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({ initProfi
     const [proficies, setArray, saveArray, isSavedArray] = useSavedState(initProficiencies)
     const [newValue, setNewValue] = useState<number | undefined>()
     const [newKey, setNewKey] = useState<string | undefined>()
-
+    const translate = useTranslation()
     const handleAddNewValue = () => {
         if (newValue && newKey) {
             if (proficies) {
@@ -51,7 +52,7 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({ initProfi
     return (
         <Container style={style}>
             <div style={{ display: "flex", gridColumn: "1/3", flexWrap: "wrap", alignItems: "center" }}>
-                <b>Proficiencies:</b>
+                <b>{translate.t('Proficiencies')} :</b>
                 {proficies ? proficies.map((prof: IMonsterProficiency, index: number) =>
                     <Chip
                         key={index}
