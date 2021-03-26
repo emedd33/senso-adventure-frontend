@@ -23,7 +23,7 @@ import {
     Typography,
     IconButton,
 } from "@material-ui/core";
-import {filterUnpublished} from "./../../../utils/Database/filterUnpublished"
+import {filterUnpublished} from "./../../../utils/Database"
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ScrollMenu from "react-horizontal-scrolling-menu";

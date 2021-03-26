@@ -68,7 +68,6 @@ const SessionNew: React.FC<SessionNewProps> = () => {
     return (
         <TitleContainer>
             <TextField
-                id="outlined-multiline-static"
                 placeholder="Write a fitting title"
                 variant="filled"
                 disabled={false}
@@ -80,7 +79,6 @@ const SessionNew: React.FC<SessionNewProps> = () => {
             />
 
             <TextField
-                id="outlined-multiline-static"
                 placeholder="Write a fitting subtitle"
                 style={{ width: "90%", margin: "1rem" }}
                 variant="filled"
@@ -89,7 +87,6 @@ const SessionNew: React.FC<SessionNewProps> = () => {
                 onChange={(event) => setSessionSubTitle(event.target.value)}
             />
             <TextField
-                id="outlined-number"
                 label="Session day"
                 placeholder="Which session is this?"
                 type="number"

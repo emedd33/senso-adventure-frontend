@@ -1,4 +1,4 @@
-import { filterUnpublished } from "../../utils/Database/filterUnpublished";
+import { filterUnpublished } from "../../utils/Database";
 import { isDungeonMasterSelector } from "../selected/selectedSelectors";
 
 export const getNewSessionDay = (state: RootReducerProp) => {
