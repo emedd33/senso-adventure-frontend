@@ -11,8 +11,9 @@ import {
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
+import DndCrest from "../../assets/Images/dungeons-and-dragons.png";
 import { getUrlFromStorage } from "../../services/Firebase/storage";
-import useOwner from "../../store/hooks/useOwner"; 
+import useOwner from "../../store/hooks/useOwner";
 type UserHomeProps = {};
 const UserHome: FunctionComponent<UserHomeProps> = () => {
     const campaigns = useSelector(getAllCampaigns);
@@ -28,7 +29,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
 
                     }
                     )
-                    .catch(() => ({ slug: campaign.slug, title: campaign.title, url: "" }))
+                    .catch(() => ({ slug: campaign.slug, title: campaign.title, url: DndCrest }))
 
             }
             )
@@ -43,13 +44,11 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
             if (campaignUrls) {
                 return Object.values(campaignUrls).map(
                     (campaign: { slug: string; title: string, url?: string }, index: number) => (
-                        <Link to={`/user/${owner}/campaigns/${campaign.slug}`} key={index} style={{textDecoration:"none",}}>
-                            <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem",  textTransform:"none" }}>
-                                {campaign.url ? (
-                                    <CampaignImg src={campaign.url} />
-                                ) : (
-                                    <h1>{campaign.title}</h1>
-                                )}
+                        <Link to={`/user/${owner}/campaigns/${campaign.slug}`} key={index} style={{ textDecoration: "none", }}>
+                            <Button style={{ marginLeft: "2rem", marginRight: "2rem", width: "17rem", textTransform: "none", display: "grid", gridTemplateColumns: "1fr" }}>
+                                <CampaignImg src={campaign.url} />
+
+                                <h4>{campaign.title}</h4>
                             </Button>
                         </Link>
                     )
@@ -61,7 +60,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
         },
         [campaignUrls, owner],
     )
-  
+
     return (
         <Container>
             <div

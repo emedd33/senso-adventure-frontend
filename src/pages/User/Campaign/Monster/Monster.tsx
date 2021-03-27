@@ -18,9 +18,9 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
 import secretIcon from "../../../../assets/icons/hush_icon.png"
-import {SensoDescription} from "../../../../components/SensoContainers";
+import { SensoDescription } from "../../../../components/SensoContainers";
+import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 
 
 type MonsterProps = {};
@@ -39,7 +39,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
     }
     return (
         <Container>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", margin: "1rem", marginLeft:0 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", margin: "1rem", marginLeft: 0 }}>
                 <div>
 
                     <h1 style={{ marginBottom: 0 }}>{`${selectedMonster.monster.name} ${selectedMonster.monster.isPublished === "FALSE" ? "(Unpublished)" : ""}`}</h1>
@@ -64,7 +64,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
             <DividerBlock />
 
 
-            <SensoDescription content={selectedMonster.monster.description}/>
+            <SensoDescription content={selectedMonster.monster.description} />
             <div style={{ width: "100%", display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
                 <Tooltip title={"Everything below is hidden from players. This includes everything except Name, Nicknames, size, type, alignment and description"}>
                     <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
@@ -233,7 +233,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                     })
                 }
                 <h2>Lore and history</h2>
-                <DraftJSEditor readOnly={true} storagePath={`${monsterPath}/monsterLore.json`} isDungeonMaster={isDungeonMaster} />
+                <SensoDraftJS readOnly={true} storagePath={`${monsterPath}/monsterLore.json`} isDungeonMaster={isDungeonMaster} />
             </>
                 : null}
 

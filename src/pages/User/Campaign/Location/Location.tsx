@@ -27,9 +27,9 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link } from "react-router-dom";
 import renderArrayOfString from "../../../../utils/renderArrayToString";
-import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
 import useOwner from "../../../../store/hooks/useOwner";
 import { SensoDescription } from "../../../../components/SensoContainers";
+import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 
 export interface LocationProps { }
 
@@ -102,7 +102,7 @@ const Location: React.FC<LocationProps> = () => {
             </div>
 
             <div style={{ gridColumn: "1/3" }}>
-    <SensoDescription content={selectedLocation.location.description}/>
+                <SensoDescription content={selectedLocation.location.description} />
             </div>
 
             {isDungeonMaster && selectedLocation.location.keyElements && selectedCampaign ? (
@@ -175,7 +175,7 @@ const Location: React.FC<LocationProps> = () => {
                 <div style={{ gridColumn: "1/3" }}>
                     <h3>{`Lore and history to ${selectedLocation.location.name}`}</h3>
 
-                    <DraftJSEditor readOnly={true} storagePath={`${locationPath}/locationLore.json`}
+                    <SensoDraftJS readOnly={true} storagePath={`${locationPath}/locationLore.json`}
                         isDungeonMaster={isDungeonMaster}
                     />
                 </div>

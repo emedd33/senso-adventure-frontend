@@ -6,6 +6,7 @@ interface IError {
 }
 type AdminState = {
   isLoading: boolean;
+  isUploading: boolean;
   authUser?: firebase.User;
   error: IError;
   env: string,

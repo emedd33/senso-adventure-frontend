@@ -12,16 +12,13 @@ import "react-markdown-editor-lite/lib/index.css";
 import { SensoAccordianInput, SensoImageInput, SensoMultilineTextInput, SensoSwitch, SensoTextArrayInput, SensoTextInput, SensoDelete } from "../../../../components/SensoInputs"
 import {
     getSelectedCampaign,
-    getSelectedCampaignMonsterMentionList,
     getSelectedCampaignMonsters,
-    getSelectedCampaignLocationMentionList,
     getSelectedLocationStoragePath,
     isDungeonMasterSelector,
-    getSelectedCampaignPlayerMentionList,
     getSelectedLocationDatabasePath
 } from "../../../../store/selected/selectedSelectors";
 import { getIsLoading } from "../../../../store/admin/adminSelectors";
-import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
+import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 
 
 const CampaignLocationEdit: React.FC = () => {
@@ -34,11 +31,6 @@ const CampaignLocationEdit: React.FC = () => {
     const CampaignMonsters = useSelector(getSelectedCampaignMonsters)
     const selectedLocationStoragePath = useSelector(getSelectedLocationStoragePath)
     const selectedLocationDatabasePath = useSelector(getSelectedLocationDatabasePath)
-
-    const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList)
-    const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
-    const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
-
 
 
     if (isLoading || !selectedLocation || !selectedCampaign) {
@@ -162,13 +154,10 @@ const CampaignLocationEdit: React.FC = () => {
 
 
             <h1 style={{ flex: 2, textAlign: "center" }}>Lore and history</h1>
-            <DraftJSEditor
-                playerMentionList={playerMentionList}
-                monsterMentionList={monsterMentionList}
+            <SensoDraftJS
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}
                 storagePath={`${selectedLocationStoragePath}/locationLore.json`}
-                locationMentionList={locationMentionList}
             />
 
             <h1>Images</h1>

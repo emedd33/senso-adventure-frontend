@@ -6,12 +6,9 @@ import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, Sen
 
 import {
     getSelectedCampaign,
-    getSelectedCampaignMonsterMentionList,
-    getSelectedCampaignLocationMentionList,
     getSelectedPlayer,
     getSelectedPlayerStoragePath,
     isDungeonMasterSelector,
-    getSelectedCampaignPlayerMentionList,
     getSelectedPlayerDatabasePath
 } from "../../../../store/selected/selectedSelectors";
 import styled from "styled-components";
@@ -22,9 +19,9 @@ import {
 
     Divider,
 } from "@material-ui/core";
-import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
 import useOwner from "../../../../store/hooks/useOwner";
 import { useTranslation } from "react-i18next";
+import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 type PlayerEditProps = {};
 const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
     const selectedPlayer: ISelectedPlayer | undefined = useSelector(
@@ -33,10 +30,7 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(getSelectedCampaign)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const owner = useOwner()
-    const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList);
 
-    const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
-    const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
     const playerStoragePath = useSelector(getSelectedPlayerStoragePath);
     const playerDatabsePath = useSelector(getSelectedPlayerDatabasePath);
     const translate = useTranslation()
@@ -149,7 +143,7 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
             <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
                 <p>
                     <b>{translate.t('Passive Perception')}:</b>{selectedPlayer.player.stats.wisdom.value}
-                    </p>
+                </p>
                 <i>{translate.t('Calculated from wisdom')}</i>
             </div>
             <SensoTextArrayInput
@@ -248,7 +242,7 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                             firebasePath={`${playerDatabsePath}/stats/skills/arcana`}
                             abilityModifier={selectedPlayer.player.stats.intelligence}
                             label={`${translate.t('Arcana')} (${translate.t("Int")})`}
-                            
+
 
                             proficiencyBonus={selectedPlayer.player.stats.proficiency}
                         />
@@ -279,7 +273,7 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                     <thead>
 
                         <tr>
-                           <th>{translate.t('Proficiency')}</th>
+                            <th>{translate.t('Proficiency')}</th>
                             <th>{translate.t('Modifier')}</th>
                             <th>{translate.t('Skill')}</th>
                         </tr>
@@ -346,7 +340,7 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                     <thead>
 
                         <tr>
-                             <th>{translate.t('Proficiency')}</th>
+                            <th>{translate.t('Proficiency')}</th>
                             <th>{translate.t('Modifier')}</th>
                             <th>{translate.t('Skill')}</th>
                         </tr>
@@ -422,10 +416,7 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
             </div>
             <div style={{ gridColumn: "1/3" }}>
                 <h3>{translate.t('Lore')}</h3>
-                <DraftJSEditor
-                    playerMentionList={playerMentionList}
-                    locationMentionList={locationMentionList}
-                    monsterMentionList={monsterMentionList}
+                <SensoDraftJS
                     readOnly={false}
                     isDungeonMaster={isDungeonMaster}
                     storagePath={`${playerStoragePath}/playerLore.json`}

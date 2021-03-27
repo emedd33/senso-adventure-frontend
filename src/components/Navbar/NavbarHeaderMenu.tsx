@@ -63,96 +63,78 @@ export default function NavbarHeaderMenu() {
 
   if (!authUser) {
     return (
-      <div
+
+      <Link
+        to="/login"
         style={{
-          flex: "1",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          paddingRight: "4rem",
+          textDecoration: "none",
+          color: "black",
+          textTransform: "none",
         }}
       >
-        <Link
-          to="/login"
+        <span
           style={{
-            textDecoration: "none",
-            color: "black",
-            textTransform: "none",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <span
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-           
-              {translate.t('Login')}
-          </span>
-        </Link>
-      </div>
+
+          {translate.t('Login')}
+        </span>
+      </Link>
     );
   }
   return (
-    <div
-      style={{
-        flex: "1",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        paddingRight: "4rem",
-      }}
-    >
-      <div className={classes.root}>
-        <div>
-          <Button
-            ref={anchorRef}
-            aria-controls={open ? "menu-list-grow" : undefined}
-            aria-haspopup="true"
-            onClick={handleToggle}
-            style={{textTransform:"none"}}
-          >
-            {authUser.displayName}
-            <AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
-          </Button>
-          <Popper
-            open={open}
-            anchorEl={anchorRef.current}
-            role={undefined}
-            transition
-            disablePortal
-          >
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                style={{
-                  transformOrigin:
-                    placement === "bottom" ? "center top" : "center bottom",
-                }}
-              >
-                <Paper>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList
-                      autoFocusItem={open}
-                      id="menu-list-grow"
-                      onKeyDown={handleListKeyDown}
+
+    <div className={classes.root}>
+      <div>
+        <Button
+          ref={anchorRef}
+          aria-controls={open ? "menu-list-grow" : undefined}
+          aria-haspopup="true"
+          onClick={handleToggle}
+          style={{ textTransform: "none" }}
+        >
+          {authUser.displayName}
+          <AiIcons.AiFillCaretDown style={{ marginLeft: "1rem" }} />
+        </Button>
+        <Popper
+          open={open}
+          anchorEl={anchorRef.current}
+          role={undefined}
+          transition
+          disablePortal
+        >
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              style={{
+                transformOrigin:
+                  placement === "bottom" ? "center top" : "center bottom",
+              }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={handleClose}>
+                  <MenuList
+                    autoFocusItem={open}
+                    id="menu-list-grow"
+                    onKeyDown={handleListKeyDown}
+                  >
+                    <Link
+                      to={`/profile`}
+                      style={{ textDecoration: "none", color: "black" }}
                     >
-                      <Link
-                        to={`/profile`}
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        <MenuItem onClick={() => setOpen(false)}>
-                          {translate.t('Profile')}
-                        </MenuItem>
-                      </Link>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
-        </div>
+                      <MenuItem onClick={() => setOpen(false)}>
+                        {translate.t('Profile')}
+                      </MenuItem>
+                    </Link>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
       </div>
     </div>
   );

@@ -10,15 +10,17 @@ import norIcon from "../../assets/icons/nor_icon.png"
 import NavbarHeaderBreadCrumbs from "./NavbarHeaderBreadCrumbs"
 
 import NavbarHeaderMenu from "./NavbarHeaderMenu";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsSidebarShown } from "../../store/admin/adminCreator";
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
+import { getIsUploading } from "../../store/admin/adminSelectors";
 
 type NavbarHeaderProps = {};
 const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
-  const  translation  = useTranslation();
+    const translation = useTranslation();
     const dispatch = useDispatch()
+    const isUploading = useSelector(getIsUploading)
     return (
         <>
             <IconContext.Provider value={{ color: "black" }}>
@@ -47,11 +49,22 @@ const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
                         </Link>
                         <NavbarHeaderBreadCrumbs />
                     </div>
-                    <NavbarHeaderMenu />
-                    <div style={{display:"grid", gridTemplateRows:"repeat(1fr)"}}>
+                    <div
+                        style={{
+                            flex: "1",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-end",
+                            paddingRight: "4rem",
+                        }}
+                    >
+                        {isUploading ? <CircularProgress size={20} /> : null}
+                        <NavbarHeaderMenu />
+                    </div>
+                    <div style={{ display: "grid", gridTemplateRows: "repeat(1fr)" }}>
 
-                    <Button onClick={() => translation.i18n.changeLanguage('en')}><img src={engIcon} style={{ width: "1.5rem" }} alt="English" /></Button>
-                    <Button  onClick={() => translation.i18n.changeLanguage('nor')}><img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" /></Button>
+                        <Button onClick={() => translation.i18n.changeLanguage('en')}><img src={engIcon} style={{ width: "1.5rem" }} alt="English" /></Button>
+                        <Button onClick={() => translation.i18n.changeLanguage('nor')}><img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" /></Button>
 
                     </div>
                 </Container>

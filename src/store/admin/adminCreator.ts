@@ -5,6 +5,7 @@ import {
   SET_ALERT_DIALOG,
   SET_AUTH_USER,
   SET_IS_SIDEBAR_SHOWN,
+  SET_IS_UPLOADING,
 } from "./adminActions";
 
 export const dispatchLogin = (payload: ILogin) => {
@@ -42,6 +43,11 @@ export const dispatchLogout = () => {
 export const setIsLoading = (isLoading: boolean) => ({
   type: SET_IS_LOADING,
   payload: isLoading,
+});
+
+export const setIsUploading = (isUploading: boolean) => ({
+  type: SET_IS_UPLOADING,
+  payload: isUploading,
 });
 
 export const setAuthUser = (user?: any) => ({

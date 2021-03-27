@@ -8,16 +8,13 @@ import styled from "styled-components";
 
 import {
     getSelectedCampaign,
-    getSelectedCampaignMonsterMentionList,
-    getSelectedCampaignLocationMentionList,
     getSelectedSession,
     getSelectedSessionStoragePath,
     isDungeonMasterSelector,
-    getSelectedCampaignPlayerMentionList,
     getSelectedSessionDatabasePath
 } from "../../../../store/selected/selectedSelectors";
-import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
 import { SensoDateInput, SensoDelete, SensoImageInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../../../components/SensoInputs";
+import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 
 
 
@@ -32,10 +29,6 @@ const SessionEdit: React.FC = () => {
     const selectedSessionStoragePath = useSelector(getSelectedSessionStoragePath);
 
 
-    const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList)
-
-    const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList)
-    const locationMentionList = useSelector(getSelectedCampaignLocationMentionList)
 
 
 
@@ -90,11 +83,8 @@ const SessionEdit: React.FC = () => {
             >
                 <h1 style={{ flex: 2, textAlign: "center" }}>Session story</h1>
             </div>
-            <DraftJSEditor
+            <SensoDraftJS
                 isDungeonMaster={isDungeonMaster}
-                monsterMentionList={monsterMentionList}
-                playerMentionList={playerMentionList}
-                locationMentionList={locationMentionList}
                 readOnly={false}
                 storagePath={`${selectedSessionStoragePath}/SessionStory.json`}
             />

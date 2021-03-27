@@ -1,6 +1,5 @@
-import { DraftHandleValue, EditorState, getDefaultKeyBinding, KeyBindingUtil, RichUtils } from "draft-js";
+import { DraftHandleValue, EditorState, getDefaultKeyBinding, RichUtils } from "draft-js";
 import { insertAtomicBlock } from "./insertContent"
-const { hasCommandModifier } = KeyBindingUtil;
 
 const keyBindingFn = (e: any, editorState: EditorState) => {
     if (e.keyCode === 13) {

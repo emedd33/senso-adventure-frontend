@@ -15,9 +15,9 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import renderArrayOfString from "../../../../utils/renderArrayToString";
-import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
-import {SensoDescription} from "../../../../components/SensoContainers";
+import { SensoDescription } from "../../../../components/SensoContainers";
 import { useTranslation } from "react-i18next";
+import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 type PlayerProps = {};
 const Player: FunctionComponent<PlayerProps> = () => {
     const history = useHistory();
@@ -47,19 +47,19 @@ const Player: FunctionComponent<PlayerProps> = () => {
     }
     return (
         <Container>
-            <div style={{width:"100%" }}>
+            <div style={{ width: "100%" }}>
                 <div
                     style={{
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr",
                     }}
                 >
-                                        <h1 style={{ marginBottom: "0" }}>
-                                            {selectedPlayer.player.name}
-                                            {selectedPlayer.player.isPublished === "FALSE"
-                                                ? `(${translate.t('Not published')})`
-                                                : null}
-                                        </h1>
+                    <h1 style={{ marginBottom: "0" }}>
+                        {selectedPlayer.player.name}
+                        {selectedPlayer.player.isPublished === "FALSE"
+                            ? `(${translate.t('Not published')})`
+                            : null}
+                    </h1>
                     <div style={{ display: "flex", justifyContent: "flex-end", }}>
                         {isDungeonMaster ? (
                             <>
@@ -77,19 +77,19 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                         }
                                         variant="contained"
                                         color="primary"
-                                        style={{ maxHeight: "2rem", maxWidth: "3rem", textTransform:"none" }}
+                                        style={{ maxHeight: "2rem", maxWidth: "3rem", textTransform: "none" }}
                                     >
                                         {translate.t('Edit')}
                                     </Button>
                                 </NestedContainer>
                             </>
-                        ) :null}
+                        ) : null}
                     </div>
 
                     <div style={{ gridColumn: "1/3" }}>
                         <b> </b>{selectedPlayer.player.nickNames ? <>{translate.t('Also known as')}: {renderArrayOfString(selectedPlayer.player.nickNames)}</> : null}
                     </div>
-                    <h3 style={{ gridColumn: "1/3"  }}>
+                    <h3 style={{ gridColumn: "1/3" }}>
                         {`${translate.t('Played by')}: ${selectedPlayer.player.playerName}`}
                     </h3>
 
@@ -111,7 +111,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
 
                 </div>
             </div>
-            <SensoDescription content={selectedPlayer.player.description}/>
+            <SensoDescription content={selectedPlayer.player.description} />
             <>
                 <NestedContainer>
                     <NestedNestedContainer>
@@ -239,7 +239,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                {translate.t('Saving')}:
+                            {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.strength.value,
                                 selectedPlayer.player.stats.strength.isProficient,
@@ -277,7 +277,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                {translate.t('Saving')}:
+                            {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.dexterity.value,
                                 selectedPlayer.player.stats.dexterity.isProficient,
@@ -315,7 +315,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                {translate.t('Saving')}:
+                            {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.constitution.value,
                                 selectedPlayer.player.stats.constitution.isProficient,
@@ -354,7 +354,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                {translate.t('Saving')}:
+                            {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.intelligence.value,
                                 selectedPlayer.player.stats.intelligence.isProficient,
@@ -392,7 +392,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                {translate.t('Saving')}:
+                            {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.wisdom.value,
                                 selectedPlayer.player.stats.wisdom.isProficient,
@@ -430,7 +430,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 "TRUE" ? (
                                 <CheckIcon style={{ width: "0.8rem", color: "green" }} />
                             ) : null}
-                {translate.t('Saving')}:
+                            {translate.t('Saving')}:
                 {getAbilityModifier(
                                 selectedPlayer.player.stats.charisma.value,
                                 selectedPlayer.player.stats.charisma.isProficient,
@@ -588,7 +588,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 <thead>
 
                                     <tr>
-                                          <TableHeader>{translate.t('Proficiency')}</TableHeader>
+                                        <TableHeader>{translate.t('Proficiency')}</TableHeader>
                                         <TableHeader>{translate.t('Modifier')}</TableHeader>
                                         <TableHeader>{translate.t('Skill')}</TableHeader>
                                     </tr>
@@ -717,7 +717,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                                 <thead>
 
                                     <tr>
-                                          <TableHeader>{translate.t('Proficiency')}</TableHeader>
+                                        <TableHeader>{translate.t('Proficiency')}</TableHeader>
                                         <TableHeader>{translate.t('Modifier')}</TableHeader>
                                         <TableHeader>{translate.t('Skill')}</TableHeader>
                                     </tr>
@@ -849,8 +849,11 @@ const Player: FunctionComponent<PlayerProps> = () => {
                     : null}
                 <NestedContainer style={{ width: "100%" }} >
                     <h3>{translate.t('Lore')}: </h3>
-                    <DraftJSEditor readOnly={true} storagePath={`${playerPath}/playerDescription.json`} isDungeonMaster={isDungeonMaster} />
-
+                    <SensoDraftJS
+                        readOnly={true}
+                        isDungeonMaster={isDungeonMaster}
+                        storagePath={`${playerPath}/playerLore.json`}
+                    />
                 </NestedContainer>
 
             </>

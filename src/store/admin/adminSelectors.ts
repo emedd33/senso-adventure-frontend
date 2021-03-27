@@ -14,3 +14,7 @@ export const getAuthUserPath = (state: RootReducerProp) => {
 export const getIsSidebarShown = (state: RootReducerProp) => {
   return state.admin.isSidebarShown
 }
+
+export const getIsUploading = (state: RootReducerProp) => {
+  return state.admin.isUploading
+}

@@ -23,7 +23,7 @@ import {
     Typography,
     IconButton,
 } from "@material-ui/core";
-import {filterUnpublished} from "./../../../utils/Database"
+import { filterUnpublished } from "./../../../utils/Database"
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ScrollMenu from "react-horizontal-scrolling-menu";
@@ -31,8 +31,8 @@ import useOwner from "../../../store/hooks/useOwner";
 import { getUrlFromStorage } from "../../../services/Firebase/storage";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useWindowSize from "../../../store/hooks/useWindowSize";
-import DraftJSEditor from "../../../components/DraftJSEditor/DraftJSEditor";
 import { useTranslation } from "react-i18next";
+import SensoDraftJS from "../../../components/SensoDraftJS/SensoDraftJS";
 
 const MenuItem: React.FC<{ text: any; selected: any, key: number }> = ({
     text,
@@ -56,7 +56,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
     const owner = useOwner()
     const translate = useTranslation()
-    const size  = useWindowSize()
+    const size = useWindowSize()
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const selectedCampaignStoragePath = useSelector(getSelectedCampaignStoragePath)
     const selectedCampaign = useSelector(getSelectedCampaign);
@@ -67,7 +67,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     },
         [selectedCampaignStoragePath]
     )
-  
+
     useEffect(() => {
         if (selectedCampaign && selectedCampaign.campaign.sessions) {
             setSessions(filterUnpublished(selectedCampaign.campaign.sessions, isDungeonMaster)
@@ -100,7 +100,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
             setSessions([])
         };
     },
-        [selectedCampaign, owner, selectedSessionMenu, history,isDungeonMaster]
+        [selectedCampaign, owner, selectedSessionMenu, history, isDungeonMaster]
     )
 
     return (
@@ -111,206 +111,206 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                     alt="Campaign title"
                     style={{
                         maxHeight: "20rem",
-                        width:"70%", 
+                        width: "70%",
                         marginBottom: "1rem",
                     }}
                 />
             ) : null}
- 
-                <div style={{width:"100%"}}>
-            {sessions.length > 0 ?
-                <Overview>
-                    <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/sessions`} style={{ textDecoration: "none" }}>
-                        <div style={{width:"100%", display:"flex", justifyContent:"center"}}>
 
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            style={{
-                                textTransform: "none",
-                                
-                            }}
-                            >
-                            Sessions
+            <div style={{ width: "100%" }}>
+                {sessions.length > 0 ?
+                    <Overview>
+                        <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/sessions`} style={{ textDecoration: "none" }}>
+                            <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    style={{
+                                        textTransform: "none",
+
+                                    }}
+                                >
+                                    Sessions
                         </Button>
                             </div>
-                    </Link>
-                    {size.width && size.width! > 769 ?
-                    <ScrollMenu
-                    data={sessions}
-                    arrowLeft={
-                        <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                                <ArrowBackIcon />
-                            </IconButton>
-                        }
-                        arrowRight={
-                            <IconButton style={{ backgroundColor: OLD_WHITE }}>
-                                <ArrowForwardIcon />
-                            </IconButton>
-                        }
-                        selected={selectedSessionMenu}
-                        wheel={false}
-                        onSelect={(key) => {
-                            if (typeof key === "string") {
-                                setSelectedSessionMenu(key);
-                            }
-                        }}
-                        />
-                        :null}
-                </Overview>
-                : null}
-                </div>
-                <div style={{width:"100%", marginTop:"1rem"}}>
-                    {selectedCampaign && selectedCampaign.campaign.monsters
+                        </Link>
+                        {size.width && size.width! > 769 ?
+                            <ScrollMenu
+                                data={sessions}
+                                arrowLeft={
+                                    <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                        <ArrowBackIcon />
+                                    </IconButton>
+                                }
+                                arrowRight={
+                                    <IconButton style={{ backgroundColor: OLD_WHITE }}>
+                                        <ArrowForwardIcon />
+                                    </IconButton>
+                                }
+                                selected={selectedSessionMenu}
+                                wheel={false}
+                                onSelect={(key) => {
+                                    if (typeof key === "string") {
+                                        setSelectedSessionMenu(key);
+                                    }
+                                }}
+                            />
+                            : null}
+                    </Overview>
+                    : null}
+            </div>
+            <div style={{ width: "100%", marginTop: "1rem" }}>
+                {selectedCampaign && selectedCampaign.campaign.monsters
                     ? <>
-                    <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/`} style={{textDecoration:"none"}}>
+                        <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/`} style={{ textDecoration: "none" }}>
 
-                <Button color="primary" variant="contained" style={{ textTransform:"none", }}>Monsters</Button>
-                            </Link>
-                            <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 20rem)" }}>
+                            <Button color="primary" variant="contained" style={{ textTransform: "none", }}>{translate.t(`Monsters`)}</Button>
+                        </Link>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 20rem)" }}>
 
-                {filterUnpublished(selectedCampaign.campaign.monsters, isDungeonMaster).slice(0,10).map(([, monster]: [string, IMonster], index: number) => (
-                    <Accordion
-                    key={index}
-                    style={
-                        
-                        monster.isPublished === "TRUE"
-                        ? { backgroundColor: OLD_WHITE, margin:0 }
-                        : { backgroundColor: OLD_WHITE, opacity: 0.7, margin:0 }
-                    }
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                            >
-                            <Typography style={{ flexBasis: "90%", flexShrink: 0 }}>
-                                {monster.name}
-                            </Typography>
+                            {filterUnpublished(selectedCampaign.campaign.monsters, isDungeonMaster).slice(0, 10).map(([, monster]: [string, IMonster], index: number) => (
+                                <Accordion
+                                    key={index}
+                                    style={
 
-                        </AccordionSummary>
-                        <AccordionDetails
-                            style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr", margin:0 }}
-                            >
-                            <p>{monster.description}</p>
-                        </AccordionDetails>
-                        <AccordionActions>
-                            <Link
-                                to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/${monster.slug}`}
-                            >
-                                <Button size="small" color="primary">
-                                    <ArrowForwardIcon />
-                                </Button>
-                            </Link>
-                        </AccordionActions>
-                    </Accordion>
-                ))}
-                </div>
-                </>
-                : null}
-</div>
-  <div style={{width:"100%", marginTop:"1rem"}}>
-                    {selectedCampaign && selectedCampaign.campaign.players
+                                        monster.isPublished === "TRUE"
+                                            ? { backgroundColor: OLD_WHITE, margin: 0 }
+                                            : { backgroundColor: OLD_WHITE, opacity: 0.7, margin: 0 }
+                                    }
+                                >
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1bh-content"
+                                        id="panel1bh-header"
+                                    >
+                                        <Typography style={{ flexBasis: "90%", flexShrink: 0 }}>
+                                            {monster.name}
+                                        </Typography>
+
+                                    </AccordionSummary>
+                                    <AccordionDetails
+                                        style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr", margin: 0 }}
+                                    >
+                                        <p>{monster.description}</p>
+                                    </AccordionDetails>
+                                    <AccordionActions>
+                                        <Link
+                                            to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/${monster.slug}`}
+                                        >
+                                            <Button size="small" color="primary">
+                                                <ArrowForwardIcon />
+                                            </Button>
+                                        </Link>
+                                    </AccordionActions>
+                                </Accordion>
+                            ))}
+                        </div>
+                    </>
+                    : null}
+            </div>
+            <div style={{ width: "100%", marginTop: "1rem" }}>
+                {selectedCampaign && selectedCampaign.campaign.players
                     ? <>
-                    <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/players/`} style={{textDecoration:"none"}}>
+                        <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/players/`} style={{ textDecoration: "none" }}>
 
-                <Button color="primary" variant="contained" style={{textTransform:"none", }}>Players</Button>
-                            </Link>
-                            <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 20rem)" }}>
+                            <Button color="primary" variant="contained" style={{ textTransform: "none", }}>{translate.t(`Players`)}</Button>
+                        </Link>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 20rem)" }}>
 
-                {filterUnpublished(selectedCampaign.campaign.players, isDungeonMaster).slice(0,10).map(([, player]: [string, IPlayer], index: number) => (
-                    <Accordion
-                    key={index}
-                    style={
-                        
-                        player.isPublished === "TRUE"
-                        ? { backgroundColor: OLD_WHITE, margin:0 }
-                        : { backgroundColor: OLD_WHITE, opacity: 0.7, margin:0 }
-                    }
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                            >
-                            <Typography style={{ flexBasis: "90%", flexShrink: 0 }}>
-                                {player.name}
-                            </Typography>
+                            {filterUnpublished(selectedCampaign.campaign.players, isDungeonMaster).slice(0, 10).map(([, player]: [string, IPlayer], index: number) => (
+                                <Accordion
+                                    key={index}
+                                    style={
 
-                        </AccordionSummary>
-                        <AccordionDetails
-                            style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr", margin:0 }}
-                            >
-                            <p>{player.description}</p>
-                        </AccordionDetails>
-                        <AccordionActions>
-                            <Link
-                                to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/players/${player.slug}`}
-                            >
-                                <Button size="small" color="primary">
-                                    <ArrowForwardIcon />
-                                </Button>
-                            </Link>
-                        </AccordionActions>
-                    </Accordion>
-                ))}
-                </div>
-            
-             </>
-                : null}
-</div>
-<div style={{width:"100%", marginTop:"1rem"}}>
-                    {selectedCampaign && selectedCampaign.campaign.locations
+                                        player.isPublished === "TRUE"
+                                            ? { backgroundColor: OLD_WHITE, margin: 0 }
+                                            : { backgroundColor: OLD_WHITE, opacity: 0.7, margin: 0 }
+                                    }
+                                >
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1bh-content"
+                                        id="panel1bh-header"
+                                    >
+                                        <Typography style={{ flexBasis: "90%", flexShrink: 0 }}>
+                                            {player.name}
+                                        </Typography>
+
+                                    </AccordionSummary>
+                                    <AccordionDetails
+                                        style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr", margin: 0 }}
+                                    >
+                                        <p>{player.description}</p>
+                                    </AccordionDetails>
+                                    <AccordionActions>
+                                        <Link
+                                            to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/players/${player.slug}`}
+                                        >
+                                            <Button size="small" color="primary">
+                                                <ArrowForwardIcon />
+                                            </Button>
+                                        </Link>
+                                    </AccordionActions>
+                                </Accordion>
+                            ))}
+                        </div>
+
+                    </>
+                    : null}
+            </div>
+            <div style={{ width: "100%", marginTop: "1rem" }}>
+                {selectedCampaign && selectedCampaign.campaign.locations
                     ? <>
-                    <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/`} style={{textDecoration:"none"}}>
+                        <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/`} style={{ textDecoration: "none" }}>
 
-                <Button color="primary" variant="contained" style={{textTransform:"none", }}>Locations</Button>
-                            </Link>
-                            <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 20rem)" }}>
+                            <Button color="primary" variant="contained" style={{ textTransform: "none", }}>{translate.t(`Locations`)}</Button>
+                        </Link>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 20rem)" }}>
 
-                {filterUnpublished(selectedCampaign.campaign.locations, isDungeonMaster).slice(0,10).map(([, location]: [string, ILocation], index: number) => (
-                    <Accordion
-                    key={index}
-                    style={
-                        
-                        location.isPublished === "TRUE"
-                        ? { backgroundColor: OLD_WHITE, margin:0 }
-                        : { backgroundColor: OLD_WHITE, opacity: 0.7, margin:0 }
-                    }
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                            >
-                            <Typography style={{ flexBasis: "90%", flexShrink: 0 }}>
-                                {location.name}
-                            </Typography>
+                            {filterUnpublished(selectedCampaign.campaign.locations, isDungeonMaster).slice(0, 10).map(([, location]: [string, ILocation], index: number) => (
+                                <Accordion
+                                    key={index}
+                                    style={
 
-                        </AccordionSummary>
-                        <AccordionDetails
-                            style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr", margin:0 }}
-                            >
-                            <p>{location.description}</p>
-                        </AccordionDetails>
-                        <AccordionActions>
-                            <Link
-                                to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/${location.slug}`}
-                            >
-                                <Button size="small" color="primary">
-                                    <ArrowForwardIcon />
-                                </Button>
-                            </Link>
-                        </AccordionActions>
-                    </Accordion>
-                ))}
-                </div>
-            
-             </>
-                : null}
-</div>
-           {isDungeonMaster ? <>
-                <div style={{  display: "flex", justifyContent: "center", flexDirection: "row", padding: "2rem", width:"100%" }}>
+                                        location.isPublished === "TRUE"
+                                            ? { backgroundColor: OLD_WHITE, margin: 0 }
+                                            : { backgroundColor: OLD_WHITE, opacity: 0.7, margin: 0 }
+                                    }
+                                >
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1bh-content"
+                                        id="panel1bh-header"
+                                    >
+                                        <Typography style={{ flexBasis: "90%", flexShrink: 0 }}>
+                                            {location.name}
+                                        </Typography>
+
+                                    </AccordionSummary>
+                                    <AccordionDetails
+                                        style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr", margin: 0 }}
+                                    >
+                                        <p>{location.description}</p>
+                                    </AccordionDetails>
+                                    <AccordionActions>
+                                        <Link
+                                            to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/${location.slug}`}
+                                        >
+                                            <Button size="small" color="primary">
+                                                <ArrowForwardIcon />
+                                            </Button>
+                                        </Link>
+                                    </AccordionActions>
+                                </Accordion>
+                            ))}
+                        </div>
+
+                    </>
+                    : null}
+            </div>
+            {isDungeonMaster ? <>
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "row", padding: "2rem", width: "100%" }}>
 
                     <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/edit`} style={{ textDecoration: "none" }}>
                         <div style={{ display: "flex", justifyContent: "center" }}>
@@ -323,18 +323,18 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                 }}
                             >
                                 {translate.t('Edit Campaign')}
-                                </Button>
+                            </Button>
                         </div>
                     </Link>
 
                 </div>
             </>
                 : null}
-                {isDungeonMaster?
+            {isDungeonMaster ?
 
-                <DraftJSEditor readOnly={true} storagePath={`${selectedCampaignStoragePath}/CampaignLore.json`} isDungeonMaster={isDungeonMaster}  style={{backgroundColor:OLD_WHITE, marginTop:"1rem"}}/>
-            :null}
-                
+                <SensoDraftJS storagePath={`${selectedCampaignStoragePath}/CampaignLore.json`} readOnly={true} isDungeonMaster={isDungeonMaster} />
+                : null}
+
 
         </Container >
     );

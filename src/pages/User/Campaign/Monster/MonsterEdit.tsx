@@ -6,12 +6,9 @@ import { SensoTextInput, SensoNumberInput, SensoSwitch, SensoTextArrayInput, Sen
 
 import {
     getSelectedCampaign,
-    getSelectedCampaignMonsterMentionList,
-    getSelectedCampaignLocationMentionList,
     getSelectedMonster,
     getSelectedMonsterStoragePath,
     isDungeonMasterSelector,
-    getSelectedCampaignPlayerMentionList
 } from "../../../../store/selected/selectedSelectors";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../../../assets/constants/Constants";
@@ -21,8 +18,8 @@ import {
 
     Divider, Tooltip,
 } from "@material-ui/core";
-import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
 import useOwner from "../../../../store/hooks/useOwner";
+import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 type MonsterEditProps = {};
 const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
     const selectedMonster: ISelectedMonster | undefined = useSelector(
@@ -30,9 +27,6 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
     );
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(getSelectedCampaign)
     const isDungeonMaster = useSelector(isDungeonMasterSelector)
-    const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
-    const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList);
-    const locationMentionList = useSelector(getSelectedCampaignLocationMentionList);
     const monsterPath = useSelector(getSelectedMonsterStoragePath);
     const owner = useOwner()
     if (selectedMonster === undefined || selectedCampaign === undefined) {
@@ -246,10 +240,7 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
 
             <Divider />
             <h3>Lore and history:</h3>
-            <DraftJSEditor
-                playerMentionList={playerMentionList}
-                monsterMentionList={monsterMentionList}
-                locationMentionList={locationMentionList}
+            <SensoDraftJS
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}
                 storagePath={`${monsterPath}/monsterLore.json`}

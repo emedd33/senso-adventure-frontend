@@ -16,9 +16,9 @@ import {
     getSelectedSessionStoragePath,
     isDungeonMasterSelector,
 } from "../../../../store/selected/selectedSelectors";
-import DraftJSEditor from "../../../../components/DraftJSEditor/DraftJSEditor";
 import { storage } from "../../../../services/Firebase/firebase";
 import useOwner from "../../../../store/hooks/useOwner";
+import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 
 type CampaignSessionProps = {};
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
@@ -154,7 +154,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     {selectedSession?.session.subTitle}
                 </h3>
                 {selectedSession ?
-                    <DraftJSEditor
+                    <SensoDraftJS
                         isDungeonMaster={isDungeonMaster}
                         readOnly={true}
                         storagePath={`${selectedSessionStoragePath}/SessionStory.json`}

@@ -3,10 +3,12 @@ import {
   SET_ALERT_DIALOG,
   SET_AUTH_USER,
   SET_IS_SIDEBAR_SHOWN,
+  SET_IS_UPLOADING
 } from "./adminActions";
 
 const initialState: AdminState = {
   isLoading: false,
+  isUploading: false,
   error: {
     isError: false,
     message: "",
@@ -26,6 +28,11 @@ const adminReducer = (
       return {
         ...state,
         isLoading: action.payload,
+      };
+    case SET_IS_UPLOADING:
+      return {
+        ...state,
+        isUploading: action.payload,
       };
     case SET_ALERT_DIALOG:
       return {
