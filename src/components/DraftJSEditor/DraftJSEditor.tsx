@@ -44,7 +44,6 @@ type DraftJSEditorProps = {
   locationMentionList?: MentionData[]
   monsterMentionList?: MentionData[]
   style?: React.CSSProperties,
-
 };
 const staticToolbarPlugin = createToolbarPlugin();
 const { Toolbar } = staticToolbarPlugin;
@@ -59,7 +58,7 @@ const PlayerMentionSuggestions = playerMentionPlugin.MentionSuggestions;
 const MonsterMentionSuggestions = monsterMentionPlugin.MentionSuggestions;
 const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
 
-const plugins = [playerMentionPlugin, staticToolbarPlugin, locationMentionPlugin, monsterMentionPlugin];
+const plugins = [staticToolbarPlugin, playerMentionPlugin, locationMentionPlugin, monsterMentionPlugin];
 
 const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, isDungeonMaster = false, playerMentionList = [], locationMentionList = [], monsterMentionList = [], style }) => {
   const [isUploading, setIsUploading] = useState(false);
@@ -68,8 +67,8 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
     EditorState.createEmpty()
   );
   const [savedEditorState, setSavedEditorState] = useState<any>(editorState);
-  const [playerOpen, setPlayerOpen] = useState(true);
   const translate = useTranslation()
+  const [playerOpen, setPlayerOpen] = useState(true);
   const [monsterOpen, setMonsterOpen] = useState(true);
   const [locationOpen, setLocationOpen] = useState(true);
   const [playerSuggestions, setPlayerSuggestions] = useState(playerMentionList);
@@ -140,7 +139,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
         " "
       ))
   }
-  
+
   const insertDescriptionBlock = () => {
 
     const contentState = editorState.getCurrentContent();
@@ -300,11 +299,11 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
   if (playerMentionList && !playerSuggestions) {
     return <IsLoading />
   }
-  if (readOnly && !editorState.getCurrentContent().hasText()){
+  if (readOnly && !editorState.getCurrentContent().hasText()) {
     return null
   }
   return (
-    <Container style={style?style:{}}>
+    <Container style={style ? style : {}}>
       {readOnly ? null :
         <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr", width: "100%", padding: "0.3rem" }}>
 
@@ -325,7 +324,7 @@ const DraftJSEditor: React.FC<DraftJSEditorProps> = ({ storagePath, readOnly, is
               <Button onClick={() => insertSecretBlock()} style={{ width: "3rem" }}> <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
               </Button>
             </Tooltip>
-             <Tooltip title={`${translate.t("Insert description")} #`}>
+            <Tooltip title={`${translate.t("Insert description")} #`}>
               <Button onClick={() => insertDescriptionBlock()} style={{ width: "3rem" }}> <img src={descriptionIcon} style={{ width: "3rem" }} alt="Secret" />
               </Button>
             </Tooltip>
@@ -350,36 +349,36 @@ justify-items:start;
 z-index:100;
 `
 const AtomicComponents = (props: any) => {
-    
-    const {block, contentState} = props;
-    const initEntity = block.getEntityAt(0)
-    if (initEntity){
-      const entity = contentState.getEntity(initEntity);
-      const type = entity.getType();
-      switch (type){ 
-        case"SECRET":
+
+  const { block, contentState } = props;
+  const initEntity = block.getEntityAt(0)
+  if (initEntity) {
+    const entity = contentState.getEntity(initEntity);
+    const type = entity.getType();
+    switch (type) {
+      case "SECRET":
         return (
           <div style={{ backgroundColor: OLD_WHITE_LIGHT, borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
-      <Tooltip title="Secret note">
- 
-        <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
-      </Tooltip>
-      <EditorBlock {...props} />
-    </div>
-    )
-    case"DESCRIPTION":
-    return (
-      <div style={{ backgroundColor: "#bdbdbd", borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
-        <SensoDescription content={block.getText()}/>
-      </div>
-      )
-      
+            <Tooltip title="Secret note">
+
+              <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
+            </Tooltip>
+            <EditorBlock {...props} />
+          </div>
+        )
+      case "DESCRIPTION":
+        return (
+          <div style={{ backgroundColor: "#bdbdbd", borderRadius: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <SensoDescription content={block.getText()} />
+          </div>
+        )
+
       default:
-        break      
-      }
+        break
     }
-    return null
-    
+  }
+  return null
+
 };
 
 export default DraftJSEditor;

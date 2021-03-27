@@ -1,11 +1,11 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
+import SensoDraftJS from '../../../components/SensoDraftJS/SensoDraftJS'
 
 export default function Campaigns() {
-    console.log("hee")
     return (
         <>
-            <Redirect to="/" />
+            <SensoDraftJS storagePath="" readOnly={false} />
         </>
     )
 }

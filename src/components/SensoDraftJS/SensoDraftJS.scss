@@ -1,0 +1,16 @@
+figure{
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+.description{
+    background-color: #FCF7F0;
+    border-top: 1px solid gray;;
+    border-bottom: 1px solid gray;;
+}
+.note{
+    background-color: #cfcfcf;
+    border-radius: 5px;
+}
+.editor :global(.public-DraftEditor-content) {
+    min-height: 10rem;
+  }
