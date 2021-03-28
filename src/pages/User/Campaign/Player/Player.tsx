@@ -47,19 +47,19 @@ const Player: FunctionComponent<PlayerProps> = () => {
     }
     return (
         <Container>
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "90%" }}>
                 <div
                     style={{
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
+                        gridTemplateColumns: "2fr 1fr",
                     }}
                 >
-                    <h1 style={{ marginBottom: "0" }}>
+                    <h2 style={{ marginBottom: "0" }}>
                         {selectedPlayer.player.name}
                         {selectedPlayer.player.isPublished === "FALSE"
                             ? `(${translate.t('Not published')})`
                             : null}
-                    </h1>
+                    </h2>
                     <div style={{ display: "flex", justifyContent: "flex-end", }}>
                         {isDungeonMaster ? (
                             <>
@@ -143,7 +143,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                 <NestedContainer>
                     <NestedNestedContainer>
                         <div>
-                            <b>{translate.t('Passive Perception')}: </b>{" "}
+                            <b>{translate.t('Passive perception')}: </b>{" "}
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
                             {selectedPlayer.player.stats.passivePerception}
@@ -218,7 +218,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             width: "5rem",
                         }}
                     >
-                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{translate.t('STR')}</b>
+                        <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{translate.t('Str')}</b>
                         <h3>
 
                             {selectedPlayer.player.stats.strength.value}(

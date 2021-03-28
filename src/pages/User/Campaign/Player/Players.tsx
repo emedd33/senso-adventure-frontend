@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import {
     getSelectedCampaign,
     getSelectedCampaignPlayers,
+    isDungeonMasterSelector,
 } from "../../../../store/selected/selectedSelectors";
 import styled from "styled-components";
 
@@ -20,12 +21,13 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import useOwner from "../../../../store/hooks/useOwner";
+import PlayerShort from "../../../../components/SensoPlayer/PlayerShort";
 type PlayerProps = {};
 const Player: FunctionComponent<PlayerProps> = () => {
     const players = useSelector(getSelectedCampaignPlayers);
     const selectedCampaign = useSelector(getSelectedCampaign);
     const owner = useOwner()
-    console.log("players");
+    const isDungeonMaster = useSelector(isDungeonMasterSelector)
 
     return (
         <Container>
@@ -50,9 +52,9 @@ const Player: FunctionComponent<PlayerProps> = () => {
 
                         </AccordionSummary>
                         <AccordionDetails
-                            style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
+
                         >
-                            <p>{player.description}</p>
+                            <PlayerShort player={player} isDungeonMaster={isDungeonMaster} />
                         </AccordionDetails>
                         <AccordionActions>
                             <Link

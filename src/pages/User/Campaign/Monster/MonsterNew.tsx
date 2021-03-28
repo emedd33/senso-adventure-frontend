@@ -10,14 +10,16 @@ import {
 import { setSelectedMonster } from "../../../../store/selected/selectedCreators";
 import { useHistory } from "react-router-dom";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import dnd5apiIcon from "../../../../assets/icons/dndapi_icon.png"
 import { database } from "../../../../services/Firebase/firebase";
 import useOwner from "../../../../store/hooks/useOwner";
+import { useTranslation } from "react-i18next";
 type MonsterNewProps = {};
 type ApiType = { index: string, name: string, url: string }
 const MonsterNew: FunctionComponent<MonsterNewProps> = () => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const translate = useTranslation()
     const [isLoading, setIsLoading] = useState(false)
     const [monsterName, setMonsterName] = useState("");
     const selectedCampaign = useSelector(getSelectedCampaign);
@@ -120,19 +122,19 @@ const MonsterNew: FunctionComponent<MonsterNewProps> = () => {
         <TitleContainer>
             {!isLoading ?
                 <>
-                    <h1 style={{ textAlign: "center", width: "100%" }}>Create new monster or Npc</h1>
+                    <h1 style={{ textAlign: "center", width: "100%" }}>{translate.t(`New monster/NPC`)}</h1>
                     <TextField
                         id="outlined-multiline-static"
-                        placeholder="Write a fitting name for the monster"
+                        placeholder={translate.t(`Write a monster name`)}
                         variant="filled"
                         error={monsterNameError}
                         value={monsterName}
                         disabled={false}
                         style={{ width: "100%" }}
-                        label="Monster Name"
+                        label={translate.t("Name of monster or Npc")}
                         onChange={(event) => setMonsterName(event.target.value)}
                     />
-                    <h3>Use existing dnd monsters as template </h3>
+                    <h3>{translate.t(`Use existing dnd monsters as template`)}</h3>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "1rem", alignItems: "center" }}>
 
 
@@ -160,8 +162,8 @@ const MonsterNew: FunctionComponent<MonsterNewProps> = () => {
                                 renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} style={{ backgroundColor: OLD_WHITE_DARK }} label="" variant="outlined" />}
                             />
                             : <CircularProgress />}
-                        <Tooltip title="Using template monsters from https://www.dnd5eapi.co/">
-                            <HelpOutlineIcon />
+                        <Tooltip title={translate.t(`Template monsters from`) + ` https://www.dnd5eapi.co/`}>
+                            <img src={dnd5apiIcon} alt="dnd5api icon" style={{ width: "2rem" }} />
 
                         </Tooltip>
                     </div>
@@ -175,8 +177,8 @@ const MonsterNew: FunctionComponent<MonsterNewProps> = () => {
                             color="primary"
                             onClick={() => createMonster()}
                         >
-                            Submit
-      </Button>
+                            {translate.t(`Submit`)}
+                        </Button>
                     </div>
                 </>
                 : <CircularProgress />}

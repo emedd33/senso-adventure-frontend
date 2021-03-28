@@ -72,14 +72,14 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({ initProfi
 
                 <TextField
                     variant="outlined"
-                    label={"Proficiency"}
+                    label={translate.t(`Proficiency`)}
                     value={newKey}
                     style={{ backgroundColor: OLD_WHITE_DARK }}
                     onChange={(event) => setNewKey(event.target.value)}
                 />
                 <TextField
                     variant="outlined"
-                    label={"Value"}
+                    label={translate.t(`Value`)}
                     type="number"
                     value={newValue}
                     style={{ backgroundColor: OLD_WHITE_DARK }}

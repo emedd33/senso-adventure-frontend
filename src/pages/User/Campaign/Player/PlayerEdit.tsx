@@ -142,7 +142,7 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
                 <p>
-                    <b>{translate.t('Passive Perception')}:</b>{selectedPlayer.player.stats.wisdom.value}
+                    <b>{translate.t('Passive perception')}:</b>{selectedPlayer.player.stats.wisdom.value}
                 </p>
                 <i>{translate.t('Calculated from wisdom')}</i>
             </div>

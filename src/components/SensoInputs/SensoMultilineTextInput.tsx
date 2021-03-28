@@ -25,7 +25,7 @@ const SensoMultilineTextInput: React.FC<SensoMultilineTextInputProps> = ({ initV
                 database.ref(firebasePath).set(value)
             }
         }
-        , 1000)
+        , 3000)
     return (
         <Container style={style}>
 

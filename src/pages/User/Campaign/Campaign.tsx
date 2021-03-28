@@ -33,6 +33,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useWindowSize from "../../../store/hooks/useWindowSize";
 import { useTranslation } from "react-i18next";
 import SensoDraftJS from "../../../components/SensoDraftJS/SensoDraftJS";
+import PlayerShort from "../../../components/SensoPlayer/PlayerShort";
 
 const MenuItem: React.FC<{ text: any; selected: any, key: number }> = ({
     text,
@@ -239,9 +240,8 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
                                     </AccordionSummary>
                                     <AccordionDetails
-                                        style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr", margin: 0 }}
                                     >
-                                        <p>{player.description}</p>
+                                        <PlayerShort player={player} isDungeonMaster={isDungeonMaster} />
                                     </AccordionDetails>
                                     <AccordionActions>
                                         <Link

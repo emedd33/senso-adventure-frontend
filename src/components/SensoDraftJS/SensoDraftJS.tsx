@@ -185,10 +185,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({ storagePath, readOnly, isDu
             if (type === 'atomic') {
                 return {
                     component: SensoDraftJSAtomic,
-                    editable: true,
-                    props: {
-                        readOnly: readOnly
-                    }
+                    readOnly: readOnly,
                 };
             }
         }
@@ -249,7 +246,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({ storagePath, readOnly, isDu
                         {
                             // may be use React.Fragment instead of div to improve perfomance after React 16
                             (externalProps) => (
-                                <div style={{ display: "flex", alignItems: "center" }}>
+                                <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
                                     <Tooltip title={`${translate.t("To add player type")} @`}>
                                         <Button onClick={() => setEditorState(insertCharacter("@", editorState))} style={{ width: "2rem" }}> <img src={playerIcon} style={{ width: "2rem" }} alt="New Character" />
                                         </Button>
