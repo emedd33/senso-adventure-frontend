@@ -1,2 +1,2 @@
-import resources from "./translations"
-export {resources}
+import resources from "./translations";
+export { resources };

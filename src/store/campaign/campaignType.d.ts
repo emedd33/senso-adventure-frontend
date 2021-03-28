@@ -1,4 +1,3 @@
-
 interface ICampaign {
   slug: string;
   title: string;
@@ -6,10 +5,9 @@ interface ICampaign {
   slug: string;
   isNew: boolean;
   id: string;
-  dungeonMaster: { username: string, uid: string };
+  dungeonMaster: { username: string; uid: string };
   sessions?: ISession[];
   monsters?: IMonster[];
   players?: IPlayer[];
   locations?: ILocation[];
-
 }

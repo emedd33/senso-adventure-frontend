@@ -11,7 +11,7 @@ import { getCurrentUser } from "../../services/Firebase/authentication";
 import { getAuthUser, getIsLoading } from "../../store/admin/adminSelectors";
 import { Redirect } from "react-router";
 
-export interface ProfileIndexProps { }
+export interface ProfileIndexProps {}
 
 const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   const dispatch = useDispatch();
@@ -21,10 +21,8 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [firstNewPassword, setFirstNewPassword] = useState("");
   const [secondNewPassword, setSecondNewPassword] = useState("");
-  const currentUser = getCurrentUser()
-  const authUser = useSelector(getAuthUser)
-
-
+  const currentUser = getCurrentUser();
+  const authUser = useSelector(getAuthUser);
 
   const handleChangePassword = () => {
     if (!firstNewPassword || !secondNewPassword) {
@@ -56,10 +54,10 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                 .updatePassword(firstNewPassword)
                 .then(function () {
                   dispatch(setAlertDialog("Password was changed", false, true));
-                  setCurrentPassword("")
-                  setFirstNewPassword("")
-                  setSecondNewPassword("")
-                  setIsChangingPassword(false)
+                  setCurrentPassword("");
+                  setFirstNewPassword("");
+                  setSecondNewPassword("");
+                  setIsChangingPassword(false);
                 })
                 .catch(function (error) {
                   console.log(
@@ -86,19 +84,17 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   if (isLoading) {
     return (
       <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-
         <IsLoading />
       </Container>
     );
   }
   if (!authUser) {
-    return <Redirect to="/" />
+    return <Redirect to="/" />;
   }
 
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-
-      < ContentContainer >
+      <ContentContainer>
         <h1>My Profile</h1>
         <div style={{ flex: 8, width: "90%" }}>
           <div
@@ -132,9 +128,9 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
             style={
               isChangingPassword
                 ? {
-                  height: "20rem",
-                  overflow: "hidden",
-                }
+                    height: "20rem",
+                    overflow: "hidden",
+                  }
                 : { height: "0rem" }
             }
           >
@@ -143,17 +139,17 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                 style={
                   isChangingPassword
                     ? {
-                      opacity: 1,
-                      padding: "1rem",
-                      display: "initial",
-                      transition: "200ms",
-                    }
+                        opacity: 1,
+                        padding: "1rem",
+                        display: "initial",
+                        transition: "200ms",
+                      }
                     : {
-                      opacity: 0,
-                      padding: "0",
-                      display: "none",
-                      transition: "200ms",
-                    }
+                        opacity: 0,
+                        padding: "0",
+                        display: "none",
+                        transition: "200ms",
+                      }
                 }
               >
                 <div
@@ -172,9 +168,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     placeholder="Write your current password"
                     margin="normal"
                     style={{ width: "90%" }}
-                    onChange={(event) =>
-                      setCurrentPassword(event.target.value)
-                    }
+                    onChange={(event) => setCurrentPassword(event.target.value)}
                   />
                 </div>
                 <div
@@ -234,7 +228,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     onClick={() => handleChangePassword()}
                   >
                     Change password
-                    </Button>
+                  </Button>
                 </div>
               </div>
             ) : null}
@@ -256,16 +250,15 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
             style={{ width: "90%" }}
           >
             {" "}
-              Log out
-            </Button>
+            Log out
+          </Button>
         </div>
-      </ContentContainer >
-    </Container >
+      </ContentContainer>
+    </Container>
   );
 };
 
-const ProfileRowString = styled.h2`
-`;
+const ProfileRowString = styled.h2``;
 const ChangePasswordContainer = styled.div`
   height: 0rem;
   margin: 1rem;

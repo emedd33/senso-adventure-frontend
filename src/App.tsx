@@ -10,7 +10,7 @@ import Navbar from "./components/Navbar/Navbar";
 import "./App.scss";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import LoginIndex from "./pages/Login/LoginIndex";
-import NotFound from "./pages/NotFound/NotFound"
+import NotFound from "./pages/NotFound/NotFound";
 import StickyFooter from "./components/Footer/StickyFooter";
 import ProfileIndex from "./pages/Profile/ProfileIndex";
 import Home from "./pages/Home/Home";
@@ -23,14 +23,13 @@ export default function App() {
   const dispatch = useDispatch();
 
   const authUser = useSelector(getAuthUser);
-  const authUserPath = useSelector(getAuthUserPath)
+  const authUserPath = useSelector(getAuthUserPath);
   useEffect(() => {
     authentication.onAuthStateChanged(function (user) {
       if (user) {
         dispatch(setAuthUser(user));
       }
     });
-    
   }, [dispatch, authUser]);
   return (
     <Router>
@@ -41,10 +40,18 @@ export default function App() {
 
       <Switch>
         <Route exact path="/profile">
-          {authUser && authUser.displayName ? <ProfileIndex /> : <Redirect to="/" />}
+          {authUser && authUser.displayName ? (
+            <ProfileIndex />
+          ) : (
+            <Redirect to="/" />
+          )}
         </Route>
         <Route path="/login">
-          {authUser && authUser.displayName ? <Redirect to="/" /> : <LoginIndex />}
+          {authUser && authUser.displayName ? (
+            <Redirect to="/" />
+          ) : (
+            <LoginIndex />
+          )}
         </Route>
         <Route path="/user/:username/">
           <UserIndex />
@@ -58,10 +65,9 @@ export default function App() {
         </Route>
       </Switch>
       <StickyFooter />
-    </Router >
+    </Router>
   );
 }
-
 
 const LeftGradientDiv = styled.div`
   background: linear-gradient(to right, #000, transparent);
@@ -69,7 +75,7 @@ const LeftGradientDiv = styled.div`
   height: 100%;
   position: fixed;
   top: 0;
-  z-index:0;
+  z-index: 0;
   backgroundcolor: black;
 `;
 const RightGradientDiv = styled.div`

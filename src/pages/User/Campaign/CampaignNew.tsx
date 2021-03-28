@@ -10,23 +10,21 @@ import { setAlertDialog } from "../../../store/admin/adminCreator";
 import { getAuthUser } from "../../../store/admin/adminSelectors";
 import { useImageFile } from "../../../store/hooks/useImageFile";
 import { isValidImageFile } from "../../../utils/isValidImageFile";
-import { pushToDatabase } from "../../../services/Firebase/database"
-import { pushToStorage } from "../../../services/Firebase/storage"
-import { transformTitleToSlug } from "../../../utils/StringProcessing"
+import { pushToDatabase } from "../../../services/Firebase/database";
+import { pushToStorage } from "../../../services/Firebase/storage";
+import { transformTitleToSlug } from "../../../utils/StringProcessing";
 import useOwner from "../../../store/hooks/useOwner";
 import { useTranslation } from "react-i18next";
 import BackgroundImage from "../../../assets/Images/background_home.jpg";
 
-export interface CampaignNewProps {
-
-}
+export interface CampaignNewProps {}
 
 const CampaignNew: React.FC<CampaignNewProps> = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const owner = useOwner()
-  const translate = useTranslation()
-  const authUser = useSelector(getAuthUser)
+  const owner = useOwner();
+  const translate = useTranslation();
+  const authUser = useSelector(getAuthUser);
   const [isLoading, setIsLoading] = useState(false);
 
   const [campaignTitle, setCampaignTitle] = useState<string>();
@@ -44,7 +42,6 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
     if (user) {
       // Checks if the inputs are valid
 
-
       // Creates instances of the campaign is a new one
       if (!campaignTitle) {
         setCampaignTitleError(true);
@@ -56,15 +53,14 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
       } else {
         setCampaignTitleError(false);
       }
-      let title = campaignTitle
+      let title = campaignTitle;
       let slug = transformTitleToSlug(campaignTitle);
       var newCampaign = {
         dungeonMaster: { username: user.displayName, uid: user.uid },
         title: title,
         slug: slug,
       };
-      await pushToDatabase(`users/${user.displayName}/campaigns/`, newCampaign)
-
+      await pushToDatabase(`users/${user.displayName}/campaigns/`, newCampaign);
 
       // Updates storage files of title image and background image
       if (slug && title) {
@@ -76,37 +72,46 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
         };
 
         if (isValidImageFile(campaignBackgroundImageFile)) {
-
-          pushToStorage(`users/${user.displayName}/campaigns/${slug}/BackgroundImage`, campaignBackgroundImageFile.file.file, metadata)
+          pushToStorage(
+            `users/${user.displayName}/campaigns/${slug}/BackgroundImage`,
+            campaignBackgroundImageFile.file.file,
+            metadata
+          );
         }
         if (isValidImageFile(campaignTitleImageFile)) {
-          pushToStorage(`users/${user.displayName}/campaigns/${slug}/TitleImage`, campaignTitleImageFile.file.file, metadata)
+          pushToStorage(
+            `users/${user.displayName}/campaigns/${slug}/TitleImage`,
+            campaignTitleImageFile.file.file,
+            metadata
+          );
         }
         history.push(`/user/${authUser.displayName}/campaigns/${slug}`);
       }
     }
-  }
+  };
   if (!owner) {
-    return <Container>
-      <IsLoading />
-    </Container>
+    return (
+      <Container>
+        <IsLoading />
+      </Container>
+    );
   }
   if (!authUser || owner !== authUser.displayName) {
-    return <Redirect to="/" />
+    return <Redirect to="/" />;
   }
   return (
-    <ParentContainer >
+    <ParentContainer>
       {isLoading ? (
         <IsLoading />
       ) : (
         <Container>
           <>
             <h1 style={{ textAlign: "center", fontFamily: "serif" }}>
-              {translate.t('New Campaign')}
+              {translate.t("New Campaign")}
             </h1>
             <TextField
               id="outlined-multiline-static"
-              placeholder={translate.t('Write a title')}
+              placeholder={translate.t("Write a title")}
               style={{ width: "50%", textAlign: "center" }}
               variant="outlined"
               error={campaignTitleError}
@@ -134,7 +139,7 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
               >
                 <h3 style={{ fontFamily: "serif", textAlign: "center" }}>
                   {" "}
-                  {translate.t('Background Image')}
+                  {translate.t("Background Image")}
                 </h3>
               </div>
               <div
@@ -146,7 +151,6 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
                   alignItems: "center",
                 }}
               >
-
                 <ImageUpload
                   imageFile={campaignBackgroundImageFile.file}
                   setImageFile={setCampaignBackgroundImageFile}
@@ -176,7 +180,7 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
               >
                 <h3 style={{ fontFamily: "serif" }}>
                   {" "}
-                  {translate.t('Campaign title image')}
+                  {translate.t("Campaign title image")}
                 </h3>
               </div>
               <div
@@ -188,7 +192,6 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
                   alignItems: "center",
                 }}
               >
-
                 <ImageUpload
                   imageFile={campaignTitleImageFile.file}
                   setImageFile={setCampaignTitleImageFile}
@@ -200,18 +203,21 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
             <Button
               variant="contained"
               onClick={submit}
-              style={{ margin: "1rem", marginBottom: "5rem", textTransform:"none"}}
+              style={{
+                margin: "1rem",
+                marginBottom: "5rem",
+                textTransform: "none",
+              }}
               color="primary"
             >
-              {translate.t('Submit')}
+              {translate.t("Submit")}
             </Button>
           </>
-
         </Container>
       )}
     </ParentContainer>
   );
-}
+};
 const ParentContainer = styled.div`
   z-index: 300;
   display: flex;

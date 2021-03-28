@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useDispatch } from "react-redux";
 import { setAlertDialog } from "../../store/admin/adminCreator";
-import { resetPassword } from "../../services/Firebase/authentication"
+import { resetPassword } from "../../services/Firebase/authentication";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
   },
 }));
-export interface SignUpProps { }
+export interface SignUpProps {}
 
 const ForgottenPasswordForm: React.FC<SignUpProps> = () => {
   const classes = useStyles();
@@ -66,7 +66,6 @@ const ForgottenPasswordForm: React.FC<SignUpProps> = () => {
           )
         );
       });
-
   };
   useEffect(() => {
     if (email.trim()) {

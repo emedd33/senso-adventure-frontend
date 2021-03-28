@@ -11,117 +11,123 @@ import { setAlertDialog } from "../../../../store/admin/adminCreator";
 import styled from "styled-components";
 import { getNewSessionDay } from "../../../../store/campaign/campaignSelectors";
 import { database } from "../../../../services/Firebase/firebase";
-import { getSelectedCampaign, getSelectedCampaignDatabasePath } from "../../../../store/selected/selectedSelectors";
+import {
+  getSelectedCampaign,
+  getSelectedCampaignDatabasePath,
+} from "../../../../store/selected/selectedSelectors";
 import useOwner from "../../../../store/hooks/useOwner";
-export interface SessionNewProps { }
+export interface SessionNewProps {}
 
 const SessionNew: React.FC<SessionNewProps> = () => {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const owner = useOwner()
-    const selectedCampaign = useSelector(getSelectedCampaign);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const owner = useOwner();
+  const selectedCampaign = useSelector(getSelectedCampaign);
 
-    const sessionDay = useSelector(getNewSessionDay);
-    const [sessionTitle, setSessionTitle] = useState<string>("");
-    const [sessionSubTitle, setSessionSubTitle] = useState<string>("");
-    const selectedCampaignDatabasePath = useSelector(getSelectedCampaignDatabasePath)
-    const [sessionTitleError, setSessionTitleError] = useState<boolean>(false);
+  const sessionDay = useSelector(getNewSessionDay);
+  const [sessionTitle, setSessionTitle] = useState<string>("");
+  const [sessionSubTitle, setSessionSubTitle] = useState<string>("");
+  const selectedCampaignDatabasePath = useSelector(
+    getSelectedCampaignDatabasePath
+  );
+  const [sessionTitleError, setSessionTitleError] = useState<boolean>(false);
 
-    const [sessionDate, setSessionDate] = useState<string>(
-        new Date().toDateString()
-    );
+  const [sessionDate, setSessionDate] = useState<string>(
+    new Date().toDateString()
+  );
 
-    const submitSession = () => {
-        if (selectedCampaign) {
-            if (!sessionTitle) {
-                setSessionTitleError(true);
-                dispatch(
-                    setAlertDialog("Please fille out the Session Title", true, true)
-                );
-                return;
-            }
+  const submitSession = () => {
+    if (selectedCampaign) {
+      if (!sessionTitle) {
+        setSessionTitleError(true);
+        dispatch(
+          setAlertDialog("Please fille out the Session Title", true, true)
+        );
+        return;
+      }
 
-            const toUpload: ISession = {
-                ...NEW_SESSION,
-                date: sessionDate ? sessionDate : new Date().toDateString(),
-                title: sessionTitle,
-                subTitle: sessionSubTitle ? sessionSubTitle : "",
-                campaignTitle: selectedCampaign.campaign.title,
-                sessionDay: sessionDay ? sessionDay : 1,
-                slug: sessionTitle.replace(/\s/g, ""),
-            };
-            database.ref(`${selectedCampaignDatabasePath}/sessions`)
-                .push(toUpload)
-                .then((snap) => {
-                    snap.once("value", async (snapshot: any) => {
-                        history.push(
-                            `/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/sessions/${toUpload.slug}`
-                        );
-                    });
-                });
-        }
-    };
-
-    if (!selectedCampaign) {
-        return <IsLoading />;
+      const toUpload: ISession = {
+        ...NEW_SESSION,
+        date: sessionDate ? sessionDate : new Date().toDateString(),
+        title: sessionTitle,
+        subTitle: sessionSubTitle ? sessionSubTitle : "",
+        campaignTitle: selectedCampaign.campaign.title,
+        sessionDay: sessionDay ? sessionDay : 1,
+        slug: sessionTitle.replace(/\s/g, ""),
+      };
+      database
+        .ref(`${selectedCampaignDatabasePath}/sessions`)
+        .push(toUpload)
+        .then((snap) => {
+          snap.once("value", async (snapshot: any) => {
+            history.push(
+              `/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/sessions/${toUpload.slug}`
+            );
+          });
+        });
     }
-    return (
-        <TitleContainer>
-            <TextField
-                placeholder="Write a fitting title"
-                variant="filled"
-                disabled={false}
-                style={{ width: "90%", margin: "1rem" }}
-                label="Session title"
-                error={sessionTitleError}
-                value={sessionTitle}
-                onChange={(event) => setSessionTitle(event.target.value)}
-            />
+  };
 
-            <TextField
-                placeholder="Write a fitting subtitle"
-                style={{ width: "90%", margin: "1rem" }}
-                variant="filled"
-                label="Subtitle"
-                value={sessionSubTitle}
-                onChange={(event) => setSessionSubTitle(event.target.value)}
-            />
-            <TextField
-                label="Session day"
-                placeholder="Which session is this?"
-                type="number"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                style={{ width: "90%", margin: "1rem" }}
-                value={sessionDay}
-                disabled={false}
-            />
+  if (!selectedCampaign) {
+    return <IsLoading />;
+  }
+  return (
+    <TitleContainer>
+      <TextField
+        placeholder="Write a fitting title"
+        variant="filled"
+        disabled={false}
+        style={{ width: "90%", margin: "1rem" }}
+        label="Session title"
+        error={sessionTitleError}
+        value={sessionTitle}
+        onChange={(event) => setSessionTitle(event.target.value)}
+      />
 
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DatePicker
-                    autoOk
-                    style={{ margin: "1rem" }}
-                    clearable
-                    disableFuture
-                    value={sessionDate}
-                    onChange={(date) =>
-                        setSessionDate(
-                            date ? date.toDateString() : new Date().toDateString()
-                        )
-                    }
-                />
-            </MuiPickersUtilsProvider>
-            <Button
-                variant="contained"
-                color="primary"
-                style={{ margin: "2rem" }}
-                onClick={submitSession}
-            >
-                Continue
+      <TextField
+        placeholder="Write a fitting subtitle"
+        style={{ width: "90%", margin: "1rem" }}
+        variant="filled"
+        label="Subtitle"
+        value={sessionSubTitle}
+        onChange={(event) => setSessionSubTitle(event.target.value)}
+      />
+      <TextField
+        label="Session day"
+        placeholder="Which session is this?"
+        type="number"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        style={{ width: "90%", margin: "1rem" }}
+        value={sessionDay}
+        disabled={false}
+      />
+
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <DatePicker
+          autoOk
+          style={{ margin: "1rem" }}
+          clearable
+          disableFuture
+          value={sessionDate}
+          onChange={(date) =>
+            setSessionDate(
+              date ? date.toDateString() : new Date().toDateString()
+            )
+          }
+        />
+      </MuiPickersUtilsProvider>
+      <Button
+        variant="contained"
+        color="primary"
+        style={{ margin: "2rem" }}
+        onClick={submitSession}
+      >
+        Continue
       </Button>
-        </TitleContainer>
-    );
+    </TitleContainer>
+  );
 };
 
 const TitleContainer = styled.div`

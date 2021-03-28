@@ -10,25 +10,27 @@ import SignupForm from "../../components/SignupForm/SignupForm";
 import { getUrlFromStorage } from "../../services/Firebase/storage";
 import { getAuthUser, getIsLoading } from "../../store/admin/adminSelectors";
 
-export interface LoginProps { }
+export interface LoginProps {}
 
 const LoginIndex: React.FC<LoginProps> = () => {
   const [imageUrl, setImageUrl] = useState("");
-  const isLoading = useSelector(getIsLoading)
-  const authUser = useSelector(getAuthUser)
+  const isLoading = useSelector(getIsLoading);
+  const authUser = useSelector(getAuthUser);
   useEffect(() => {
-    getUrlFromStorage(LOGIN_BACKGROUND_IMAGE_STORAGE_PATH)
-      .then((url: string) => setImageUrl(url));
+    getUrlFromStorage(LOGIN_BACKGROUND_IMAGE_STORAGE_PATH).then((url: string) =>
+      setImageUrl(url)
+    );
   }, []);
   if (authUser && authUser.user.displayName) {
-    return <Redirect to="/" />
+    return <Redirect to="/" />;
   }
 
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
-      {isLoading ? <IsLoading />
-        : <>
-
+      {isLoading ? (
+        <IsLoading />
+      ) : (
+        <>
           <Route exact path="/login">
             <LoginForm />
           </Route>
@@ -39,7 +41,7 @@ const LoginIndex: React.FC<LoginProps> = () => {
             <ForgottenPasswordForm />
           </Route>
         </>
-      }
+      )}
     </Container>
   );
 };

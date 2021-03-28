@@ -1,4 +1,3 @@
-
 interface IError {
   message: string;
   isError: boolean;
@@ -9,9 +8,9 @@ type AdminState = {
   isUploading: boolean;
   authUser?: firebase.User;
   error: IError;
-  env: string,
-  port: string,
-  isSidebarShown: boolean,
+  env: string;
+  port: string;
+  isSidebarShown: boolean;
 };
 type ILogin = {
   email: string;

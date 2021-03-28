@@ -13,7 +13,7 @@ type ScrollProps = {
   campaignSlug: string;
   onClick: any;
   isOpaque: boolean;
-  owner?: string
+  owner?: string;
 };
 
 function Scroll({
@@ -24,7 +24,7 @@ function Scroll({
   campaignSlug,
   onClick,
   isOpaque,
-  owner
+  owner,
 }: ScrollProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
@@ -37,7 +37,7 @@ function Scroll({
     }
   }, [campaignSlug, owner]);
   return (
-    <ScrollButton onClick={onClick} >
+    <ScrollButton onClick={onClick}>
       <ScrollContainer style={isOpaque ? { opacity: 0.5 } : {}}>
         <div>
           <h5 style={{ margin: 0, opacity: 0.7 }}>Session day: {sessionDay}</h5>
@@ -68,7 +68,7 @@ const ScrollButton = styled(Button)`
 const StoryImage = styled.img`
   margin-top: 1rem;
   width: 70%;
-  max-height:5rem;
+  max-height: 5rem;
   max-width: 15rem;
 `;
 const ScrollContainer = styled.div`
@@ -83,7 +83,6 @@ const ScrollContainer = styled.div`
   justify-content: center;
   display: flex;
   flex-direction: column;
-
 `;
 
 const ScrollTitle = styled.h3`

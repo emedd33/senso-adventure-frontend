@@ -53,7 +53,6 @@ const selectedReducer = (
       state.selectedLocation = action.payload;
       return state;
     }
-
   }
   return state;
 };

@@ -1,16 +1,9 @@
-import React, { FunctionComponent, useMemo, } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import {
-    Route,
-    Switch,
-    useLocation,
-} from "react-router-dom";
-
-
+import { Route, Switch, useLocation } from "react-router-dom";
 
 import "react-tiny-fab/dist/styles.css";
-
 
 import UserHome from "./UserHome";
 import { setCampaigns } from "../../store/campaign/campaignCreator";
@@ -22,49 +15,44 @@ import CampaignNew from "./Campaign/CampaignNew";
 
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
-    const location = useLocation();
-    const dispatch = useDispatch();
-    const owner = useOwner()
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const owner = useOwner();
 
-    useMemo(() => {
-        if (location) {
-            database.ref(`users/${owner}/campaigns`).on("value", (campaigns) => {
-                dispatch(setCampaigns(campaigns.val()))
-            }
-            )
-        }
-        return () => setCampaigns()
-    }, [location, owner, dispatch])
+  useMemo(() => {
+    if (location) {
+      database.ref(`users/${owner}/campaigns`).on("value", (campaigns) => {
+        dispatch(setCampaigns(campaigns.val()));
+      });
+    }
+    return () => setCampaigns();
+  }, [location, owner, dispatch]);
 
-
-
-    return (
-        <Container >
-
-            <Switch>
-                < Route exact path="/user/:username/newcampaign">
-                    <CampaignNew />
-                </Route>
-                <Route path="/user/:username/campaigns">
-                    <CampaignIndex />
-                </Route>
-                <Route exact path="/user/:username/">
-                    <UserHome />
-                </Route>
-                <Route>
-                    <NotFound />
-                </Route>
-            </Switch>
-
-        </Container >
-    );
+  return (
+    <Container>
+      <Switch>
+        <Route exact path="/user/:username/newcampaign">
+          <CampaignNew />
+        </Route>
+        <Route path="/user/:username/campaigns">
+          <CampaignIndex />
+        </Route>
+        <Route exact path="/user/:username/">
+          <UserHome />
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+    </Container>
+  );
 };
 const Container = styled.div`
   display: flex;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   width: 100%;
@@ -73,4 +61,3 @@ const Container = styled.div`
 `;
 
 export default UserIndex;
-

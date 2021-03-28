@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function NavbarHeaderMenu() {
   const classes = useStyles();
-  const translate = useTranslation()
+  const translate = useTranslation();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const authUser = useSelector(getAuthUser);
@@ -63,7 +63,6 @@ export default function NavbarHeaderMenu() {
 
   if (!authUser) {
     return (
-
       <Link
         to="/login"
         style={{
@@ -79,14 +78,12 @@ export default function NavbarHeaderMenu() {
             alignItems: "center",
           }}
         >
-
-          {translate.t('Login')}
+          {translate.t("Login")}
         </span>
       </Link>
     );
   }
   return (
-
     <div className={classes.root}>
       <div>
         <Button
@@ -126,7 +123,7 @@ export default function NavbarHeaderMenu() {
                       style={{ textDecoration: "none", color: "black" }}
                     >
                       <MenuItem onClick={() => setOpen(false)}>
-                        {translate.t('Profile')}
+                        {translate.t("Profile")}
                       </MenuItem>
                     </Link>
                   </MenuList>

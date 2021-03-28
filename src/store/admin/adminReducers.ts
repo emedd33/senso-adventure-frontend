@@ -3,7 +3,7 @@ import {
   SET_ALERT_DIALOG,
   SET_AUTH_USER,
   SET_IS_SIDEBAR_SHOWN,
-  SET_IS_UPLOADING
+  SET_IS_UPLOADING,
 } from "./adminActions";
 
 const initialState: AdminState = {
@@ -48,8 +48,7 @@ const adminReducer = (
       return {
         ...state,
         isSidebarShown: action.payload,
-      }
-
+      };
   }
   return state;
 };

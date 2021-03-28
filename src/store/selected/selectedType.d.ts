@@ -3,7 +3,7 @@ type SelectedState = {
   selectedSession?: ISelectedSession;
   selectedMonster?: ISelectedMonster;
   selectedPlayer?: ISelectedPlayer;
-  selectedLocation?: ISelectedLocation,
+  selectedLocation?: ISelectedLocation;
   backgroundImage?: string;
 };
 
@@ -30,8 +30,8 @@ type ISelectedMonster = {
 type ISelectedPlayer = {
   player: IPlayer;
   id: string;
-}
+};
 type ISelectedLocation = {
   location: ILocation;
   id: string;
-}
+};

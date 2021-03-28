@@ -3,12 +3,7 @@ import styled from "styled-components";
 import BackgroundImage from "../../assets/Images/background_home.jpg";
 type HomeProps = {};
 const Home: FunctionComponent<HomeProps> = () => {
-
-  return (
-    <Container>
-
-    </Container>
-  );
+  return <Container></Container>;
 };
 const Container = styled.div`
   z-index: 300;
@@ -24,6 +19,5 @@ const Container = styled.div`
   padding-top: 10rem;
   min-height: 100vh;
 `;
-
 
 export default Home;

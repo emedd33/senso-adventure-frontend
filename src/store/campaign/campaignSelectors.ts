@@ -14,9 +14,6 @@ export const getAllCampaigns = (state: RootReducerProp) => {
   return state.rootCampaigns?.campaigns;
 };
 
-
-
-
 export const getAllSessions = (state: RootReducerProp) => {
   let sessions: (
     | { campaignId: string; sessionId: string; session: ISession }
@@ -26,15 +23,16 @@ export const getAllSessions = (state: RootReducerProp) => {
     sessions = Object.entries(state.rootCampaigns.campaigns)
       .map(([campaignId, campaign]) => {
         if (campaign.sessions) {
-          return filterUnpublished(Object.entries(campaign.sessions), isDungeonMasterSelector(state)).map(
-            ([sessionId, session]) => {
-              return {
-                campaignId: campaignId,
-                sessionId: sessionId,
-                session: session,
-              };
-            }
-          );
+          return filterUnpublished(
+            Object.entries(campaign.sessions),
+            isDungeonMasterSelector(state)
+          ).map(([sessionId, session]) => {
+            return {
+              campaignId: campaignId,
+              sessionId: sessionId,
+              session: session,
+            };
+          });
         }
         return undefined;
       })

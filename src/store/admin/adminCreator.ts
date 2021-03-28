@@ -10,7 +10,7 @@ import {
 
 export const dispatchLogin = (payload: ILogin) => {
   return async (dispatch: Dispatch) => {
-    dispatch(setIsLoading(true))
+    dispatch(setIsLoading(true));
     login(payload.email, payload.password)
       .then((user: any) => {
         dispatch(setAuthUser(user));
@@ -39,7 +39,6 @@ export const dispatchLogout = () => {
   };
 };
 
-
 export const setIsLoading = (isLoading: boolean) => ({
   type: SET_IS_LOADING,
   payload: isLoading,
@@ -57,9 +56,8 @@ export const setAuthUser = (user?: any) => ({
 
 export const setIsSidebarShown = (shown: boolean) => ({
   type: SET_IS_SIDEBAR_SHOWN,
-  payload: shown
-})
-
+  payload: shown,
+});
 
 export const setAlertDialog = (
   message: any,
@@ -76,4 +74,3 @@ export const setAlertDialog = (
   isError: isError,
   isOpen: isOpen,
 });
-

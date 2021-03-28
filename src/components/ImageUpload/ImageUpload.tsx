@@ -14,7 +14,7 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({
   maxFiles,
 }) => {
   const imageFileArray = imageFile.dataURL ? [imageFile] : [];
-  const translate = useTranslation()
+  const translate = useTranslation();
   return (
     <ImageUploading
       multiple
@@ -33,9 +33,9 @@ const ImageUpload: React.FC<ImageUoloadProps> = ({
               variant="contained"
               color="primary"
               onClick={onImageUpload}
-              style={{ height: "3rem", textTransform:"none" }}
+              style={{ height: "3rem", textTransform: "none" }}
             >
-              {translate.t('Upload image')}
+              {translate.t("Upload image")}
             </Button>
           ) : null}
           &nbsp;

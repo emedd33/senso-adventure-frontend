@@ -1,3 +1,3 @@
 export const transformTitleToSlug = (title: string) => {
-    return title.replace(/\s/g, "")
-}
+  return title.replace(/\s/g, "");
+};

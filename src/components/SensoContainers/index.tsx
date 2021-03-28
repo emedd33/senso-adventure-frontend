@@ -1,3 +1,3 @@
-import SensoDescription from "./SensoDescription"
+import SensoDescription from "./SensoDescription";
 
-export {SensoDescription}
+export { SensoDescription };

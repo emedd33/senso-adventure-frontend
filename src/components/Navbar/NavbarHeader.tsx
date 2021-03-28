@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
 import styled from "styled-components";
-import engIcon from "../../assets/icons/eng_icon.png"
-import norIcon from "../../assets/icons/nor_icon.png"
+import engIcon from "../../assets/icons/eng_icon.png";
+import norIcon from "../../assets/icons/nor_icon.png";
 
-import NavbarHeaderBreadCrumbs from "./NavbarHeaderBreadCrumbs"
+import NavbarHeaderBreadCrumbs from "./NavbarHeaderBreadCrumbs";
 
 import NavbarHeaderMenu from "./NavbarHeaderMenu";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,64 +18,63 @@ import { getIsUploading } from "../../store/admin/adminSelectors";
 
 type NavbarHeaderProps = {};
 const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
-    const translation = useTranslation();
-    const dispatch = useDispatch()
-    const isUploading = useSelector(getIsUploading)
-    return (
-        <>
-            <IconContext.Provider value={{ color: "black" }}>
-                <Container>
-                    <div
-                        style={{
-                            height: "5rem",
-                            flex: "3",
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                    >
+  const translation = useTranslation();
+  const dispatch = useDispatch();
+  const isUploading = useSelector(getIsUploading);
+  return (
+    <>
+      <IconContext.Provider value={{ color: "black" }}>
+        <Container>
+          <div
+            style={{
+              height: "5rem",
+              flex: "3",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <NavBarOpenIcon to="#">
+              <FaIcons.FaBars
+                onClick={() => dispatch(setIsSidebarShown(true))}
+              />
+            </NavBarOpenIcon>
 
-
-                        <NavBarOpenIcon to="#">
-                            <FaIcons.FaBars onClick={() => dispatch(setIsSidebarShown(true))} />
-                        </NavBarOpenIcon>
-
-                        <Link
-                            to="/"
-                            style={{ textDecoration: "none", color: "black" }}
-                        >
-                            <span>
-                                <Title>Senso Adventure</Title>
-                            </span>
-                        </Link>
-                        <NavbarHeaderBreadCrumbs />
-                    </div>
-                    <div
-                        style={{
-                            flex: "1",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                            paddingRight: "4rem",
-                        }}
-                    >
-                        {isUploading ? <CircularProgress size={20} /> : null}
-                        <NavbarHeaderMenu />
-                    </div>
-                    <div style={{ display: "grid", gridTemplateRows: "repeat(1fr)" }}>
-
-                        <Button onClick={() => translation.i18n.changeLanguage('en')}><img src={engIcon} style={{ width: "1.5rem" }} alt="English" /></Button>
-                        <Button onClick={() => translation.i18n.changeLanguage('nor')}><img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" /></Button>
-
-                    </div>
-                </Container>
-            </IconContext.Provider>
-        </>
-    );
+            <Link to="/" style={{ textDecoration: "none", color: "black" }}>
+              <span>
+                <Title>Senso Adventure</Title>
+              </span>
+            </Link>
+            <NavbarHeaderBreadCrumbs />
+          </div>
+          <div
+            style={{
+              flex: "1",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              paddingRight: "4rem",
+            }}
+          >
+            {isUploading ? <CircularProgress size={20} /> : null}
+            <NavbarHeaderMenu />
+          </div>
+          <div style={{ display: "grid", gridTemplateRows: "repeat(1fr)" }}>
+            <Button onClick={() => translation.i18n.changeLanguage("en")}>
+              <img src={engIcon} style={{ width: "1.5rem" }} alt="English" />
+            </Button>
+            <Button onClick={() => translation.i18n.changeLanguage("nor")}>
+              <img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" />
+            </Button>
+          </div>
+        </Container>
+      </IconContext.Provider>
+    </>
+  );
 };
 const Title = styled.h2`
-margin-left: 2vh;
+  margin-left: 2vh;
   width: 15rem;
-  `;
+`;
 const Container = styled.div`
   background-color: #ab9696;
   width: 100%;

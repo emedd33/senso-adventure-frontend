@@ -10,7 +10,7 @@ import { Link, Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
 import { getAuthUser } from "../../store/admin/adminSelectors";
-import { getFromDatabase } from "../../services/Firebase/database"
+import { getFromDatabase } from "../../services/Firebase/database";
 import { createUserWithEmailPasswordAndUsername } from "../../services/Firebase/authentication";
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,12 +40,12 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
   },
 }));
-export interface SignUpProps { }
+export interface SignUpProps {}
 
 const SignupForm: React.FC<SignUpProps> = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const history = useHistory()
+  const history = useHistory();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [firstPassword, setFirstPassword] = useState("");
@@ -57,7 +57,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
   const [confirmPasswordHelperText, setConfirmPasswordHelperText] = useState(
     ""
   );
-  const authUser = useSelector(getAuthUser)
+  const authUser = useSelector(getAuthUser);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const handleSignup = () => {
     !username ? setUsernameError(true) : setUsernameError(false);
@@ -72,30 +72,34 @@ const SignupForm: React.FC<SignUpProps> = () => {
         setSecondPasswordError(true);
         return;
       }
-      dispatch(setIsLoading(true))
-      getFromDatabase("admin/usernames").then(function (snapshot) {
-
-        if (snapshot && Object.values(snapshot.val()).includes(username)) {
-          dispatch(setAlertDialog("Username already exists", true, true))
-            dispatch(setIsLoading(false))
-
-        } else {
-          createUserWithEmailPasswordAndUsername(email, firstPassword, username).then(() => {
-            history.push("/user/" + username)
-            dispatch(setIsLoading(false))
-          })
-            .catch((error) => {
-              if (error.code === "auth/email-already-in-use") {
-                dispatch(setAlertDialog("Email already exists", true, true))
-              }
-              else {
-                console.log(error)
-                dispatch(setAlertDialog("an error has occured", true, true))
-              }
-              dispatch(setIsLoading(false))
-            })
-        }
-      }).catch(() => dispatch(setIsLoading(false)))
+      dispatch(setIsLoading(true));
+      getFromDatabase("admin/usernames")
+        .then(function (snapshot) {
+          if (snapshot && Object.values(snapshot.val()).includes(username)) {
+            dispatch(setAlertDialog("Username already exists", true, true));
+            dispatch(setIsLoading(false));
+          } else {
+            createUserWithEmailPasswordAndUsername(
+              email,
+              firstPassword,
+              username
+            )
+              .then(() => {
+                history.push("/user/" + username);
+                dispatch(setIsLoading(false));
+              })
+              .catch((error) => {
+                if (error.code === "auth/email-already-in-use") {
+                  dispatch(setAlertDialog("Email already exists", true, true));
+                } else {
+                  console.log(error);
+                  dispatch(setAlertDialog("an error has occured", true, true));
+                }
+                dispatch(setIsLoading(false));
+              });
+          }
+        })
+        .catch(() => dispatch(setIsLoading(false)));
     }
   };
   useEffect(() => {
@@ -111,7 +115,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
     }
   }, [username, firstPassword, secondPassword, email]);
   if (authUser && authUser.displayName) {
-    return <Redirect to="/" />
+    return <Redirect to="/" />;
   }
   return (
     <Container component="main" maxWidth="xs">

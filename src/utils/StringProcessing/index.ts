@@ -1,2 +1,2 @@
-import { transformTitleToSlug } from "./transformTitleToSlug"
-export { transformTitleToSlug }
+import { transformTitleToSlug } from "./transformTitleToSlug";
+export { transformTitleToSlug };

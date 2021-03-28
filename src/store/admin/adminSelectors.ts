@@ -7,14 +7,14 @@ export const getAuthUser = (state: RootReducerProp) => {
 
 export const getAuthUserPath = (state: RootReducerProp) => {
   if (state.admin.authUser) {
-    return `/user/${state.admin.authUser.displayName}`
+    return `/user/${state.admin.authUser.displayName}`;
   }
-}
+};
 
 export const getIsSidebarShown = (state: RootReducerProp) => {
-  return state.admin.isSidebarShown
-}
+  return state.admin.isSidebarShown;
+};
 
 export const getIsUploading = (state: RootReducerProp) => {
-  return state.admin.isUploading
-}
+  return state.admin.isUploading;
+};
