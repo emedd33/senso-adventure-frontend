@@ -33,8 +33,9 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
             }
             )
         }
-    return ()=> setCampaigns()
+        return () => setCampaigns()
     }, [location, owner, dispatch])
+
 
 
     return (

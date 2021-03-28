@@ -1,5 +1,4 @@
 import { MentionData } from "@draft-js-plugins/mention";
-import { getHost } from "../../utils/getHost";
 
 export const getSelectedSession = (state: RootReducerProp) =>
     state.selected.selectedSession;
@@ -208,14 +207,13 @@ export const getSelectedSessionStoragePath = (state: RootReducerProp) => {
 // MENTION LISTS
 
 export const getSelectedCampaignMonsterMentionList = (state: RootReducerProp) => {
-    const host = getHost()
     let mentions: MentionData[] = []
     if (state.selected.selectedCampaign) {
         if (state.selected.selectedCampaign?.campaign.monsters) {
 
             mentions = Object.values(state.selected.selectedCampaign?.campaign.monsters).map((monster: IMonster) => ({
                 name: monster.name,
-                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/monsters/${monster.slug}`
+                link: `/user/${state.selected.selectedCampaign?.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign.slug}/monsters/${monster.slug}`
             }))
 
         }
@@ -223,29 +221,27 @@ export const getSelectedCampaignMonsterMentionList = (state: RootReducerProp) =>
     return mentions
 }
 export const getSelectedCampaignPlayerMentionList = (state: RootReducerProp) => {
-    const host = getHost()
     let mentions: MentionData[] = []
     if (state.selected.selectedCampaign) {
         if (state.selected.selectedCampaign?.campaign.players) {
 
             mentions = Object.values(state.selected.selectedCampaign?.campaign.players).map((player: IPlayer) => ({
                 name: player.name,
-                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/players/${player.slug}`
+                link: `/user/${state.selected.selectedCampaign?.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign.slug}/players/${player.slug}`
             }))
 
         }
     }
     return mentions
 }
-export const getSelectedCampaignLocationMentionList = (state: RootReducerProp) => {
-    const host = getHost()
+export const getSelectedCampaignLocationMentionList = (state: RootReducerProp,) => {
     let mentions: MentionData[] = []
     if (state.selected.selectedCampaign) {
         if (state.selected.selectedCampaign?.campaign.locations) {
 
             mentions = Object.values(state.selected.selectedCampaign?.campaign.locations).map((location: ILocation) => ({
                 name: location.name,
-                link: `${host}/${state.selected.selectedCampaign?.campaign.slug}/locations/${location.slug}`
+                link: `/user/${state.selected.selectedCampaign?.campaign.dungeonMaster.username}/campaigns//${state.selected.selectedCampaign?.campaign.slug}/locations/${location.slug}`
             }))
 
         }

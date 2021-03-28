@@ -40,7 +40,8 @@ const CampaignLocationEdit: React.FC = () => {
         <div
             style={{
                 marginBottom: "10rem",
-                width: "70%",
+                width: "90%",
+                zIndex: 100,
                 backgroundColor: OLD_WHITE,
                 alignItems: "center",
                 justifyItems: "start",
@@ -160,11 +161,7 @@ const CampaignLocationEdit: React.FC = () => {
                 storagePath={`${selectedLocationStoragePath}/locationLore.json`}
             />
 
-            <h1>Images</h1>
-            <SensoImageInput
-                style={{ width: "100%" }}
-                storagePath={`${selectedLocationStoragePath}/LocationImages`}
-            />
+
 
             <SensoDelete
                 storagePath={`${selectedLocationStoragePath}`}

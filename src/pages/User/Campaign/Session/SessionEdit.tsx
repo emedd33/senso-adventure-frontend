@@ -13,7 +13,7 @@ import {
     isDungeonMasterSelector,
     getSelectedSessionDatabasePath
 } from "../../../../store/selected/selectedSelectors";
-import { SensoDateInput, SensoDelete, SensoImageInput, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../../../components/SensoInputs";
+import { SensoDateInput, SensoDelete, SensoNumberInput, SensoSwitch, SensoTextInput } from "../../../../components/SensoInputs";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 
 
@@ -89,12 +89,7 @@ const SessionEdit: React.FC = () => {
                 storagePath={`${selectedSessionStoragePath}/SessionStory.json`}
             />
 
-            <h1>Session Images</h1>
 
-            <SensoImageInput
-                style={{ width: "100%" }}
-                storagePath={`${selectedSessionStoragePath}/SessionImages`}
-            />
             <SensoDelete
                 storagePath={`${selectedSessionStoragePath}`}
                 databasePath={`${selectedSessionDatabasePath}`}

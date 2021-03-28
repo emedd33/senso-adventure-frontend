@@ -6,7 +6,6 @@ export const OLD_WHITE_TRANSPARENT = "rgba(250, 235, 215,0.7)";
 export const DEEP_RED = "#750615";
 export const LIGHT_PINK = "#AB9696";
 export const LIGHT_PURPLe = "#AB9696";
-export const HOST = "https://senso-adventure.web.app/"
 
 export const LOGIN_BACKGROUND_IMAGE_STORAGE_PATH = "Images/Background/dnd_login.jpg"
 export const MONSTER_DATABASE_API = "https://www.dnd5eapi.co"
