@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     useHistory,
 } from "react-router-dom";
-import { OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants"
+import { OLD_WHITE_DARK } from "../../assets/constants/Constants"
 import AddIcon from "@material-ui/icons/Add";
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
@@ -30,7 +30,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
 
     return (
         <Fab
-            mainButtonStyles={{ backgroundColor: OLD_WHITE_TRANSPARENT }}
+            mainButtonStyles={{ backgroundColor: OLD_WHITE_DARK }}
             icon={<AddIcon />}
             alwaysShowTitle={true}
         >
@@ -96,7 +96,7 @@ const SensoFab: React.FC<SensoFabProps> = () => {
                     }
                 }}
             >
-                <img src={locationIcon} style={{ width: "inherit" }} alt={translate.t('New location')}/>
+                <img src={locationIcon} style={{ width: "inherit" }} alt={translate.t('New location')} />
 
             </Action>
 

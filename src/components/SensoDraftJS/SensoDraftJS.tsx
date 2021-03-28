@@ -11,6 +11,7 @@ import 'draft-js/dist/Draft.css';
 import playerIcon from "../../assets/icons/character_icon.png"
 import locationIcon from "../../assets/icons/location_icon.png"
 import monsterIcon from "../../assets/icons/monster_icon.png"
+import knowledgeIcon from "../../assets/icons/knowledge_icon.png"
 import secretIcon from "../../assets/icons/hush_icon.png"
 import descriptionIcon from "../../assets/icons/description_icon.png"
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
@@ -183,6 +184,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({ storagePath, readOnly, isDu
         function myBlockRenderer(contentBlock: any) {
             const type = contentBlock.getType();
             if (type === 'atomic') {
+
                 return {
                     component: SensoDraftJSAtomic,
                     readOnly: readOnly,
@@ -260,11 +262,15 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({ storagePath, readOnly, isDu
                                         </Button>
                                     </Tooltip>
                                     <Tooltip title={`${translate.t('Insert secret note')} `}>
-                                        <Button onClick={() => setEditorState(insertAtomicBlock("note", editorState))} style={{ width: "2rem" }}> <img src={secretIcon} style={{ width: "2rem" }} alt="Secret" />
+                                        <Button onClick={() => setEditorState(insertAtomicBlock("secret", editorState))} style={{ width: "2rem" }}> <img src={secretIcon} style={{ width: "2rem" }} alt="Secret" />
                                         </Button>
                                     </Tooltip>
                                     <Tooltip title={`${translate.t("Insert description block")} `}>
                                         <Button onClick={() => setEditorState(insertAtomicBlock("description", editorState))} style={{ width: "2rem" }}> <img src={descriptionIcon} style={{ width: "2rem" }} alt="Secret" />
+                                        </Button>
+                                    </Tooltip>
+                                    <Tooltip title={`${translate.t("Insert knowledge note")} `}>
+                                        <Button onClick={() => setEditorState(insertAtomicBlock("note", editorState))} style={{ width: "2rem" }}> <img src={knowledgeIcon} style={{ width: "2rem" }} alt="Secret" />
                                         </Button>
                                     </Tooltip>
                                     <HeadlineOneButton {...externalProps} />

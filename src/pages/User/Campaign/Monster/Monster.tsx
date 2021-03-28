@@ -71,10 +71,17 @@ const Monster: FunctionComponent<MonsterProps> = () => {
             <SensoDescription content={selectedMonster.monster.description} />
             {isDungeonMaster ? <>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
-                    <Tooltip title={"Everything below is hidden from players. This includes everything except Name, Nicknames, size, type, alignment and description"}>
+                    <Tooltip title={`${translate.t(`Everything below is hidden from players`)}`}>
                         <img src={secretIcon} style={{ width: "3rem" }} alt="Secret" />
                     </Tooltip>
                 </div>
+                <DividerBlock />
+
+                <div>
+
+                    <p><b>{translate.t(`Roleplaying`)}: </b>{selectedMonster.monster.rolePlaying}</p>
+                </div>
+                <DividerBlock />
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(10rem,20rem)" }}>
                     <div>

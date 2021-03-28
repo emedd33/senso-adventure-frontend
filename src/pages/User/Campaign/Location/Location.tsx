@@ -30,12 +30,13 @@ import renderArrayOfString from "../../../../utils/renderArrayToString";
 import useOwner from "../../../../store/hooks/useOwner";
 import { SensoDescription } from "../../../../components/SensoContainers";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
+import { useTranslation } from "react-i18next";
 
 export interface LocationProps { }
 
 
 const Location: React.FC<LocationProps> = () => {
-    // const dispatch = useDispatch();
+    const translate = useTranslation()
     const history = useHistory();
 
     const selectedCampaign = useSelector(getSelectedCampaign);
@@ -54,7 +55,7 @@ const Location: React.FC<LocationProps> = () => {
                 <h1 style={{ marginBottom: "0" }}>
                     {selectedLocation.location.name}
                     {selectedLocation.location.isPublished === "FALSE"
-                        ? "(Unpublished)"
+                        ? `(${translate.t(`Not published`)})`
                         : null}
                 </h1>
             </div>
@@ -77,25 +78,25 @@ const Location: React.FC<LocationProps> = () => {
                                 color="primary"
                                 style={{ maxHeight: "2rem", maxWidth: "3rem" }}
                             >
-                                Edit
-                  </Button>
+                                {translate.t(`Edit`)}
+                            </Button>
                         </div>
                     </>
                 ) : null}
             </div>
             <div style={{ gridColumn: "1/3" }}>
-                <b>Also known as: </b>
+                <b>{translate.t(`Also known as`)}: </b>
                 <i>
                     {renderArrayOfString(selectedLocation.location.nickNames)}
                 </i>
             </div>
             <div>
-                <b>Religion/Belief system: </b>
+                <b>{translate.t(`Religion/Belief system`)}: </b>
                 <i>{selectedLocation.location.religion}</i>
             </div>
 
             <div>
-                <b>Governed rule: </b>
+                <b>{translate.t(`Governed rule`)}: </b>
                 <i>
                     {selectedLocation.location.governRule}
                 </i>
@@ -108,7 +109,7 @@ const Location: React.FC<LocationProps> = () => {
             {isDungeonMaster && selectedLocation.location.keyElements && selectedCampaign ? (
                 <>
                     <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
-                    <h3 style={{ gridColumn: "1/3" }}>{`Key Elements in ${selectedLocation.location.name}`}</h3>
+                    <h3 style={{ gridColumn: "1/3" }}>{`${translate.t("Key Elements in")} ${selectedLocation.location.name}`}</h3>
                     {Object.values(selectedLocation.location.keyElements).map((keyElement: { name: string, description: string }) => (
                         <div>
                             <b>{keyElement.name}: </b>
@@ -117,7 +118,7 @@ const Location: React.FC<LocationProps> = () => {
                     ))
                     }
                     <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
-                    <h3 style={{ gridColumn: "1/3" }}>{`Resources in ${selectedLocation.location.name}`}</h3>
+                    <h3 style={{ gridColumn: "1/3" }}>{`${translate.t("Resources in")} ${selectedLocation.location.name}`}</h3>
                     {Object.values(selectedLocation.location.resources).map((resource: { name: string, description: string }) => (
                         <div>
                             <b>{resource.name}: </b>
@@ -131,49 +132,51 @@ const Location: React.FC<LocationProps> = () => {
                 : null}
             <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
 
-            <div style={{ gridColumn: "1/3" }}>
-                <h3>{`Characters in ${selectedLocation.location.name}`}</h3>
-
-            </div>
             {selectedLocation.location.characters && selectedCampaign
-                ? Object.values(selectedLocation.location.characters).map((character: { name: string, description: string }) => (
-                    <Accordion
-                        style={
-                            { backgroundColor: OLD_WHITE_DARK, gridColumn: "1/3" }
-                        }
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                        >
-                            <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
-                                {character.name}
-                            </Typography>
+                ? <>
+                    <div style={{ gridColumn: "1/3" }}>
+                        <h3>{`${translate.t("Characters in")} ${selectedLocation.location.name}`}</h3>
 
-                        </AccordionSummary>
-                        <AccordionDetails
-                            style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
+                    </div>
+                    {Object.values(selectedLocation.location.characters).map((character: { name: string, description: string }) => (
+                        <Accordion
+                            style={
+                                { backgroundColor: OLD_WHITE_DARK, gridColumn: "1/3" }
+                            }
                         >
-
-                            <div>
-                                <p>{character.description}</p>
-                            </div>
-                        </AccordionDetails>
-                        <AccordionActions>
-                            <Link
-                                to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/${character.name.replace(/\s/g, "")}`}
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1bh-content"
+                                id="panel1bh-header"
                             >
-                                <Button size="small" color="primary">
-                                    <ArrowForwardIcon />
-                                </Button>
-                            </Link>
-                        </AccordionActions>
-                    </Accordion>
-                )) : null}
+                                <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
+                                    {character.name}
+                                </Typography>
+
+                            </AccordionSummary>
+                            <AccordionDetails
+                                style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
+                            >
+
+                                <div>
+                                    <p>{character.description}</p>
+                                </div>
+                            </AccordionDetails>
+                            <AccordionActions>
+                                <Link
+                                    to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/${character.name.replace(/\s/g, "")}`}
+                                >
+                                    <Button size="small" color="primary">
+                                        <ArrowForwardIcon />
+                                    </Button>
+                                </Link>
+                            </AccordionActions>
+                        </Accordion>
+                    ))}
+                </> : null}
             {isDungeonMaster ?
                 <div style={{ gridColumn: "1/3" }}>
-                    <h3>{`Lore and history to ${selectedLocation.location.name}`}</h3>
+                    <h3>{`${translate.t("Lore of")} ${selectedLocation.location.name}`}</h3>
 
                     <SensoDraftJS readOnly={true} storagePath={`${locationPath}/locationLore.json`}
                         isDungeonMaster={isDungeonMaster}
@@ -185,7 +188,8 @@ const Location: React.FC<LocationProps> = () => {
     );
 };
 const Container = styled.div`
-  width: 70%;
+  width: 90%;
+  z-index:100;
   padding: 1rem;
   -webkit-box-shadow: 5px 5px 15px 5px #000000;
   box-shadow: 5px 0px 15px 2px #000000;

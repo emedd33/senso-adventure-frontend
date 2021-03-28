@@ -5,11 +5,22 @@
     border-bottom: 1px solid gray;
     padding:1rem
 }
-.note{
+.secret{
     background-color: #cfcfcf;
     border-radius: 5px;
     padding:1rem
 
+}
+.note{
+    background-color: #c2aa69;
+    border-top: 1px solid gray;;
+    border-bottom: 1px solid gray;
+    padding:1rem;
+
+}
+.overhead{
+    width: 10rem;
+    margin:0;
 }
 .editor :global(.public-DraftEditor-content) {
     min-height: 10rem;

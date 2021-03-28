@@ -8,6 +8,7 @@ interface IMonster {
     damageImmunities?: string[];
     damageResistances?: string[];
     damageVulnerabilities?: string[];
+    description: string;
     forms?: APIReference;
     index: string;
     isDead?: string;
@@ -17,13 +18,13 @@ interface IMonster {
     legendaryActions?: IMonsterAction[];
     name: string;
     nickNames?: string[];
+    rolePlaying?: string;
     senses?: ISenses;
     slug: string;
     specialAbilities?: IMonsterAction[];
     stats: IMonsterStats;
     size?: string;
     subtype?: string;
-    description: string;
     type?: string;
     xp?: number;
 }

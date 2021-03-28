@@ -72,7 +72,7 @@ const SensoActionInputs: React.FC<SensoActionInputsProps> = ({ actions = [], fir
                         }}
                     >
                         <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
-                            <h3>Description</h3>
+                            <h3>{translate.t(`Description`)}</h3>
                             <TextField
                                 label={translate.t('Description')}
                                 multiline
@@ -119,11 +119,11 @@ const SensoActionInputs: React.FC<SensoActionInputsProps> = ({ actions = [], fir
             <Button
                 variant="contained"
                 color="primary"
-                style={{ height: "2rem", margin: "1rem", maxWidth: "10rem", textTransform:"none" }}
+                style={{ height: "2rem", margin: "1rem", maxWidth: "10rem", textTransform: "none" }}
                 onClick={handleAddNewValue}
             >
                 {translate.t('Add new')}
-        </Button>
+            </Button>
         </Container >)
 }
 

@@ -168,7 +168,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
                             <Button color="primary" variant="contained" style={{ textTransform: "none", }}>{translate.t(`Monsters`)}</Button>
                         </Link>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 20rem)" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 40rem)" }}>
 
                             {filterUnpublished(selectedCampaign.campaign.monsters, isDungeonMaster).slice(0, 10).map(([, monster]: [string, IMonster], index: number) => (
                                 <Accordion
@@ -191,7 +191,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
                                     </AccordionSummary>
                                     <AccordionDetails
-                                        style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr", margin: 0 }}
+                                        style={{ display: "grid", gridTemplateColumns: "1fr", margin: 0 }}
                                     >
                                         <p>{monster.description}</p>
                                     </AccordionDetails>
@@ -217,7 +217,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
 
                             <Button color="primary" variant="contained" style={{ textTransform: "none", }}>{translate.t(`Players`)}</Button>
                         </Link>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 20rem)" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 40rem)" }}>
 
                             {filterUnpublished(selectedCampaign.campaign.players, isDungeonMaster).slice(0, 10).map(([, player]: [string, IPlayer], index: number) => (
                                 <Accordion
@@ -310,10 +310,10 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                     : null}
             </div>
             {isDungeonMaster ? <>
-                <div style={{ display: "flex", justifyContent: "center", flexDirection: "row", padding: "2rem", width: "100%" }}>
+                <div style={{ display: "flex", justifyContent: "flex-start", flexDirection: "row", paddingTop: "2rem", width: "100%" }}>
 
                     <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/edit`} style={{ textDecoration: "none" }}>
-                        <div style={{ display: "flex", justifyContent: "center" }}>
+                        <div style={{ display: "flex", justifyContent: "flex-start" }}>
 
                             <Button
                                 variant="contained"

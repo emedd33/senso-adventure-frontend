@@ -27,7 +27,7 @@ const insertAtomicBlock = (type: string, editorState: EditorState) => {
     const contentStateWithEntity = contentState.createEntity(
         type,
         "MUTABLE",
-        { a: "b" }
+        { type: type }
     );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     let newEditorState = EditorState.set(editorState, {

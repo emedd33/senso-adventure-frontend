@@ -10,6 +10,9 @@ const keyBindingFn = (e: any, editorState: EditorState) => {
         }
         return getDefaultKeyBinding(e);
     }
+    if (e.keyCode === 8 /* `D` key */ && e.ctrlKey) {
+        return 'atomic-backspace';
+    }
     if (e.keyCode === 83 /* `S` key */ && e.ctrlKey) {
 
         return 'editor-save';
@@ -20,16 +23,19 @@ const keyBindingFn = (e: any, editorState: EditorState) => {
     if (e.keyCode === 73 /* `I` key */ && e.ctrlKey) {
         return 'editor-itallic';
     }
+    if (e.keyCode === 74 /* `J` key */ && e.ctrlKey) {
+        return 'editor-note';
+    }
     if (e.keyCode === 85 /* `U` key */ && e.ctrlKey) {
         return 'editor-underline';
     }
     if (e.keyCode === 68 /* `D` key */ && e.ctrlKey) {
         return 'editor-description';
     }
+
     return getDefaultKeyBinding(e);
 }
 const handleKeyCommand = (command: string, editorState: EditorState, setEditorState: any): DraftHandleValue => {
-    console.log("command", command)
     if (command === 'editor-bold') {
         setEditorState(
             RichUtils.toggleInlineStyle(editorState, 'BOLD')
@@ -51,10 +57,16 @@ const handleKeyCommand = (command: string, editorState: EditorState, setEditorSt
     if (command === 'atomic-enter') {
         return 'handled';
     }
+    if (command === 'atomic-backspace') {
+        return 'handled';
+    }
 
-    console.log(command)
     if (command === 'editor-description') {
         setEditorState(insertAtomicBlock("description", editorState))
+        return 'handled';
+    }
+    if (command === 'editor-note') {
+        setEditorState(insertAtomicBlock("note", editorState))
         return 'handled';
     }
 

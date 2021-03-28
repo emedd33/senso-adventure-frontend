@@ -8,10 +8,12 @@ import styled from "styled-components";
 import { database } from "../../../../services/Firebase/firebase";
 import useOwner from "../../../../store/hooks/useOwner";
 import { getSelectedCampaign } from "../../../../store/selected/selectedSelectors";
+import { useTranslation } from "react-i18next";
 export interface LocationNewProps { }
 
 
 const LocationNew: React.FC<LocationNewProps> = () => {
+    const translate = useTranslation()
     const dispatch = useDispatch();
     const history = useHistory();
     const owner = useOwner()
@@ -24,7 +26,7 @@ const LocationNew: React.FC<LocationNewProps> = () => {
             if (!locationName) {
                 setLocationNameError(true);
                 dispatch(
-                    setAlertDialog("Please fille out the Location name", true, true)
+                    setAlertDialog("Fill out the form", true, true)
                 );
                 return;
             }
@@ -40,7 +42,7 @@ const LocationNew: React.FC<LocationNewProps> = () => {
                 .then((snap) => {
                     snap.once("value", async (snapshot: any) => {
                         history.push(
-                            `/users/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/${toUpload.slug}`
+                            `/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/${toUpload.slug}/edit`
                         );
                     });
                 });
@@ -51,11 +53,11 @@ const LocationNew: React.FC<LocationNewProps> = () => {
         <TitleContainer>
             <TextField
                 id="outlined-multiline-static"
-                placeholder="Write a fitting name"
+                placeholder={translate.t(`Write a location name`)}
                 variant="filled"
                 disabled={false}
                 style={{ width: "90%", margin: "1rem" }}
-                label="Location Name"
+                label={translate.t(`Location name`)}
                 error={locationNameError}
                 value={locationName}
                 onChange={(event) => setLocationName(event.target.value)}
@@ -67,8 +69,8 @@ const LocationNew: React.FC<LocationNewProps> = () => {
                 style={{ margin: "2rem" }}
                 onClick={submitLocation}
             >
-                Continue
-      </Button>
+                {translate.t(`Submitt`)}
+            </Button>
         </TitleContainer>
     );
 };

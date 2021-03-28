@@ -77,15 +77,16 @@ const MonsterNew: FunctionComponent<MonsterNewProps> = () => {
                     if (monsterJson.forms) {
                         newMonster.forms = monsterJson.forms
                     }
+
                     return {
                         ...newMonster,
                         alignment: monsterJson.alignment ? monsterJson.alignment : NEW_MONSTER.alignment,
                         actions: monsterJson.actions ? monsterJson.actions : [],
                         challengeRating: monsterJson.challenge_rating ? monsterJson.challenge_rating : "",
-                        conditionImmunities: monsterJson.condition_immunities ? monsterJson.condition_immunities : [],
-                        damageImmunities: monsterJson.damage_immunities ? monsterJson.damage_immunities : [],
-                        damageResistances: monsterJson.damage_resistance ? monsterJson.damage_resistance : [],
-                        damageVulnerabilities: monsterJson.damage_vulnerabilities ? monsterJson.damage_vulnerabilities : [],
+                        conditionImmunities: monsterJson.condition_immunities ? monsterJson.condition_immunities.map((immunity: APIReference) => immunity.name) : [],
+                        damageImmunities: monsterJson.damage_immunities ? monsterJson.damage_immunities.map((immunity: APIReference) => immunity.name) : [],
+                        damageResistances: monsterJson.damage_resistance ? monsterJson.damage_resistance.map((resistance: APIReference) => resistance.name) : [],
+                        damageVulnerabilities: monsterJson.damage_vulnerabilities ? monsterJson.damage_vulnerabilities.map((vulnerability: APIReference) => vulnerability.name) : [],
                         languages: monsterJson.languages ? monsterJson.languages.split(",") : [],
                         legendaryActions: monsterJson.legendary_actions ? monsterJson.legendary_actions : [],
                         index: monsterJson.index ? monsterJson.index : newMonster.slug,
