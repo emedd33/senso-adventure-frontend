@@ -4,9 +4,9 @@ import createToolbarPlugin, {
     Separator,
 } from "@draft-js-plugins/static-toolbar";
 import createImagePlugin from '@draft-js-plugins/image';
-import Editor from "@draft-js-plugins/editor";
+import Editor, { composeDecorators } from "@draft-js-plugins/editor";
 import { insertCharacter, insertAtomicBlock } from "./insertContent";
-import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw, SelectionState, DraftHandleValue } from "draft-js";
 import { handleKeyCommand, keyBindingFn } from "./handleKey";
 import playerIcon from "../../assets/icons/character_icon.png";
 import locationIcon from "../../assets/icons/location_icon.png";
@@ -39,6 +39,10 @@ import createMentionPlugin, {
     defaultSuggestionsFilter,
     MentionData,
 } from "@draft-js-plugins/mention";
+import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
+import createAlignmentPlugin from '@draft-js-plugins/alignment';
+import createFocusPlugin from '@draft-js-plugins/focus';
+import createResizeablePlugin from '@draft-js-plugins/resizeable';
 import { Button, Tooltip } from "@material-ui/core";
 import SensoDraftJSAtomic from "./SensoDraftJSAtomic";
 import { useTranslation } from "react-i18next";
@@ -51,7 +55,7 @@ import {
 import useInterval from "../../store/hooks/useInterval";
 import { storage } from "../../services/Firebase/firebase";
 import { setIsUploading } from "../../store/admin/adminCreator";
-
+import { initialState } from "./initialState"
 type SensoDraftJSProps = {
     storagePath: string;
     readOnly: boolean;
@@ -64,7 +68,9 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     isDungeonMaster = false,
     style,
 }) => {
+
     const dispatch = useDispatch();
+    // @ts-ignore
     const [editorState, setEditorState] = React.useState(() =>
         EditorState.createEmpty()
     );
@@ -80,6 +86,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     const [locationSuggestions, setLocationSuggestions] = useState<MentionData[]>(
         []
     );
+
     const playerMentionList = useSelector(getSelectedCampaignPlayerMentionList);
     const monsterMentionList = useSelector(getSelectedCampaignMonsterMentionList);
     const locationMentionList = useSelector(
@@ -163,15 +170,24 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         LocationMentionSuggestions,
     ] = useMemo(() => {
         const staticToolbarPlugin = createToolbarPlugin();
-        const imagePlugin = createImagePlugin();
+        const focusPlugin = createFocusPlugin();
         const playerMentionPlugin = createMentionPlugin();
+        const resizeablePlugin = createResizeablePlugin({});
+        const blockDndPlugin = createBlockDndPlugin();
+        const alignmentPlugin = createAlignmentPlugin();
         const locationMentionPlugin = createMentionPlugin({
             mentionTrigger: "#",
         });
         const monsterMentionPlugin = createMentionPlugin({
             mentionTrigger: "$",
         });
-
+        const decorator = composeDecorators(
+            resizeablePlugin.decorator,
+            alignmentPlugin.decorator,
+            focusPlugin.decorator,
+            blockDndPlugin.decorator
+        );
+        const imagePlugin = createImagePlugin({ decorator });
         const PlayerMentionSuggestions = playerMentionPlugin.MentionSuggestions;
         const MonsterMentionSuggestions = monsterMentionPlugin.MentionSuggestions;
         const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
@@ -179,6 +195,10 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         return [
             [
                 imagePlugin,
+                focusPlugin,
+                resizeablePlugin,
+                alignmentPlugin,
+                blockDndPlugin,
                 staticToolbarPlugin,
                 playerMentionPlugin,
                 locationMentionPlugin,
@@ -199,8 +219,10 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                 fetch(url)
                     .then((res) => res.json())
                     .then((res) => {
+
                         let loadedEditorState = EditorState.createWithContent(
-                            convertFromRaw(res)
+                            // @ts-ignore
+                            convertFromRaw(initialState)
                         );
 
                         setSavedEditorState(loadedEditorState);
@@ -256,6 +278,13 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                 <Editor
                     editorState={editorState}
                     onChange={setEditorState}
+                    handleDroppedFiles={(
+                        selection: SelectionState,
+                        files: any[]
+                    ) => {
+                        console.log(files)
+                        return "handled"
+                    }}
                     handleKeyCommand={(e: any) =>
                         handleKeyCommand(e, editorState, setEditorState)
                     }

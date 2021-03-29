@@ -1,52 +1,53 @@
 import { OLD_WHITE } from "../../../assets/constants/Constants";
 import styled from "styled-components";
 import {
-  getSelectedCampaign,
-  getSelectedCampaignStoragePath,
-  isDungeonMasterSelector,
+    getSelectedCampaign,
+    getSelectedCampaignStoragePath,
+    isDungeonMasterSelector,
 } from "../../../store/selected/selectedSelectors";
 import { useSelector } from "react-redux";
 import useOwner from "../../../store/hooks/useOwner";
 import IsLoading from "../../../components/IsLoading/IsLoading";
 import { SensoDelete } from "../../../components/SensoInputs";
 import SensoDraftJS from "../../../components/SensoDraftJS/SensoDraftJS";
-
+import { SensoImageInput } from "../../../components/SensoInputs"
 type CampaignEditProps = {};
 const CampaignEdit: React.FC<CampaignEditProps> = () => {
-  const selectedCampaign: ISelectedCampaign | undefined = useSelector(
-    getSelectedCampaign
-  );
-  const isDungeonMaster = useSelector(isDungeonMasterSelector);
-  const selectedCampaignStoragePath = useSelector(
-    getSelectedCampaignStoragePath
-  );
-  const owner = useOwner();
-  if (selectedCampaign === undefined) {
-    return (
-      <Container>
-        <IsLoading />
-      </Container>
+    const selectedCampaign: ISelectedCampaign | undefined = useSelector(
+        getSelectedCampaign
     );
-  }
-  return (
-    <Container>
-      <SensoDraftJS
-        storagePath={`${selectedCampaignStoragePath}/CampaignLore.json`}
-        readOnly={false}
-        isDungeonMaster={isDungeonMaster}
-      />
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "5rem" }}
-      >
-        <SensoDelete
-          storagePath={`${selectedCampaignStoragePath}`}
-          databasePath={`users/${owner}/campaigns/${selectedCampaign.id}`}
-          instanceType="Character"
-          linkPath={`/`}
-        />
-      </div>
-    </Container>
-  );
+    const isDungeonMaster = useSelector(isDungeonMasterSelector);
+    const selectedCampaignStoragePath = useSelector(
+        getSelectedCampaignStoragePath
+    );
+    const owner = useOwner();
+    if (selectedCampaign === undefined) {
+        return (
+            <Container>
+                <IsLoading />
+            </Container>
+        );
+    }
+    return (
+        <Container>
+            <SensoImageInput storagePath="/" />
+            <SensoDraftJS
+                storagePath={`${selectedCampaignStoragePath}/CampaignLore.json`}
+                readOnly={false}
+                isDungeonMaster={isDungeonMaster}
+            />
+            <div
+                style={{ display: "flex", justifyContent: "center", marginTop: "5rem" }}
+            >
+                <SensoDelete
+                    storagePath={`${selectedCampaignStoragePath}`}
+                    databasePath={`users/${owner}/campaigns/${selectedCampaign.id}`}
+                    instanceType="Character"
+                    linkPath={`/`}
+                />
+            </div>
+        </Container>
+    );
 };
 const Container = styled.div`
   width: 90%;
