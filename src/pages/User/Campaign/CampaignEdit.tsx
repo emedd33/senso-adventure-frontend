@@ -10,7 +10,6 @@ import useOwner from "../../../store/hooks/useOwner";
 import IsLoading from "../../../components/IsLoading/IsLoading";
 import { SensoDelete } from "../../../components/SensoInputs";
 import SensoDraftJS from "../../../components/SensoDraftJS/SensoDraftJS";
-import { SensoImageInput } from "../../../components/SensoInputs"
 type CampaignEditProps = {};
 const CampaignEdit: React.FC<CampaignEditProps> = () => {
     const selectedCampaign: ISelectedCampaign | undefined = useSelector(
