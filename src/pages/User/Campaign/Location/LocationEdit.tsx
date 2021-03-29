@@ -168,7 +168,7 @@ const CampaignLocationEdit: React.FC = () => {
             <SensoDraftJS
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}
-                storagePath={`${selectedLocationStoragePath}/locationLore.json`}
+                storagePath={`${selectedLocationStoragePath}`}
             />
 
             <SensoDelete

@@ -6,96 +6,96 @@ import "react-markdown-editor-lite/lib/index.css";
 import styled from "styled-components";
 
 import {
-  getSelectedCampaign,
-  getSelectedSession,
-  getSelectedSessionStoragePath,
-  isDungeonMasterSelector,
-  getSelectedSessionDatabasePath,
+    getSelectedCampaign,
+    getSelectedSession,
+    getSelectedSessionStoragePath,
+    isDungeonMasterSelector,
+    getSelectedSessionDatabasePath,
 } from "../../../../store/selected/selectedSelectors";
 import {
-  SensoDateInput,
-  SensoDelete,
-  SensoNumberInput,
-  SensoSwitch,
-  SensoTextInput,
+    SensoDateInput,
+    SensoDelete,
+    SensoNumberInput,
+    SensoSwitch,
+    SensoTextInput,
 } from "../../../../components/SensoInputs";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 
 const SessionEdit: React.FC = () => {
-  const selectedSession = useSelector(getSelectedSession);
-  const selectedCampaign = useSelector(getSelectedCampaign);
+    const selectedSession = useSelector(getSelectedSession);
+    const selectedCampaign = useSelector(getSelectedCampaign);
 
-  const isDungeonMaster = useSelector(isDungeonMasterSelector);
+    const isDungeonMaster = useSelector(isDungeonMasterSelector);
 
-  const selectedSessionDatabasePath = useSelector(
-    getSelectedSessionDatabasePath
-  );
-  const selectedSessionStoragePath = useSelector(getSelectedSessionStoragePath);
+    const selectedSessionDatabasePath = useSelector(
+        getSelectedSessionDatabasePath
+    );
+    const selectedSessionStoragePath = useSelector(getSelectedSessionStoragePath);
 
-  if (!selectedSession || !selectedCampaign) {
-    return <IsLoading />;
-  }
-  return (
-    <div
-      style={{
-        marginBottom: "10rem",
-        width: "80%",
-        backgroundColor: OLD_WHITE,
-        alignItems: "center",
-        justifyContent: "center",
-        display: "flex",
-        padding: "1rem",
-        flexDirection: "column",
-      }}
-    >
-      <TitleContainer>
-        <h2 style={{ gridColumn: "1/3" }}>{selectedSession.session.title}</h2>
-        <SensoDateInput
-          initValue={selectedSession.session.date}
-          firebasePath={`${selectedSessionDatabasePath}/date`}
-          label={"Date"}
-        />
-        <SensoSwitch
-          initValue={selectedSession.session.isPublished}
-          firebasePath={`${selectedSessionDatabasePath}/isPublished`}
-          label={"Publish"}
-        />
-        <SensoNumberInput
-          initValue={selectedSession.session.sessionDay}
-          firebasePath={`${selectedSessionDatabasePath}/sessionDay`}
-          label={"Session day"}
-          isNegativeValid={false}
-        />
-        <SensoTextInput
-          initValue={selectedSession.session.subTitle}
-          firebasePath={`${selectedSessionDatabasePath}/subTitle`}
-          label={"Subtitle"}
-        />
-      </TitleContainer>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
-        <h1 style={{ flex: 2, textAlign: "center" }}>Session story</h1>
-      </div>
-      <SensoDraftJS
-        isDungeonMaster={isDungeonMaster}
-        readOnly={false}
-        storagePath={`${selectedSessionStoragePath}/SessionStory.json`}
-      />
+    if (!selectedSession || !selectedCampaign) {
+        return <IsLoading />;
+    }
+    return (
+        <div
+            style={{
+                marginBottom: "10rem",
+                width: "80%",
+                backgroundColor: OLD_WHITE,
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+                padding: "1rem",
+                flexDirection: "column",
+            }}
+        >
+            <TitleContainer>
+                <h2 style={{ gridColumn: "1/3" }}>{selectedSession.session.title}</h2>
+                <SensoDateInput
+                    initValue={selectedSession.session.date}
+                    firebasePath={`${selectedSessionDatabasePath}/date`}
+                    label={"Date"}
+                />
+                <SensoSwitch
+                    initValue={selectedSession.session.isPublished}
+                    firebasePath={`${selectedSessionDatabasePath}/isPublished`}
+                    label={"Publish"}
+                />
+                <SensoNumberInput
+                    initValue={selectedSession.session.sessionDay}
+                    firebasePath={`${selectedSessionDatabasePath}/sessionDay`}
+                    label={"Session day"}
+                    isNegativeValid={false}
+                />
+                <SensoTextInput
+                    initValue={selectedSession.session.subTitle}
+                    firebasePath={`${selectedSessionDatabasePath}/subTitle`}
+                    label={"Subtitle"}
+                />
+            </TitleContainer>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
+                <h1 style={{ flex: 2, textAlign: "center" }}>Session story</h1>
+            </div>
+            <SensoDraftJS
+                isDungeonMaster={isDungeonMaster}
+                readOnly={false}
+                storagePath={`${selectedSessionStoragePath}`}
+            />
 
-      <SensoDelete
-        storagePath={`${selectedSessionStoragePath}`}
-        databasePath={`${selectedSessionDatabasePath}`}
-        instanceType="Session"
-        linkPath={`/${selectedCampaign.campaign.slug}/sessions`}
-      />
-    </div>
-  );
+            <SensoDelete
+                storagePath={`${selectedSessionStoragePath}`}
+                databasePath={`${selectedSessionDatabasePath}`}
+                instanceType="Session"
+                linkPath={`/${selectedCampaign.campaign.slug}/sessions`}
+            />
+        </div>
+    );
 };
 
 const TitleContainer = styled.div`

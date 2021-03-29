@@ -1,25 +1,28 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
+import { EditorState, convertToRaw, convertFromRaw, SelectionState } from "draft-js";
+import { insertCharacter, insertAtomicBlock, insertImageBlock } from "./insertContent";
 import createToolbarPlugin, {
     Separator,
 } from "@draft-js-plugins/static-toolbar";
 import createImagePlugin from '@draft-js-plugins/image';
+import createInlineToolbarPlugin from '@draft-js-plugins/inline-toolbar';
 import Editor, { composeDecorators } from "@draft-js-plugins/editor";
-import { insertCharacter, insertAtomicBlock, insertImageBlock } from "./insertContent";
-import { EditorState, convertToRaw, convertFromRaw, SelectionState } from "draft-js";
 import { handleKeyCommand, keyBindingFn } from "./handleKey";
-import playerIcon from "../../assets/icons/character_icon.png";
-import locationIcon from "../../assets/icons/location_icon.png";
-import monsterIcon from "../../assets/icons/monster_icon.png";
-import knowledgeIcon from "../../assets/icons/knowledge_icon.png";
-import secretIcon from "../../assets/icons/hush_icon.png";
-import descriptionIcon from "../../assets/icons/description_icon.png";
 import "@draft-js-plugins/static-toolbar/lib/plugin.css";
 import "@draft-js-plugins/mention/lib/plugin.css";
 import '@draft-js-plugins/image/lib/plugin.css';
 import "draft-js/dist/Draft.css";
 import "./SensoDraftJS.scss";
 import "@draft-js-plugins/inline-toolbar/lib/plugin.css";
+import createMentionPlugin, {
+    defaultSuggestionsFilter,
+    MentionData,
+} from "@draft-js-plugins/mention";
+import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
+import createAlignmentPlugin from '@draft-js-plugins/alignment';
+import createFocusPlugin from '@draft-js-plugins/focus';
+import createResizeablePlugin from '@draft-js-plugins/resizeable';
 
 import {
     ItalicButton,
@@ -31,18 +34,16 @@ import {
     UnorderedListButton,
     OrderedListButton,
 } from "@draft-js-plugins/buttons";
+import playerIcon from "../../assets/icons/character_icon.png";
+import locationIcon from "../../assets/icons/location_icon.png";
+import monsterIcon from "../../assets/icons/monster_icon.png";
+import knowledgeIcon from "../../assets/icons/knowledge_icon.png";
+import secretIcon from "../../assets/icons/hush_icon.png";
+import descriptionIcon from "../../assets/icons/description_icon.png";
 import {
     OLD_WHITE_DARK,
     OLD_WHITE_LIGHT,
 } from "../../assets/constants/Constants";
-import createMentionPlugin, {
-    defaultSuggestionsFilter,
-    MentionData,
-} from "@draft-js-plugins/mention";
-import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
-import createAlignmentPlugin from '@draft-js-plugins/alignment';
-import createFocusPlugin from '@draft-js-plugins/focus';
-import createResizeablePlugin from '@draft-js-plugins/resizeable';
 import { Button, Tooltip } from "@material-ui/core";
 import SensoDraftJSAtomic from "./SensoDraftJSAtomic";
 import { useTranslation } from "react-i18next";
@@ -64,7 +65,6 @@ type SensoDraftJSProps = {
 const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     storagePath,
     readOnly,
-    isDungeonMaster = false,
     style,
 }) => {
     const translate = useTranslation();
@@ -93,6 +93,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     const [
         plugins,
         Toolbar,
+        InlineToolbar,
         PlayerMentionSuggestions,
         MonsterMentionSuggestions,
         LocationMentionSuggestions,
@@ -103,6 +104,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         const resizeablePlugin = createResizeablePlugin({});
         const blockDndPlugin = createBlockDndPlugin();
         const alignmentPlugin = createAlignmentPlugin();
+        const inlineToolbarPlugin = createInlineToolbarPlugin();
         const locationMentionPlugin = createMentionPlugin({
             mentionTrigger: "#",
         });
@@ -119,6 +121,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         const PlayerMentionSuggestions = playerMentionPlugin.MentionSuggestions;
         const MonsterMentionSuggestions = monsterMentionPlugin.MentionSuggestions;
         const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
+        const InlineToolbar = inlineToolbarPlugin.InlineToolbar
 
         return [
             [
@@ -127,12 +130,14 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                 resizeablePlugin,
                 alignmentPlugin,
                 blockDndPlugin,
+                inlineToolbarPlugin,
                 staticToolbarPlugin,
                 playerMentionPlugin,
                 locationMentionPlugin,
                 monsterMentionPlugin,
             ],
             staticToolbarPlugin.Toolbar,
+            InlineToolbar,
             PlayerMentionSuggestions,
             MonsterMentionSuggestions,
             LocationMentionSuggestions,
@@ -318,6 +323,31 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                     }}
                     plugins={plugins}
                 />
+                <InlineToolbar >
+                    {
+                        // may be use React.Fragment instead of div to improve perfomance after React 16
+                        (externalProps) => (
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    flexWrap: "wrap",
+                                }}
+                            >
+
+                                <HeadlineOneButton {...externalProps} />
+                                <HeadlineTwoButton {...externalProps} />
+                                <HeadlineThreeButton {...externalProps} />
+                                <BoldButton {...externalProps} />
+                                <ItalicButton {...externalProps} />
+                                <UnderlineButton {...externalProps} />
+                                <Separator />
+                                <UnorderedListButton {...externalProps} />
+                                <OrderedListButton {...externalProps} />
+                            </div>
+                        )
+                    }
+                </InlineToolbar>
                 {playerSuggestions ? (
                     <PlayerMentionSuggestions
                         open={playerOpen}
@@ -349,6 +379,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         MonsterMentionSuggestions,
         PlayerMentionSuggestions,
         plugins,
+        InlineToolbar,
         editorState,
         playerOpen,
         playerSuggestions,
@@ -366,7 +397,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         onMonsterSearchChange,
     ]);
     return (
-        <EditorContainer>
+        <EditorContainer style={style ? style : {}}>
             {!readOnly ? (
                 <EditorHeader>
                     {!readOnly ? (
@@ -492,6 +523,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                                 )
                             }
                         </Toolbar>
+
                     ) : null}
                 </EditorHeader>
             ) : null}

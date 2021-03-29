@@ -30,7 +30,6 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
     }
     return (
         <Container>
-            <SensoImageInput storagePath="/" />
             <SensoDraftJS
                 storagePath={`${selectedCampaignStoragePath}`}
                 readOnly={false}
