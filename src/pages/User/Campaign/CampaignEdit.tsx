@@ -32,7 +32,7 @@ const CampaignEdit: React.FC<CampaignEditProps> = () => {
         <Container>
             <SensoImageInput storagePath="/" />
             <SensoDraftJS
-                storagePath={`${selectedCampaignStoragePath}/CampaignLore.json`}
+                storagePath={`${selectedCampaignStoragePath}`}
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}
             />

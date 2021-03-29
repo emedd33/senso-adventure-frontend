@@ -3,10 +3,11 @@ import styled from "styled-components";
 import createToolbarPlugin, {
     Separator,
 } from "@draft-js-plugins/static-toolbar";
+import { Map } from "immutable"
 import createImagePlugin from '@draft-js-plugins/image';
 import Editor, { composeDecorators } from "@draft-js-plugins/editor";
-import { insertCharacter, insertAtomicBlock } from "./insertContent";
-import { EditorState, convertToRaw, convertFromRaw, SelectionState, DraftHandleValue } from "draft-js";
+import { insertCharacter, insertAtomicBlock, insertImageBlock } from "./insertContent";
+import { EditorState, convertToRaw, convertFromRaw, SelectionState, DraftHandleValue, DefaultDraftBlockRenderMap, AtomicBlockUtils } from "draft-js";
 import { handleKeyCommand, keyBindingFn } from "./handleKey";
 import playerIcon from "../../assets/icons/character_icon.png";
 import locationIcon from "../../assets/icons/location_icon.png";
@@ -55,7 +56,7 @@ import {
 import useInterval from "../../store/hooks/useInterval";
 import { storage } from "../../services/Firebase/firebase";
 import { setIsUploading } from "../../store/admin/adminCreator";
-import { initialState } from "./initialState"
+import { initialState } from "./initialState";
 type SensoDraftJSProps = {
     storagePath: string;
     readOnly: boolean;
@@ -70,7 +71,6 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
 }) => {
 
     const dispatch = useDispatch();
-    // @ts-ignore
     const [editorState, setEditorState] = React.useState(() =>
         EditorState.createEmpty()
     );
@@ -149,7 +149,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                         { type: "application/json" }
                     );
                     storage
-                        .ref(storagePath)
+                        .ref(storagePath + "/CampaignLore.json")
                         .put(blob)
                         .then(() => {
                             setSavedEditorState(uploadedState);
@@ -213,13 +213,12 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
 
     useMemo(() => {
         storage
-            .ref(storagePath)
+            .ref(storagePath + "/CampaignLore.json")
             .getDownloadURL()
             .then((url: string) =>
                 fetch(url)
                     .then((res) => res.json())
                     .then((res) => {
-
                         let loadedEditorState = EditorState.createWithContent(
                             // @ts-ignore
                             convertFromRaw(initialState)
@@ -241,7 +240,6 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         };
     }, [storagePath]);
     const translate = useTranslation();
-
     const focus = (): void => {
         editor.current?.focus();
     };
@@ -265,7 +263,52 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                     readOnly: readOnly,
                 };
             }
+            if (type == 'SLIDER') {
+                //   return {
+                //     component: EditorSlider, // <-- [2]
+                //     props: {
+                //       getEditorState, // <-- [3]
+                //       setEditorState, // <-- [3]
+                //     }
+                // };
+
+            }
+            return null
         }
+        const handleDroppedFiles = (selection: SelectionState, files: File[]) => {
+            const filteredFiles = files.filter((file: File) => file.type.indexOf('image/') === 0); // <-- [1]
+
+            if (!filteredFiles.length) {
+                return "not-handled";
+            }
+
+            submitImages(filteredFiles, selection)
+            return 'handled';
+        }
+        const submitImages = (newImages: File[], selection: SelectionState) => {
+            newImages.map(async (newImage: File) => {
+
+                let uploadTask = storage
+                    .ref(storagePath)
+                    .child("images")
+                    .child(newImage.name)
+                    .put(newImage);
+                uploadTask.on(
+                    "state_changed",
+                    () => { },
+                    (error) => {
+                        console.log(`Could not upload ${newImage}`, error);
+                    },
+                    () => {
+                        let name = uploadTask.snapshot.ref.name;
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            setEditorState(insertImageBlock(downloadURL, selection, editorState))
+                        })
+                    }
+                )
+            })
+        }
+
 
         return (
             <div
@@ -278,13 +321,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                 <Editor
                     editorState={editorState}
                     onChange={setEditorState}
-                    handleDroppedFiles={(
-                        selection: SelectionState,
-                        files: any[]
-                    ) => {
-                        console.log(files)
-                        return "handled"
-                    }}
+                    // handleDroppedFiles={handleDroppedFiles}
                     handleKeyCommand={(e: any) =>
                         handleKeyCommand(e, editorState, setEditorState)
                     }
