@@ -36,6 +36,7 @@ import {
 } from "@draft-js-plugins/buttons";
 import playerIcon from "../../assets/icons/character_icon.png";
 import locationIcon from "../../assets/icons/location_icon.png";
+import imageIcon from "../../assets/icons/image_icon.png";
 import monsterIcon from "../../assets/icons/monster_icon.png";
 import knowledgeIcon from "../../assets/icons/knowledge_icon.png";
 import secretIcon from "../../assets/icons/hush_icon.png";
@@ -74,6 +75,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     );
     const [savedEditorState, setSavedEditorState] = useState<any>(editorState);
     const editor = useRef<Editor | null>(null);
+    const inputFile = useRef(null)
     const [playerOpen, setPlayerOpen] = useState(true);
     const [monsterOpen, setMonsterOpen] = useState(true);
     const [locationOpen, setLocationOpen] = useState(true);
@@ -185,7 +187,44 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         },
         [locationMentionList]
     );
+    const submitImages = useCallback((newImages: File[], selection: SelectionState) => {
+        newImages.map(async (newImage: File) => {
 
+            let uploadTask = storage
+                .ref(storagePath)
+                .child("images")
+                .child(newImage.name)
+                .put(newImage);
+            uploadTask.on(
+                "state_changed",
+                () => { },
+                (error) => {
+                    console.log(`Could not upload ${newImage}`, error);
+                },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        setEditorState(insertImageBlock(downloadURL, selection, editorState))
+                    })
+                }
+            )
+        })
+    }, [editorState, storagePath])
+    const handleImageUpload = useCallback((e: any) => {
+        const [file] = e.target.files;
+        if (file) {
+            submitImages([file], editorState.getSelection())
+        }
+    }, [editorState, submitImages]);
+    const handleDroppedFiles = useCallback((selection: SelectionState, files: File[]) => {
+        const filteredFiles = files.filter((file: File) => file.type.indexOf('image/') === 0); // <-- [1]
+
+        if (!filteredFiles.length) {
+            return "not-handled";
+        }
+
+        submitImages(filteredFiles, selection)
+        return 'handled';
+    }, [submitImages])
     useInterval(() => {
         if (!readOnly) {
             if (savedEditorState) {
@@ -244,6 +283,8 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     const focus = (): void => {
         editor.current?.focus();
     };
+
+
     const renderEditor = useCallback(() => {
         function blockStyleFn(contentBlock: any) {
             const type = contentBlock.getType();
@@ -266,38 +307,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
             }
             return null
         }
-        const handleDroppedFiles = (selection: SelectionState, files: File[]) => {
-            const filteredFiles = files.filter((file: File) => file.type.indexOf('image/') === 0); // <-- [1]
 
-            if (!filteredFiles.length) {
-                return "not-handled";
-            }
-
-            submitImages(filteredFiles, selection)
-            return 'handled';
-        }
-        const submitImages = (newImages: File[], selection: SelectionState) => {
-            newImages.map(async (newImage: File) => {
-
-                let uploadTask = storage
-                    .ref(storagePath)
-                    .child("images")
-                    .child(newImage.name)
-                    .put(newImage);
-                uploadTask.on(
-                    "state_changed",
-                    () => { },
-                    (error) => {
-                        console.log(`Could not upload ${newImage}`, error);
-                    },
-                    () => {
-                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                            setEditorState(insertImageBlock(downloadURL, selection, editorState))
-                        })
-                    }
-                )
-            })
-        }
 
         return (
             <div
@@ -344,6 +354,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                                 <Separator />
                                 <UnorderedListButton {...externalProps} />
                                 <OrderedListButton {...externalProps} />
+
                             </div>
                         )
                     }
@@ -385,11 +396,11 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         playerSuggestions,
         locationOpen,
         locationSuggestions,
+        handleDroppedFiles,
         onPlayerSearchChange,
         onLocationOpenChange,
         onLocationSearchChange,
         readOnly,
-        storagePath,
         onPlayerOpenChange,
         monsterOpen,
         monsterSuggestions,
@@ -510,6 +521,28 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                                                 />
                                             </Button>
                                         </Tooltip>
+                                        <Tooltip title={`${translate.t("Insert image")} `}>
+                                            <Button
+                                                onClick={() => {
+                                                    if (inputFile !== null) {
+                                                        // @ts-ignore
+                                                        inputFile!.current.click()
+                                                    }
+                                                }}
+                                                style={{ width: "2rem" }}
+                                            >
+                                                {" "}
+                                                <img
+                                                    src={imageIcon}
+                                                    style={{ width: "2rem" }}
+                                                    alt=""
+                                                />
+                                                <input type='file' id='file' accept="image/*" ref={inputFile} style={{ display: 'none' }} onChange={handleImageUpload} multiple={false} />
+
+                                            </Button>
+                                        </Tooltip>
+
+
                                         <HeadlineOneButton {...externalProps} />
                                         <HeadlineTwoButton {...externalProps} />
                                         <HeadlineThreeButton {...externalProps} />

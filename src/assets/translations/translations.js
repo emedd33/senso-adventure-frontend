@@ -48,6 +48,7 @@ const resources = {
       "Insert description": "Legg til beskrivelse",
       "Insert knowledge note": "Legg tile kunnskapsnotat",
       Immunities: "Immunitet",
+      "Insert image": "Sett inn bilde",
       Inspiration: "Inspirasjon",
       Insight: "Innsikt",
       Int: "Int",
