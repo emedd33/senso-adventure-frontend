@@ -3,11 +3,10 @@ import styled from "styled-components";
 import createToolbarPlugin, {
     Separator,
 } from "@draft-js-plugins/static-toolbar";
-import { Map } from "immutable"
 import createImagePlugin from '@draft-js-plugins/image';
 import Editor, { composeDecorators } from "@draft-js-plugins/editor";
 import { insertCharacter, insertAtomicBlock, insertImageBlock } from "./insertContent";
-import { EditorState, convertToRaw, convertFromRaw, SelectionState, DraftHandleValue, DefaultDraftBlockRenderMap, AtomicBlockUtils } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw, SelectionState } from "draft-js";
 import { handleKeyCommand, keyBindingFn } from "./handleKey";
 import playerIcon from "../../assets/icons/character_icon.png";
 import locationIcon from "../../assets/icons/location_icon.png";
@@ -56,7 +55,6 @@ import {
 import useInterval from "../../store/hooks/useInterval";
 import { storage } from "../../services/Firebase/firebase";
 import { setIsUploading } from "../../store/admin/adminCreator";
-import { initialState } from "./initialState";
 type SensoDraftJSProps = {
     storagePath: string;
     readOnly: boolean;
@@ -69,7 +67,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     isDungeonMaster = false,
     style,
 }) => {
-
+    const translate = useTranslation();
     const dispatch = useDispatch();
     const [editorState, setEditorState] = React.useState(() =>
         EditorState.createEmpty()
@@ -92,6 +90,54 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     const locationMentionList = useSelector(
         getSelectedCampaignLocationMentionList
     );
+    const [
+        plugins,
+        Toolbar,
+        PlayerMentionSuggestions,
+        MonsterMentionSuggestions,
+        LocationMentionSuggestions,
+    ] = useMemo(() => {
+        const staticToolbarPlugin = createToolbarPlugin();
+        const focusPlugin = createFocusPlugin();
+        const playerMentionPlugin = createMentionPlugin();
+        const resizeablePlugin = createResizeablePlugin({});
+        const blockDndPlugin = createBlockDndPlugin();
+        const alignmentPlugin = createAlignmentPlugin();
+        const locationMentionPlugin = createMentionPlugin({
+            mentionTrigger: "#",
+        });
+        const monsterMentionPlugin = createMentionPlugin({
+            mentionTrigger: "$",
+        });
+        const decorator = composeDecorators(
+            resizeablePlugin.decorator,
+            alignmentPlugin.decorator,
+            focusPlugin.decorator,
+            blockDndPlugin.decorator
+        );
+        const imagePlugin = createImagePlugin({ decorator });
+        const PlayerMentionSuggestions = playerMentionPlugin.MentionSuggestions;
+        const MonsterMentionSuggestions = monsterMentionPlugin.MentionSuggestions;
+        const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
+
+        return [
+            [
+                imagePlugin,
+                focusPlugin,
+                resizeablePlugin,
+                alignmentPlugin,
+                blockDndPlugin,
+                staticToolbarPlugin,
+                playerMentionPlugin,
+                locationMentionPlugin,
+                monsterMentionPlugin,
+            ],
+            staticToolbarPlugin.Toolbar,
+            PlayerMentionSuggestions,
+            MonsterMentionSuggestions,
+            LocationMentionSuggestions,
+        ];
+    }, []);
 
     const onPlayerOpenChange = useCallback((_open: boolean) => {
         setPlayerOpen(_open);
@@ -162,54 +208,6 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
             }
         }
     }, 5000);
-    const [
-        plugins,
-        Toolbar,
-        PlayerMentionSuggestions,
-        MonsterMentionSuggestions,
-        LocationMentionSuggestions,
-    ] = useMemo(() => {
-        const staticToolbarPlugin = createToolbarPlugin();
-        const focusPlugin = createFocusPlugin();
-        const playerMentionPlugin = createMentionPlugin();
-        const resizeablePlugin = createResizeablePlugin({});
-        const blockDndPlugin = createBlockDndPlugin();
-        const alignmentPlugin = createAlignmentPlugin();
-        const locationMentionPlugin = createMentionPlugin({
-            mentionTrigger: "#",
-        });
-        const monsterMentionPlugin = createMentionPlugin({
-            mentionTrigger: "$",
-        });
-        const decorator = composeDecorators(
-            resizeablePlugin.decorator,
-            alignmentPlugin.decorator,
-            focusPlugin.decorator,
-            blockDndPlugin.decorator
-        );
-        const imagePlugin = createImagePlugin({ decorator });
-        const PlayerMentionSuggestions = playerMentionPlugin.MentionSuggestions;
-        const MonsterMentionSuggestions = monsterMentionPlugin.MentionSuggestions;
-        const LocationMentionSuggestions = locationMentionPlugin.MentionSuggestions;
-
-        return [
-            [
-                imagePlugin,
-                focusPlugin,
-                resizeablePlugin,
-                alignmentPlugin,
-                blockDndPlugin,
-                staticToolbarPlugin,
-                playerMentionPlugin,
-                locationMentionPlugin,
-                monsterMentionPlugin,
-            ],
-            staticToolbarPlugin.Toolbar,
-            PlayerMentionSuggestions,
-            MonsterMentionSuggestions,
-            LocationMentionSuggestions,
-        ];
-    }, []);
 
     useMemo(() => {
         storage
@@ -220,8 +218,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                     .then((res) => res.json())
                     .then((res) => {
                         let loadedEditorState = EditorState.createWithContent(
-                            // @ts-ignore
-                            convertFromRaw(initialState)
+                            convertFromRaw(res)
                         );
 
                         setSavedEditorState(loadedEditorState);
@@ -239,7 +236,6 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
             setMonsterSuggestions([]);
         };
     }, [storagePath]);
-    const translate = useTranslation();
     const focus = (): void => {
         editor.current?.focus();
     };
@@ -262,16 +258,6 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                     component: SensoDraftJSAtomic,
                     readOnly: readOnly,
                 };
-            }
-            if (type == 'SLIDER') {
-                //   return {
-                //     component: EditorSlider, // <-- [2]
-                //     props: {
-                //       getEditorState, // <-- [3]
-                //       setEditorState, // <-- [3]
-                //     }
-                // };
-
             }
             return null
         }
@@ -300,7 +286,6 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                         console.log(`Could not upload ${newImage}`, error);
                     },
                     () => {
-                        let name = uploadTask.snapshot.ref.name;
                         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                             setEditorState(insertImageBlock(downloadURL, selection, editorState))
                         })
@@ -308,7 +293,6 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                 )
             })
         }
-
 
         return (
             <div
@@ -321,7 +305,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                 <Editor
                     editorState={editorState}
                     onChange={setEditorState}
-                    // handleDroppedFiles={handleDroppedFiles}
+                    handleDroppedFiles={handleDroppedFiles}
                     handleKeyCommand={(e: any) =>
                         handleKeyCommand(e, editorState, setEditorState)
                     }
@@ -374,6 +358,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         onLocationOpenChange,
         onLocationSearchChange,
         readOnly,
+        storagePath,
         onPlayerOpenChange,
         monsterOpen,
         monsterSuggestions,
