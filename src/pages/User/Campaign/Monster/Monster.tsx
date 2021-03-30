@@ -476,13 +476,15 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                                 }
                             )}
                             <h2>{translate.t(`Lore`)}</h2>
-                            <SensoDraftJS
-                                readOnly={true}
-                                storagePath={`${monsterPath}`}
-                                isDungeonMaster={isDungeonMaster}
-                            />
                         </>
                     ) : null}
+                    <h3>{translate.t(`Lore`)}:</h3>
+
+                    <SensoDraftJS
+                        readOnly={true}
+                        storagePath={`${monsterPath}`}
+                        isDungeonMaster={isDungeonMaster}
+                    />
                 </>
             ) : null}
         </Container>

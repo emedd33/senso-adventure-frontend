@@ -228,7 +228,7 @@ export const getSelectedCampaignLocationMentionList = (
         state.selected.selectedCampaign?.campaign.locations
       ).map((location: ILocation) => ({
         name: location.name,
-        link: `/user/${state.selected.selectedCampaign?.campaign.dungeonMaster.username}/campaigns//${state.selected.selectedCampaign?.campaign.slug}/locations/${location.slug}`,
+        link: `/user/${state.selected.selectedCampaign?.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.campaign.slug}/locations/${location.slug}`,
       }));
     }
   }
