@@ -33,7 +33,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useWindowSize from "../../../store/hooks/useWindowSize";
 import { useTranslation } from "react-i18next";
 import SensoDraftJS from "../../../components/SensoDraftJS/SensoDraftJS";
-import PlayerShort from "../../../components/SensoPlayer/PlayerShort";
+import { SensoMonsterShort, SensoPlayerShort } from "../../../components/SensoContainers";
 
 const MenuItem: React.FC<{ text: any; selected: any; key: number }> = ({
     text,
@@ -220,14 +220,11 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                                 {monster.name}
                                             </Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails
-                                            style={{
-                                                display: "grid",
-                                                gridTemplateColumns: "1fr",
-                                                margin: 0,
-                                            }}
-                                        >
-                                            <p>{monster.description}</p>
+                                        <AccordionDetails>
+                                            <SensoMonsterShort
+                                                monster={monster}
+                                                isDungeonMaster={isDungeonMaster}
+                                            />
                                         </AccordionDetails>
                                         <AccordionActions>
                                             <Link
@@ -288,12 +285,16 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                             aria-controls="panel1bh-content"
                                             id="panel1bh-header"
                                         >
-                                            <Typography style={{ flexBasis: "90%", flexShrink: 0 }}>
+                                            <Typography style={{ flexBasis: "40%", flexShrink: 0 }}>
                                                 {player.name}
                                             </Typography>
+                                            <Typography style={{ flexBasis: "50%", flexShrink: 0 }}>
+                                                {translate.t(`Played by`)}
+                                                {` ${player.playerName}`}
+                                            </Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails>
-                                            <PlayerShort
+                                        <AccordionDetails >
+                                            <SensoPlayerShort
                                                 player={player}
                                                 isDungeonMaster={isDungeonMaster}
                                             />

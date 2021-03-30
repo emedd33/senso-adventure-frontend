@@ -85,53 +85,28 @@ const Location: React.FC<LocationProps> = () => {
                     </>
                 ) : null}
             </div>
-            <div style={{ gridColumn: "1/3" }}>
-                <b>{translate.t(`Also known as`)}: </b>
-                <i>{renderArrayOfString(selectedLocation.location.nickNames)}</i>
-            </div>
-            <div>
-                <b>{translate.t(`Religion/Belief system`)}: </b>
-                <i>{selectedLocation.location.religion}</i>
-            </div>
-
-            <div>
-                <b>{translate.t(`Governed rule`)}: </b>
-                <i>{selectedLocation.location.governRule}</i>
-            </div>
-
+            {selectedLocation.location.nickNames ?
+                <div style={{ gridColumn: "1/3" }}>
+                    <b>{translate.t(`Also known as`)}: </b>
+                    <i>{renderArrayOfString(selectedLocation.location.nickNames)}</i>
+                </div>
+                : null}
+            {selectedLocation.location.religion ?
+                <div>
+                    <b>{translate.t(`Religion/Belief system`)}: </b>
+                    <i>{selectedLocation.location.religion}</i>
+                </div>
+                : null}
+            {selectedLocation.location.governRule ?
+                <div>
+                    <b>{translate.t(`Governed rule`)}: </b>
+                    <i>{selectedLocation.location.governRule}</i>
+                </div>
+                : null}
             <div style={{ gridColumn: "1/3" }}>
                 <SensoDescription content={selectedLocation.location.description} />
             </div>
 
-            {isDungeonMaster &&
-                selectedLocation.location.keyElements &&
-                selectedCampaign ? (
-                <>
-                    <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
-                    <h3 style={{ gridColumn: "1/3" }}>{`${translate.t(
-                        "Key Elements in"
-                    )} ${selectedLocation.location.name}`}</h3>
-                    {Object.values(selectedLocation.location.keyElements).map(
-                        (keyElement: { name: string; description: string }) => (
-                            <div>
-                                <b>{keyElement.name}: </b>
-                                {keyElement.description}
-                            </div>
-                        )
-                    )}
-                    <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
-                    <h3 style={{ gridColumn: "1/3" }}>{`${translate.t("Resources in")} ${selectedLocation.location.name
-                        }`}</h3>
-                    {Object.values(selectedLocation.location.resources).map(
-                        (resource: { name: string; description: string }) => (
-                            <div>
-                                <b>{resource.name}: </b>
-                                {resource.description}
-                            </div>
-                        )
-                    )}
-                </>
-            ) : null}
             <Divider style={{ gridColumn: "1/3", marginTop: "1rem" }} />
 
             {selectedLocation.location.characters && selectedCampaign ? (
@@ -181,8 +156,7 @@ const Location: React.FC<LocationProps> = () => {
             ) : null}
             {isDungeonMaster ? (
                 <div style={{ gridColumn: "1/3" }}>
-                    <h3>{`${translate.t("Lore of")} ${selectedLocation.location.name
-                        }`}</h3>
+                    <h3>{`${translate.t("Lore and information")}`}</h3>
 
                     <SensoDraftJS
                         readOnly={true}

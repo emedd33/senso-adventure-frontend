@@ -9,11 +9,13 @@ import {
     SensoActionInputs,
     SensoDelete,
     SensoProficiencyInput,
+    SensoMonsterAbilityInput,
 } from "../../../../components/SensoInputs";
 
 import {
     getSelectedCampaign,
     getSelectedMonster,
+    getSelectedMonsterDatabasePath,
     getSelectedMonsterStoragePath,
     isDungeonMasterSelector,
 } from "../../../../store/selected/selectedSelectors";
@@ -35,8 +37,8 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
         getSelectedCampaign
     );
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
-    const monsterPath = useSelector(getSelectedMonsterStoragePath);
-    console.log(selectedMonster);
+    const selectedMonsterStoragePath = useSelector(getSelectedMonsterStoragePath);
+    const selectedMonsterDatabasePath = useSelector(getSelectedMonsterDatabasePath);
     const owner = useOwner();
     if (selectedMonster === undefined || selectedCampaign === undefined) {
         return (
@@ -216,7 +218,52 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
                             />
                         </div>
                     </div>
+                    <div
+                        style={{
+                            display: "flex",
+                            gridColumn: "1/2",
+                            justifyContent: "space-between",
+                            flexWrap: "wrap",
 
+                        }}
+                    >
+                        <SensoMonsterAbilityInput
+                            initAbilityValue={selectedMonster.monster.stats.strength}
+                            firebasePath={`${selectedMonsterDatabasePath}/stats/strength`}
+                            label={translate.t(`Str`)}
+
+                        />
+
+                        <SensoMonsterAbilityInput
+                            initAbilityValue={selectedMonster.monster.stats.dexterity}
+                            firebasePath={`${selectedMonsterDatabasePath}/stats/dexterity`}
+                            label={translate.t(`Dex`)}
+
+                        /> <SensoMonsterAbilityInput
+                            initAbilityValue={selectedMonster.monster.stats.constitution}
+                            firebasePath={`${selectedMonsterDatabasePath}/stats/constitution`}
+                            label={translate.t(`Con`)}
+
+                        />
+                        <SensoMonsterAbilityInput
+                            initAbilityValue={selectedMonster.monster.stats.intelligence}
+                            firebasePath={`${selectedMonsterDatabasePath}/stats/intelligence`}
+                            label={translate.t(`Int`)}
+
+                        />
+                        <SensoMonsterAbilityInput
+                            initAbilityValue={selectedMonster.monster.stats.wisdom}
+                            firebasePath={`${selectedMonsterDatabasePath}/stats/wisdom`}
+                            label={translate.t(`Wis`)}
+
+                        />
+                        <SensoMonsterAbilityInput
+                            initAbilityValue={selectedMonster.monster.stats.charisma}
+                            firebasePath={`${selectedMonsterDatabasePath}/stats/charisma`}
+                            label={translate.t(`Cha`)}
+
+                        />
+                    </div>
                     <div
                         style={{
                             display: "flex",
@@ -234,11 +281,11 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
                             label={translate.t(`Damage immunities`)}
                             firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageImmunities`}
                         />
-                        {/* <SensoTextArrayInput
-                        initArray={selectedMonster.monster.conditionImmunities}
-                        label={translate.t(`Condition immunities`)}
-                        firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/conditionImmunities`}
-                    /> */}
+                        <SensoTextArrayInput
+                            initArray={selectedMonster.monster.conditionImmunities}
+                            label={translate.t(`Condition immunities`)}
+                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/conditionImmunities`}
+                        />
                         <SensoTextArrayInput
                             initArray={selectedMonster.monster.damageResistances}
                             label={translate.t(`Damage resistance`)}
@@ -250,17 +297,20 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
                             firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageVulnerabilities`}
                         />
                     </div>
-                    <h2>{translate.t(`Special abilities`)}</h2>
                     <SensoActionInputs
                         actions={selectedMonster.monster.specialAbilities}
-                        label={translate.t(`Abilities`)}
+                        label={translate.t(`Special abilities`)}
                         firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/specialAbilities`}
                     />
-                    <h2>{translate.t(`Actions`)}</h2>
                     <SensoActionInputs
                         actions={selectedMonster.monster.actions}
                         label={translate.t(`Actions`)}
                         firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/actions`}
+                    />
+                    <SensoActionInputs
+                        actions={selectedMonster.monster.legendaryActions}
+                        label={translate.t(`Legendary actions`)}
+                        firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/legendaryActions`}
                     />
 
                     <Divider />
@@ -268,10 +318,10 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
                     <SensoDraftJS
                         readOnly={false}
                         isDungeonMaster={isDungeonMaster}
-                        storagePath={`${monsterPath}`}
+                        storagePath={`${selectedMonsterStoragePath}`}
                     />
                     <SensoDelete
-                        storagePath={`${monsterPath}`}
+                        storagePath={`${selectedMonsterStoragePath}`}
                         databasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}`}
                         instanceType="Character"
                         linkPath={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters`}

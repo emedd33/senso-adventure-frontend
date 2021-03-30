@@ -6,17 +6,15 @@ import {
   AccordionActions,
   IconButton,
   TextField,
+  Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import useSavedState from "../../store/hooks/useSavedState";
-import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
+import { OLD_WHITE_DARK, OLD_WHITE } from "../../assets/constants/Constants";
 import DeleteIcon from "@material-ui/icons/Delete";
 import styled from "styled-components";
-import useInterval from "../../store/hooks/useInterval";
 import { database } from "../../services/Firebase/firebase";
 import { useTranslation } from "react-i18next";
-
 type SensoActionInputsProps = {
   actions?: IMonsterAction[];
   firebasePath: string;
@@ -24,95 +22,93 @@ type SensoActionInputsProps = {
   style?: React.CSSProperties;
 };
 
-const NEW_ACTION = { name: "New Action", description: "" };
 const SensoActionInputs: React.FC<SensoActionInputsProps> = ({
   actions = [],
   firebasePath,
   label,
   style,
 }) => {
-  const [array, setArray, saveArray, isSavedArray] = useSavedState(actions);
+  const [newAction, setNewAction] = useState<{ name: string, desc: string }>({ name: "", desc: "" })
   const translate = useTranslation();
   const handleAddNewValue = () => {
-    if (array) {
-      setArray((existingValues: any[]) => [...existingValues, NEW_ACTION]);
-    } else {
-      setArray([NEW_ACTION]);
-    }
+
+    database.ref(firebasePath).set([...actions, newAction]);
+    setNewAction({ name: "", desc: "" })
+
+
   };
-  useInterval(() => {
-    if (!isSavedArray && array) {
-      saveArray();
-      database.ref(firebasePath).set(array);
-    }
-  }, 1000);
+  const handleDelete = (actionIndex: number) => {
+    actions.splice(actionIndex, 1)
+    database.ref(firebasePath).set(actions);
+    setNewAction({ name: "", desc: "" })
+  }
+
   return (
     <Container style={style}>
-      {array
-        ? array.map((action: IMonsterAction, index: number) => (
-            <Accordion key={index} style={{ backgroundColor: OLD_WHITE_DARK }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <TextField
-                  variant="outlined"
-                  label={label}
-                  value={action.name}
-                  style={{ backgroundColor: OLD_WHITE_DARK }}
-                  onChange={(event) => {
-                    if (array) {
-                      setArray((existingValues: IMonsterAction[]) => {
-                        existingValues[index].name = event.target.value;
-                        return [...existingValues];
-                      });
-                    }
-                  }}
-                />
-              </AccordionSummary>
-              <AccordionDetails
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
-                  <h3>{translate.t(`Description`)}</h3>
-                  <TextField
-                    label={translate.t("Description")}
-                    multiline
-                    style={{ backgroundColor: OLD_WHITE_DARK, width: "100%" }}
-                    rows={6}
-                    value={action.desc}
-                    onChange={(event) => {
-                      if (event.target.value.length < 400) {
-                        if (array) {
-                          setArray((existingValues: IMonsterAction[]) => {
-                            existingValues[index].desc = event.target.value;
-                            return [...existingValues];
-                          });
-                        }
-                      }
-                    }}
-                    variant="filled"
-                  />
-                </div>
-              </AccordionDetails>
-              <AccordionActions>
-                <IconButton
-                  onClick={() => {
-                    setArray((existingValues: any[]) =>
-                      existingValues.filter((existingAction: any) =>
-                        existingAction.splice(index, index)
-                      )
-                    );
+      <h2>{label}</h2>
+      {actions ? (
+        <>
+          {actions.map((action: IMonsterAction, index: number) => {
+            return (
+              <div key={index}>
+                <Accordion
+
+                  style={{
+                    backgroundColor: OLD_WHITE,
+                    marginTop: "0.2rem",
                   }}
                 >
-                  <DeleteIcon color="secondary" />
-                </IconButton>
-              </AccordionActions>
-            </Accordion>
-          ))
-        : null}
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>{action.name}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    style={{
+                      backgroundColor: OLD_WHITE_DARK,
+                      display: "grid",
+                      gridTemplateColumns: "auto",
+                      gap: "1rem",
+                    }}
+                  >
+                    {action.desc}
+                  </AccordionDetails>
+                  <AccordionActions style={{
+                    backgroundColor: OLD_WHITE_DARK
+                  }}>
+                    <IconButton onClick={() => handleDelete(index)}>
+
+                      <DeleteIcon color="secondary" />
+                    </IconButton>
+                  </AccordionActions>
+                </Accordion>
+              </div>
+            );
+          })}
+        </>
+      ) : null}
+      <div style={{ width: "10rem", marginTop: "1rem" }}>
+
+        <TextField
+          variant="outlined"
+          label={translate.t(`Name`)}
+          value={newAction.name}
+
+          style={{ backgroundColor: OLD_WHITE_DARK }}
+          onChange={(event) => setNewAction({ ...newAction, name: event.target.value })}
+        />
+      </div>
+      <TextField
+        variant="outlined"
+        multiline
+        rows={4}
+        label={translate.t(`Description`)}
+        value={newAction.desc}
+        style={{ backgroundColor: OLD_WHITE_DARK, width: "100%" }}
+        onChange={(event) => setNewAction({ ...newAction, desc: event.target.value })}
+      />
       <Button
         variant="contained"
         color="primary"
@@ -124,8 +120,10 @@ const SensoActionInputs: React.FC<SensoActionInputsProps> = ({
         }}
         onClick={handleAddNewValue}
       >
-        {translate.t("Add new")}
+        {translate.t("Add")}
       </Button>
+
+
     </Container>
   );
 };

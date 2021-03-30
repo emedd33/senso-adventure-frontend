@@ -153,7 +153,7 @@ export const getSelectedMonsterStoragePath = (state: RootReducerProp) => {
 
 export const getSelectedMonsterDatabasePath = (state: RootReducerProp) => {
   if (state.selected.selectedCampaign && state.selected.selectedMonster) {
-    return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.id}/monster/${state.selected.selectedMonster?.id}`;
+    return `users/${state.selected.selectedCampaign.campaign.dungeonMaster.username}/campaigns/${state.selected.selectedCampaign?.id}/monsters/${state.selected.selectedMonster?.id}`;
   }
 };
 

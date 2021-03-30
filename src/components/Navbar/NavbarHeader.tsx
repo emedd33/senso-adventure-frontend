@@ -15,10 +15,12 @@ import { setIsSidebarShown } from "../../store/admin/adminCreator";
 import { Button, CircularProgress } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { getIsUploading } from "../../store/admin/adminSelectors";
+import useWindowSize from "../../store/hooks/useWindowSize";
 
 type NavbarHeaderProps = {};
 const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
   const translation = useTranslation();
+  const size = useWindowSize();
   const dispatch = useDispatch();
   const isUploading = useSelector(getIsUploading);
   return (
@@ -58,14 +60,23 @@ const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
             {isUploading ? <CircularProgress size={20} /> : null}
             <NavbarHeaderMenu />
           </div>
-          <div style={{ display: "grid", gridTemplateRows: "repeat(1fr)" }}>
-            <Button onClick={() => translation.i18n.changeLanguage("en")}>
-              <img src={engIcon} style={{ width: "1.5rem" }} alt="English" />
-            </Button>
-            <Button onClick={() => translation.i18n.changeLanguage("nor")}>
-              <img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" />
-            </Button>
-          </div>
+          {size.width && size.width! > 769 ?
+            <div style={{ display: "grid", gridTemplateRows: "repeat(1fr)" }}>
+              <Button onClick={() => {
+                translation.i18n.changeLanguage("en")
+                window.localStorage.setItem("language", "en")
+              }}>
+                <img src={engIcon} style={{ width: "1.5rem" }} alt="English" />
+              </Button>
+              <Button onClick={() => {
+                translation.i18n.changeLanguage("nor")
+                window.localStorage.setItem("language", "nor")
+
+              }}>
+                <img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" />
+              </Button>
+            </div>
+            : null}
         </Container>
       </IconContext.Provider>
     </>

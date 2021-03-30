@@ -33,7 +33,7 @@ const SensoSkillInput: React.FC<SensoSkillInputProps> = ({
       saveSkill();
       database.ref(firebasePath).set(skill);
     }
-  }, 1000);
+  }, 3000);
   return (
     <tr style={style}>
       <td>{label}</td>

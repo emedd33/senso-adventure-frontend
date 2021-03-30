@@ -22,8 +22,10 @@ import {
 } from "../../../../store/selected/selectedSelectors";
 import { getIsLoading } from "../../../../store/admin/adminSelectors";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
+import { useTranslation } from "react-i18next";
 
 const CampaignLocationEdit: React.FC = () => {
+    const translate = useTranslation()
     const selectedLocation = useSelector(
         (state: RootReducerProp) => state.selected.selectedLocation
     );
@@ -84,14 +86,14 @@ const CampaignLocationEdit: React.FC = () => {
             <SensoTextInput
                 firebasePath={`${selectedLocationDatabasePath}/governRule`}
                 initValue={selectedLocation.location.governRule}
-                label={"Govern rule"}
+                label={translate.t(`Govern rule`)}
             />
             <SensoMultilineTextInput
                 firebasePath={`${selectedLocationDatabasePath}/description`}
                 initValue={selectedLocation.location.description}
                 rows={4}
                 style={{ width: "100%" }}
-                label={"Description"}
+                label={translate.t(`Description`)}
             />
             <Divider style={{ width: "100%", margin: "1rem" }} />
             <div
@@ -103,13 +105,14 @@ const CampaignLocationEdit: React.FC = () => {
                 }}
             >
                 <h1 style={{ flex: 2, textAlign: "center" }}>
-                    {`Characters in ${selectedLocation.location.name}`}{" "}
+                    {`${translate.t(`Characters in`)} ${selectedLocation.location.name}`}{" "}
                 </h1>
             </div>
 
             <SensoAccordianInput
                 firebasePath={`${selectedLocationDatabasePath}/characters`}
                 initArray={selectedLocation.location.characters}
+                detailLabel={`${translate.t(`Role in`)} ${selectedLocation.location.name}`}
                 choices={
                     CampaignMonsters
                         ? CampaignMonsters.map(([, character]: [string, IMonster]) => ({
@@ -118,53 +121,14 @@ const CampaignLocationEdit: React.FC = () => {
                         }))
                         : []
                 }
-                label={"Characters"}
+                label={translate.t(`Characters`)}
                 style={{ width: "100%" }}
             />
 
-            <Divider style={{ width: "100%", margin: "1rem" }} />
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    width: "100%",
-                }}
-            >
-                <h1 style={{ flex: 2, textAlign: "center" }}>
-                    {`Resources in ${selectedLocation.location.name}`}{" "}
-                </h1>
-            </div>
 
-            <SensoAccordianInput
-                firebasePath={`${selectedLocationDatabasePath}/resources`}
-                initArray={selectedLocation.location.resources}
-                label={"Resources"}
-                style={{ width: "100%" }}
-            />
 
-            <Divider style={{ width: "100%", margin: "1rem" }} />
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    width: "100%",
-                }}
-            >
-                <h1 style={{ flex: 2, textAlign: "center" }}>
-                    {`Key Elements in ${selectedLocation.location.name}`}{" "}
-                </h1>
-            </div>
 
-            <SensoAccordianInput
-                firebasePath={`${selectedLocationDatabasePath}/keyElements`}
-                initArray={selectedLocation.location.keyElements}
-                label={"Key elements"}
-                style={{ width: "100%" }}
-            />
-
-            <h1 style={{ flex: 2, textAlign: "center" }}>Lore and history</h1>
+            <h1 style={{ flex: 2, textAlign: "center" }}>{translate.t(`Lore and information`)}</h1>
             <SensoDraftJS
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}

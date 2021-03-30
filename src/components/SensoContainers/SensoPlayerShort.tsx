@@ -3,12 +3,13 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import getAbilityModifier from "../../utils/getAbilityModifier";
+import { SensoDescription } from "../SensoContainers";
 
-type PlayerShortProps = {
+type SensoPlayerShortProps = {
   player: IPlayer;
   isDungeonMaster: boolean;
 };
-const PlayerShort: React.FC<PlayerShortProps> = ({
+const SensoPlayerShort: React.FC<SensoPlayerShortProps> = ({
   player,
   isDungeonMaster,
 }) => {
@@ -23,23 +24,20 @@ const PlayerShort: React.FC<PlayerShortProps> = ({
           gridTemplateColumns: "repeat(auto-fit, minmax(10rem,30rem)",
         }}
       >
-        <div>
-          <p>{player.description}</p>
-        </div>
+        <SensoDescription content={player.description} />
         <div style={{ height: "10rem" }}>
-          <Divider />
 
+          <LineContainer>
+            <b style={{ paddingRight: "0.2rem" }}>
+              {translate.t("Level")}:{" "}
+            </b>
+            {player.level}
+          </LineContainer>
           <LineContainer>
             <b style={{ paddingRight: "0.2rem" }}>
               {translate.t("Armor class")}:{" "}
             </b>{" "}
             {player.stats.armorClass}
-          </LineContainer>
-          <LineContainer>
-            <b style={{ paddingRight: "0.2rem" }}>
-              {translate.t("Proficiency")}:{" "}
-            </b>
-            {player.stats.proficiency}
           </LineContainer>
           <LineContainer>
             <b style={{ paddingRight: "0.2rem" }}>Hp: </b>
@@ -112,4 +110,4 @@ const LineContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-export default PlayerShort;
+export default SensoPlayerShort;

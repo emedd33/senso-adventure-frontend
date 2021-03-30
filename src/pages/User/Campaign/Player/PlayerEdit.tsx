@@ -7,7 +7,7 @@ import {
     SensoTextArrayInput,
     SensoMultilineTextInput,
     SensoAccordianInput,
-    SensoAbilityInput,
+    SensoPlayerAbilityInput,
     SensoSkillInput,
     SensoDelete,
 } from "../../../../components/SensoInputs";
@@ -171,41 +171,41 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                     flexWrap: "wrap",
                 }}
             >
-                <SensoAbilityInput
+                <SensoPlayerAbilityInput
                     initAbilityValue={selectedPlayer.player.stats.strength}
                     firebasePath={`${playerDatabsePath}/stats/strength`}
                     label={translate.t("Str")}
                     proficiencyBonus={selectedPlayer.player.stats.proficiency}
                 />
-                <SensoAbilityInput
+                <SensoPlayerAbilityInput
                     initAbilityValue={selectedPlayer.player.stats.dexterity}
                     firebasePath={`${playerDatabsePath}/stats/dexterity`}
                     label={translate.t("Dex")}
                     proficiencyBonus={selectedPlayer.player.stats.proficiency}
                 />
 
-                <SensoAbilityInput
+                <SensoPlayerAbilityInput
                     initAbilityValue={selectedPlayer.player.stats.constitution}
                     firebasePath={`${playerDatabsePath}/stats/constitution`}
                     label={translate.t("Con")}
                     proficiencyBonus={selectedPlayer.player.stats.proficiency}
                 />
 
-                <SensoAbilityInput
+                <SensoPlayerAbilityInput
                     initAbilityValue={selectedPlayer.player.stats.intelligence}
                     firebasePath={`${playerDatabsePath}/stats/intelligence`}
                     label={translate.t("Int")}
                     proficiencyBonus={selectedPlayer.player.stats.proficiency}
                 />
 
-                <SensoAbilityInput
+                <SensoPlayerAbilityInput
                     initAbilityValue={selectedPlayer.player.stats.wisdom}
                     firebasePath={`${playerDatabsePath}/stats/wisdom`}
                     label={translate.t("Wis")}
                     proficiencyBonus={selectedPlayer.player.stats.proficiency}
                 />
 
-                <SensoAbilityInput
+                <SensoPlayerAbilityInput
                     initAbilityValue={selectedPlayer.player.stats.charisma}
                     firebasePath={`${playerDatabsePath}/stats/charisma`}
                     label={translate.t("Cha")}
@@ -216,9 +216,9 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                 <table style={{ border: "double", margin: "1rem" }}>
                     <thead>
                         <tr>
-                            <th>{translate.t("Proficiency")}</th>
-                            <th>{translate.t("Modifier")}</th>
                             <th>{translate.t("Skill")}</th>
+                            <th>{translate.t("Modifier")}</th>
+                            <th>{translate.t("Proficiency")}</th>
                         </tr>
                         <tr>
                             <th>
@@ -282,9 +282,9 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                 <table style={{ border: "double", margin: "1rem" }}>
                     <thead>
                         <tr>
-                            <th>{translate.t("Proficiency")}</th>
-                            <th>{translate.t("Modifier")}</th>
                             <th>{translate.t("Skill")}</th>
+                            <th>{translate.t("Modifier")}</th>
+                            <th>{translate.t("Proficiency")}</th>
                         </tr>
                         <tr>
                             <th>
@@ -346,9 +346,9 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                 <table style={{ border: "double", margin: "1rem" }}>
                     <thead>
                         <tr>
-                            <th>{translate.t("Proficiency")}</th>
-                            <th>{translate.t("Modifier")}</th>
                             <th>{translate.t("Skill")}</th>
+                            <th>{translate.t("Modifier")}</th>
+                            <th>{translate.t("Proficiency")}</th>
                         </tr>
                         <tr>
                             <th>
@@ -414,6 +414,7 @@ const PlayerEdit: FunctionComponent<PlayerEditProps> = () => {
                 style={{ gridColumn: "1/3" }}
                 initArray={selectedPlayer.player.actions}
                 firebasePath={`${playerDatabsePath}/actions`}
+                detailLabel={`${translate.t(`Description`)}`}
                 label={translate.t("New action name")}
             />
             <div style={{ gridColumn: "1/3" }}>

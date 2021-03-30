@@ -1,7 +1,6 @@
 import { Button, Chip, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import useSavedState from "../../store/hooks/useSavedState";
-import useInterval from "../../store/hooks/useInterval";
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import { database } from "../../services/Firebase/firebase";
@@ -18,7 +17,7 @@ const SensoTextArrayInput: React.FC<SensoTextArrayInputProps> = ({
   label,
   style,
 }) => {
-  const [array, setArray, saveArray, isSavedArray] = useSavedState(initArray);
+  const [array, setArray, saveArray] = useSavedState(initArray);
   const [newValue, setNewValue] = useState<string>("");
   const translate = useTranslation();
   const handleAddNewValue = () => {
@@ -28,6 +27,10 @@ const SensoTextArrayInput: React.FC<SensoTextArrayInputProps> = ({
       } else {
         setArray([newValue]);
       }
+
+      saveArray();
+      database.ref(firebasePath).set(array);
+      setNewValue("")
     }
   };
   const handleDeleteValue = (elem: string) => {
@@ -35,12 +38,6 @@ const SensoTextArrayInput: React.FC<SensoTextArrayInputProps> = ({
       existingValues.filter((existingvalue: string) => existingvalue !== elem)
     );
   };
-  useInterval(() => {
-    if (!isSavedArray && array) {
-      saveArray();
-      database.ref(firebasePath).set(array);
-    }
-  }, 1000);
   return (
     <Container style={style}>
       <div
@@ -55,14 +52,14 @@ const SensoTextArrayInput: React.FC<SensoTextArrayInputProps> = ({
 
         {array
           ? array.map((elem: string, index: number) => (
-              <Chip
-                key={index}
-                style={{ margin: "0.2rem", backgroundColor: OLD_WHITE_DARK }}
-                label={elem}
-                onDelete={() => handleDeleteValue(elem)}
-                variant="outlined"
-              />
-            ))
+            <Chip
+              key={index}
+              style={{ margin: "0.2rem", backgroundColor: OLD_WHITE_DARK }}
+              label={elem}
+              onDelete={() => handleDeleteValue(elem)}
+              variant="outlined"
+            />
+          ))
           : null}
       </div>
       <div

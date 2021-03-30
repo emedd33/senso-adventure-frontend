@@ -16,11 +16,13 @@ import styled from "styled-components";
 import useInterval from "../../store/hooks/useInterval";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { database } from "../../services/Firebase/firebase";
+import { useTranslation } from "react-i18next";
 
 type SensoAccordianInputProps = {
   initArray?: any[];
   firebasePath: string;
   label: string;
+  detailLabel: string;
   choices?: { title: string; content: any }[];
   style?: React.CSSProperties;
 };
@@ -29,12 +31,14 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
   initArray = [],
   firebasePath,
   label,
+  detailLabel,
   style,
   choices,
 }) => {
   const [array, setArray, saveArray, isSavedArray] = useSavedState(
     Object.values(initArray)
   );
+  const translate = useTranslation()
   const [newValue, setNewValue] = useState<
     { name: string; description: string } | undefined
   >({ name: "", description: "" });
@@ -47,6 +51,8 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
       } else {
         setArray([newValue]);
       }
+      setNewValue(undefined)
+      setNewInputValue("")
     }
   };
   useInterval(() => {
@@ -103,53 +109,53 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
         style={{ height: "2rem", margin: "1rem", maxWidth: "10rem" }}
         onClick={handleAddNewValue}
       >
-        Add new
+        {translate.t(`Add`)}
       </Button>
       {array
         ? array.map((value: any, index: number) => (
-            <Accordion key={index} style={{ backgroundColor: OLD_WHITE_DARK }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                {value.name}
-              </AccordionSummary>
-              <AccordionDetails
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "4fr 1fr",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <TextField
-                  label="Action description"
-                  multiline
-                  style={{ backgroundColor: OLD_WHITE_DARK }}
-                  rows={4}
-                  value={value.description}
-                  onChange={(event) => {
-                    if (event.target.value.length < 400) {
-                      setArray((existingValues: any[]) => {
-                        existingValues[index].description = event.target.value;
-                        return [...existingValues];
-                      });
-                    }
-                  }}
-                  variant="filled"
-                />
-                <IconButton
-                  onClick={() =>
-                    setArray((existingValues: any[]) =>
-                      existingValues.filter(
-                        (existingAction: any) =>
-                          existingAction.name !== value.name
-                      )
-                    )
+          <Accordion key={index} style={{ backgroundColor: OLD_WHITE_DARK }}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              {value.name}
+            </AccordionSummary>
+            <AccordionDetails
+              style={{
+                display: "grid",
+                gridTemplateColumns: "4fr 1fr",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <TextField
+                label={detailLabel}
+                multiline
+                style={{ backgroundColor: OLD_WHITE_DARK }}
+                rows={4}
+                value={value.description}
+                onChange={(event) => {
+                  if (event.target.value.length < 400) {
+                    setArray((existingValues: any[]) => {
+                      existingValues[index].description = event.target.value;
+                      return [...existingValues];
+                    });
                   }
-                >
-                  <DeleteIcon color="secondary" />
-                </IconButton>
-              </AccordionDetails>
-            </Accordion>
-          ))
+                }}
+                variant="filled"
+              />
+              <IconButton
+                onClick={() =>
+                  setArray((existingValues: any[]) =>
+                    existingValues.filter(
+                      (existingAction: any) =>
+                        existingAction.name !== value.name
+                    )
+                  )
+                }
+              >
+                <DeleteIcon color="secondary" />
+              </IconButton>
+            </AccordionDetails>
+          </Accordion>
+        ))
         : null}
     </Container>
   );

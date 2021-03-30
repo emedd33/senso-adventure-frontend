@@ -55,8 +55,8 @@ const Monster: FunctionComponent<MonsterProps> = () => {
             >
                 <div>
                     <h1 style={{ marginBottom: 0 }}>{`${selectedMonster.monster.name} ${selectedMonster.monster.isPublished === "FALSE"
-                            ? `(${translate.t(`Not published`)})`
-                            : ""
+                        ? `(${translate.t(`Not published`)})`
+                        : ""
                         }`}</h1>
                     {selectedMonster.monster.nickNames ? (
                         <h3 style={{ opacity: 0.7 }}>

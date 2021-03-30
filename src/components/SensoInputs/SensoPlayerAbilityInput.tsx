@@ -8,7 +8,7 @@ import getAbilityModifier from "../../utils/getAbilityModifier";
 import { database } from "../../services/Firebase/firebase";
 import { useTranslation } from "react-i18next";
 
-type SensoAbilityInputProps = {
+type SensoPlayerAbilityInputProps = {
   initAbilityValue: IAbility;
   firebasePath: string;
   label: string;
@@ -16,7 +16,7 @@ type SensoAbilityInputProps = {
   isNegativeValid?: boolean;
   proficiencyBonus?: number;
 };
-const SensoAbilityInput: React.FC<SensoAbilityInputProps> = ({
+const SensoPlayerAbilityInput: React.FC<SensoPlayerAbilityInputProps> = ({
   initAbilityValue,
   firebasePath,
   label,
@@ -47,18 +47,9 @@ const SensoAbilityInput: React.FC<SensoAbilityInputProps> = ({
   }, 1000);
   return (
     <Container style={style}>
-      <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>{label}</b>
-      <p>
-        {translate.t("Saving")}:{" "}
-        {getAbilityModifier(
-          abilityValue.value,
-          abilityValue.isProficient,
-          proficiencyBonus
-        )}
-      </p>
+      <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem", gridColumn: "1/3", textAlign: "center" }}>{label}</b>
       <TextField
         style={{
-          margin: "0.3rem",
           backgroundColor: OLD_WHITE_DARK,
           gridColumn: "1/3",
         }}
@@ -69,7 +60,15 @@ const SensoAbilityInput: React.FC<SensoAbilityInputProps> = ({
         InputLabelProps={{ shrink: true }}
         value={abilityValue.value}
       />
-      <p>{translate.t("Proficiency")}</p>
+      <p style={{ gridColumn: "1/3", marginBottom: 0 }}>
+        {translate.t("Saving")}:{" "}
+        {getAbilityModifier(
+          abilityValue.value,
+          abilityValue.isProficient,
+          proficiencyBonus
+        )}
+      </p>
+      <p style={{ marginTop: 0 }}>{translate.t("Proficiency")}</p>
       <Switch
         checked={abilityValue.isProficient === "TRUE"}
         onChange={(event) =>
@@ -94,4 +93,4 @@ const Container = styled.div`
   align-items: center;
 `;
 
-export default SensoAbilityInput;
+export default SensoPlayerAbilityInput;

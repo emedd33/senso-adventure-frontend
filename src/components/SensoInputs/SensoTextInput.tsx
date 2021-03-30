@@ -24,7 +24,7 @@ const SensoTextInput: React.FC<SensoTextInputProps> = ({
       saveValue();
       database.ref(firebasePath).set(value);
     }
-  }, 1000);
+  }, 3000);
   return (
     <Container style={style}>
       <TextField

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -19,18 +19,25 @@ import styled from "styled-components";
 import { authentication } from "./services/Firebase/firebase";
 import { setAuthUser } from "./store/admin/adminCreator";
 import UserIndex from "./pages/User/UserIndex";
+import { useTranslation } from "react-i18next";
 export default function App() {
   const dispatch = useDispatch();
-
+  const translate = useTranslation()
   const authUser = useSelector(getAuthUser);
   const authUserPath = useSelector(getAuthUserPath);
-  useEffect(() => {
+  useMemo(() => {
     authentication.onAuthStateChanged(function (user) {
       if (user) {
         dispatch(setAuthUser(user));
       }
     });
-  }, [dispatch, authUser]);
+  }, [dispatch]);
+  useMemo(() => {
+    const cachedLanguage = window.localStorage.getItem("language")
+    if (cachedLanguage) {
+      translate.i18n.changeLanguage(cachedLanguage)
+    }
+  }, [translate.i18n])
   return (
     <Router>
       <AlertDialog />

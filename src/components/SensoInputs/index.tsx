@@ -4,13 +4,14 @@ import SensoNumberInput from "./SensoNumberInput";
 import SensoSwitch from "./SensoSwitch";
 import SensoTextArrayInput from "./SensoTextArrayInput";
 import SensoAccordianInput from "./SensoAccordianInput";
-import SensoAbilityInput from "./SensoAbilityInput";
+import SensoPlayerAbilityInput from "./SensoPlayerAbilityInput";
 import SensoDateInput from "./SensoDateInput";
 import SensoSkillInput from "./SensoSkillInput";
 import SensoImageInput from "./SensoImageInput";
 import SensoDelete from "./SensoDelete";
 import SensoProficiencyInput from "./SensoProficiencyInput";
 import SensoActionInputs from "./SensoActionInputs";
+import SensoMonsterAbilityInput from "./SensoMonsterAbilityInput"
 export {
   SensoDateInput,
   SensoNumberInput,
@@ -19,10 +20,11 @@ export {
   SensoTextInput,
   SensoMultilineTextInput,
   SensoAccordianInput,
-  SensoAbilityInput,
+  SensoPlayerAbilityInput,
   SensoSkillInput,
   SensoImageInput,
   SensoDelete,
   SensoProficiencyInput,
   SensoActionInputs,
+  SensoMonsterAbilityInput,
 };

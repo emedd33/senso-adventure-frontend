@@ -1,10 +1,10 @@
-import { TextField } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import React from "react";
 import useSavedState from "../../store/hooks/useSavedState";
-import useInterval from "../../store/hooks/useInterval";
 import { OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import { database } from "../../services/Firebase/firebase";
+import { useTranslation } from "react-i18next";
 
 type SensoMultilineTextInputProps = {
   initValue?: string;
@@ -21,13 +21,13 @@ const SensoMultilineTextInput: React.FC<SensoMultilineTextInputProps> = ({
   style,
 }) => {
   const [value, setValue, saveValue, isSavedValue] = useSavedState(initValue);
-
-  useInterval(() => {
-    if (!isSavedValue && value) {
-      saveValue();
+  const translate = useTranslation()
+  const saveText = () => {
+    if (!isSavedValue) {
       database.ref(firebasePath).set(value);
+      saveValue()
     }
-  }, 3000);
+  }
   return (
     <Container style={style}>
       <TextField
@@ -39,6 +39,19 @@ const SensoMultilineTextInput: React.FC<SensoMultilineTextInputProps> = ({
         style={{ backgroundColor: OLD_WHITE_DARK, width: "100%" }}
         onChange={(event) => setValue(event.target.value)}
       />
+      <Button
+        variant="contained"
+        color="primary"
+        style={{
+          height: "2rem",
+          margin: "1rem",
+          maxWidth: "10rem",
+          textTransform: "none",
+        }}
+        onClick={saveText}
+      >
+        {translate.t("Save")}
+      </Button>
     </Container>
   );
 };

@@ -8,7 +8,7 @@ import { database } from "../../services/Firebase/firebase";
 import { useTranslation } from "react-i18next";
 
 type SensoProficiencyInputProps = {
-  initProficiencies: IMonsterProficiency[];
+  initProficiencies?: IMonsterProficiency[];
   firebasePath: string;
   style?: React.CSSProperties;
 };
@@ -40,6 +40,8 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({
       } else {
         setArray([newValue]);
       }
+      setNewKey(undefined)
+      setNewValue(undefined)
     }
   };
   const deleteProfiency = (proficiency: IMonsterProficiency) => {
@@ -69,14 +71,14 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({
         <b>{translate.t("Proficiencies")} :</b>
         {proficies
           ? proficies.map((prof: IMonsterProficiency, index: number) => (
-              <Chip
-                key={index}
-                style={{ margin: "0.2rem", backgroundColor: OLD_WHITE_DARK }}
-                label={`${prof.proficiency.name}:${prof.value}`}
-                onDelete={() => deleteProfiency(prof)}
-                variant="outlined"
-              />
-            ))
+            <Chip
+              key={index}
+              style={{ margin: "0.2rem", backgroundColor: OLD_WHITE_DARK }}
+              label={`${prof.proficiency.name}:${prof.value}`}
+              onDelete={() => deleteProfiency(prof)}
+              variant="outlined"
+            />
+          ))
           : null}
       </div>
       <div
@@ -106,7 +108,7 @@ const SensoProficiencyInput: React.FC<SensoProficiencyInputProps> = ({
           color="primary"
           onClick={handleAddNewValue}
         >
-          Add
+          {translate.t(`Add`)}
         </Button>
       </div>
     </Container>
