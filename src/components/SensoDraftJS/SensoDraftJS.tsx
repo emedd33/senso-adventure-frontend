@@ -45,7 +45,7 @@ import {
     OLD_WHITE_DARK,
     OLD_WHITE_LIGHT,
 } from "../../assets/constants/Constants";
-import { Button, Tooltip } from "@material-ui/core";
+import { Backdrop, Button, Tooltip } from "@material-ui/core";
 import SensoDraftJSAtomic from "./SensoDraftJSAtomic";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,6 +57,9 @@ import {
 import useInterval from "../../store/hooks/useInterval";
 import { storage } from "../../services/Firebase/firebase";
 import { setIsUploading } from "../../store/admin/adminCreator";
+import { pushToStorage } from "../../services/Firebase/storage";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 type SensoDraftJSProps = {
     storagePath: string;
     readOnly: boolean;
@@ -76,6 +79,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     const [savedEditorState, setSavedEditorState] = useState<any>(editorState);
     const editor = useRef<Editor | null>(null);
     const inputFile = useRef(null)
+    const [insertingImage, setInsertingImage] = useState<boolean>(false)
     const [playerOpen, setPlayerOpen] = useState(true);
     const [monsterOpen, setMonsterOpen] = useState(true);
     const [locationOpen, setLocationOpen] = useState(true);
@@ -189,7 +193,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     );
     const submitImages = useCallback((newImages: File[], selection: SelectionState) => {
         newImages.map(async (newImage: File) => {
-
+            setInsertingImage(true)
             let uploadTask = storage
                 .ref(storagePath)
                 .child("images")
@@ -200,11 +204,12 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                 () => { },
                 (error) => {
                     console.log(`Could not upload ${newImage}`, error);
+                    setInsertingImage(false)
                 },
                 () => {
                     uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                         setEditorState(insertImageBlock(downloadURL, selection, editorState))
-                    })
+                    }).finally(() => setInsertingImage(false))
                 }
             )
         })
@@ -238,9 +243,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                         [JSON.stringify(convertToRaw(uploadedState.getCurrentContent()))],
                         { type: "application/json" }
                     );
-                    storage
-                        .ref(storagePath + "/CampaignLore.json")
-                        .put(blob)
+                    pushToStorage(storagePath + "/CampaignLore.json", blob, {})
                         .then(() => {
                             setSavedEditorState(uploadedState);
                         })
@@ -322,7 +325,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                     onChange={setEditorState}
                     handleDroppedFiles={handleDroppedFiles}
                     handleKeyCommand={(e: any) =>
-                        handleKeyCommand(e, editorState, setEditorState)
+                        handleKeyCommand(e, editorState, setEditorState, storagePath + "/CampaignLore.json", dispatch)
                     }
                     keyBindingFn={(e) => keyBindingFn(e, editorState)}
                     blockRendererFn={myBlockRenderer}
@@ -386,6 +389,8 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
             </div>
         );
     }, [
+        dispatch,
+        storagePath,
         LocationMentionSuggestions,
         MonsterMentionSuggestions,
         PlayerMentionSuggestions,
@@ -409,158 +414,164 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     ]);
     return (
         <EditorContainer style={style ? style : {}}>
-            {!readOnly ? (
-                <EditorHeader>
+            {insertingImage ?
+                <Backdrop open={true} >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+                : <>
                     {!readOnly ? (
-                        <Toolbar>
-                            {
-                                // may be use React.Fragment instead of div to improve perfomance after React 16
-                                (externalProps) => (
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            flexWrap: "wrap",
-                                        }}
-                                    >
-                                        <Tooltip title={`${translate.t("To add player type")} @`}>
-                                            <Button
-                                                onClick={() =>
-                                                    setEditorState(insertCharacter("@", editorState))
-                                                }
-                                                style={{ width: "2rem" }}
-                                            >
-                                                {" "}
-                                                <img
-                                                    src={playerIcon}
-                                                    style={{ width: "2rem" }}
-                                                    alt="New Character"
-                                                />
-                                            </Button>
-                                        </Tooltip>
-                                        <Tooltip
-                                            title={`${translate.t("To add monster/Npc type")} $`}
-                                        >
-                                            <Button
-                                                onClick={() =>
-                                                    setEditorState(insertCharacter("$", editorState))
-                                                }
-                                                style={{ width: "2rem" }}
-                                            >
-                                                {" "}
-                                                <img
-                                                    src={monsterIcon}
-                                                    style={{ width: "2rem" }}
-                                                    alt="New Character"
-                                                />
-                                            </Button>
-                                        </Tooltip>
-                                        <Tooltip title={`${translate.t("To add location type")} #`}>
-                                            <Button
-                                                onClick={() =>
-                                                    setEditorState(insertCharacter("#", editorState))
-                                                }
-                                                style={{ width: "2rem" }}
-                                            >
-                                                {" "}
-                                                <img
-                                                    src={locationIcon}
-                                                    style={{ width: "2rem" }}
-                                                    alt="New Character"
-                                                />
-                                            </Button>
-                                        </Tooltip>
-                                        <Tooltip title={`${translate.t("Insert secret note")} `}>
-                                            <Button
-                                                onClick={() =>
-                                                    setEditorState(
-                                                        insertAtomicBlock("secret", editorState)
-                                                    )
-                                                }
-                                                style={{ width: "2rem" }}
-                                            >
-                                                {" "}
-                                                <img
-                                                    src={secretIcon}
-                                                    style={{ width: "2rem" }}
-                                                    alt="Secret"
-                                                />
-                                            </Button>
-                                        </Tooltip>
-                                        <Tooltip
-                                            title={`${translate.t("Insert description block")} `}
-                                        >
-                                            <Button
-                                                onClick={() =>
-                                                    setEditorState(
-                                                        insertAtomicBlock("description", editorState)
-                                                    )
-                                                }
-                                                style={{ width: "2rem" }}
-                                            >
-                                                {" "}
-                                                <img
-                                                    src={descriptionIcon}
-                                                    style={{ width: "2rem" }}
-                                                    alt="Secret"
-                                                />
-                                            </Button>
-                                        </Tooltip>
-                                        <Tooltip title={`${translate.t("Insert knowledge note")} `}>
-                                            <Button
-                                                onClick={() =>
-                                                    setEditorState(insertAtomicBlock("note", editorState))
-                                                }
-                                                style={{ width: "2rem" }}
-                                            >
-                                                {" "}
-                                                <img
-                                                    src={knowledgeIcon}
-                                                    style={{ width: "2rem" }}
-                                                    alt="Secret"
-                                                />
-                                            </Button>
-                                        </Tooltip>
-                                        <Tooltip title={`${translate.t("Insert image")} `}>
-                                            <Button
-                                                onClick={() => {
-                                                    if (inputFile !== null) {
-                                                        // @ts-ignore
-                                                        inputFile!.current.click()
-                                                    }
+                        <EditorHeader>
+                            {!readOnly ? (
+                                <Toolbar>
+                                    {
+                                        // may be use React.Fragment instead of div to improve perfomance after React 16
+                                        (externalProps) => (
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    flexWrap: "wrap",
                                                 }}
-                                                style={{ width: "2rem" }}
                                             >
-                                                {" "}
-                                                <img
-                                                    src={imageIcon}
-                                                    style={{ width: "2rem" }}
-                                                    alt=""
-                                                />
-                                                <input type='file' id='file' accept="image/*" ref={inputFile} style={{ display: 'none' }} onChange={handleImageUpload} multiple={false} />
+                                                <Tooltip title={`${translate.t("To add player type")} @`}>
+                                                    <Button
+                                                        onClick={() =>
+                                                            setEditorState(insertCharacter("@", editorState))
+                                                        }
+                                                        style={{ width: "2rem" }}
+                                                    >
+                                                        {" "}
+                                                        <img
+                                                            src={playerIcon}
+                                                            style={{ width: "2rem" }}
+                                                            alt="New Character"
+                                                        />
+                                                    </Button>
+                                                </Tooltip>
+                                                <Tooltip
+                                                    title={`${translate.t("To add monster/Npc type")} $`}
+                                                >
+                                                    <Button
+                                                        onClick={() =>
+                                                            setEditorState(insertCharacter("$", editorState))
+                                                        }
+                                                        style={{ width: "2rem" }}
+                                                    >
+                                                        {" "}
+                                                        <img
+                                                            src={monsterIcon}
+                                                            style={{ width: "2rem" }}
+                                                            alt="New Character"
+                                                        />
+                                                    </Button>
+                                                </Tooltip>
+                                                <Tooltip title={`${translate.t("To add location type")} #`}>
+                                                    <Button
+                                                        onClick={() =>
+                                                            setEditorState(insertCharacter("#", editorState))
+                                                        }
+                                                        style={{ width: "2rem" }}
+                                                    >
+                                                        {" "}
+                                                        <img
+                                                            src={locationIcon}
+                                                            style={{ width: "2rem" }}
+                                                            alt="New Character"
+                                                        />
+                                                    </Button>
+                                                </Tooltip>
+                                                <Tooltip title={`${translate.t("Insert secret note")} `}>
+                                                    <Button
+                                                        onClick={() =>
+                                                            setEditorState(
+                                                                insertAtomicBlock("secret", editorState)
+                                                            )
+                                                        }
+                                                        style={{ width: "2rem" }}
+                                                    >
+                                                        {" "}
+                                                        <img
+                                                            src={secretIcon}
+                                                            style={{ width: "2rem" }}
+                                                            alt="Secret"
+                                                        />
+                                                    </Button>
+                                                </Tooltip>
+                                                <Tooltip
+                                                    title={`${translate.t("Insert description block")} `}
+                                                >
+                                                    <Button
+                                                        onClick={() =>
+                                                            setEditorState(
+                                                                insertAtomicBlock("description", editorState)
+                                                            )
+                                                        }
+                                                        style={{ width: "2rem" }}
+                                                    >
+                                                        {" "}
+                                                        <img
+                                                            src={descriptionIcon}
+                                                            style={{ width: "2rem" }}
+                                                            alt="Secret"
+                                                        />
+                                                    </Button>
+                                                </Tooltip>
+                                                <Tooltip title={`${translate.t("Insert knowledge note")} `}>
+                                                    <Button
+                                                        onClick={() =>
+                                                            setEditorState(insertAtomicBlock("note", editorState))
+                                                        }
+                                                        style={{ width: "2rem" }}
+                                                    >
+                                                        {" "}
+                                                        <img
+                                                            src={knowledgeIcon}
+                                                            style={{ width: "2rem" }}
+                                                            alt="Secret"
+                                                        />
+                                                    </Button>
+                                                </Tooltip>
+                                                <Tooltip title={`${translate.t("Insert image")} `}>
+                                                    <Button
+                                                        onClick={() => {
+                                                            if (inputFile !== null) {
+                                                                // @ts-ignore
+                                                                inputFile!.current.click()
+                                                            }
+                                                        }}
+                                                        style={{ width: "2rem" }}
+                                                    >
+                                                        {" "}
+                                                        <img
+                                                            src={imageIcon}
+                                                            style={{ width: "2rem" }}
+                                                            alt=""
+                                                        />
+                                                        <input type='file' id='file' accept="image/*" ref={inputFile} style={{ display: 'none' }} onChange={handleImageUpload} multiple={false} />
 
-                                            </Button>
-                                        </Tooltip>
+                                                    </Button>
+                                                </Tooltip>
 
 
-                                        <HeadlineOneButton {...externalProps} />
-                                        <HeadlineTwoButton {...externalProps} />
-                                        <HeadlineThreeButton {...externalProps} />
-                                        <BoldButton {...externalProps} />
-                                        <ItalicButton {...externalProps} />
-                                        <UnderlineButton {...externalProps} />
-                                        <Separator />
-                                        <UnorderedListButton {...externalProps} />
-                                        <OrderedListButton {...externalProps} />
-                                    </div>
-                                )
-                            }
-                        </Toolbar>
+                                                <HeadlineOneButton {...externalProps} />
+                                                <HeadlineTwoButton {...externalProps} />
+                                                <HeadlineThreeButton {...externalProps} />
+                                                <BoldButton {...externalProps} />
+                                                <ItalicButton {...externalProps} />
+                                                <UnderlineButton {...externalProps} />
+                                                <Separator />
+                                                <UnorderedListButton {...externalProps} />
+                                                <OrderedListButton {...externalProps} />
+                                            </div>
+                                        )
+                                    }
+                                </Toolbar>
 
+                            ) : null}
+                        </EditorHeader>
                     ) : null}
-                </EditorHeader>
-            ) : null}
-            <EditorBody onClick={focus}>{renderEditor()}</EditorBody>
+                    <EditorBody onClick={focus}>{renderEditor()}</EditorBody>
+                </>}
         </EditorContainer>
     );
 };

@@ -12,7 +12,7 @@ import { database } from "../../../../services/Firebase/firebase";
 import useOwner from "../../../../store/hooks/useOwner";
 import { getSelectedCampaign } from "../../../../store/selected/selectedSelectors";
 import { useTranslation } from "react-i18next";
-export interface LocationNewProps {}
+export interface LocationNewProps { }
 
 const LocationNew: React.FC<LocationNewProps> = () => {
   const translate = useTranslation();
@@ -69,7 +69,7 @@ const LocationNew: React.FC<LocationNewProps> = () => {
         style={{ margin: "2rem" }}
         onClick={submitLocation}
       >
-        {translate.t(`Submitt`)}
+        {translate.t(`Submit`)}
       </Button>
     </TitleContainer>
   );

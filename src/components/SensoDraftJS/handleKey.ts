@@ -1,9 +1,12 @@
 import {
+  convertToRaw,
   DraftHandleValue,
   EditorState,
   getDefaultKeyBinding,
   RichUtils,
 } from "draft-js";
+import { pushToStorage } from "../../services/Firebase/storage";
+import { setIsUploading } from "../../store/admin/adminCreator";
 import { insertAtomicBlock } from "./insertContent";
 
 const keyBindingFn = (e: any, editorState: EditorState) => {
@@ -45,7 +48,9 @@ const keyBindingFn = (e: any, editorState: EditorState) => {
 const handleKeyCommand = (
   command: string,
   editorState: EditorState,
-  setEditorState: any
+  setEditorState: any,
+  storagePath?: string,
+  dispatch?: any,
 ): DraftHandleValue => {
   if (command === "editor-bold") {
     setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"));
@@ -72,6 +77,15 @@ const handleKeyCommand = (
   }
   if (command === "editor-note") {
     setEditorState(insertAtomicBlock("note", editorState));
+    return "handled";
+  }
+  if (command === "editor-save") {
+    dispatch(setIsUploading(true))
+    var blob = new Blob(
+      [JSON.stringify(convertToRaw(editorState.getCurrentContent()))],
+      { type: "application/json" }
+    );
+    pushToStorage(storagePath + "/CampaignLore.json", blob, {}).then(() => dispatch(setIsUploading(false)))
     return "handled";
   }
 

@@ -7,7 +7,6 @@ import SensoAccordianInput from "./SensoAccordianInput";
 import SensoPlayerAbilityInput from "./SensoPlayerAbilityInput";
 import SensoDateInput from "./SensoDateInput";
 import SensoSkillInput from "./SensoSkillInput";
-import SensoImageInput from "./SensoImageInput";
 import SensoDelete from "./SensoDelete";
 import SensoProficiencyInput from "./SensoProficiencyInput";
 import SensoActionInputs from "./SensoActionInputs";
@@ -22,7 +21,6 @@ export {
   SensoAccordianInput,
   SensoPlayerAbilityInput,
   SensoSkillInput,
-  SensoImageInput,
   SensoDelete,
   SensoProficiencyInput,
   SensoActionInputs,
