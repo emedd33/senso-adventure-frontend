@@ -14,7 +14,7 @@ import IsLoading from "../../../../components/IsLoading/IsLoading";
 import getAbilityModifier from "../../../../utils/getAbilityModifier";
 
 import { Button, Divider, Tooltip } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import renderArrayOfString from "../../../../utils/StringProcessing/renderArrayOfString";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -30,6 +30,7 @@ type MonsterProps = {};
 const Monster: FunctionComponent<MonsterProps> = () => {
     const history = useHistory();
     const translate = useTranslation();
+    const location = useLocation()
     const selectedMonster = useSelector(getSelectedMonster);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const monsterPath = useSelector(getSelectedMonsterStoragePath);
@@ -479,12 +480,18 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                         </>
                     ) : null}
                     <h3>{translate.t(`Lore`)}:</h3>
-
-                    <SensoDraftJS
-                        readOnly={true}
-                        storagePath={`${monsterPath}`}
-                        isDungeonMaster={isDungeonMaster}
-                    />
+                    <div onDoubleClick={() => {
+                        if (isDungeonMaster) {
+                            history.push(`${location.pathname}/edit`)
+                        }
+                    }}
+                    >
+                        <SensoDraftJS
+                            readOnly={true}
+                            storagePath={`${monsterPath}`}
+                            isDungeonMaster={isDungeonMaster}
+                        />
+                    </div>
                 </>
             ) : null}
         </Container>

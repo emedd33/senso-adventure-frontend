@@ -3,7 +3,7 @@ import {
     // useDispatch,
     useSelector,
 } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import {
     OLD_WHITE,
     OLD_WHITE_DARK,
@@ -40,7 +40,7 @@ export interface LocationProps { }
 const Location: React.FC<LocationProps> = () => {
     const translate = useTranslation();
     const history = useHistory();
-
+    const location = useLocation()
     const selectedCampaign = useSelector(getSelectedCampaign);
     const selectedLocation = useSelector(getSelectedLocation);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
@@ -157,12 +157,18 @@ const Location: React.FC<LocationProps> = () => {
             {isDungeonMaster ? (
                 <div style={{ gridColumn: "1/3" }}>
                     <h3>{`${translate.t("Lore and information")}`}</h3>
-
-                    <SensoDraftJS
-                        readOnly={true}
-                        storagePath={`${locationPath}`}
-                        isDungeonMaster={isDungeonMaster}
-                    />
+                    <div onDoubleClick={() => {
+                        if (isDungeonMaster) {
+                            history.push(`${location.pathname}/edit`)
+                        }
+                    }}
+                    >
+                        <SensoDraftJS
+                            readOnly={true}
+                            storagePath={`${locationPath}`}
+                            isDungeonMaster={isDungeonMaster}
+                        />
+                    </div>
                 </div>
             ) : null}
         </Container>

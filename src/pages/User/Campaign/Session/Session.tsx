@@ -1,9 +1,9 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { FunctionComponent, } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../../../assets/constants/Constants";
 import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import {
     getNextSession,
     getPreviousSession,
@@ -15,7 +15,6 @@ import {
     getSelectedSessionStoragePath,
     isDungeonMasterSelector,
 } from "../../../../store/selected/selectedSelectors";
-import { storage } from "../../../../services/Firebase/firebase";
 import useOwner from "../../../../store/hooks/useOwner";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 import { useTranslation } from "react-i18next";
@@ -23,10 +22,9 @@ import { renderDate } from "../../../../utils/StringProcessing";
 
 type CampaignSessionProps = {};
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
-    const dispatch = useDispatch();
     const history = useHistory();
-    const [sessionImages, setSessionImages] = useState<string[]>([]);
     const translate = useTranslation()
+    const location = useLocation()
     const selectedSession = useSelector(getSelectedSession);
     const selectedCampaign = useSelector(getSelectedCampaign);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
@@ -34,41 +32,6 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const owner = useOwner();
     const selectedSessionStoragePath = useSelector(getSelectedSessionStoragePath);
     const previousSession = useSelector(getPreviousSession);
-    useEffect(() => {
-        if (selectedSession && selectedCampaign) {
-            storage
-                .ref(`${selectedSessionStoragePath}/SessionImages`)
-                .listAll()
-                .then((res) => {
-                    res.items.forEach((itemRef) => {
-                        itemRef
-                            .getDownloadURL()
-                            .then((url) => {
-                                setSessionImages((urls) => {
-                                    if (!urls.includes(url)) {
-                                        return [...urls, url];
-                                    }
-                                    return urls;
-                                });
-                            })
-                            .catch((e) => console.log("Could not connect to firebase", e));
-                    });
-                })
-                .catch((error) => {
-                    console.log("Could not fetch session images");
-                });
-        }
-        return () => {
-            setSessionImages([]);
-        };
-    }, [
-        selectedSessionStoragePath,
-        dispatch,
-        selectedSession,
-        isDungeonMaster,
-        selectedCampaign,
-    ]);
-    console.log(selectedSession?.session.date)
     return (
         <>
             <Container>
@@ -107,6 +70,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                             justifyContent: "flex-start",
                             alignItems: "flex-start",
                             flexDirection: "column",
+                            width: "100%",
                         }}
                     >
                         <p
@@ -156,22 +120,19 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                     {selectedSession?.session.subTitle}
                 </h3>
                 {selectedSession ? (
-                    <SensoDraftJS
-                        isDungeonMaster={isDungeonMaster}
-                        readOnly={true}
-                        storagePath={`${selectedSessionStoragePath}`}
-                    />
-                ) : null}
-                {sessionImages
-                    ? sessionImages.map((url: string, index: number) => (
-                        <img
-                            src={url}
-                            key={index}
-                            alt="SessionImage"
-                            style={{ width: "10rem", height: "10rem" }}
+                    <div onDoubleClick={() => {
+                        if (isDungeonMaster) {
+                            history.push(`${location.pathname}/edit`)
+                        }
+                    }} style={{ width: "100%" }}>
+
+                        <SensoDraftJS
+                            isDungeonMaster={isDungeonMaster}
+                            readOnly={true}
+                            storagePath={`${selectedSessionStoragePath}`}
                         />
-                    ))
-                    : null}
+                    </div>
+                ) : null}
             </Container>
         </>
     );
@@ -179,7 +140,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
 const Container = styled.div`
   min-height: 20rem;
   min-width: 15rem;
-  width: 50%;
+  width: 90%;
   padding: 1rem;
   display: grid;
   grid-template-columns: 1fr;

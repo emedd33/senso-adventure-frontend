@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import Scroll from "../../../components/Scroll/Scroll";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 import {
     getSelectedCampaign,
@@ -59,6 +59,7 @@ export const Menu = (list: any[], selected: any) =>
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
+    const location = useLocation()
     const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
     const owner = useOwner();
     const translate = useTranslation();
@@ -427,11 +428,18 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 </>
             ) : null}
             {isDungeonMaster ? (
-                <SensoDraftJS
-                    storagePath={`${selectedCampaignStoragePath}`}
-                    readOnly={true}
-                    isDungeonMaster={isDungeonMaster}
-                />
+                <div onDoubleClick={() => {
+                    if (isDungeonMaster) {
+                        history.push(`${location.pathname}/edit`)
+                    }
+                }}
+                >
+                    <SensoDraftJS
+                        storagePath={`${selectedCampaignStoragePath}`}
+                        readOnly={true}
+                        isDungeonMaster={isDungeonMaster}
+                    />
+                </div>
             ) : null}
         </Container>
     );

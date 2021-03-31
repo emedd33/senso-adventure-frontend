@@ -41,7 +41,7 @@ const SessionEdit: React.FC = () => {
         <div
             style={{
                 marginBottom: "10rem",
-                width: "80%",
+                width: "90%",
                 backgroundColor: OLD_WHITE,
                 alignItems: "center",
                 justifyContent: "center",

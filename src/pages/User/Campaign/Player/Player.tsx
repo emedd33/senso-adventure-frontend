@@ -13,7 +13,7 @@ import parseValuesToString from "../../../../utils/parseValuesToString";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import renderArrayOfString from "../../../../utils/StringProcessing/renderArrayOfString";
 import { SensoDescription } from "../../../../components/SensoContainers";
 import { useTranslation } from "react-i18next";
@@ -25,6 +25,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const playerPath = useSelector(getSelectedPlayerStoragePath);
     const translate = useTranslation();
+    const location = useLocation()
     const parseStringBooleanToCheckmark = (
         proficient: any,
         setCross: boolean
@@ -867,11 +868,18 @@ const Player: FunctionComponent<PlayerProps> = () => {
                 ) : null}
                 <NestedContainer style={{ width: "100%" }}>
                     <h3>{translate.t("Lore")}: </h3>
-                    <SensoDraftJS
-                        readOnly={true}
-                        isDungeonMaster={isDungeonMaster}
-                        storagePath={`${playerPath}`}
-                    />
+                    <div onDoubleClick={() => {
+                        if (isDungeonMaster) {
+                            history.push(`${location.pathname}/edit`)
+                        }
+                    }}
+                    >
+                        <SensoDraftJS
+                            readOnly={true}
+                            isDungeonMaster={isDungeonMaster}
+                            storagePath={`${playerPath}`}
+                        />
+                    </div>
                 </NestedContainer>
             </>
         </Container>
