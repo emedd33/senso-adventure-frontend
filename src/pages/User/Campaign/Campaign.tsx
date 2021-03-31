@@ -35,7 +35,7 @@ import useWindowSize from "../../../store/hooks/useWindowSize";
 import { useTranslation } from "react-i18next";
 import SensoDraftJS from "../../../components/SensoDraftJS/SensoDraftJS";
 import { SensoMonsterShort, SensoPlayerShort } from "../../../components/SensoContainers";
-import renderArrayOfString from "../../../utils/renderArrayToString";
+import renderArrayOfString from "../../../utils/StringProcessing/renderArrayOfString";
 
 const MenuItem: React.FC<{ text: any; selected: any; key: number }> = ({
     text,
@@ -258,7 +258,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                     variant="contained"
                                     style={{ textTransform: "none" }}
                                 >
-                                    {translate.t(`Monsters`)}
+                                    {translate.t(`Npc/Monsters`)}
                                 </Button>
                             </Link>
                             <div
@@ -294,7 +294,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                                     {monster.name}
                                                 </Typography>
                                                 <Typography style={{ flexBasis: "40%", flexShrink: 0 }}>
-                                                    {renderArrayOfString(monster.nickNames)}
+                                                    {renderArrayOfString(", ", monster.nickNames)}
                                                 </Typography>
                                             </AccordionSummary>
                                             <AccordionDetails style={{ backgroundColor: OLD_WHITE_DARK }}>
@@ -368,7 +368,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                                 {location.name}
                                             </Typography>
                                             <Typography style={{ flexBasis: "40%", flexShrink: 0 }}>
-                                                {renderArrayOfString(location.nickNames)}
+                                                {renderArrayOfString(", ", location.nickNames)}
                                             </Typography>
                                         </AccordionSummary>
                                         <AccordionDetails

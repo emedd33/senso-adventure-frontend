@@ -15,7 +15,7 @@ import getAbilityModifier from "../../../../utils/getAbilityModifier";
 
 import { Button, Divider, Tooltip } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import renderArrayOfString from "../../../../utils/renderArrayToString";
+import renderArrayOfString from "../../../../utils/StringProcessing/renderArrayOfString";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -61,7 +61,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                     {selectedMonster.monster.nickNames ? (
                         <h3 style={{ opacity: 0.7 }}>
                             {translate.t(`Also known as`)}:{" "}
-                            {renderArrayOfString(selectedMonster.monster.nickNames)}
+                            {renderArrayOfString(", ", selectedMonster.monster.nickNames)}
                         </h3>
                     ) : null}
                     <P>
@@ -175,7 +175,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                             <P>
                                 <b>{translate.t(`Languages`)}: </b>
                                 {selectedMonster.monster.languages
-                                    ? renderArrayOfString(selectedMonster.monster.languages)
+                                    ? renderArrayOfString(", ", selectedMonster.monster.languages)
                                     : null}
                             </P>
                             <P>
@@ -336,7 +336,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                             {selectedMonster.monster.conditionImmunities ? (
                                 <P>
                                     <b>{translate.t(`Condition immunities`)}: </b>
-                                    {renderArrayOfString(
+                                    {renderArrayOfString(", ",
                                         selectedMonster.monster.conditionImmunities
                                     )}
                                 </P>
@@ -344,7 +344,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                             {selectedMonster.monster.damageImmunities ? (
                                 <P>
                                     <b>{translate.t(`Damage immunities`)}: </b>
-                                    {renderArrayOfString(
+                                    {renderArrayOfString(", ",
                                         selectedMonster.monster.damageImmunities
                                     )}
                                 </P>
@@ -352,7 +352,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                             {selectedMonster.monster.damageResistances ? (
                                 <P>
                                     <b>{translate.t(`Damage resistances`)}: </b>
-                                    {renderArrayOfString(
+                                    {renderArrayOfString(", ",
                                         selectedMonster.monster.damageResistances
                                     )}
                                 </P>
@@ -362,7 +362,7 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                                     <DividerBlock />{" "}
                                     <P>
                                         <b>{translate.t(`Damage vulnerabilities`)}: </b>
-                                        {renderArrayOfString(
+                                        {renderArrayOfString(", ",
                                             selectedMonster.monster.damageVulnerabilities
                                         )}
                                     </P>{" "}

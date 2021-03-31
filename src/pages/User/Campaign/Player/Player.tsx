@@ -14,7 +14,7 @@ import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import renderArrayOfString from "../../../../utils/renderArrayToString";
+import renderArrayOfString from "../../../../utils/StringProcessing/renderArrayOfString";
 import { SensoDescription } from "../../../../components/SensoContainers";
 import { useTranslation } from "react-i18next";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
@@ -95,7 +95,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                         {selectedPlayer.player.nickNames ? (
                             <>
                                 {translate.t("Also known as")}:{" "}
-                                {renderArrayOfString(selectedPlayer.player.nickNames)}
+                                {renderArrayOfString(", ", selectedPlayer.player.nickNames)}
                             </>
                         ) : null}
                     </div>
@@ -192,7 +192,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             <b>{translate.t("Senses")}: </b>{" "}
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
-                            {renderArrayOfString(selectedPlayer.player.senses)}
+                            {renderArrayOfString(", ", selectedPlayer.player.senses)}
                         </div>
                     </NestedNestedContainer>
                     <NestedNestedContainer>
@@ -200,7 +200,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
                             <b>{translate.t("Immunities")} : </b>
                         </div>
                         <div style={{ paddingLeft: "0.3rem" }}>
-                            {renderArrayOfString(selectedPlayer.player.immunities)}
+                            {renderArrayOfString(", ", selectedPlayer.player.immunities)}
                         </div>
                     </NestedNestedContainer>
                 </NestedContainer>

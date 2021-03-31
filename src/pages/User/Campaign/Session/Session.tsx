@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { OLD_WHITE } from "../../../../assets/constants/Constants";
 import { Button } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
 import { useHistory } from "react-router-dom";
 import {
     getNextSession,
@@ -19,13 +18,15 @@ import {
 import { storage } from "../../../../services/Firebase/firebase";
 import useOwner from "../../../../store/hooks/useOwner";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
+import { useTranslation } from "react-i18next";
+import { renderDate } from "../../../../utils/StringProcessing";
 
 type CampaignSessionProps = {};
 const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [sessionImages, setSessionImages] = useState<string[]>([]);
-
+    const translate = useTranslation()
     const selectedSession = useSelector(getSelectedSession);
     const selectedCampaign = useSelector(getSelectedCampaign);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
@@ -67,7 +68,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
         isDungeonMaster,
         selectedCampaign,
     ]);
-
+    console.log(selectedSession?.session.date)
     return (
         <>
             <Container>
@@ -83,14 +84,14 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                         style={!previousSession ? { opacity: 0.6, cursor: "default" } : {}}
                         onClick={() => history.push(`${previousSession?.session.slug}`)}
                     >
-                        Previous
-          </ChangeSessionButton>
+                        {translate.t(`Previous`)}
+                    </ChangeSessionButton>
                     <ChangeSessionButton
                         style={!nextSession ? { opacity: 0.6, cursor: "default" } : {}}
                         onClick={() => history.push(`${nextSession?.session.slug}`)}
                     >
-                        Next
-          </ChangeSessionButton>
+                        {translate.t(`Next`)}
+                    </ChangeSessionButton>
                 </div>
                 <div
                     style={{
@@ -116,7 +117,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                                 margin: 0,
                             }}
                         >
-                            Session: {selectedSession?.session.sessionDay}
+                            {translate.t(`Session number`)}: {selectedSession?.session.sessionDay}
                         </p>
                         <p
                             style={{
@@ -126,7 +127,7 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                                 margin: 0,
                             }}
                         >
-                            {selectedSession?.session.date}
+                            {renderDate(selectedSession?.session.date, translate, " ")}
                         </p>
                     </div>
                     {isDungeonMaster ? (
@@ -141,14 +142,14 @@ const CampaignSession: FunctionComponent<CampaignSessionProps> = () => {
                                 }
                             }}
                         >
-                            <EditIcon />
+                            {translate.t(`Edit`)}
                         </Button>
                     ) : null}
                 </div>
                 <h2 style={{ fontSize: "3rem", textAlign: "center" }}>
                     {selectedSession?.session.title}{" "}
                     {selectedSession?.session.isPublished === "FALSE"
-                        ? "(Unpublished)"
+                        ? `(${translate.t(`Not published`)})`
                         : null}
                 </h2>
                 <h3 style={{ fontSize: "2rem", textAlign: "center", opacity: 0.5 }}>

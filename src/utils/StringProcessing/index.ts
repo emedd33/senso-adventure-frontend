@@ -1,2 +1,3 @@
 import { transformTitleToSlug } from "./transformTitleToSlug";
-export { transformTitleToSlug };
+import { renderDate } from "./renderDate"
+export { transformTitleToSlug, renderDate };

@@ -16,12 +16,14 @@ import {
   getSelectedCampaignDatabasePath,
 } from "../../../../store/selected/selectedSelectors";
 import useOwner from "../../../../store/hooks/useOwner";
-export interface SessionNewProps {}
+import { useTranslation } from "react-i18next";
+export interface SessionNewProps { }
 
 const SessionNew: React.FC<SessionNewProps> = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const owner = useOwner();
+  const translate = useTranslation()
   const selectedCampaign = useSelector(getSelectedCampaign);
 
   const sessionDay = useSelector(getNewSessionDay);
@@ -40,9 +42,6 @@ const SessionNew: React.FC<SessionNewProps> = () => {
     if (selectedCampaign) {
       if (!sessionTitle) {
         setSessionTitleError(true);
-        dispatch(
-          setAlertDialog("Please fille out the Session Title", true, true)
-        );
         return;
       }
 
@@ -74,27 +73,27 @@ const SessionNew: React.FC<SessionNewProps> = () => {
   return (
     <TitleContainer>
       <TextField
-        placeholder="Write a fitting title"
+        placeholder={translate.t(`Write a fitting title`)}
         variant="filled"
         disabled={false}
         style={{ width: "90%", margin: "1rem" }}
-        label="Session title"
+        label={translate.t(`Title`)}
         error={sessionTitleError}
         value={sessionTitle}
         onChange={(event) => setSessionTitle(event.target.value)}
       />
 
       <TextField
-        placeholder="Write a fitting subtitle"
+        placeholder={translate.t(`Write a fitting subtitle`)}
         style={{ width: "90%", margin: "1rem" }}
         variant="filled"
-        label="Subtitle"
+        label={translate.t(`Subtitle`)}
         value={sessionSubTitle}
         onChange={(event) => setSessionSubTitle(event.target.value)}
       />
       <TextField
-        label="Session day"
-        placeholder="Which session is this?"
+        label={translate.t(`Session number`)}
+        placeholder={translate.t(`Which session is this?`)}
         type="number"
         InputLabelProps={{
           shrink: true,
@@ -124,7 +123,7 @@ const SessionNew: React.FC<SessionNewProps> = () => {
         style={{ margin: "2rem" }}
         onClick={submitSession}
       >
-        Continue
+        {translate.t(`Continue`)}
       </Button>
     </TitleContainer>
   );

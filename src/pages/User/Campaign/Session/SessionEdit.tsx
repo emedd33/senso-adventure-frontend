@@ -20,8 +20,10 @@ import {
     SensoTextInput,
 } from "../../../../components/SensoInputs";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
+import { useTranslation } from "react-i18next";
 
 const SessionEdit: React.FC = () => {
+    const translate = useTranslation()
     const selectedSession = useSelector(getSelectedSession);
     const selectedCampaign = useSelector(getSelectedCampaign);
 
@@ -53,23 +55,26 @@ const SessionEdit: React.FC = () => {
                 <SensoDateInput
                     initValue={selectedSession.session.date}
                     firebasePath={`${selectedSessionDatabasePath}/date`}
-                    label={"Date"}
+                    label={translate.t(`Date`)}
                 />
                 <SensoSwitch
                     initValue={selectedSession.session.isPublished}
                     firebasePath={`${selectedSessionDatabasePath}/isPublished`}
-                    label={"Publish"}
+                    label={`${translate.t(`Is published`)}`}
+                    toolTip={translate.t(
+                        `Published means that it's visible for other users`
+                    )}
                 />
                 <SensoNumberInput
                     initValue={selectedSession.session.sessionDay}
                     firebasePath={`${selectedSessionDatabasePath}/sessionDay`}
-                    label={"Session day"}
+                    label={translate.t(`Session number`)}
                     isNegativeValid={false}
                 />
                 <SensoTextInput
                     initValue={selectedSession.session.subTitle}
                     firebasePath={`${selectedSessionDatabasePath}/subTitle`}
-                    label={"Subtitle"}
+                    label={translate.t(`Subtitle`)}
                 />
             </TitleContainer>
             <div
@@ -80,7 +85,7 @@ const SessionEdit: React.FC = () => {
                     width: "100%",
                 }}
             >
-                <h1 style={{ flex: 2, textAlign: "center" }}>Session story</h1>
+                <h1 style={{ flex: 2, textAlign: "center" }}>{translate.t(`The story`)}</h1>
             </div>
             <SensoDraftJS
                 isDungeonMaster={isDungeonMaster}

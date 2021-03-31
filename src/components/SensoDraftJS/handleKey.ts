@@ -79,13 +79,13 @@ const handleKeyCommand = (
     setEditorState(insertAtomicBlock("note", editorState));
     return "handled";
   }
-  if (command === "editor-save") {
+  if (command === "editor-save" && storagePath) {
     dispatch(setIsUploading(true))
     var blob = new Blob(
       [JSON.stringify(convertToRaw(editorState.getCurrentContent()))],
       { type: "application/json" }
     );
-    pushToStorage(storagePath + "/CampaignLore.json", blob, {}).then(() => dispatch(setIsUploading(false)))
+    pushToStorage(storagePath + "/Content.json", blob, {}).then(() => dispatch(setIsUploading(false)))
     return "handled";
   }
 

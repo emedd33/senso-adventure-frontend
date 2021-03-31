@@ -243,7 +243,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                         [JSON.stringify(convertToRaw(uploadedState.getCurrentContent()))],
                         { type: "application/json" }
                     );
-                    pushToStorage(storagePath + "/CampaignLore.json", blob, {})
+                    pushToStorage(storagePath + "/Content.json", blob, {})
                         .then(() => {
                             setSavedEditorState(uploadedState);
                         })
@@ -254,11 +254,11 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                 }
             }
         }
-    }, 5000);
-
+    }, 30000);
+    console.log("storagePath", storagePath)
     useMemo(() => {
         storage
-            .ref(storagePath + "/CampaignLore.json")
+            .ref(storagePath + "/Content.json")
             .getDownloadURL()
             .then((url: string) =>
                 fetch(url)
@@ -325,7 +325,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                     onChange={setEditorState}
                     handleDroppedFiles={handleDroppedFiles}
                     handleKeyCommand={(e: any) =>
-                        handleKeyCommand(e, editorState, setEditorState, storagePath + "/CampaignLore.json", dispatch)
+                        handleKeyCommand(e, editorState, setEditorState, storagePath, dispatch)
                     }
                     keyBindingFn={(e) => keyBindingFn(e, editorState)}
                     blockRendererFn={myBlockRenderer}

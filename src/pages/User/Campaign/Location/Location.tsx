@@ -29,7 +29,7 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link } from "react-router-dom";
-import renderArrayOfString from "../../../../utils/renderArrayToString";
+import renderArrayOfString from "../../../../utils/StringProcessing/renderArrayOfString";
 import useOwner from "../../../../store/hooks/useOwner";
 import { SensoDescription } from "../../../../components/SensoContainers";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
@@ -88,7 +88,7 @@ const Location: React.FC<LocationProps> = () => {
             {selectedLocation.location.nickNames ?
                 <div style={{ gridColumn: "1/3" }}>
                     <b>{translate.t(`Also known as`)}: </b>
-                    <i>{renderArrayOfString(selectedLocation.location.nickNames)}</i>
+                    <i>{renderArrayOfString(", ", selectedLocation.location.nickNames)}</i>
                 </div>
                 : null}
             {selectedLocation.location.religion ?
