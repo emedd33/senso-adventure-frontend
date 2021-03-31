@@ -1,6 +1,6 @@
 import { Button, TextField } from "@material-ui/core";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NEW_SESSION, OLD_WHITE } from "../../../../assets/constants/Constants";
 import IsLoading from "../../../../components/IsLoading/IsLoading";
