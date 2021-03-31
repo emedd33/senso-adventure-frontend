@@ -146,8 +146,8 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                                         textTransform: "none",
                                     }}
                                 >
-                                    Sessions
-                </Button>
+                                    {translate.t(`Sessions`)}
+                                </Button>
                             </div>
                         </Link>
                         {size.width && size.width! > 769 ? (

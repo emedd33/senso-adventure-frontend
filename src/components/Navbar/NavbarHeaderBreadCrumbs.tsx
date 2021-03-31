@@ -6,11 +6,12 @@ import useOwner from "../../store/hooks/useOwner";
 import { Breadcrumbs, Button } from "@material-ui/core";
 
 import useWindowSize from "../../store/hooks/useWindowSize";
+import { useTranslation } from "react-i18next";
 
 type NavbarHeaderBreadCrumbsProps = {};
 const NavbarHeaderBreadCrumbs: FunctionComponent<NavbarHeaderBreadCrumbsProps> = () => {
   const size = useWindowSize();
-
+  const translate = useTranslation()
   const location = useLocation();
   const [breadCrumbs, setBreadCrumbs] = useState<string[]>([]);
   const owner = useOwner();
@@ -26,21 +27,21 @@ const NavbarHeaderBreadCrumbs: FunctionComponent<NavbarHeaderBreadCrumbsProps> =
       <Breadcrumbs aria-label="breadcrumb" style={{ textDecoration: "none" }}>
         {breadCrumbs && size.width && size.width! > 769
           ? breadCrumbs.map((crumb: string, index: number) => {
-              let path = `/user/${owner}`;
-              for (let i = 0; i <= index; i++) {
-                path += `/${breadCrumbs[i]}`;
-              }
-              return (
-                <Link to={path} style={{ textDecoration: "none" }} key={index}>
-                  <Button
-                    style={{ textTransform: "none", padding: 0 }}
-                    disabled={index === breadCrumbs.length - 1}
-                  >
-                    {crumb}
-                  </Button>
-                </Link>
-              );
-            })
+            let path = `/user/${owner}`;
+            for (let i = 0; i <= index; i++) {
+              path += `/${breadCrumbs[i]}`;
+            }
+            return (
+              <Link to={path} style={{ textDecoration: "none" }} key={index}>
+                <Button
+                  style={{ textTransform: "none", padding: 0 }}
+                  disabled={index === breadCrumbs.length - 1}
+                >
+                  {translate.t(crumb)}
+                </Button>
+              </Link>
+            );
+          })
           : null}
       </Breadcrumbs>
     </>

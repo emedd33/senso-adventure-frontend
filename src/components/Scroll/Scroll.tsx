@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import ScrollImage from "../../assets/Images/scroll.png";
 import { storage } from "../../services/Firebase/firebase";
@@ -27,6 +28,7 @@ function Scroll({
   owner,
 }: ScrollProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState("");
+  const translate = useTranslation()
   useEffect(() => {
     if (owner && campaignSlug) {
       storage
@@ -37,17 +39,17 @@ function Scroll({
     }
   }, [campaignSlug, owner]);
   return (
-    <ScrollButton onClick={onClick}>
+    <ScrollButton onClick={onClick} style={{ textTransform: "none" }}>
       <ScrollContainer style={isOpaque ? { opacity: 0.5 } : {}}>
         <div>
-          <h5 style={{ margin: 0, opacity: 0.7 }}>Session day: {sessionDay}</h5>
+          <h5 style={{ margin: 0, opacity: 0.7 }}>{translate.t(`Session number`)}: {sessionDay}</h5>
           <ScrollDate>{date}</ScrollDate>
         </div>
         <div>
           <StoryImage src={imageUrl} alt="" />
           <ScrollTitle>{title}</ScrollTitle>
           <h5 style={{ color: "black", textAlign: "center", opacity: 0.7 }}>
-            {subTitle ? subTitle : "Subtitle"}
+            {subTitle ? subTitle : translate.t("Subtitle")}
           </h5>
         </div>
       </ScrollContainer>
