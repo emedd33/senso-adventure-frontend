@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "senso-adventure"
+    "default": "sensoadventure",
+    "dev": "dev.sensoadventure
   }
 }
