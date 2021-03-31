@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "auto",
     color: "white",
     backgroundColor: LIGHT_PINK,
+    width: "100%",
   },
 }));
 

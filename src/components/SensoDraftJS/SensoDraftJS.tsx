@@ -255,7 +255,6 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
             }
         }
     }, 30000);
-    console.log("storagePath", storagePath)
     useMemo(() => {
         storage
             .ref(storagePath + "/Content.json")

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { storage, firebaseAuth } from "../../services/Firebase/firebase";
 import Button from "@material-ui/core/Button";
+import engIcon from "../../assets/icons/eng_icon.png";
+import norIcon from "../../assets/icons/nor_icon.png";
 import IsLoading from "../../components/IsLoading/IsLoading";
 import { OLD_WHITE, OLD_WHITE_DARK } from "../../assets/constants/Constants";
 import { dispatchLogout, setAlertDialog } from "../../store/admin/adminCreator";
@@ -10,11 +12,13 @@ import TextField from "@material-ui/core/TextField";
 import { getCurrentUser } from "../../services/Firebase/authentication";
 import { getAuthUser, getIsLoading } from "../../store/admin/adminSelectors";
 import { Redirect } from "react-router";
+import { useTranslation } from "react-i18next";
 
-export interface ProfileIndexProps {}
+export interface ProfileIndexProps { }
 
 const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   const dispatch = useDispatch();
+  const translate = useTranslation();
   const isLoading = useSelector(getIsLoading);
   const [imageUrl, setImageUrl] = useState("");
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -95,7 +99,25 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
   return (
     <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
       <ContentContainer>
-        <h1>My Profile</h1>
+        <div>
+
+          <Button onClick={() => {
+            translate.i18n.changeLanguage("en")
+            window.localStorage.setItem("language", "en")
+          }}>
+            <img src={engIcon} style={{ width: "1.5rem" }} alt="English" />
+          </Button>
+          <Button onClick={() => {
+            translate.i18n.changeLanguage("nor")
+            window.localStorage.setItem("language", "nor")
+
+          }}>
+            <img src={norIcon} style={{ width: "1.5rem" }} alt="Norsk" />
+          </Button>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateRows: "repeat(1fr)" }}>
+        </div>
         <div style={{ flex: 8, width: "90%" }}>
           <div
             style={{
@@ -104,7 +126,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
               alignItems: "center",
             }}
           >
-            <ProfileRowString>Username: </ProfileRowString>
+            <ProfileRowString>{translate.t(`Username`)}: </ProfileRowString>
             <p>{authUser.displayName ? authUser.displayName : ""}</p>
           </div>
           <div
@@ -114,7 +136,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
               alignItems: "center",
             }}
           >
-            <ProfileRowString>Email: </ProfileRowString>
+            <ProfileRowString>{translate.t(`Email`)}: </ProfileRowString>
             <p>{authUser.email}</p>
           </div>
           <Button
@@ -122,15 +144,15 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
             color="primary"
             onClick={() => setIsChangingPassword(!isChangingPassword)}
           >
-            {isChangingPassword ? "Close window" : "Change password"}
+            {isChangingPassword ? translate.t(`Close`) : translate.t(`Change password`)}
           </Button>
           <ChangePasswordContainer
             style={
               isChangingPassword
                 ? {
-                    height: "20rem",
-                    overflow: "hidden",
-                  }
+                  height: "20rem",
+                  overflow: "hidden",
+                }
                 : { height: "0rem" }
             }
           >
@@ -139,17 +161,17 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                 style={
                   isChangingPassword
                     ? {
-                        opacity: 1,
-                        padding: "1rem",
-                        display: "initial",
-                        transition: "200ms",
-                      }
+                      opacity: 1,
+                      padding: "1rem",
+                      display: "initial",
+                      transition: "200ms",
+                    }
                     : {
-                        opacity: 0,
-                        padding: "0",
-                        display: "none",
-                        transition: "200ms",
-                      }
+                      opacity: 0,
+                      padding: "0",
+                      display: "none",
+                      transition: "200ms",
+                    }
                 }
               >
                 <div
@@ -164,8 +186,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     fullWidth
                     id="current password"
                     type="password"
-                    label="Current password"
-                    placeholder="Write your current password"
+                    label={translate.t(`Current password`)}
                     margin="normal"
                     style={{ width: "90%" }}
                     onChange={(event) => setCurrentPassword(event.target.value)}
@@ -183,8 +204,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     fullWidth
                     id="first password"
                     type="password"
-                    label="New password"
-                    placeholder="Write your new password"
+                    label={translate.t(`New password`)}
                     margin="normal"
                     style={{ width: "90%" }}
                     onChange={(event) =>
@@ -204,8 +224,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     fullWidth
                     id="second password"
                     type="password"
-                    label="New password"
-                    placeholder="Write your new password"
+                    label={translate.t(`New password`)}
                     margin="normal"
                     style={{ width: "90%" }}
                     onChange={(event) =>
@@ -227,7 +246,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
                     color="primary"
                     onClick={() => handleChangePassword()}
                   >
-                    Change password
+                    {translate.t(`Change password`)}
                   </Button>
                 </div>
               </div>
@@ -250,7 +269,7 @@ const ProfileIndex: React.FC<ProfileIndexProps> = () => {
             style={{ width: "90%" }}
           >
             {" "}
-            Log out
+            {translate.t(`Log out`)}
           </Button>
         </div>
       </ContentContainer>

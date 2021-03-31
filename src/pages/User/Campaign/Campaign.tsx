@@ -193,7 +193,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                         <div
                             style={{
                                 display: "grid",
-                                gridTemplateColumns: "repeat(auto-fill, 40rem)",
+                                gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 40rem))",
                             }}
                         >
                             {filterUnpublished(
@@ -265,7 +265,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                             <div
                                 style={{
                                     display: "grid",
-                                    gridTemplateColumns: "repeat(auto-fill, 40rem)",
+                                    gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 40rem))",
                                 }}
                             >
                                 {filterUnpublished(
@@ -339,7 +339,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                         <div
                             style={{
                                 display: "grid",
-                                gridTemplateColumns: "repeat(auto-fill, 40rem)",
+                                gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 40rem))",
                             }}
                         >
                             {filterUnpublished(
