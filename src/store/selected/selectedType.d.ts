@@ -4,7 +4,6 @@ type SelectedState = {
   selectedMonster?: ISelectedMonster;
   selectedPlayer?: ISelectedPlayer;
   selectedLocation?: ISelectedLocation;
-  backgroundImage?: string;
 };
 
 type ISelectedCampaign = {

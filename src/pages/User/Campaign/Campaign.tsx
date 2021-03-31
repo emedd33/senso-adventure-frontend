@@ -73,7 +73,7 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
     useMemo(() => {
         getUrlFromStorage(selectedCampaignStoragePath + "/TitleImage").then((url) =>
             setCampaignTitleImage(url)
-        );
+        ).catch(() => null);
     }, [selectedCampaignStoragePath]);
 
     useEffect(() => {

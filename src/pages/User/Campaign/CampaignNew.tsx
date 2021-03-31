@@ -15,9 +15,8 @@ import { pushToStorage } from "../../../services/Firebase/storage";
 import { transformTitleToSlug } from "../../../utils/StringProcessing";
 import useOwner from "../../../store/hooks/useOwner";
 import { useTranslation } from "react-i18next";
-import BackgroundImage from "../../../assets/Images/background_home.jpg";
 
-export interface CampaignNewProps {}
+export interface CampaignNewProps { }
 
 const CampaignNew: React.FC<CampaignNewProps> = () => {
   const dispatch = useDispatch();
@@ -221,9 +220,6 @@ const CampaignNew: React.FC<CampaignNewProps> = () => {
 const ParentContainer = styled.div`
   z-index: 300;
   display: flex;
-  background-size: cover;
-  justify-content: center;
-  background-image: url(${BackgroundImage});
   align-items: center;
   flex-direction: column;
   padding-top: 5vh;

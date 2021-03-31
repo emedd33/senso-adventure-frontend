@@ -11,7 +11,6 @@ import { getAllCampaigns } from "../../store/campaign/campaignSelectors";
 import { OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
-import BackgroundImage from "../../assets/Images/background_home.jpg";
 import DndCrest from "../../assets/Images/dungeons-and-dragons.png";
 import { getUrlFromStorage } from "../../services/Firebase/storage";
 import useOwner from "../../store/hooks/useOwner";
@@ -99,10 +98,6 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
 const Container = styled.div`
   z-index: 300;
   display: flex;
-  background-image: url(${BackgroundImage});
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
   justify-content: center;
   align-items: center;
   flex-direction: column;

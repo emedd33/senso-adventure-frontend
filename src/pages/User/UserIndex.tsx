@@ -49,9 +49,6 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
 };
 const Container = styled.div`
   display: flex;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
   justify-content: center;
   align-items: center;
   flex-direction: column;

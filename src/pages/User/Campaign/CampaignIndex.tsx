@@ -6,7 +6,6 @@ import Campaign from "./Campaign";
 import CampaignEdit from "./CampaignEdit";
 import Campaigns from "./Campaigns";
 import SensoFab from "../../../components/SensoFab/SensoFab";
-
 import {
   isDungeonMasterSelector,
   getSelectedCampaignStoragePath,
@@ -57,7 +56,14 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
   }, [dispatch, selectedCampaignStoragePath]);
 
   return (
-    <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+    <Container style={imageUrl ? {
+      background: `
+      linear-gradient(to right, transparent,transparent, black),
+      linear-gradient(to left, transparent,transparent, black),
+      no-repeat url(${imageUrl})`,
+      backgroundAttachment: "fixed",
+      backgroundSize: "cover",
+    } : {}}>
       <Switch>
         <Route exact path="/user/:username/campaigns/:campaignId/new-player">
           <PlayerNew />
@@ -102,9 +108,6 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
 };
 const Container = styled.div`
   display: flex;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
   justify-content: center;
   align-items: center;
   flex-direction: column;

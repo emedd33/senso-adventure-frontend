@@ -20,6 +20,7 @@ import { authentication } from "./services/Firebase/firebase";
 import { setAuthUser } from "./store/admin/adminCreator";
 import UserIndex from "./pages/User/UserIndex";
 import { useTranslation } from "react-i18next";
+import backgroundImage from "./assets/Images/background_home.jpg"
 export default function App() {
   const dispatch = useDispatch();
   const translate = useTranslation()
@@ -42,54 +43,41 @@ export default function App() {
     <Router>
       <AlertDialog />
       <Navbar />
-      <LeftGradientDiv style={{ left: 0 }} />
-      <RightGradientDiv style={{ right: 0 }} />
+      <Container>
 
-      <Switch>
-        <Route exact path="/profile">
-          {authUser && authUser.displayName ? (
-            <ProfileIndex />
-          ) : (
-            <Redirect to="/" />
-          )}
-        </Route>
-        <Route path="/login">
-          {authUser && authUser.displayName ? (
-            <Redirect to="/" />
-          ) : (
-            <LoginIndex />
-          )}
-        </Route>
-        <Route path="/user/:username/">
-          <UserIndex />
-        </Route>
+        <Switch>
+          <Route exact path="/profile">
+            {authUser && authUser.displayName ? (
+              <ProfileIndex />
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
+          <Route path="/login">
+            {authUser && authUser.displayName ? (
+              <Redirect to="/" />
+            ) : (
+              <LoginIndex />
+            )}
+          </Route>
+          <Route path="/user/:username/">
+            <UserIndex />
+          </Route>
 
-        <Route exact path="/">
-          {authUserPath ? <Redirect to={authUserPath} /> : <Home />}
-        </Route>
-        <Route>
-          <NotFound />
-        </Route>
-      </Switch>
+          <Route exact path="/">
+            {authUserPath ? <Redirect to={authUserPath} /> : <Home />}
+          </Route>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+      </Container>
       <StickyFooter />
     </Router>
   );
 }
-
-const LeftGradientDiv = styled.div`
-  background: linear-gradient(to right, #000, transparent);
-  width: 10vw;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 0;
-  backgroundcolor: black;
-`;
-const RightGradientDiv = styled.div`
-  background: linear-gradient(to left, #000, transparent);
-  width: 10vw;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  backgroundcolor: black;
-`;
+const Container = styled.div`
+background: linear-gradient(to right, transparent,transparent, black), linear-gradient(to left, transparent,transparent, black), no-repeat url(${backgroundImage});
+background-attachment: fixed;
+background-size: cover;
+`

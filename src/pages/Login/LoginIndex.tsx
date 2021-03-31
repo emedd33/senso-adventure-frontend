@@ -10,7 +10,7 @@ import SignupForm from "../../components/SignupForm/SignupForm";
 import { getUrlFromStorage } from "../../services/Firebase/storage";
 import { getAuthUser, getIsLoading } from "../../store/admin/adminSelectors";
 
-export interface LoginProps {}
+export interface LoginProps { }
 
 const LoginIndex: React.FC<LoginProps> = () => {
   const [imageUrl, setImageUrl] = useState("");
@@ -19,14 +19,14 @@ const LoginIndex: React.FC<LoginProps> = () => {
   useEffect(() => {
     getUrlFromStorage(LOGIN_BACKGROUND_IMAGE_STORAGE_PATH).then((url: string) =>
       setImageUrl(url)
-    );
+    ).catch(() => null);
   }, []);
   if (authUser && authUser.user.displayName) {
     return <Redirect to="/" />;
   }
 
   return (
-    <Container style={{ backgroundImage: "url(" + imageUrl + ")" }}>
+    <Container style={{}}>
       {isLoading ? (
         <IsLoading />
       ) : (
@@ -49,9 +49,6 @@ const LoginIndex: React.FC<LoginProps> = () => {
 const Container = styled.div`
   z-index: 300;
   display: flex;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
   justify-content: center;
   align-items: center;
   flex-direction: column;
