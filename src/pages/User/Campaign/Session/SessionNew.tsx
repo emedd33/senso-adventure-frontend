@@ -7,7 +7,6 @@ import IsLoading from "../../../../components/IsLoading/IsLoading";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker } from "@material-ui/pickers";
-import { setAlertDialog } from "../../../../store/admin/adminCreator";
 import styled from "styled-components";
 import { getNewSessionDay } from "../../../../store/campaign/campaignSelectors";
 import { database } from "../../../../services/Firebase/firebase";
@@ -20,7 +19,6 @@ import { useTranslation } from "react-i18next";
 export interface SessionNewProps { }
 
 const SessionNew: React.FC<SessionNewProps> = () => {
-  const dispatch = useDispatch();
   const history = useHistory();
   const owner = useOwner();
   const translate = useTranslation()
