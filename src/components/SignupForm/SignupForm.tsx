@@ -12,6 +12,7 @@ import { setAlertDialog, setIsLoading } from "../../store/admin/adminCreator";
 import { getAuthUser } from "../../store/admin/adminSelectors";
 import { getFromDatabase } from "../../services/Firebase/database";
 import { createUserWithEmailPasswordAndUsername } from "../../services/Firebase/authentication";
+import { useTranslation } from "react-i18next";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
   },
 }));
-export interface SignUpProps {}
+export interface SignUpProps { }
 
 const SignupForm: React.FC<SignUpProps> = () => {
   const classes = useStyles();
@@ -57,6 +58,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
   const [confirmPasswordHelperText, setConfirmPasswordHelperText] = useState(
     ""
   );
+  const translate = useTranslation()
   const authUser = useSelector(getAuthUser);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const handleSignup = () => {
@@ -90,10 +92,10 @@ const SignupForm: React.FC<SignUpProps> = () => {
               })
               .catch((error) => {
                 if (error.code === "auth/email-already-in-use") {
-                  dispatch(setAlertDialog("Email already exists", true, true));
+                  dispatch(setAlertDialog(`${translate.t(`Email already exists`)}`, true, true));
                 } else {
                   console.log(error);
-                  dispatch(setAlertDialog("an error has occured", true, true));
+                  dispatch(setAlertDialog(`${translate.t(`An error has occured`)}`, true, true));
                 }
                 dispatch(setIsLoading(false));
               });
@@ -121,7 +123,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign up
+          {translate.t(`Signup`)}
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -132,10 +134,10 @@ const SignupForm: React.FC<SignUpProps> = () => {
                 fullWidth
                 error={emailError}
                 id="email"
-                label="Email Address"
-                name="email"
+                label={translate.t(`Email`)}
                 onKeyDown={(e) => (e.key === "Enter" ? handleSignup() : null)}
                 autoComplete="email"
+                name="name"
                 onChange={(event) => setEmail(event.target.value)}
               />
             </Grid>
@@ -145,10 +147,9 @@ const SignupForm: React.FC<SignUpProps> = () => {
                 required
                 fullWidth
                 id="username"
-                error={usernameError}
-                label="Username"
-                name="username"
                 autoComplete="username"
+                error={usernameError}
+                label={translate.t(`Username`)}
                 onKeyDown={(e) => (e.key === "Enter" ? handleSignup() : null)}
                 onChange={(event) => setUsername(event.target.value)}
               />
@@ -160,7 +161,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
                 fullWidth
                 error={firstPasswordError}
                 name="password"
-                label="Password"
+                label={translate.t(`Password`)}
                 type="password"
                 onKeyDown={(e) => (e.key === "Enter" ? handleSignup() : null)}
                 id="first-password"
@@ -173,7 +174,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
                 required
                 fullWidth
                 name="confirm-password"
-                label="Confirm password"
+                label={translate.t(`Password`)}
                 type="password"
                 id="second-password"
                 error={secondPasswordError}
@@ -191,7 +192,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
             onClick={() => handleSignup()}
             disabled={isButtonDisabled}
           >
-            Sign Up
+            {translate.t(`Signup`)}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
@@ -201,7 +202,7 @@ const SignupForm: React.FC<SignUpProps> = () => {
                   size="medium"
                   className={classes.login}
                 >
-                  Already have an account? Login
+                  {translate.t(`Already have an account? Login`)}
                 </Button>
               </Link>
             </Grid>

@@ -11,6 +11,7 @@ import { OLD_WHITE } from "../../assets/constants/Constants";
 import { Link } from "react-router-dom";
 import { dispatchLogin } from "../../store/admin/adminCreator";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const LoginForm = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const translate = useTranslation()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
@@ -76,7 +78,7 @@ const LoginForm = () => {
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <Card className={classes.card}>
-        <CardHeader className={classes.header} title="Login" />
+        <CardHeader className={classes.header} title={translate.t(`Login`)} />
         <CardContent>
           <div>
             <TextField
@@ -84,8 +86,7 @@ const LoginForm = () => {
               fullWidth
               id="email"
               type="email"
-              label="Email"
-              placeholder="Email"
+              label={translate.t(`Email`)}
               margin="normal"
               onChange={(event) => setEmail(event.target.value)}
               onKeyDown={(e) => (e.key === "Enter" ? handleLogin() : null)}
@@ -95,8 +96,7 @@ const LoginForm = () => {
               fullWidth
               id="password"
               type="password"
-              label="Password"
-              placeholder="Password"
+              label={translate.t(`Password`)}
               margin="normal"
               helperText={helperText}
               onChange={(event) => setPassword(event.target.value)}
@@ -113,16 +113,16 @@ const LoginForm = () => {
             onClick={() => handleLogin()}
             disabled={isButtonDisabled}
           >
-            Login
+            {translate.t(`Login`)}
           </Button>
           <Link to={"/login/forgotten"} className={classes.link}>
             <Button color="secondary" size="medium">
-              Forgotten password?
+              {translate.t(`Forgotten password?`)}
             </Button>
           </Link>
           <Link to={"/login/signup"} className={classes.link}>
             <Button color="secondary" size="medium">
-              Sign up
+              {translate.t(`Signup`)}
             </Button>
           </Link>
         </CardActions>
