@@ -80,7 +80,7 @@ const NavbarSidebar: FunctionComponent<NavbarSidebarProps> = () => {
                 }
               >
                 <Link
-                  to={`/user/${authUser.displayName}/campaigns/${campaign.slug}`}
+                  to={`/user/${owner}/campaigns/${campaign.slug}`}
                   style={{
                     textDecoration: "none",
                     color: "black",

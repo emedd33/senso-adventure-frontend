@@ -339,13 +339,9 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                     {
                         // may be use React.Fragment instead of div to improve perfomance after React 16
                         (externalProps) => (
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    flexWrap: "wrap",
-                                }}
-                            >
+                            <InnlineToolbarContainer>
+
+
 
                                 <HeadlineOneButton {...externalProps} />
                                 <HeadlineTwoButton {...externalProps} />
@@ -353,11 +349,10 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
                                 <BoldButton {...externalProps} />
                                 <ItalicButton {...externalProps} />
                                 <UnderlineButton {...externalProps} />
-                                <Separator />
                                 <UnorderedListButton {...externalProps} />
                                 <OrderedListButton {...externalProps} />
 
-                            </div>
+                            </InnlineToolbarContainer>
                         )
                     }
                 </InlineToolbar>
@@ -594,5 +589,13 @@ const EditorContainer = styled.div`
   z-index: 100;
   width: 100%;
 `;
+const InnlineToolbarContainer = styled.div`
+position: fixed;
+top: 2rem;
+display:flex;
+flex-direction:column;
+-webkit-box-shadow: 5px 5px 15px 5px #000000;
+box-shadow: 5px 0px 15px 2px #000000;,
+`
 
 export default SensoDraftJS;
