@@ -21,7 +21,7 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
 
   useMemo(() => {
     if (location) {
-      database.ref(`users/${owner}/campaigns`).on("value", (campaigns) => {
+      database.ref(`users/${owner}/campaigns`).once("value", (campaigns) => {
         dispatch(setCampaigns(campaigns.val()));
       });
     }

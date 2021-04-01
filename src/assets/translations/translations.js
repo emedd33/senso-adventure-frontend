@@ -66,6 +66,7 @@ const resources = {
       "Governed rule": "Styringssett",
       History: "Historie",
       "Hit dice": "Treff-terninger",
+      "Image is too large": "Bilde er for stort",
       "Insert secret note": "Legg til hemmelig notat",
       "Insert description": "Legg til beskrivelse",
       "Insert knowledge note": "Legg tile kunnskapsnotat",

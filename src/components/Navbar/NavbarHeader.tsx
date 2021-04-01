@@ -24,7 +24,6 @@ const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
   const authUser = useSelector(getAuthUser);
   const dispatch = useDispatch();
   const isUploading = useSelector(getIsUploading);
-  console.log(authUser)
   return (
     <>
       <IconContext.Provider value={{ color: "black" }}>

@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import { EditorState, convertToRaw, convertFromRaw, SelectionState } from "draft-js";
 import { insertCharacter, insertAtomicBlock, insertImageBlock } from "./insertContent";
+import Compressor from 'compressorjs';
 import createToolbarPlugin, {
     Separator,
 } from "@draft-js-plugins/static-toolbar";
@@ -56,7 +57,7 @@ import {
 } from "../../store/selected/selectedSelectors";
 import useInterval from "../../store/hooks/useInterval";
 import { storage } from "../../services/Firebase/firebase";
-import { setIsUploading } from "../../store/admin/adminCreator";
+import { setAlertDialog, setIsUploading } from "../../store/admin/adminCreator";
 import { pushToStorage } from "../../services/Firebase/storage";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -191,29 +192,48 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         },
         [locationMentionList]
     );
+    const uploadImage = useCallback((image: File, selection: SelectionState) => {
+        setInsertingImage(true)
+        let uploadTask = storage
+            .ref(storagePath)
+            .child("images")
+            .child(image.name)
+            .put(image);
+        uploadTask.on(
+            "state_changed",
+            () => { },
+            (error) => {
+                console.log(`Could not upload ${image}`, error);
+                setInsertingImage(false)
+            },
+            () => {
+                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                    setEditorState(insertImageBlock(downloadURL, selection, editorState))
+                }).finally(() => setInsertingImage(false))
+            }
+        )
+    }, [editorState, storagePath])
     const submitImages = useCallback((newImages: File[], selection: SelectionState) => {
+
         newImages.map(async (newImage: File) => {
             setInsertingImage(true)
-            let uploadTask = storage
-                .ref(storagePath)
-                .child("images")
-                .child(newImage.name)
-                .put(newImage);
-            uploadTask.on(
-                "state_changed",
-                () => { },
-                (error) => {
-                    console.log(`Could not upload ${newImage}`, error);
-                    setInsertingImage(false)
-                },
-                () => {
-                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        setEditorState(insertImageBlock(downloadURL, selection, editorState))
-                    }).finally(() => setInsertingImage(false))
-                }
-            )
+            if (newImage.size / 1024 / 1024 > 1) {
+                new Compressor(newImage, {
+                    quality: 0.6,
+                    success(result: File) {
+                        if (result.size / 1024 / 1024 > 2) {
+                            dispatch(setAlertDialog(`${translate.t(`Image is too large`)}`, true, true))
+                        } else {
+
+                            uploadImage(result, selection)
+                        }
+                    }
+                })
+            } else {
+                uploadImage(newImage, selection)
+            }
         })
-    }, [editorState, storagePath])
+    }, [uploadImage, translate, dispatch])
     const handleImageUpload = useCallback((e: any) => {
         const [file] = e.target.files;
         if (file) {
