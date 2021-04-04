@@ -24,6 +24,7 @@ import SessionIndex from "./Session/SessionIndex";
 import PlayerIndex from "./Player/PlayerIndex";
 import LocationIndex from "./Location/LocationIndex";
 import NotFound from "../../NotFound/NotFound";
+import CampaignIndexTabs from "./CampaignIndexTabs";
 
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
@@ -63,7 +64,9 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
       no-repeat url(${imageUrl})`,
       backgroundAttachment: "fixed",
       backgroundSize: "cover",
+
     } : {}}>
+      <CampaignIndexTabs />
       <Switch>
         <Route exact path="/user/:username/campaigns/:campaignId/new-player">
           <PlayerNew />
@@ -108,14 +111,11 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
 };
 const Container = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
+  width:100%;
+  height:100%;
   flex-direction: column;
-  width: 100%;
-  padding-top: 10rem;
-  padding-bottom: 10rem;
-  height: 100%;
-  min-height: 100vh;
+  min-height: 100vh
 `;
 
 export default UserIndex;

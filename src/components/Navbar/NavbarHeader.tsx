@@ -98,6 +98,7 @@ const NavbarHeader: FunctionComponent<NavbarHeaderProps> = () => {
             </div>
             : null}
         </Container>
+
       </IconContext.Provider>
     </>
   );
