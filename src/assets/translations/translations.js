@@ -25,6 +25,7 @@ const resources = {
       Blindsight: "Blindesyn",
       "Calculated from wisdom": "Beregnet fra visdom",
       "campaigns": "kampanjer",
+      "Campaigns": "Kampanjer",
       "Campaign title image": "Tittelbilde for kampanjen",
       Cancel: "Avbryt",
       Cha: "Kar",

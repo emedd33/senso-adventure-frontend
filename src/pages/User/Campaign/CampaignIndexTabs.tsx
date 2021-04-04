@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -9,10 +9,10 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getSelectedCampaign } from '../../../store/selected/selectedSelectors';
 import useOwner from '../../../store/hooks/useOwner';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles({
     root: {
-        width: "90%",
         backgroundColor: OLD_WHITE,
         zIndex: 200,
         marginTop: "10rem",
@@ -25,7 +25,7 @@ export default function CampaignIndexTabs() {
     const location = useLocation()
     const selectedCampaign = useSelector(getSelectedCampaign)
     const owner = useOwner()
-    const [currentLocationTab, setCurrentLocationTab] = useState(0)
+    const translate = useTranslation()
     useEffect(() => {
         let locationArray = location.pathname.split("/")
         if (locationArray[5] === "sessions") {
@@ -57,21 +57,23 @@ export default function CampaignIndexTabs() {
                 indicatorColor="primary"
                 textColor="primary"
                 centered
+                variant="scrollable"
+                scrollButtons="auto"
             >
-                <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}`} style={{ textDecoration: "none", color: "black" }}>
-                    <Tab label="Campaign" />
+                <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}`} style={{ textDecoration: "none", color: "black", }}>
+                    <Tab label={translate.t(`Campaign`)} style={{ textTransform: "none" }} />
                 </Link>
                 <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/sessions`} style={{ textDecoration: "none", color: "black" }}>
-                    <Tab label="Sessions" />
+                    <Tab label={translate.t(`Sessions`)} style={{ textTransform: "none" }} />
                 </Link>
                 <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/players`} style={{ textDecoration: "none", color: "black" }}>
-                    <Tab label="Players" />
+                    <Tab label={translate.t(`Players`)} style={{ textTransform: "none" }} />
                 </Link>
                 <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/locations`} style={{ textDecoration: "none", color: "black" }}>
-                    <Tab label="Locations" />
+                    <Tab label={translate.t(`Locations`)} style={{ textTransform: "none" }} />
                 </Link>
                 <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}/monsters`} style={{ textDecoration: "none", color: "black" }}>
-                    <Tab label="Monsters" />
+                    <Tab label={translate.t(`Monsters/Npc`)} style={{ textTransform: "none" }} />
                 </Link>
             </Tabs>
         </Paper>
