@@ -7,6 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
+import MapMakerIndex from "./pages/Mapmaker/MapmakerIndex"
 import "./App.scss";
 import AlertDialog from "./components/AlertDialog/AlertDialog";
 import LoginIndex from "./pages/Login/LoginIndex";
@@ -63,7 +64,9 @@ export default function App() {
           <Route path="/user/:username/">
             <UserIndex />
           </Route>
-
+          <Route exact path="/mapmaker">
+            <MapMakerIndex />
+          </Route>
           <Route exact path="/">
             {authUserPath ? <Redirect to={authUserPath} /> : <Home />}
           </Route>
@@ -80,4 +83,5 @@ const Container = styled.div`
 background: linear-gradient(to right, transparent,transparent, black), linear-gradient(to left, transparent,transparent, black), no-repeat url(${backgroundImage});
 background-attachment: fixed;
 background-size: cover;
+min-height:100vh;
 `
