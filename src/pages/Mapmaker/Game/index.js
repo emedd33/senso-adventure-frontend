@@ -1,12 +1,11 @@
 import * as PIXI from 'pixi.js';
 // import backgroundPath from "../assets/background.png"
 import { setUpGrid } from "./draw"
-const WIDTH = 128 * 6
-const HEIGHT = 128 * 6
+import { HEIGHT, WIDTH } from "../assets/Constants"
 export function createGame() {
     const app = new PIXI.Application({
-        width: window.innerWidth * 0.8,
-        height: window.innerHeight * 0.8
+        width: WIDTH,
+        height: HEIGHT
     })
     const tilesMatrix = new Array((WIDTH / 32) * (HEIGHT / 32)).fill(0);
     app.renderer.backgroundColor = 0xFAEBD7
