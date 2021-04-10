@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
-import { createGame } from "./MapmakerGame"
+import { createGame } from "./Game"
 
 const MapmakerIndex: React.FC = () => {
     const [app, setApp] = useState<any>();
@@ -21,6 +21,8 @@ const MapmakerIndex: React.FC = () => {
                     canvasDiv?.appendChild(app.view)
                 }
             }} />
+            <button id="change-to-items">Items</button>
+            <button id="change-to-tiles">Tiles</button>
         </Container>
     );
 }
