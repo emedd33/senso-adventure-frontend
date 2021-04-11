@@ -24,5 +24,4 @@ export function drawSurroundingSprites(app, gameMatrix, textures, columnPx, rowP
     drawBottomLeftTile(app, gameMatrix, index, textures, columnPx, rowPx)
     drawBottomTile(app, gameMatrix, index, textures, columnPx, rowPx)
     drawBottomRightTile(app, gameMatrix, index, textures, columnPx, rowPx)
-    printGameMatrix(gameMatrix, index) // 
 }

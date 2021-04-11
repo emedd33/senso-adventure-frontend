@@ -1,8 +1,8 @@
 export const OLD_WHITE = 0xFAEBD7
-export const WIDTH = 128 * 3
-export const HEIGHT = 128 * 3
 export const TEXTURE_WIDTH = 32
 export const TEXTURE_HEIGHT = 32
+export const WIDTH = TEXTURE_WIDTH * 32
+export const HEIGHT = TEXTURE_HEIGHT * 24
 export const MATRIX_WIDTH = WIDTH / TEXTURE_WIDTH
 export const MATRIX_HEIGHT = HEIGHT / TEXTURE_HEIGHT
 

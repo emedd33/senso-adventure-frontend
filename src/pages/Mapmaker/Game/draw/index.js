@@ -2,7 +2,6 @@
 import * as PIXI from 'pixi.js'
 import { getTilePosition, getGameMatrixIndex } from "../../utils/position"
 import { CENTER } from "../../assets/Constants"
-import { CompositeTilemap } from '@pixi/tilemap';
 import { drawSprite, drawSurroundingSprites } from "./drawTile/index"
 import { loadBackground, loadObjects, loadTiles } from '../loadAssets';
 export function setUpGame(app, gameMatrix) {
@@ -13,6 +12,8 @@ export function setUpGame(app, gameMatrix) {
     loadTiles(loader)
     loadObjects(loader)
     loadBackground(loader)
+    app.stage.scale.x = 1.5
+    app.stage.scale.y = 1.5
     function onClick(event) {
         const pos = event.data.getLocalPosition(this.parent)
         addToGrid(pos, textures)
@@ -44,6 +45,26 @@ export function setUpGame(app, gameMatrix) {
             }
         }
     }
+
+    function onScroll(event) {
+        let wDelta = event.wheelDelta < 0 ? 'down' : 'up';
+        // Initial scale is set to 1.5, so user can zoom out to 1.05 and zoom in to 1.95 
+        if (wDelta === "down") {
+            if (app.stage.scale.y >= 1.05) {
+                app.stage.scale.x -= .05
+                app.stage.scale.y -= .05
+            }
+        } else if (wDelta === "up") {
+            if (app.stage.scale.y <= 1.9) {
+
+                app.stage.scale.x += .05
+                app.stage.scale.y += .05
+            }
+        }
+
+        event.preventDefault()
+
+    }
     function addToGrid(pos, tileTextures) {
         if (drawType === "tiles") {
 
@@ -59,7 +80,6 @@ export function setUpGame(app, gameMatrix) {
                 index,
             )
         } else if (drawType === "items") {
-            console.log("asd")
             const sprite = new PIXI.Sprite(PIXI.utils.TextureCache.item);
             sprite.y = pos.y
             sprite.x = pos.x;
@@ -86,8 +106,9 @@ export function setUpGame(app, gameMatrix) {
             .on('pointerdown', onDragStart)
             .on('pointerup', onDragEnd)
             .on('pointerupoutside', onDragEnd)
-            .on('pointermove', onDragMove);
-
+            .on('pointermove', onDragMove)
+            .on("mousewheel", onScroll)
+        app.view.addEventListener("mousewheel", onScroll)
         textures.bottomright = PIXI.utils.TextureCache.dungeonTile1
         textures.bottom = PIXI.utils.TextureCache.dungeonTile2
         textures.bottomleft = PIXI.utils.TextureCache.dungeonTile3
@@ -136,6 +157,7 @@ export function setUpGame(app, gameMatrix) {
         textures.topleftBottomright = PIXI.utils.TextureCache.dungeonTile46
         textures.topleftToprightBottomleftBottomright = PIXI.utils.TextureCache.dungeonTile47
         app.stage.addChild(backgroundSprite);
+
     })
 
 }

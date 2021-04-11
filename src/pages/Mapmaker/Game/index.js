@@ -11,8 +11,6 @@ export function createGame() {
     app.renderer.backgroundColor = 0xFAEBD7
     // Scale mode for all textures, will retain pixelation
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-    const loader = new PIXI.Loader(); // you can also create your own if you want
-    const textures = {}
 
     setUpGame(app, tilesMatrix)
 
