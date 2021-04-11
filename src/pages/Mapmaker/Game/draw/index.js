@@ -53,6 +53,7 @@ export function setUpGame(app, gameMatrix) {
             if (app.stage.scale.y >= 1.05) {
                 app.stage.scale.x -= .05
                 app.stage.scale.y -= .05
+                console.log(event)
             }
         } else if (wDelta === "up") {
             if (app.stage.scale.y <= 1.9) {

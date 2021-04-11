@@ -1,5 +1,5 @@
 import {
-    WIDTH, TEXTURE_WIDTH, TEXTURE_HEIGHT, MATRIX_WIDTH,
+    TEXTURE_HEIGHT, MATRIX_WIDTH,
     NO_TILE,
     BOTTOMRIGHT,
     BOTTOM,
@@ -29,12 +29,9 @@ import {
     TOP_BOTTOMLEFT,
     TOP_BOTTOMRIGHT,
     RIGHT_TOPLEFT,
-    RIGHT_BOTTOMLEFT,
     BOTTOM_TOPRIGHT,
     BOTTOM_TOPLEFT,
-    RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT_TILE,
     TOP_BOTTOMLEFT_BOTTOMRIGHT,
-    TOP_BOTTOM_RIGHT_BOTTOM_LEFT,
     LEFT_TOPRIGHT_BOTTOMRIGHT,
     RIGHT_BOTTOMLEFT_TOPLEFT,
     BOTTOM_TOPLEFT_TOPRIGHT,
@@ -96,7 +93,7 @@ export function drawBottomTile(app, gameMatrix, index, textures, columnPx, rowPx
     else if (bottomTile === LEFT_TOPRIGHT) {
         drawSprite(app, gameMatrix, textures.swingUpRight, rowPx + TEXTURE_HEIGHT, columnPx, bottomIndex, SWING_UP_RIGHT)
     }
-    else if (bottomTile === BOTTOM_TOPLEFT || bottomTile === BOTTOM_TOPRIGHT || bottomTile == BOTTOM_TOPLEFT_TOPRIGHT) {
+    else if (bottomTile === BOTTOM_TOPLEFT || bottomTile === BOTTOM_TOPRIGHT || bottomTile === BOTTOM_TOPLEFT_TOPRIGHT) {
         drawSprite(app, gameMatrix, textures.topBottom, rowPx + TEXTURE_HEIGHT, columnPx, bottomIndex, TOP_BOTTOM)
     }
     else if (bottomTile === RIGHT_TOPLEFT) {

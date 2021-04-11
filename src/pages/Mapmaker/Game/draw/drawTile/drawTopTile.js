@@ -1,5 +1,5 @@
 import {
-    WIDTH, TEXTURE_WIDTH, TEXTURE_HEIGHT, MATRIX_WIDTH,
+    TEXTURE_HEIGHT, MATRIX_WIDTH,
     NO_TILE,
     BOTTOMRIGHT,
     BOTTOM,
@@ -32,9 +32,7 @@ import {
     RIGHT_BOTTOMLEFT,
     BOTTOM_TOPRIGHT,
     BOTTOM_TOPLEFT,
-    RIGHT_BOTTOM_LEFT_BOTTOM_RIGHT_TILE,
     TOP_BOTTOMLEFT_BOTTOMRIGHT,
-    TOP_BOTTOM_RIGHT_BOTTOM_LEFT,
     LEFT_TOPRIGHT_BOTTOMRIGHT,
     RIGHT_BOTTOMLEFT_TOPLEFT,
     BOTTOM_TOPLEFT_TOPRIGHT,
@@ -74,7 +72,7 @@ export function drawTopTile(app, gameMatrix, index, textures, columnPx, rowPx) {
         drawSprite(app, gameMatrix, textures.bottomTopright, rowPx - TEXTURE_HEIGHT, columnPx, topIndex, BOTTOM_TOPRIGHT)
     } else if (topTile === TOP) {
         drawSprite(app, gameMatrix, textures.topBottom, rowPx - TEXTURE_HEIGHT, columnPx, topIndex, TOP_BOTTOM)
-    } else if (topTile === TOPLEFT || topTile == TOPLEFT_BOTTOMLEFT || topTile === TOPLEFT_BOTTOMLEFT_BOTTOMRIGHT || topTile === TOPLEFT_BOTTOMRIGHT) {
+    } else if (topTile === TOPLEFT || topTile === TOPLEFT_BOTTOMLEFT || topTile === TOPLEFT_BOTTOMLEFT_BOTTOMRIGHT || topTile === TOPLEFT_BOTTOMRIGHT) {
         drawSprite(app, gameMatrix, textures.bottomTopleft, rowPx - TEXTURE_HEIGHT, columnPx, topIndex, BOTTOM_TOPLEFT)
     } else if (topTile === SWING_UP_RIGHT) {
         drawSprite(app, gameMatrix, textures.UFromRight, rowPx - TEXTURE_HEIGHT, columnPx, topIndex, U_FROM_RIGHT)
@@ -99,7 +97,7 @@ export function drawTopTile(app, gameMatrix, index, textures, columnPx, rowPx) {
     else if (topTile === LEFT_BOTTOMRIGHT) {
         drawSprite(app, gameMatrix, textures.swingDownRight, rowPx - TEXTURE_HEIGHT, columnPx, topIndex, SWING_DOWN_RIGHT)
     }
-    else if (topTile === TOP_BOTTOMLEFT || topTile === TOP_BOTTOMRIGHT || topTile == TOP_BOTTOMLEFT_BOTTOMRIGHT) {
+    else if (topTile === TOP_BOTTOMLEFT || topTile === TOP_BOTTOMRIGHT || topTile === TOP_BOTTOMLEFT_BOTTOMRIGHT) {
         drawSprite(app, gameMatrix, textures.topBottom, rowPx - TEXTURE_HEIGHT, columnPx, topIndex, TOP_BOTTOM)
     }
     else if (topTile === RIGHT_BOTTOMLEFT) {

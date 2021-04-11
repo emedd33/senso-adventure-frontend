@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js'
-import { printGameMatrix } from "../../../utils/print"
+// import { printGameMatrix } from "../../../utils/print"
 import { drawTopLeftTile } from "./drawTopLeftTile"
 import { drawTopTile } from './drawTopTile';
 import { drawTopRightTile } from './drawTopRightTile';
