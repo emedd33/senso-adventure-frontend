@@ -35,7 +35,7 @@ export function setUpGame(app, gameMatrix) {
 
 
     function onDragMove(event) {
-        if (this.dragging) {
+        if (this.dragging && drawType === "tiles") {
             const newPosition = getTilePosition(event.data.getLocalPosition(this.parent));
             if (newPosition.x !== this.data.x || newPosition.y !== this.data.y) {
                 this.alpha = 0.5;
