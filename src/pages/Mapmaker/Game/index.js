@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 // import backgroundPath from "../assets/background.png"
-import { setUpGrid } from "./draw"
+import { setUpGame } from "./draw"
 import { HEIGHT, WIDTH } from "../assets/Constants"
 export function createGame() {
     const app = new PIXI.Application({
@@ -14,20 +14,7 @@ export function createGame() {
     const loader = new PIXI.Loader(); // you can also create your own if you want
     const textures = {}
 
-    // loader
-    //     .add("background", backgroundPath)
-    // loader.load((loader, resources) => {
-
-    //     const backgroundSprite = new PIXI.Sprite(PIXI.utils.TextureCache.background);
-    //     backgroundSprite.anchor.set(0.5);
-    //     backgroundSprite.x = app.screen.width / 2;
-    //     backgroundSprite.y = app.screen.height / 2;
-    //     backgroundSprite.interactive = true;
-    //     backgroundSprite.buttonMode = true;
-    //     app.stage.addChild(backgroundSprite);
-
-    // })
-    setUpGrid(app, tilesMatrix)
+    setUpGame(app, tilesMatrix)
 
     return app
 }
