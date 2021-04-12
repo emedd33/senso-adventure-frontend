@@ -5,7 +5,7 @@ import { HEIGHT, MATRIX_HEIGHT, MATRIX_WIDTH, WIDTH } from "../assets/Constants"
 export function createGame() {
     const app = new PIXI.Application({
         width: WIDTH,
-        height: HEIGHT
+        height: HEIGHT 
     })
     const gameMatrix = new Array(MATRIX_WIDTH * MATRIX_HEIGHT).fill(0);
     app.renderer.backgroundColor = 0xFAEBD7

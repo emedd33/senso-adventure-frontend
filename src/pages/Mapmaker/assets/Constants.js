@@ -1,11 +1,12 @@
 export const OLD_WHITE = 0xFAEBD7
 export const TEXTURE_WIDTH = 32
 export const TEXTURE_HEIGHT = 32
-export const WIDTH = TEXTURE_WIDTH * 32
-export const HEIGHT = TEXTURE_HEIGHT * 20
-export const MATRIX_WIDTH = WIDTH / TEXTURE_WIDTH
-export const MATRIX_HEIGHT = HEIGHT / TEXTURE_HEIGHT
-
+export const X_SCALE = 0.5
+export const Y_SCALE = 0.5
+export const WIDTH = TEXTURE_WIDTH * 20
+export const HEIGHT = TEXTURE_HEIGHT * 16
+export const MATRIX_WIDTH = (WIDTH / TEXTURE_WIDTH)*1/X_SCALE
+export const MATRIX_HEIGHT =(HEIGHT / TEXTURE_HEIGHT)*1/Y_SCALE
 export const NO_TILE = 0
 export const BOTTOMRIGHT = 1
 export const BOTTOM = 2

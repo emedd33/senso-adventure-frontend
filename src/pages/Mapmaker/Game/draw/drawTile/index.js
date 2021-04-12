@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js'
-// import { printGameMatrix } from "../../../utils/print"
+import { printGameMatrix } from "../../../utils/print"
 import { drawTopLeftTile } from "./drawTopLeftTile"
 import { drawTopTile } from './drawTopTile';
 import { drawTopRightTile } from './drawTopRightTile';
@@ -24,4 +24,5 @@ export function drawSurroundingSprites(app, gameMatrix, textures, columnPx, rowP
     drawBottomLeftTile(app, gameMatrix, index, textures, columnPx, rowPx)
     drawBottomTile(app, gameMatrix, index, textures, columnPx, rowPx)
     drawBottomRightTile(app, gameMatrix, index, textures, columnPx, rowPx)
+    printGameMatrix(gameMatrix, index)
 }

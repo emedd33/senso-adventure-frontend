@@ -4,7 +4,12 @@ export function printGameMatrix(gameMatrix, indexAdded) {
     let rowNumber = 0;
     let rowString = `row ${rowNumber}: `
     let columnCounter = 0
-    for (var i = 0; i < gameMatrix.length; i++) {
+    let columnString = `Row :`
+    for (var j = 0; j< MATRIX_WIDTH; j++){
+        columnString +=  `c${j} ` 
+    }
+    console.log(columnString)
+    for (var i = 0; i < gameMatrix.length; i++) { 
         if (i === indexAdded){
             rowString += `@${gameMatrix[i]} `
         } else  {

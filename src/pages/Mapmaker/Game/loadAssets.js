@@ -1,14 +1,5 @@
 
 import backgroundPath from "../assets/background.png"
-import dungeonTile1Path from "../assets/textures/dungeon-tile/dungeon-tile-1.png"
-import dungeonTile2Path from "../assets/textures/dungeon-tile/dungeon-tile-2.png"
-import dungeonTile3Path from "../assets/textures/dungeon-tile/dungeon-tile-3.png"
-import dungeonTile4Path from "../assets/textures/dungeon-tile/dungeon-tile-4.png"
-import dungeonTile5Path from "../assets/textures/dungeon-tile/dungeon-tile-5.png"
-import dungeonTile6Path from "../assets/textures/dungeon-tile/dungeon-tile-6.png"
-import dungeonTile7Path from "../assets/textures/dungeon-tile/dungeon-tile-7.png"
-import dungeonTile8Path from "../assets/textures/dungeon-tile/dungeon-tile-8.png"
-import dungeonTile9Path from "../assets/textures/dungeon-tile/dungeon-tile-9.png"
 import dungeonTile10Path from "../assets/textures/dungeon-tile/dungeon-tile-10.png"
 import dungeonTile11Path from "../assets/textures/dungeon-tile/dungeon-tile-11.png"
 import dungeonTile12Path from "../assets/textures/dungeon-tile/dungeon-tile-12.png"
@@ -47,19 +38,11 @@ import dungeonTile44Path from "../assets/textures/dungeon-tile/dungeon-tile-44.p
 import dungeonTile45Path from "../assets/textures/dungeon-tile/dungeon-tile-45.png"
 import dungeonTile46Path from "../assets/textures/dungeon-tile/dungeon-tile-46.png"
 import dungeonTile47Path from "../assets/textures/dungeon-tile/dungeon-tile-47.png"
+import dungeonTilesPath from "../assets/textures/dungeon-tile/dungeon-tile.png"
 import item from "../assets/textures/items/Table-1.png"
 
 export const loadTiles = (loader) => {
     loader
-        .add("dungeonTile1", dungeonTile1Path)
-        .add("dungeonTile2", dungeonTile2Path)
-        .add("dungeonTile3", dungeonTile3Path)
-        .add("dungeonTile4", dungeonTile4Path)
-        .add("dungeonTile5", dungeonTile5Path)
-        .add("dungeonTile6", dungeonTile6Path)
-        .add("dungeonTile7", dungeonTile7Path)
-        .add("dungeonTile8", dungeonTile8Path)
-        .add("dungeonTile9", dungeonTile9Path)
         .add("dungeonTile10", dungeonTile10Path)
         .add("dungeonTile11", dungeonTile11Path)
         .add("dungeonTile12", dungeonTile12Path)
@@ -98,6 +81,7 @@ export const loadTiles = (loader) => {
         .add("dungeonTile45", dungeonTile45Path)
         .add("dungeonTile46", dungeonTile46Path)
         .add("dungeonTile47", dungeonTile47Path)
+        .add("dungeonTiles", dungeonTilesPath)
 
 }
 export const loadBackground = (loader) => {

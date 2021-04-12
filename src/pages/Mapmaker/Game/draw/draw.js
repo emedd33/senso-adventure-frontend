@@ -12,8 +12,11 @@ export function setUpGame(app, gameMatrix) {
     loadTiles(loader)
     loadObjects(loader)
     loadBackground(loader)
-    app.stage.scale.x = 1
-    app.stage.scale.y = 1
+    // app.stage.width = 6000
+    // app.stage.width = .7
+    app.stage.scale.x = 0.5
+    app.stage.scale.y = 0.5
+
     // app.stage.position.x = 128
     // app.stage.position.y = 128
     function onClick(event) {
@@ -49,16 +52,18 @@ export function setUpGame(app, gameMatrix) {
     }
 
     function onScroll(event) {
+        // no implemented yet
+        // TODO make zooming work
         let wDelta = event.wheelDelta < 0 ? 'down' : 'up';
         // Initial scale is set to 1.5, so user can zoom out to 1.05 and zoom in to 1.95 
         if (wDelta === "down") {
-            if (app.stage.scale.y >= 0.55) {
+            if (app.stage.width >= 3800) {
                 app.stage.scale.x -= .05
                 app.stage.scale.y -= .05
-                console.log(event)
-            }
+                console.log(app.stage.width)
+            } 
         } else if (wDelta === "up") {
-            if (app.stage.scale.y <= 1.5) {
+            if (app.stage.scale.y <= 1) {
 
                 app.stage.scale.x += .05
                 app.stage.scale.y += .05
@@ -71,9 +76,8 @@ export function setUpGame(app, gameMatrix) {
     function addToGrid(pos, tileTextures) {
         if (drawType === "tiles") {
             const transformedPos = getTilePosition(pos)
-            console.log("trans", transformedPos)
             const index = getGameMatrixIndex(transformedPos.x, transformedPos.y)
-            drawSprite(app, gameMatrix, textures.center, transformedPos.y, transformedPos.x, index, CENTER)
+           drawSprite(app, gameMatrix, textures.center, transformedPos.y, transformedPos.x, index, CENTER)
             drawSurroundingSprites(
                 app,
                 gameMatrix,
@@ -88,7 +92,6 @@ export function setUpGame(app, gameMatrix) {
             sprite.y = pos.y
             sprite.x = pos.x;
             sprite.scale.set(0.5)
-            console.log(sprite)
             sprite.anchor.set(0.5)
             app.stage.addChild(sprite)
         }
@@ -113,35 +116,58 @@ export function setUpGame(app, gameMatrix) {
             .on('pointerup', onDragEnd)
             .on('pointerupoutside', onDragEnd)
             .on('pointermove', onDragMove)
-            .on("mousewheel", onScroll)
-        app.view.addEventListener("mousewheel", onScroll)
-        textures.bottomright = PIXI.utils.TextureCache.dungeonTile1
-        textures.bottom = PIXI.utils.TextureCache.dungeonTile2
-        textures.bottomleft = PIXI.utils.TextureCache.dungeonTile3
-        textures.right = PIXI.utils.TextureCache.dungeonTile4
-        textures.center = PIXI.utils.TextureCache.dungeonTile5
-        textures.left = PIXI.utils.TextureCache.dungeonTile6
-        textures.topright = PIXI.utils.TextureCache.dungeonTile7
-        textures.top = PIXI.utils.TextureCache.dungeonTile8
-        textures.topleft = PIXI.utils.TextureCache.dungeonTile9
-        textures.swingUpRight = PIXI.utils.TextureCache.dungeonTile10
-        textures.swingRightDown = PIXI.utils.TextureCache.dungeonTile11
-        textures.swingRightUp = PIXI.utils.TextureCache.dungeonTile12
-        textures.swingDownRight = PIXI.utils.TextureCache.dungeonTile13
-        textures.UFromLeft = PIXI.utils.TextureCache.dungeonTile14
-        textures.UFromTop = PIXI.utils.TextureCache.dungeonTile15
-        textures.UFromRight = PIXI.utils.TextureCache.dungeonTile16
-        textures.UFromBottom = PIXI.utils.TextureCache.dungeonTile17
-        textures.circle = PIXI.utils.TextureCache.dungeonTile18
-        textures.swingUpRightBottomright = PIXI.utils.TextureCache.dungeonTile19
-        textures.swingRightDownBottomleft = PIXI.utils.TextureCache.dungeonTile20
-        textures.swingRightUpTopleft = PIXI.utils.TextureCache.dungeonTile21
-        textures.swingDownRightTopright = PIXI.utils.TextureCache.dungeonTile22
-        textures.leftRight = PIXI.utils.TextureCache.dungeonTile23
-        textures.topBottom = PIXI.utils.TextureCache.dungeonTile24
-        textures.leftTopright = PIXI.utils.TextureCache.dungeonTile25
-        textures.leftBottomright = PIXI.utils.TextureCache.dungeonTile26
-        textures.topBottomleft = PIXI.utils.TextureCache.dungeonTile27
+        // app.view.addEventListener("mousewheel", onScroll)
+        textures.bottomright = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.bottomright.frame = new PIXI.Rectangle(0,0,32,32)
+        textures.bottom = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.bottom.frame = new PIXI.Rectangle(32,0,32,32)
+        textures.bottomleft = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.bottomleft.frame = new PIXI.Rectangle(32*2,0,32,32)
+        textures.right = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.right.frame = new PIXI.Rectangle(32*3,0,32,32)
+        textures.center = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.center.frame = new PIXI.Rectangle(32*4,0,32,32)
+        textures.left = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.left.frame = new PIXI.Rectangle(32*5,0,32,32)
+        textures.topright = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.topright.frame = new PIXI.Rectangle(32*6,0,32,32)
+        textures.top = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.top.frame = new PIXI.Rectangle(0,32,32,32)
+        textures.topleft = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.topleft.frame = new PIXI.Rectangle(32,32,32,32)
+        textures.swingUpRight = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.swingUpRight.frame = new PIXI.Rectangle(32*2,32,32,32)
+        textures.swingRightDown = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.swingRightDown.frame = new PIXI.Rectangle(32*3,32,32,32)
+        textures.swingRightUp = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.swingRightUp.frame = new PIXI.Rectangle(32*4,32,32,32)
+        textures.swingDownRight = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.swingDownRight.frame = new PIXI.Rectangle(32*5,32,32,32)
+        textures.UFromLeft = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.UFromLeft.frame = new PIXI.Rectangle(32*6,32,32,32)
+        textures.UFromTop = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.UFromTop.frame = new PIXI.Rectangle(0,32*2,32,32)
+        textures.UFromRight = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.UFromRight.frame = new PIXI.Rectangle(32,32*2,32,32)
+        textures.UFromBottom = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.UFromBottom.frame = new PIXI.Rectangle(32*3,32*2,32,32)
+        textures.circle = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.circle.frame = new PIXI.Rectangle(32*4,32*2,32,32)
+        textures.swingUpRightBottomright = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.swingUpRightBottomright.frame = new PIXI.Rectangle(32*5,32*2,32,32)
+        textures.swingRightUpTopleft = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.swingRightUpTopleft.frame = new PIXI.Rectangle(32*6,32*2,32,32)
+        textures.swingDownRightTopright = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.swingDownRightTopright.frame = new PIXI.Rectangle(0,32*3,32,32)
+        textures.leftRight = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.leftRight.frame = new PIXI.Rectangle(32,32*3,32,32)
+        textures.topBottom = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.topBottom.frame = new PIXI.Rectangle(32*2,32*3,32,32)
+        textures.leftTopright = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.leftTopright.frame = new PIXI.Rectangle(32*3,32*3,32,32)
+        textures.leftBottomright = PIXI.utils.TextureCache.dungeonTiles.clone()
+        textures.leftBottomright.frame = new PIXI.Rectangle(32*4,32*3,32,32)
+        textures.topBottomleft = PIXI.utils.TextureCache.dungeonTiles.clone()
         textures.topBottomright = PIXI.utils.TextureCache.dungeonTile28
         textures.rightTopleft = PIXI.utils.TextureCache.dungeonTile29
         textures.rightBottomleft = PIXI.utils.TextureCache.dungeonTile30
@@ -163,6 +189,8 @@ export function setUpGame(app, gameMatrix) {
         textures.topleftBottomright = PIXI.utils.TextureCache.dungeonTile46
         textures.topleftToprightBottomleftBottomright = PIXI.utils.TextureCache.dungeonTile47
         app.stage.addChild(backgroundSprite);
+    console.log(app.stage.width)
+
 
     })
 

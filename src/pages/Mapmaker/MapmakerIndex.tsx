@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
-import { createGame } from "./Game"
+import { createGame } from "./Game/game"
 
 const MapmakerIndex: React.FC = () => {
     const [app, setApp] = useState<any>();
