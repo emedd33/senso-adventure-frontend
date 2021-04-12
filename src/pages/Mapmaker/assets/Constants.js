@@ -5,8 +5,11 @@ export const X_SCALE = 0.5
 export const Y_SCALE = 0.5
 export const WIDTH = TEXTURE_WIDTH * 20
 export const HEIGHT = TEXTURE_HEIGHT * 16
-export const MATRIX_WIDTH = (WIDTH / TEXTURE_WIDTH)*1/X_SCALE
-export const MATRIX_HEIGHT =(HEIGHT / TEXTURE_HEIGHT)*1/Y_SCALE
+export const MATRIX_WIDTH = (WIDTH / TEXTURE_WIDTH) * 1 / X_SCALE
+export const MATRIX_HEIGHT = (HEIGHT / TEXTURE_HEIGHT) * 1 / Y_SCALE
+
+
+// Tiles numbers
 export const NO_TILE = 0
 export const BOTTOMRIGHT = 1
 export const BOTTOM = 2
