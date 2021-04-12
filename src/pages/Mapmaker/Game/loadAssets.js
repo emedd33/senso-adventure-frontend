@@ -47,7 +47,7 @@ import dungeonTile44Path from "../assets/textures/dungeon-tile/dungeon-tile-44.p
 import dungeonTile45Path from "../assets/textures/dungeon-tile/dungeon-tile-45.png"
 import dungeonTile46Path from "../assets/textures/dungeon-tile/dungeon-tile-46.png"
 import dungeonTile47Path from "../assets/textures/dungeon-tile/dungeon-tile-47.png"
-import item from "../assets/textures/items/item.png"
+import item from "../assets/textures/items/Table-1.png"
 
 export const loadTiles = (loader) => {
     loader

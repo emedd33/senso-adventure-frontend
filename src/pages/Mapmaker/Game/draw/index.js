@@ -14,6 +14,8 @@ export function setUpGame(app, gameMatrix) {
     loadBackground(loader)
     app.stage.scale.x = 1.5
     app.stage.scale.y = 1.5
+    // app.stage.position.x = 128
+    // app.stage.position.y = 128
     function onClick(event) {
         const pos = event.data.getLocalPosition(this.parent)
         addToGrid(pos, textures)
@@ -68,8 +70,8 @@ export function setUpGame(app, gameMatrix) {
     }
     function addToGrid(pos, tileTextures) {
         if (drawType === "tiles") {
-
             const transformedPos = getTilePosition(pos)
+            console.log("trans", transformedPos)
             const index = getGameMatrixIndex(transformedPos.x, transformedPos.y)
             drawSprite(app, gameMatrix, textures.center, transformedPos.y, transformedPos.x, index, CENTER)
             drawSurroundingSprites(
@@ -82,8 +84,11 @@ export function setUpGame(app, gameMatrix) {
             )
         } else if (drawType === "items") {
             const sprite = new PIXI.Sprite(PIXI.utils.TextureCache.item);
+            // sprite.scale = 0.9
             sprite.y = pos.y
             sprite.x = pos.x;
+            sprite.scale.set(0.5)
+            console.log(sprite)
             sprite.anchor.set(0.5)
             app.stage.addChild(sprite)
         }
