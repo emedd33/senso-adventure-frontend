@@ -35,12 +35,13 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
     getSelectedCampaignStoragePath
   );
   const [imageUrl, setImageUrl] = useState("");
-
+  
   useMemo(() => {
     if (campaigns) {
       let pathArray = location.pathname.split("/");
       dispatchSelectedCampaignByUrl(pathArray, dispatch, campaigns);
     }
+ 
   }, [dispatch, campaigns, location]);
 
   useEffect(() => {

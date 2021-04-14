@@ -60,7 +60,6 @@ import { storage } from "../../services/Firebase/firebase";
 import { setAlertDialog, setIsUploading } from "../../store/admin/adminCreator";
 import { pushToStorage } from "../../services/Firebase/storage";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link } from "react-router-dom";
 
 type SensoDraftJSProps = {
     storagePath: string;
