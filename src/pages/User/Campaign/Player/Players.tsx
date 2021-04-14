@@ -22,17 +22,28 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import useOwner from "../../../../store/hooks/useOwner";
 import SensoPlayerShort from "../../../../components/SensoContainers/SensoPlayerShort";
+import { useTranslation } from "react-i18next";
 type PlayerProps = {};
 const Player: FunctionComponent<PlayerProps> = () => {
+  const translate = useTranslation()
   const players = useSelector(getSelectedCampaignPlayers);
   const selectedCampaign = useSelector(getSelectedCampaign);
   const owner = useOwner();
   const isDungeonMaster = useSelector(isDungeonMasterSelector);
-
   return (
     <Container>
-      {players && selectedCampaign
-        ? players.map(([, player]: [string, IPlayer], index: number) => (
+      {selectedCampaign
+        ? <> 
+        <div style={{display:"flex", justifyContent:"center"}}>
+
+      <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-player/`} style={{textDecoration:"none"}}>
+      <Button variant="contained" color="primary" style={{textTransform:"none"}}>
+            {translate.t('New player')}
+      </Button>
+      </Link>
+        </div>
+       { players?
+        players.map(([, player]: [string, IPlayer], index: number) => (
           <Accordion
             key={index}
             style={
@@ -66,7 +77,8 @@ const Player: FunctionComponent<PlayerProps> = () => {
               </Link>
             </AccordionActions>
           </Accordion>
-        ))
+        )):null}
+        </>
         : null}
     </Container>
   );

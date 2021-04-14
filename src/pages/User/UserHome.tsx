@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { getAllCampaigns } from "../../store/campaign/campaignSelectors";
 import { OLD_WHITE_TRANSPARENT } from "../../assets/constants/Constants";
 import styled from "styled-components";
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import DndCrest from "../../assets/Images/dungeons-and-dragons.png";
 import { getUrlFromStorage } from "../../services/Firebase/storage";
 import useOwner from "../../store/hooks/useOwner";
@@ -19,6 +19,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
   const campaigns = useSelector(getAllCampaigns);
   const [campaignUrls, setCampaignUrls] = useState<any[]>([]);
   const owner = useOwner();
+  const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
     if (campaigns) {
       let urlPromises: Promise<any>[] = Object.values(campaigns).map(
@@ -33,7 +34,7 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
               slug: campaign.slug,
               title: campaign.title,
               url: DndCrest,
-            }));
+            })).finally(()=> setIsLoading(false))
         }
       );
       Promise.all(urlPromises).then((val) => {
@@ -75,7 +76,9 @@ const UserHome: FunctionComponent<UserHomeProps> = () => {
       return null;
     }
   }, [campaignUrls, owner]);
-
+  if (isLoading){
+    return <CircularProgress/>
+  }
   return (
     <Container>
       <div

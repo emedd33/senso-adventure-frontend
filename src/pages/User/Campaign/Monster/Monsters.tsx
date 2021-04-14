@@ -21,15 +21,26 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import useOwner from "../../../../store/hooks/useOwner";
 import SensoMonsterShort from "../../../../components/SensoContainers/SensoMonsterShort";
+import { useTranslation } from "react-i18next";
 type CampaignMonstersProps = {};
 const CampaignMonsters: FunctionComponent<CampaignMonstersProps> = () => {
   const selectedCampaign = useSelector(getSelectedCampaign);
+  const translate = useTranslation()
   const monsters = useSelector(getSelectedCampaignMonsters);
   const owner = useOwner();
   const isDungeonMaster = useSelector(isDungeonMasterSelector)
   return (
-    <Container>
-      {selectedCampaign && monsters
+    <Container>{selectedCampaign
+        ? <> 
+        <div style={{display:"flex", justifyContent:"center"}}>
+
+      <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-session/`} style={{textDecoration:"none"}}>
+        <Button variant="contained" color="primary" style={{textTransform:"none"}}>
+          {translate.t('New monster/NPC')}
+        </Button>
+      </Link>
+        </div>
+        {monsters
         ? monsters.map(([, monster]: [string, IMonster], index: number) => (
           <Accordion
             key={index}
@@ -66,6 +77,7 @@ const CampaignMonsters: FunctionComponent<CampaignMonstersProps> = () => {
           </Accordion>
         ))
         : null}
+        </> :null}
     </Container>
   );
 };

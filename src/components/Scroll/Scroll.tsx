@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -29,15 +29,21 @@ function Scroll({
 }: ScrollProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState("");
   const translate = useTranslation()
+  const [isLoadingTitleImage, setIsLoadingTitleImage] = useState(true) 
   useEffect(() => {
     if (owner && campaignSlug) {
       storage
         .ref(`users/${owner}/campaigns/${campaignSlug}/TitleImage`)
         .getDownloadURL()
         .then((url) => setImageUrl(url))
-        .catch((e) => console.log("could not fetch TitleImage for scroll"));
+        .catch((e) => console.log("could not fetch TitleImage for scroll"))
+        .finally(()=>setIsLoadingTitleImage(false))
+
     }
   }, [campaignSlug, owner]);
+  if (isLoadingTitleImage){
+    return <CircularProgress/>
+  }
   return (
     <ScrollButton onClick={onClick} style={{ textTransform: "none" }}>
       <ScrollContainer style={isOpaque ? { opacity: 0.5 } : {}}>
