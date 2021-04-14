@@ -36,15 +36,16 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
   );
   const [imageUrl, setImageUrl] = useState("");
   
-  useMemo(() => {
+  useEffect(() => {
     if (campaigns) {
       let pathArray = location.pathname.split("/");
       dispatchSelectedCampaignByUrl(pathArray, dispatch, campaigns);
     }
+    return () => dispatchSelectedCampaignByUrl([], dispatch);
  
   }, [dispatch, campaigns, location]);
 
-  useEffect(() => {
+  useMemo(() => {
     setIsLoading(true);
     if (selectedCampaignStoragePath) {
       getUrlFromStorage(selectedCampaignStoragePath + "/BackgroundImage")
