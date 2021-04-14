@@ -25,7 +25,6 @@ import PlayerIndex from "./Player/PlayerIndex";
 import LocationIndex from "./Location/LocationIndex";
 import NotFound from "../../NotFound/NotFound";
 import CampaignIndexTabs from "./CampaignIndexTabs";
-
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
   const location = useLocation();

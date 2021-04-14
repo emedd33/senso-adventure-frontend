@@ -6,12 +6,12 @@ import {
   getSelectedCampaignSessions,
 } from "../../../../store/selected/selectedSelectors";
 
-import Scroll from "../../../../components/Scroll/Scroll";
 import { setSelectedSession } from "../../../../store/selected/selectedCreators";
 import useOwner from "../../../../store/hooks/useOwner";
 import { useTranslation } from "react-i18next";
 import { Button } from "@material-ui/core";
 import styled from "styled-components";
+import Scroll from "../../../../components/Scroll/Scroll";
 
 type CampaignSessionsProps = {};
 const CampaignSessions: FunctionComponent<CampaignSessionsProps> = () => {

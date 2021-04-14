@@ -34,7 +34,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
     <Container>
       {selectedCampaign
         ? <> 
-        <div style={{display:"flex", justifyContent:"center"}}>
+        <div style={{display:"flex", justifyContent:"center", marginBottom:"1rem"}}>
 
       <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-player/`} style={{textDecoration:"none"}}>
       <Button variant="contained" color="primary" style={{textTransform:"none"}}>

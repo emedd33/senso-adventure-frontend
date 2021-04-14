@@ -29,7 +29,7 @@ const CampaignLocations: FunctionComponent<CampaignLocationsProps> = () => {
     <Container>
       {selectedCampaign
         ? <> 
-        <div style={{display:"flex", justifyContent:"center"}}>
+        <div style={{display:"flex", justifyContent:"center", marginBottom:"1rem"}}>
 
       <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-location/`} style={{textDecoration:"none"}}>
       <Button variant="contained" color="primary" style={{textTransform:"none"}}>
