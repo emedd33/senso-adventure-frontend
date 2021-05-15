@@ -37,69 +37,69 @@ export const NEW_MONSTER: IMonster = {
   slug: "",
   index: "",
   name: "",
-  stats: {
-    armorClass: 12,
-    speed: { climb: "10 ft", swim: "15 ft", walk: "30 ft" },
-    hitPoints: 10,
-    strength: 10,
-    dexterity: 10,
-    wisdom: 10,
-    constitution: 10,
-    intelligence: 10,
-    charisma: 10,
-    proficiencies: [
-      {
-        value: 0,
-        proficiency: {
-          index: "saving-throw-str",
-          name: "Saving Throw: STR",
-          url: "",
-        },
-      },
-      {
-        value: 0,
-        proficiency: {
-          index: "saving-throw-dex",
-          name: "Saving Throw: DEX",
-          url: "",
-        },
-      },
-      {
-        value: 0,
-        proficiency: {
-          index: "saving-throw-con",
-          name: "Saving Throw: CON",
-          url: "",
-        },
-      },
-      {
-        value: 0,
-        proficiency: {
-          index: "saving-throw-wis",
-          name: "Saving Throw: WIS",
-          url: "",
-        },
-      },
-      {
-        value: 0,
-        proficiency: {
-          index: "saving-throw-int",
-          name: "Saving Throw: INT",
-          url: "",
-        },
-      },
-      {
-        value: 0,
-        proficiency: {
-          index: "saving-throw-cha",
-          name: "Saving Throw: CHA",
-          url: "",
-        },
-      },
-    ],
-  },
   description: "",
 };
+export const DEFAULT_STATS = {
+  armorClass: 12,
+  speed: { climb: "10 ft", swim: "15 ft", walk: "30 ft" },
+  hitPoints: 10,
+  strength: 10,
+  dexterity: 10,
+  wisdom: 10,
+  constitution: 10,
+  intelligence: 10,
+  charisma: 10,
+  proficiencies: [
+    {
+      value: 0,
+      proficiency: {
+        index: "saving-throw-str",
+        name: "Saving Throw: STR",
+        url: "",
+      },
+    },
+    {
+      value: 0,
+      proficiency: {
+        index: "saving-throw-dex",
+        name: "Saving Throw: DEX",
+        url: "",
+      },
+    },
+    {
+      value: 0,
+      proficiency: {
+        index: "saving-throw-con",
+        name: "Saving Throw: CON",
+        url: "",
+      },
+    },
+    {
+      value: 0,
+      proficiency: {
+        index: "saving-throw-wis",
+        name: "Saving Throw: WIS",
+        url: "",
+      },
+    },
+    {
+      value: 0,
+      proficiency: {
+        index: "saving-throw-int",
+        name: "Saving Throw: INT",
+        url: "",
+      },
+    },
+    {
+      value: 0,
+      proficiency: {
+        index: "saving-throw-cha",
+        name: "Saving Throw: CHA",
+        url: "",
+      },
+    },
+  ],
+}
 
 export const NEW_PLAYER: IPlayer = {
   name: "",

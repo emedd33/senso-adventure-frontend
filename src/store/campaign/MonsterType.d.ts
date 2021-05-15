@@ -21,7 +21,7 @@ interface IMonster {
   senses?: ISenses;
   slug: string;
   specialAbilities?: IMonsterAction[];
-  stats: IMonsterStats;
+  stats?: IMonsterStats;
   size?: string;
   subtype?: string;
   type?: string;

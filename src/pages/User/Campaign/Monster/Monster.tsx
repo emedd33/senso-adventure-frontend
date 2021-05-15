@@ -118,259 +118,262 @@ const Monster: FunctionComponent<MonsterProps> = () => {
                         </p>
                     </div>
                     <DividerBlock />
-
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(10rem,20rem)",
-                        }}
-                    >
-                        <div>
-                            <P>
-                                <b>{translate.t(`Armor class`)}: </b>
-                                {selectedMonster.monster.stats.armorClass}
-                            </P>
-                            <P>
-                                <b>hp: </b>
-                                {selectedMonster.monster.stats.hitPoints}{" "}
-                                {selectedMonster.monster.stats.hitDice
-                                    ? `(${selectedMonster.monster.stats.hitDice})`
-                                    : null}
-                            </P>
-                            <P>
-                                <b>{translate.t(`Speed`)}: </b>{" "}
-                                {selectedMonster.monster.stats.speed ? (
-                                    <ul style={{ marginTop: 0 }}>
-                                        {selectedMonster.monster.stats.speed.walk ? (
-                                            <li>
-                                                <b>Walk: </b> {selectedMonster.monster.stats.speed.walk}{" "}
-                                            </li>
-                                        ) : null}
-                                        {selectedMonster.monster.stats.speed.swim ? (
-                                            <li>
-                                                <b>Swim: </b> {selectedMonster.monster.stats.speed.swim}{" "}
-                                            </li>
-                                        ) : null}
-                                        {selectedMonster.monster.stats.speed.climb ? (
-                                            <li>
-                                                <b>Climb: </b>{" "}
-                                                {selectedMonster.monster.stats.speed.climb}{" "}
-                                            </li>
-                                        ) : null}
-                                        {selectedMonster.monster.stats.speed.fly ? (
-                                            <li>
-                                                <b>Fly: </b> {selectedMonster.monster.stats.speed.fly}{" "}
-                                            </li>
-                                        ) : null}
-                                    </ul>
-                                ) : null}
-                            </P>
-                        </div>
-                        <div>
-                            <P>
-                                <b>{translate.t(`Challenge rating`)}: </b>
-                                {selectedMonster.monster.challengeRating
-                                    ? selectedMonster.monster.challengeRating
-                                    : null}
-                            </P>
-                            <P>
-                                <b>{translate.t(`Languages`)}: </b>
-                                {selectedMonster.monster.languages
-                                    ? renderArrayOfString(", ", selectedMonster.monster.languages)
-                                    : null}
-                            </P>
-                            <P>
-                                <b>{translate.t(`Senses`)}: </b>{" "}
-                                {selectedMonster.monster.senses ? (
-                                    <ul style={{ marginTop: 0 }}>
-                                        {selectedMonster.monster.senses?.passive_perception ? (
-                                            <li>
-                                                <b>{translate.t(`Passive perception`)}: </b>{" "}
-                                                {selectedMonster.monster.senses?.passive_perception}{" "}
-                                            </li>
-                                        ) : null}
-                                        {selectedMonster.monster.senses?.blindsight ? (
-                                            <li>
-                                                <b>{translate.t(`Blindsight`)}: </b>{" "}
-                                                {selectedMonster.monster.senses?.blindsight}{" "}
-                                            </li>
-                                        ) : null}
-                                        {selectedMonster.monster.senses?.darkvision ? (
-                                            <li>
-                                                <b>{translate.t(`Darkvision`)}: </b>{" "}
-                                                {selectedMonster.monster.senses?.darkvision}{" "}
-                                            </li>
-                                        ) : null}
-                                        {selectedMonster.monster.senses?.truesight ? (
-                                            <li>
-                                                <b>{translate.t(`Truesight`)}: </b>{" "}
-                                                {selectedMonster.monster.senses?.truesight}{" "}
-                                            </li>
-                                        ) : null}
-                                    </ul>
-                                ) : null}
-                            </P>
-                        </div>
-                    </div>
-
-                    <DividerBlock />
-                    <div
-                        style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            alignItems: "center",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            gap: "0.5rem",
-                            padding: "1rem",
-                        }}
-                    >
-                        {/* STRENGTH */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
-                            <h2 style={{ gridColumn: "1/3", margin: 0 }}>
-                                {translate.t(`Str`)}
-                            </h2>
-                            <p style={{ margin: 0, fontSize: "1.2rem" }}>
-                                {selectedMonster.monster.stats.strength}
-                            </p>
-                            <p
-                                style={{ margin: 0, fontSize: "1.2rem" }}
-                            >{`(${getAbilityModifier(
-                                selectedMonster.monster.stats.strength
-                            )})`}</p>
-                        </div>
-                        {/* DEXTERITY */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
-                            <h2 style={{ gridColumn: "1/3", margin: 0 }}>
-                                {translate.t(`Dex`)}
-                            </h2>
-                            <p style={{ margin: 0, fontSize: "1.2rem" }}>
-                                {selectedMonster.monster.stats.dexterity}
-                            </p>
-                            <p
-                                style={{ margin: 0, fontSize: "1.2rem" }}
-                            >{`(${getAbilityModifier(
-                                selectedMonster.monster.stats.dexterity
-                            )})`}</p>
-                        </div>
-                        {/* CONSTITUTION */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
-                            <h2 style={{ gridColumn: "1/3", margin: 0 }}>
-                                {translate.t(`Con`)}
-                            </h2>
-                            <p style={{ margin: 0, fontSize: "1.2rem" }}>
-                                {selectedMonster.monster.stats.constitution}
-                            </p>
-                            <p
-                                style={{ margin: 0, fontSize: "1.2rem" }}
-                            >{`(${getAbilityModifier(
-                                selectedMonster.monster.stats.constitution
-                            )})`}</p>
-                        </div>
-                        {/* INTELLIGENCE */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
-                            <h2 style={{ gridColumn: "1/3", margin: 0 }}>
-                                {translate.t(`Int`)}
-                            </h2>
-                            <p style={{ margin: 0, fontSize: "1.2rem" }}>
-                                {selectedMonster.monster.stats.intelligence}
-                            </p>
-                            <p
-                                style={{ margin: 0, fontSize: "1.2rem" }}
-                            >{`(${getAbilityModifier(
-                                selectedMonster.monster.stats.intelligence
-                            )})`}</p>
-                        </div>
-                        {/* WISDOM */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
-                            <h2 style={{ gridColumn: "1/3", margin: 0 }}>
-                                {translate.t(`Wis`)}
-                            </h2>
-                            <p style={{ margin: 0, fontSize: "1.2rem" }}>
-                                {selectedMonster.monster.stats.wisdom}
-                            </p>
-                            <p
-                                style={{ margin: 0, fontSize: "1.2rem" }}
-                            >{`(${getAbilityModifier(
-                                selectedMonster.monster.stats.wisdom
-                            )})`}</p>
-                        </div>
-                        {/* CHARISMA */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
-                            <h2 style={{ gridColumn: "1/3", margin: 0 }}>
-                                {translate.t(`Cha`)}
-                            </h2>
-                            <p style={{ margin: 0, fontSize: "1.2rem" }}>
-                                {selectedMonster.monster.stats.charisma}
-                            </p>
-                            <p
-                                style={{ margin: 0, fontSize: "1.2rem" }}
-                            >{`(${getAbilityModifier(
-                                selectedMonster.monster.stats.charisma
-                            )})`}</p>
-                        </div>
-                    </div>
-                    <DividerBlock />
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(10rem,20rem)",
-                        }}
-                    >
-                        <div>
-                            {selectedMonster.monster.stats.proficiencies ? (
+                    {selectedMonster.monster.stats ? <>
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(auto-fit, minmax(10rem,20rem)",
+                            }}
+                        >
+                            <div>
                                 <P>
-                                    <b>{translate.t(`Proficiencies`)}: </b>
-                                    <ul style={{ marginTop: 0 }}>
-                                        {selectedMonster.monster.stats.proficiencies.map(
-                                            (prof: IMonsterProficiency) => (
+                                    <b>{translate.t(`Armor class`)}: </b>
+                                    {selectedMonster.monster.stats.armorClass}
+                                </P>
+                                <P>
+                                    <b>hp: </b>
+                                    {selectedMonster.monster.stats.hitPoints}{" "}
+                                    {selectedMonster.monster.stats.hitDice
+                                        ? `(${selectedMonster.monster.stats.hitDice})`
+                                        : null}
+                                </P>
+                                <P>
+                                    <b>{translate.t(`Speed`)}: </b>{" "}
+                                    {selectedMonster.monster.stats.speed ? (
+                                        <ul style={{ marginTop: 0 }}>
+                                            {selectedMonster.monster.stats.speed.walk ? (
                                                 <li>
-                                                    <b>{prof.proficiency.name}: </b> {prof.value}{" "}
+                                                    <b>Walk: </b> {selectedMonster.monster.stats.speed.walk}{" "}
                                                 </li>
-                                            )
-                                        )}
-                                    </ul>
+                                            ) : null}
+                                            {selectedMonster.monster.stats.speed.swim ? (
+                                                <li>
+                                                    <b>Swim: </b> {selectedMonster.monster.stats.speed.swim}{" "}
+                                                </li>
+                                            ) : null}
+                                            {selectedMonster.monster.stats.speed.climb ? (
+                                                <li>
+                                                    <b>Climb: </b>{" "}
+                                                    {selectedMonster.monster.stats.speed.climb}{" "}
+                                                </li>
+                                            ) : null}
+                                            {selectedMonster.monster.stats.speed.fly ? (
+                                                <li>
+                                                    <b>Fly: </b> {selectedMonster.monster.stats.speed.fly}{" "}
+                                                </li>
+                                            ) : null}
+                                        </ul>
+                                    ) : null}
                                 </P>
-                            ) : null}
+                            </div>
+                            <div>
+                                <P>
+                                    <b>{translate.t(`Challenge rating`)}: </b>
+                                    {selectedMonster.monster.challengeRating
+                                        ? selectedMonster.monster.challengeRating
+                                        : null}
+                                </P>
+                                <P>
+                                    <b>{translate.t(`Languages`)}: </b>
+                                    {selectedMonster.monster.languages
+                                        ? renderArrayOfString(", ", selectedMonster.monster.languages)
+                                        : null}
+                                </P>
+                                <P>
+                                    <b>{translate.t(`Senses`)}: </b>{" "}
+                                    {selectedMonster.monster.senses ? (
+                                        <ul style={{ marginTop: 0 }}>
+                                            {selectedMonster.monster.senses?.passive_perception ? (
+                                                <li>
+                                                    <b>{translate.t(`Passive perception`)}: </b>{" "}
+                                                    {selectedMonster.monster.senses?.passive_perception}{" "}
+                                                </li>
+                                            ) : null}
+                                            {selectedMonster.monster.senses?.blindsight ? (
+                                                <li>
+                                                    <b>{translate.t(`Blindsight`)}: </b>{" "}
+                                                    {selectedMonster.monster.senses?.blindsight}{" "}
+                                                </li>
+                                            ) : null}
+                                            {selectedMonster.monster.senses?.darkvision ? (
+                                                <li>
+                                                    <b>{translate.t(`Darkvision`)}: </b>{" "}
+                                                    {selectedMonster.monster.senses?.darkvision}{" "}
+                                                </li>
+                                            ) : null}
+                                            {selectedMonster.monster.senses?.truesight ? (
+                                                <li>
+                                                    <b>{translate.t(`Truesight`)}: </b>{" "}
+                                                    {selectedMonster.monster.senses?.truesight}{" "}
+                                                </li>
+                                            ) : null}
+                                        </ul>
+                                    ) : null}
+                                </P>
+                            </div>
                         </div>
-                        <div>
-                            {selectedMonster.monster.conditionImmunities ? (
-                                <P>
-                                    <b>{translate.t(`Condition immunities`)}: </b>
-                                    {renderArrayOfString(", ",
-                                        selectedMonster.monster.conditionImmunities
-                                    )}
-                                </P>
-                            ) : null}
-                            {selectedMonster.monster.damageImmunities ? (
-                                <P>
-                                    <b>{translate.t(`Damage immunities`)}: </b>
-                                    {renderArrayOfString(", ",
-                                        selectedMonster.monster.damageImmunities
-                                    )}
-                                </P>
-                            ) : null}
-                            {selectedMonster.monster.damageResistances ? (
-                                <P>
-                                    <b>{translate.t(`Damage resistances`)}: </b>
-                                    {renderArrayOfString(", ",
-                                        selectedMonster.monster.damageResistances
-                                    )}
-                                </P>
-                            ) : null}
-                            {selectedMonster.monster.damageVulnerabilities ? (
-                                <>
-                                    <DividerBlock />{" "}
+
+                        <DividerBlock />
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                alignItems: "center",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                gap: "0.5rem",
+                                padding: "1rem",
+                            }}
+                        >
+                            {/* STRENGTH */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
+                                <h2 style={{ gridColumn: "1/3", margin: 0 }}>
+                                    {translate.t(`Str`)}
+                                </h2>
+                                <p style={{ margin: 0, fontSize: "1.2rem" }}>
+                                    {selectedMonster.monster.stats.strength}
+                                </p>
+                                <p
+                                    style={{ margin: 0, fontSize: "1.2rem" }}
+                                >{`(${getAbilityModifier(
+                                    selectedMonster.monster.stats.strength
+                                )})`}</p>
+                            </div>
+                            {/* DEXTERITY */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
+                                <h2 style={{ gridColumn: "1/3", margin: 0 }}>
+                                    {translate.t(`Dex`)}
+                                </h2>
+                                <p style={{ margin: 0, fontSize: "1.2rem" }}>
+                                    {selectedMonster.monster.stats.dexterity}
+                                </p>
+                                <p
+                                    style={{ margin: 0, fontSize: "1.2rem" }}
+                                >{`(${getAbilityModifier(
+                                    selectedMonster.monster.stats.dexterity
+                                )})`}</p>
+                            </div>
+                            {/* CONSTITUTION */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
+                                <h2 style={{ gridColumn: "1/3", margin: 0 }}>
+                                    {translate.t(`Con`)}
+                                </h2>
+                                <p style={{ margin: 0, fontSize: "1.2rem" }}>
+                                    {selectedMonster.monster.stats.constitution}
+                                </p>
+                                <p
+                                    style={{ margin: 0, fontSize: "1.2rem" }}
+                                >{`(${getAbilityModifier(
+                                    selectedMonster.monster.stats.constitution
+                                )})`}</p>
+                            </div>
+                            {/* INTELLIGENCE */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
+                                <h2 style={{ gridColumn: "1/3", margin: 0 }}>
+                                    {translate.t(`Int`)}
+                                </h2>
+                                <p style={{ margin: 0, fontSize: "1.2rem" }}>
+                                    {selectedMonster.monster.stats.intelligence}
+                                </p>
+                                <p
+                                    style={{ margin: 0, fontSize: "1.2rem" }}
+                                >{`(${getAbilityModifier(
+                                    selectedMonster.monster.stats.intelligence
+                                )})`}</p>
+                            </div>
+                            {/* WISDOM */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
+                                <h2 style={{ gridColumn: "1/3", margin: 0 }}>
+                                    {translate.t(`Wis`)}
+                                </h2>
+                                <p style={{ margin: 0, fontSize: "1.2rem" }}>
+                                    {selectedMonster.monster.stats.wisdom}
+                                </p>
+                                <p
+                                    style={{ margin: 0, fontSize: "1.2rem" }}
+                                >{`(${getAbilityModifier(
+                                    selectedMonster.monster.stats.wisdom
+                                )})`}</p>
+                            </div>
+                            {/* CHARISMA */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1 fr" }}>
+                                <h2 style={{ gridColumn: "1/3", margin: 0 }}>
+                                    {translate.t(`Cha`)}
+                                </h2>
+                                <p style={{ margin: 0, fontSize: "1.2rem" }}>
+                                    {selectedMonster.monster.stats.charisma}
+                                </p>
+                                <p
+                                    style={{ margin: 0, fontSize: "1.2rem" }}
+                                >{`(${getAbilityModifier(
+                                    selectedMonster.monster.stats.charisma
+                                )})`}</p>
+                            </div>
+                        </div>
+                        <DividerBlock />
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(auto-fit, minmax(10rem,20rem)",
+                            }}
+                        >
+                            <div>
+                                {selectedMonster.monster.stats.proficiencies ? (
                                     <P>
-                                        <b>{translate.t(`Damage vulnerabilities`)}: </b>
+                                        <b>{translate.t(`Proficiencies`)}: </b>
+                                        <ul style={{ marginTop: 0 }}>
+                                            {selectedMonster.monster.stats.proficiencies.map(
+                                                (prof: IMonsterProficiency) => (
+                                                    <li>
+                                                        <b>{prof.proficiency.name}: </b> {prof.value}{" "}
+                                                    </li>
+                                                )
+                                            )}
+                                        </ul>
+                                    </P>
+                                ) : null}
+                            </div>
+                            <div>
+                                {selectedMonster.monster.conditionImmunities ? (
+                                    <P>
+                                        <b>{translate.t(`Condition immunities`)}: </b>
                                         {renderArrayOfString(", ",
-                                            selectedMonster.monster.damageVulnerabilities
+                                            selectedMonster.monster.conditionImmunities
                                         )}
-                                    </P>{" "}
-                                </>
-                            ) : null}
+                                    </P>
+                                ) : null}
+                                {selectedMonster.monster.damageImmunities ? (
+                                    <P>
+                                        <b>{translate.t(`Damage immunities`)}: </b>
+                                        {renderArrayOfString(", ",
+                                            selectedMonster.monster.damageImmunities
+                                        )}
+                                    </P>
+                                ) : null}
+                                {selectedMonster.monster.damageResistances ? (
+                                    <P>
+                                        <b>{translate.t(`Damage resistances`)}: </b>
+                                        {renderArrayOfString(", ",
+                                            selectedMonster.monster.damageResistances
+                                        )}
+                                    </P>
+                                ) : null}
+                                {selectedMonster.monster.damageVulnerabilities ? (
+                                    <>
+                                        <DividerBlock />{" "}
+                                        <P>
+                                            <b>{translate.t(`Damage vulnerabilities`)}: </b>
+                                            {renderArrayOfString(", ",
+                                                selectedMonster.monster.damageVulnerabilities
+                                            )}
+                                        </P>{" "}
+                                    </>
+                                ) : null}
+                            </div>
                         </div>
-                    </div>
+                    </>
+                        : null}
+
                     {selectedMonster.monster.specialAbilities ? (
                         <>
                             <h2>{translate.t(`Special abilities`)}</h2>

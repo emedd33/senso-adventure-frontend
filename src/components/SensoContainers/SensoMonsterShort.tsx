@@ -25,79 +25,80 @@ const SensoMonsterShort: React.FC<SensoMonsterShortProps> = ({
                 }}
             >
                 <SensoDescription content={monster.description} />
+                {monster.stats ?
+                    <div style={{ height: "10rem" }}>
 
-                <div style={{ height: "10rem" }}>
-
-                    <LineContainer>
-                        <b style={{ paddingRight: "0.2rem" }}>
-                            {translate.t("Challenge rating")}:{" "}
-                        </b>
-                        {monster.challengeRating}
-                    </LineContainer>
-                    <LineContainer>
-                        <b style={{ paddingRight: "0.2rem" }}>
-                            {translate.t("Armor class")}:{" "}
-                        </b>{" "}
-                        {monster.stats.armorClass}
-                    </LineContainer>
-                    <LineContainer>
-                        <b style={{ paddingRight: "0.2rem" }}>Hp: </b>
-                        {monster.stats.hitPoints}
-                    </LineContainer>
-                    <Divider />
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit,8rem)",
-                        }}
-                    >
-                        <div>
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
-                                {translate.t("Str")}
+                        <LineContainer>
+                            <b style={{ paddingRight: "0.2rem" }}>
+                                {translate.t("Challenge rating")}:{" "}
                             </b>
-                            {monster.stats.strength}(
+                            {monster.challengeRating}
+                        </LineContainer>
+                        <LineContainer>
+                            <b style={{ paddingRight: "0.2rem" }}>
+                                {translate.t("Armor class")}:{" "}
+                            </b>{" "}
+                            {monster.stats.armorClass}
+                        </LineContainer>
+                        <LineContainer>
+                            <b style={{ paddingRight: "0.2rem" }}>Hp: </b>
+                            {monster.stats.hitPoints}
+                        </LineContainer>
+                        <Divider />
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(auto-fit,8rem)",
+                            }}
+                        >
+                            <div>
+                                <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
+                                    {translate.t("Str")}
+                                </b>
+                                {monster.stats.strength}(
               {getAbilityModifier(monster.stats.strength)})
             </div>
 
-                        <div>
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
-                                {translate.t("Dex")}
-                            </b>
-                            {monster.stats.dexterity}(
+                            <div>
+                                <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
+                                    {translate.t("Dex")}
+                                </b>
+                                {monster.stats.dexterity}(
               {getAbilityModifier(monster.stats.dexterity)})
             </div>
 
-                        <div>
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
-                                {translate.t("Con")}
-                            </b>
-                            {monster.stats.constitution}(
+                            <div>
+                                <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
+                                    {translate.t("Con")}
+                                </b>
+                                {monster.stats.constitution}(
               {getAbilityModifier(monster.stats.constitution)})
             </div>
 
-                        <div>
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
-                                {translate.t("Int")}
-                            </b>
-                            {monster.stats.intelligence}(
+                            <div>
+                                <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
+                                    {translate.t("Int")}
+                                </b>
+                                {monster.stats.intelligence}(
               {getAbilityModifier(monster.stats.intelligence)})
             </div>
-                        <div>
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
-                                {translate.t("Wis")}
-                            </b>
-                            {monster.stats.wisdom}(
+                            <div>
+                                <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
+                                    {translate.t("Wis")}
+                                </b>
+                                {monster.stats.wisdom}(
               {getAbilityModifier(monster.stats.wisdom)})
             </div>
-                        <div>
-                            <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
-                                {translate.t("Cha")}
-                            </b>
-                            {monster.stats.charisma}(
+                            <div>
+                                <b style={{ paddingRight: "0.3rem", fontSize: "1.4rem" }}>
+                                    {translate.t("Cha")}
+                                </b>
+                                {monster.stats.charisma}(
               {getAbilityModifier(monster.stats.charisma)})
             </div>
+                        </div>
                     </div>
-                </div>
+                    : null}
             </div>
         );
     }
@@ -108,7 +109,7 @@ const SensoMonsterShort: React.FC<SensoMonsterShortProps> = ({
     );
 };
 const LineContainer = styled.div`
-  display: flex;
+display: flex;
   flex-direction: row;
 `;
 export default SensoMonsterShort;

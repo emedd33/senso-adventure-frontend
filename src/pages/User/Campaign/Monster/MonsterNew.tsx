@@ -9,6 +9,7 @@ import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
+  DEFAULT_STATS,
   MONSTER_DATABASE_API,
   NEW_MONSTER,
   OLD_WHITE,
@@ -113,23 +114,23 @@ const MonsterNew: FunctionComponent<MonsterNewProps> = () => {
               : "",
             conditionImmunities: monsterJson.condition_immunities
               ? monsterJson.condition_immunities.map(
-                  (immunity: APIReference) => immunity.name
-                )
+                (immunity: APIReference) => immunity.name
+              )
               : [],
             damageImmunities: monsterJson.damage_immunities
               ? monsterJson.damage_immunities.map(
-                  (immunity: APIReference) => immunity.name
-                )
+                (immunity: APIReference) => immunity.name
+              )
               : [],
             damageResistances: monsterJson.damage_resistance
               ? monsterJson.damage_resistance.map(
-                  (resistance: APIReference) => resistance.name
-                )
+                (resistance: APIReference) => resistance.name
+              )
               : [],
             damageVulnerabilities: monsterJson.damage_vulnerabilities
               ? monsterJson.damage_vulnerabilities.map(
-                  (vulnerability: APIReference) => vulnerability.name
-                )
+                (vulnerability: APIReference) => vulnerability.name
+              )
               : [],
             languages: monsterJson.languages
               ? monsterJson.languages.split(",")
@@ -151,35 +152,35 @@ const MonsterNew: FunctionComponent<MonsterNewProps> = () => {
             stats: {
               armorClass: monsterJson.armor_class
                 ? monsterJson.armor_class
-                : NEW_MONSTER.stats.armorClass,
+                : DEFAULT_STATS.armorClass,
               hitPoints: monsterJson.hit_points
                 ? monsterJson.hit_points
-                : NEW_MONSTER.stats.hitPoints,
+                : DEFAULT_STATS.hitPoints,
               hitDice: monsterJson.hit_dice ? monsterJson.hit_dice : "",
               proficiencies: monsterJson.proficiencies
                 ? monsterJson.proficiencies
                 : [],
               speed: monsterJson.speed
                 ? monsterJson.speed
-                : NEW_MONSTER.stats.speed,
+                : DEFAULT_STATS.speed,
               strength: monsterJson.strength
                 ? monsterJson.strength
-                : NEW_MONSTER.stats.strength,
+                : DEFAULT_STATS.strength,
               dexterity: monsterJson.dexterity
                 ? monsterJson.dexterity
-                : NEW_MONSTER.stats.dexterity,
+                : DEFAULT_STATS.dexterity,
               constitution: monsterJson.constitution
                 ? monsterJson.constitution
-                : NEW_MONSTER.stats.constitution,
+                : DEFAULT_STATS.constitution,
               intelligence: monsterJson.intelligence
                 ? monsterJson.intelligence
-                : NEW_MONSTER.stats.intelligence,
+                : DEFAULT_STATS.intelligence,
               wisdom: monsterJson.wisdom
                 ? monsterJson.wisdom
-                : NEW_MONSTER.stats.wisdom,
+                : DEFAULT_STATS.wisdom,
               charisma: monsterJson.charisma
                 ? monsterJson.charisma
-                : NEW_MONSTER.stats.charisma,
+                : DEFAULT_STATS.charisma,
             },
           };
         })

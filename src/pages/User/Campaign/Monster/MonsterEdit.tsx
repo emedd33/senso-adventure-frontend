@@ -125,194 +125,210 @@ const MonsterEdit: FunctionComponent<MonsterEditProps> = () => {
                     />
 
                     <DividerBlock style={{ width: "100%" }} />
-
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            flexWrap: "wrap",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <div style={{ display: "grid", gap: "0.5rem" }}>
-                            <SensoNumberInput
-                                initValue={selectedMonster.monster.stats.armorClass}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/armorClass`}
-                                label={translate.t(`Armor class`)}
-                                isNegativeValid={false}
-                            />
-                            <div style={{ display: "flex", flexWrap: "wrap" }}>
+                    {selectedMonster.monster.stats ?
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                flexWrap: "wrap",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <div style={{ display: "grid", gap: "0.5rem" }}>
                                 <SensoNumberInput
-                                    initValue={selectedMonster.monster.stats.hitPoints}
-                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/hitPoints`}
-                                    label="hp"
+                                    initValue={selectedMonster.monster.stats.armorClass}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/armorClass`}
+                                    label={translate.t(`Armor class`)}
+                                    isNegativeValid={false}
+                                />
+                                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                    <SensoNumberInput
+                                        initValue={selectedMonster.monster.stats.hitPoints}
+                                        firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/hitPoints`}
+                                        label="hp"
+                                        isNegativeValid={false}
+                                    />
+                                    <SensoTextInput
+                                        initValue={selectedMonster.monster.stats.hitDice}
+                                        firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/hitDice`}
+                                        label={translate.t(`Hit dice`)}
+                                    />
+                                </div>
+                                <h3>Speed</h3>
+                                <SensoTextInput
+                                    initValue={selectedMonster.monster.stats.speed.walk}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/walk`}
+                                    label={translate.t(`Walking speed`)}
+                                />
+                                <SensoTextInput
+                                    initValue={selectedMonster.monster.stats.speed.swim}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/swim`}
+                                    label={translate.t(`Swiming speed`)}
+                                />
+                                <SensoTextInput
+                                    initValue={selectedMonster.monster.stats.speed.climb}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/climb`}
+                                    label={translate.t(`Climbing speed`)}
+                                />
+                                <SensoTextInput
+                                    initValue={selectedMonster.monster.stats.speed.fly}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/fly`}
+                                    label={translate.t(`Fly speed`)}
+                                />
+                            </div>
+
+                            <div style={{ display: "grid", gap: "0.5rem" }}>
+                                <SensoTextInput
+                                    initValue={selectedMonster.monster.challengeRating}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/challengeRating`}
+                                    label={translate.t(`Challenge rating`)}
+                                    style={{ maxWidth: "10rem" }}
+                                />
+                                <SensoTextArrayInput
+                                    initArray={selectedMonster.monster.languages}
+                                    label={translate.t(`Languages`)}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/languages`}
+                                />
+                                <h3>{translate.t(`Senses`)}</h3>
+                                <SensoNumberInput
+                                    initValue={selectedMonster.monster.senses?.passive_perception}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/passive_perception`}
+                                    label={translate.t(`Passive perception`)}
                                     isNegativeValid={false}
                                 />
                                 <SensoTextInput
-                                    initValue={selectedMonster.monster.stats.hitDice}
-                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/hitDice`}
-                                    label={translate.t(`Hit dice`)}
+                                    initValue={selectedMonster.monster.senses?.darkvision}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/darkvision`}
+                                    label={translate.t(`Darkvision`)}
+                                />
+                                <SensoTextInput
+                                    initValue={selectedMonster.monster.senses?.blindsight}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/blindsight`}
+                                    label={translate.t(`Blindsight`)}
+                                />
+                                <SensoTextInput
+                                    initValue={selectedMonster.monster.senses?.truesight}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/truesight`}
+                                    label={translate.t(`Truesight`)}
+                                />
+
+                                <SensoTextInput
+                                    initValue={selectedMonster.monster.senses?.tremorsense}
+                                    firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/tremorsense`}
+                                    label={translate.t(`Tremorsense`)}
                                 />
                             </div>
-                            <h3>Speed</h3>
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.stats.speed.walk}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/walk`}
-                                label={translate.t(`Walking speed`)}
+                        </div>
+                        : null}
+                    {selectedMonster.monster.stats ?
+
+                        <div
+                            style={{
+                                display: "flex",
+                                gridColumn: "1/2",
+                                justifyContent: "space-between",
+                                flexWrap: "wrap",
+
+                            }}
+                        >
+                            <SensoMonsterAbilityInput
+                                initAbilityValue={selectedMonster.monster.stats.strength}
+                                firebasePath={`${selectedMonsterDatabasePath}/stats/strength`}
+                                label={translate.t(`Str`)}
+
                             />
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.stats.speed.swim}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/swim`}
-                                label={translate.t(`Swiming speed`)}
+
+                            <SensoMonsterAbilityInput
+                                initAbilityValue={selectedMonster.monster.stats.dexterity}
+                                firebasePath={`${selectedMonsterDatabasePath}/stats/dexterity`}
+                                label={translate.t(`Dex`)}
+
+                            /> <SensoMonsterAbilityInput
+                                initAbilityValue={selectedMonster.monster.stats.constitution}
+                                firebasePath={`${selectedMonsterDatabasePath}/stats/constitution`}
+                                label={translate.t(`Con`)}
+
                             />
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.stats.speed.climb}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/climb`}
-                                label={translate.t(`Climbing speed`)}
+                            <SensoMonsterAbilityInput
+                                initAbilityValue={selectedMonster.monster.stats.intelligence}
+                                firebasePath={`${selectedMonsterDatabasePath}/stats/intelligence`}
+                                label={translate.t(`Int`)}
+
                             />
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.stats.speed.fly}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/speed/fly`}
-                                label={translate.t(`Fly speed`)}
+                            <SensoMonsterAbilityInput
+                                initAbilityValue={selectedMonster.monster.stats.wisdom}
+                                firebasePath={`${selectedMonsterDatabasePath}/stats/wisdom`}
+                                label={translate.t(`Wis`)}
+
+                            />
+                            <SensoMonsterAbilityInput
+                                initAbilityValue={selectedMonster.monster.stats.charisma}
+                                firebasePath={`${selectedMonsterDatabasePath}/stats/charisma`}
+                                label={translate.t(`Cha`)}
+
                             />
                         </div>
-                        <div style={{ display: "grid", gap: "0.5rem" }}>
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.challengeRating}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/challengeRating`}
-                                label={translate.t(`Challenge rating`)}
-                                style={{ maxWidth: "10rem" }}
+                        : null}
+                    {selectedMonster.monster.stats ?
+
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <SensoProficiencyInput
+                                initProficiencies={selectedMonster.monster.stats.proficiencies}
+                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/proficiencies`}
+                            />
+                            <DividerBlock style={{ width: "100%" }} />
+                            <SensoTextArrayInput
+                                initArray={selectedMonster.monster.damageImmunities}
+                                label={translate.t(`Damage immunities`)}
+                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageImmunities`}
                             />
                             <SensoTextArrayInput
-                                initArray={selectedMonster.monster.languages}
-                                label={translate.t(`Languages`)}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/languages`}
+                                initArray={selectedMonster.monster.conditionImmunities}
+                                label={translate.t(`Condition immunities`)}
+                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/conditionImmunities`}
                             />
-                            <h3>{translate.t(`Senses`)}</h3>
-                            <SensoNumberInput
-                                initValue={selectedMonster.monster.senses?.passive_perception}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/passive_perception`}
-                                label={translate.t(`Passive perception`)}
-                                isNegativeValid={false}
+                            <SensoTextArrayInput
+                                initArray={selectedMonster.monster.damageResistances}
+                                label={translate.t(`Damage resistance`)}
+                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageResistances`}
                             />
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.senses?.darkvision}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/darkvision`}
-                                label={translate.t(`Darkvision`)}
-                            />
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.senses?.blindsight}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/blindsight`}
-                                label={translate.t(`Blindsight`)}
-                            />
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.senses?.truesight}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/truesight`}
-                                label={translate.t(`Truesight`)}
-                            />
-
-                            <SensoTextInput
-                                initValue={selectedMonster.monster.senses?.tremorsense}
-                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/senses/tremorsense`}
-                                label={translate.t(`Tremorsense`)}
+                            <SensoTextArrayInput
+                                initArray={selectedMonster.monster.damageVulnerabilities}
+                                label={translate.t(`Damage vulnerabilities`)}
+                                firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageVulnerabilities`}
                             />
                         </div>
-                    </div>
-                    <div
-                        style={{
-                            display: "flex",
-                            gridColumn: "1/2",
-                            justifyContent: "space-between",
-                            flexWrap: "wrap",
+                        : null}
+                    {selectedMonster.monster.stats ?
 
-                        }}
-                    >
-                        <SensoMonsterAbilityInput
-                            initAbilityValue={selectedMonster.monster.stats.strength}
-                            firebasePath={`${selectedMonsterDatabasePath}/stats/strength`}
-                            label={translate.t(`Str`)}
+                        <SensoActionInputs
+                            actions={selectedMonster.monster.specialAbilities}
+                            label={translate.t(`Special abilities`)}
+                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/specialAbilities`}
+                        />
+                        : null}
+                    {selectedMonster.monster.stats ?
 
+                        <SensoActionInputs
+                            actions={selectedMonster.monster.actions}
+                            label={translate.t(`Actions`)}
+                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/actions`}
                         />
+                        : null}
+                    {selectedMonster.monster.stats ?
 
-                        <SensoMonsterAbilityInput
-                            initAbilityValue={selectedMonster.monster.stats.dexterity}
-                            firebasePath={`${selectedMonsterDatabasePath}/stats/dexterity`}
-                            label={translate.t(`Dex`)}
-
-                        /> <SensoMonsterAbilityInput
-                            initAbilityValue={selectedMonster.monster.stats.constitution}
-                            firebasePath={`${selectedMonsterDatabasePath}/stats/constitution`}
-                            label={translate.t(`Con`)}
-
+                        <SensoActionInputs
+                            actions={selectedMonster.monster.legendaryActions}
+                            label={translate.t(`Legendary actions`)}
+                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/legendaryActions`}
                         />
-                        <SensoMonsterAbilityInput
-                            initAbilityValue={selectedMonster.monster.stats.intelligence}
-                            firebasePath={`${selectedMonsterDatabasePath}/stats/intelligence`}
-                            label={translate.t(`Int`)}
-
-                        />
-                        <SensoMonsterAbilityInput
-                            initAbilityValue={selectedMonster.monster.stats.wisdom}
-                            firebasePath={`${selectedMonsterDatabasePath}/stats/wisdom`}
-                            label={translate.t(`Wis`)}
-
-                        />
-                        <SensoMonsterAbilityInput
-                            initAbilityValue={selectedMonster.monster.stats.charisma}
-                            firebasePath={`${selectedMonsterDatabasePath}/stats/charisma`}
-                            label={translate.t(`Cha`)}
-
-                        />
-                    </div>
-                    <div
-                        style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <SensoProficiencyInput
-                            initProficiencies={selectedMonster.monster.stats.proficiencies}
-                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/stats/proficiencies`}
-                        />
-                        <DividerBlock style={{ width: "100%" }} />
-                        <SensoTextArrayInput
-                            initArray={selectedMonster.monster.damageImmunities}
-                            label={translate.t(`Damage immunities`)}
-                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageImmunities`}
-                        />
-                        <SensoTextArrayInput
-                            initArray={selectedMonster.monster.conditionImmunities}
-                            label={translate.t(`Condition immunities`)}
-                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/conditionImmunities`}
-                        />
-                        <SensoTextArrayInput
-                            initArray={selectedMonster.monster.damageResistances}
-                            label={translate.t(`Damage resistance`)}
-                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageResistances`}
-                        />
-                        <SensoTextArrayInput
-                            initArray={selectedMonster.monster.damageVulnerabilities}
-                            label={translate.t(`Damage vulnerabilities`)}
-                            firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/damageVulnerabilities`}
-                        />
-                    </div>
-                    <SensoActionInputs
-                        actions={selectedMonster.monster.specialAbilities}
-                        label={translate.t(`Special abilities`)}
-                        firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/specialAbilities`}
-                    />
-                    <SensoActionInputs
-                        actions={selectedMonster.monster.actions}
-                        label={translate.t(`Actions`)}
-                        firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/actions`}
-                    />
-                    <SensoActionInputs
-                        actions={selectedMonster.monster.legendaryActions}
-                        label={translate.t(`Legendary actions`)}
-                        firebasePath={`users/${owner}/campaigns/${selectedCampaign.id}/monsters/${selectedMonster.id}/legendaryActions`}
-                    />
-
+                        : null}
                     <Divider />
                     <h3>{translate.t(`Lore`)}:</h3>
                     <SensoDraftJS
