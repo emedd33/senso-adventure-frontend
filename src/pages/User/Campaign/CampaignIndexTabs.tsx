@@ -7,7 +7,7 @@ import { OLD_WHITE } from '../../../assets/constants/Constants';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getSelectedCampaign, isDungeonMasterSelector } from '../../../store/selected/selectedSelectors';
+import { getSelectedCampaign } from '../../../store/selected/selectedSelectors';
 import useOwner from '../../../store/hooks/useOwner';
 import { useTranslation } from 'react-i18next';
 
@@ -23,7 +23,6 @@ const useStyles = makeStyles({
 
 export default function CampaignIndexTabs() {
     const classes = useStyles();
-    const isDungeonMaster = useSelector(isDungeonMasterSelector)
     const [value, setValue] = React.useState(1);
     const location = useLocation()
     const selectedCampaign = useSelector(getSelectedCampaign)
