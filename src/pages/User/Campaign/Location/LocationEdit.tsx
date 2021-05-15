@@ -113,6 +113,7 @@ const CampaignLocationEdit: React.FC = () => {
                 firebasePath={`${selectedLocationDatabasePath}/characters`}
                 initArray={selectedLocation.location.characters}
                 detailLabel={`${translate.t(`Role in`)} ${selectedLocation.location.name}`}
+                allowStrings={true}
                 choices={
                     CampaignMonsters
                         ? CampaignMonsters.map(([, character]: [string, IMonster]) => ({
@@ -128,7 +129,7 @@ const CampaignLocationEdit: React.FC = () => {
 
 
 
-            <h1 style={{ flex: 2, textAlign: "center" }}>{translate.t(`Lore and information`)}</h1>
+            <h1 style={{ flex: 2, textAlign: "center" }}>{translate.t(`Notes`)}</h1>
             <SensoDraftJS
                 readOnly={false}
                 isDungeonMaster={isDungeonMaster}

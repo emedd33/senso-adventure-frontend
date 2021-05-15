@@ -125,6 +125,7 @@ const resources = {
       "Next": "Neste",
       Nature: "Natur",
       "Not published": "Ikke publisert",
+      "Notes": "Notater",
       "Nov": "Nov",
       "Npc/Monster": "Npc/Monster",
       "Npc/Monsters": "Npc/Monstere",

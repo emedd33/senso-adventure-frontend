@@ -25,6 +25,7 @@ type SensoAccordianInputProps = {
   detailLabel: string;
   choices?: { title: string; content: any }[];
   style?: React.CSSProperties;
+  allowStrings?: boolean;
 };
 
 const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
@@ -34,6 +35,7 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
   detailLabel,
   style,
   choices,
+  allowStrings,
 }) => {
   const [array, setArray, saveArray, isSavedArray] = useSavedState(
     Object.values(initArray)
@@ -46,6 +48,7 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
 
   const handleAddNewValue = () => {
     if (newValue) {
+      debugger
       if (array) {
         setArray((existingValues: any[]) => [...existingValues, newValue]);
       } else {
@@ -67,13 +70,17 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
         <Autocomplete
           id="combo-box-demo"
           options={choices}
+          freeSolo={allowStrings ? true : false}
           getOptionLabel={(option: { title: any }) => option.title}
           style={{ width: "15rem" }}
           onChange={(
             event: any,
-            newValue: { title: string; content: any } | null
+            newValue: { title: string; content: any } | string | null
           ) => {
-            if (newValue) {
+            if (typeof (newValue) === "string") {
+              setNewValue({ name: newValue, description: "" });
+            }
+            else if (newValue) {
               setNewValue({ name: newValue.title, description: "" });
             } else {
               setNewValue(undefined);
@@ -81,7 +88,9 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
           }}
           inputValue={newInputValue}
           onInputChange={(event, newInputValue) => {
+            setNewValue({ name: newInputValue, description: "" });
             setNewInputValue(newInputValue);
+
           }}
           renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
             <TextField
@@ -96,7 +105,16 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
         <TextField
           variant="outlined"
           label={label}
-          value={newValue ? newValue.name : ""}
+          value={() => {
+            if (!newValue) {
+              return ""
+            }
+            else if (typeof (newValue) === "string") {
+              return newValue
+            } else {
+              return newValue.name
+            }
+          }}
           style={{ backgroundColor: OLD_WHITE_DARK }}
           onChange={(event) => {
             setNewValue({ name: event.target.value, description: "" });
@@ -115,7 +133,7 @@ const SensoAccordianInput: React.FC<SensoAccordianInputProps> = ({
         ? array.map((value: any, index: number) => (
           <Accordion key={index} style={{ backgroundColor: OLD_WHITE_DARK }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              {value.name}
+              {value.name ? value.name : value}
             </AccordionSummary>
             <AccordionDetails
               style={{

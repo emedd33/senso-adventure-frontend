@@ -60,7 +60,6 @@ export default function CampaignIndexTabs() {
                 indicatorColor="primary"
                 textColor="primary"
                 centered
-                variant="scrollable"
                 scrollButtons="auto"
             >
                 <Link to={`/user/${owner}/campaigns/${selectedCampaign?.campaign.slug}`} style={{ textDecoration: "none", color: "black", }}>
