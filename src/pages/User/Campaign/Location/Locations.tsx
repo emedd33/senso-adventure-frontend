@@ -27,7 +27,17 @@ const CampaignLocations: FunctionComponent<CampaignLocationsProps> = () => {
 
   return (
     <Container>
-      {locations && selectedCampaign
+      {selectedCampaign
+        ? <> 
+        <div style={{display:"flex", justifyContent:"center", marginBottom:"1rem"}}>
+
+      <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-location/`} style={{textDecoration:"none"}}>
+      <Button variant="contained" color="primary" style={{textTransform:"none"}}>
+        Add New Location
+      </Button>
+      </Link>
+        </div>
+      {locations 
         ? locations.map(([, location]: [string, ILocation], index: number) => (
             <Accordion
               key={index}
@@ -65,6 +75,7 @@ const CampaignLocations: FunctionComponent<CampaignLocationsProps> = () => {
             </Accordion>
           ))
         : null}
+        </> :null}
     </Container>
   );
 };

@@ -25,7 +25,6 @@ import PlayerIndex from "./Player/PlayerIndex";
 import LocationIndex from "./Location/LocationIndex";
 import NotFound from "../../NotFound/NotFound";
 import CampaignIndexTabs from "./CampaignIndexTabs";
-
 type UserIndexProps = {};
 const UserIndex: FunctionComponent<UserIndexProps> = () => {
   const location = useLocation();
@@ -36,15 +35,17 @@ const UserIndex: FunctionComponent<UserIndexProps> = () => {
     getSelectedCampaignStoragePath
   );
   const [imageUrl, setImageUrl] = useState("");
-
-  useMemo(() => {
+  
+  useEffect(() => {
     if (campaigns) {
       let pathArray = location.pathname.split("/");
       dispatchSelectedCampaignByUrl(pathArray, dispatch, campaigns);
     }
+    return () => dispatchSelectedCampaignByUrl([], dispatch);
+ 
   }, [dispatch, campaigns, location]);
 
-  useEffect(() => {
+  useMemo(() => {
     setIsLoading(true);
     if (selectedCampaignStoragePath) {
       getUrlFromStorage(selectedCampaignStoragePath + "/BackgroundImage")

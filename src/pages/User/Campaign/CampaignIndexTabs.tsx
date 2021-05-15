@@ -30,16 +30,17 @@ export default function CampaignIndexTabs() {
     const translate = useTranslation()
     useEffect(() => {
         let locationArray = location.pathname.split("/")
-        if (locationArray[5] === "sessions") {
+        console.log(locationArray[5])
+        if (locationArray[5] === "sessions" || locationArray[5] === "new-session") {
             setValue(1)
         }
-        else if (locationArray[5] === "players") {
+        else if (locationArray[5] === "players" || locationArray[5] === "new-player") {
             setValue(2)
         }
-        else if (locationArray[5] === "locations") {
+        else if (locationArray[5] === "locations" || locationArray[5] === "new-location") {
             setValue(3)
         }
-        else if (locationArray[5] === "monsters") {
+        else if (locationArray[5] === "monsters" || locationArray[5] === "new-monster") {
             setValue(4)
         }
         else if (locationArray[3] === "campaigns" && locationArray.length > 3) {

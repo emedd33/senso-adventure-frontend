@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 import {
     getSelectedCampaignStoragePath,
@@ -10,6 +10,8 @@ import styled from "styled-components";
 
 import { getUrlFromStorage } from "../../../services/Firebase/storage";
 import SensoDraftJS from "../../../components/SensoDraftJS/SensoDraftJS";
+import { Button } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const MenuItem: React.FC<{ text: any; selected: any; key: number }> = ({
     text,
@@ -33,6 +35,7 @@ export const Menu = (list: any[], selected: any) =>
 type CampaignProps = {};
 const Campaign: FunctionComponent<CampaignProps> = () => {
     const history = useHistory();
+    const translate = useTranslation()
     const [campaignTitleImage, setCampaignTitleImage] = useState<string>("");
     const location = useLocation()
     const selectedCampaignStoragePath = useSelector(
@@ -60,12 +63,17 @@ const Campaign: FunctionComponent<CampaignProps> = () => {
                 />
             ) : null}
             {isDungeonMaster ? (
-                <div onDoubleClick={() => {
+                <div style={{width:"100%"}} onDoubleClick={() => {
                     if (isDungeonMaster) {
                         history.push(`${location.pathname}/edit`)
                     }
                 }}
                 >
+                     <div>
+            <Link to={`${location.pathname}/edit`} style={{textDecoration:"none", display:"flex", justifyContent:"center", marginBottom:"1rem"}}>
+                <Button color="primary" variant="contained" >{translate.t('Edit')}</Button>
+            </Link>
+            </div>
                     <SensoDraftJS
                         storagePath={`${selectedCampaignStoragePath}`}
                         readOnly={true}
@@ -86,6 +94,6 @@ const Container = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 3rem;
+  padding: 1rem;
 `;
 export default Campaign;

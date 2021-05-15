@@ -9,9 +9,9 @@ import {
 export const dispatchSelectedCampaignByUrl = (
   pathArray: string[],
   dispatch: any,
-  campaigns: any[]
+  campaigns?: any[]
 ) => {
-  if (pathArray.length >= 4) {
+  if (pathArray.length >= 4 && campaigns) {
     let filteredCampaign = Object.entries(campaigns)
       .filter(([, campaign]: [string, ICampaign]) => {
         return campaign.slug === pathArray[4];
@@ -26,6 +26,9 @@ export const dispatchSelectedCampaignByUrl = (
       };
       dispatch(setSelectedCampaign(campaign));
     }
+  } else {
+    dispatch(setSelectedCampaign());
+
   }
 };
 

@@ -80,4 +80,5 @@ const Container = styled.div`
 background: linear-gradient(to right, transparent,transparent, black), linear-gradient(to left, transparent,transparent, black), no-repeat url(${backgroundImage});
 background-attachment: fixed;
 background-size: cover;
+min-height:100vh;
 `

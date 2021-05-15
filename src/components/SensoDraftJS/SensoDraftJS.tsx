@@ -72,6 +72,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     readOnly,
     style,
 }) => {
+    const [isLoading, setIsLoading] = useState(true)
     const translate = useTranslation();
     const dispatch = useDispatch();
     const [editorState, setEditorState] = React.useState(() =>
@@ -289,10 +290,12 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
 
                         setSavedEditorState(loadedEditorState);
                         setEditorState(loadedEditorState);
+                        setIsLoading(false)
                     })
             )
             .catch((e: any) => {
                 console.log("Could not fetch description from firebase");
+                setIsLoading(false)
             });
         return () => {
             setSavedEditorState(undefined);
@@ -426,8 +429,18 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         onMonsterOpenChange,
         onMonsterSearchChange,
     ]);
+    if (isLoading){
+        return <div style={{display:"flex", justifyContent:"center"}}>
+
+        <CircularProgress/>
+        </div>
+    }
+    if (!isLoading && readOnly && !editorState.getCurrentContent().hasText()){
+        return null
+    }
     return (
         <EditorContainer style={style ? style : {}}>
+
             {insertingImage ?
                 <Backdrop open={true} >
                     <CircularProgress color="inherit" />
