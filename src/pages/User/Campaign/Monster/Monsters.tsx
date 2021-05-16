@@ -1,10 +1,9 @@
-import { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   getSelectedCampaign,
   getSelectedCampaignMonsters,
-  isDungeonMasterSelector,
 } from "../../../../store/selected/selectedSelectors";
 import styled from "styled-components";
 
@@ -20,64 +19,60 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import useOwner from "../../../../store/hooks/useOwner";
-import SensoMonsterShort from "../../../../components/SensoContainers/SensoMonsterShort";
 import { useTranslation } from "react-i18next";
+import { SensoDescription } from "../../../../components/SensoContainers";
 type CampaignMonstersProps = {};
 const CampaignMonsters: FunctionComponent<CampaignMonstersProps> = () => {
   const selectedCampaign = useSelector(getSelectedCampaign);
   const translate = useTranslation()
   const monsters = useSelector(getSelectedCampaignMonsters);
   const owner = useOwner();
-  const isDungeonMaster = useSelector(isDungeonMasterSelector)
   return (
     <Container>{selectedCampaign
-        ? <> 
-        <div style={{display:"flex", justifyContent:"center",  marginBottom:"1rem"}}>
+      ? <>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
 
-      <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-session/`} style={{textDecoration:"none"}}>
-        <Button variant="contained" color="primary" style={{textTransform:"none"}}>
-          {translate.t('New monster/NPC')}
-        </Button>
-      </Link>
+          <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-session/`} style={{ textDecoration: "none" }}>
+            <Button variant="contained" color="primary" style={{ textTransform: "none" }}>
+              {translate.t('New monster/NPC')}
+            </Button>
+          </Link>
         </div>
         {monsters
-        ? monsters.map(([, monster]: [string, IMonster], index: number) => (
-          <Accordion
-            key={index}
-            style={
-              monster.isPublished === "TRUE"
-                ? { backgroundColor: OLD_WHITE }
-                : { backgroundColor: OLD_WHITE, opacity: 0.7 }
-            }
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-              id="panel1bh-header"
+          ? monsters.map(([, monster]: [string, IMonster], index: number) => (
+            <Accordion
+              key={index}
+              style={
+                monster.isPublished === "TRUE"
+                  ? { backgroundColor: OLD_WHITE }
+                  : { backgroundColor: OLD_WHITE, opacity: 0.7 }
+              }
             >
-              <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
-                {monster.name}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <SensoMonsterShort
-                monster={monster}
-                isDungeonMaster={isDungeonMaster}
-              />
-            </AccordionDetails>
-            <AccordionActions>
-              <Link
-                to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/${monster.slug}`}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
               >
-                <Button size="small" color="primary">
-                  <ArrowForwardIcon />
-                </Button>
-              </Link>
-            </AccordionActions>
-          </Accordion>
-        ))
-        : null}
-        </> :null}
+                <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
+                  {monster.name}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <SensoDescription content={monster.description} />
+              </AccordionDetails>
+              <AccordionActions>
+                <Link
+                  to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/monsters/${monster.slug}`}
+                >
+                  <Button size="small" color="primary">
+                    <ArrowForwardIcon />
+                  </Button>
+                </Link>
+              </AccordionActions>
+            </Accordion>
+          ))
+          : null}
+      </> : null}
     </Container>
   );
 };

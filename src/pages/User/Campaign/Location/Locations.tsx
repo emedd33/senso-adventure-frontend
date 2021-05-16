@@ -28,54 +28,54 @@ const CampaignLocations: FunctionComponent<CampaignLocationsProps> = () => {
   return (
     <Container>
       {selectedCampaign
-        ? <> 
-        <div style={{display:"flex", justifyContent:"center", marginBottom:"1rem"}}>
+        ? <>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
 
-      <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-location/`} style={{textDecoration:"none"}}>
-      <Button variant="contained" color="primary" style={{textTransform:"none"}}>
-        Add New Location
+            <Link to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/new-location/`} style={{ textDecoration: "none" }}>
+              <Button variant="contained" color="primary" style={{ textTransform: "none" }}>
+                Add New Location
       </Button>
-      </Link>
-        </div>
-      {locations 
-        ? locations.map(([, location]: [string, ILocation], index: number) => (
-            <Accordion
-              key={index}
-              style={
-                location.isPublished === "TRUE"
-                  ? { backgroundColor: OLD_WHITE }
-                  : { backgroundColor: OLD_WHITE, opacity: 0.5 }
-              }
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
+            </Link>
+          </div>
+          {locations
+            ? locations.map(([, location]: [string, ILocation], index: number) => (
+              <Accordion
+                key={index}
+                style={
+                  location.isPublished === "TRUE"
+                    ? { backgroundColor: OLD_WHITE }
+                    : { backgroundColor: OLD_WHITE, opacity: 0.5 }
+                }
               >
-                <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
-                  {location.name}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                style={{ display: "grid", gridTemplateColumns: "3fr 1fr 5fr" }}
-              >
-                <div>
-                  <p>{location.description}</p>
-                </div>
-              </AccordionDetails>
-              <AccordionActions>
-                <Link
-                  to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/${location.slug}`}
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1bh-content"
+                  id="panel1bh-header"
                 >
-                  <Button size="small" color="primary">
-                    <ArrowForwardIcon />
-                  </Button>
-                </Link>
-              </AccordionActions>
-            </Accordion>
-          ))
-        : null}
-        </> :null}
+                  <Typography style={{ flexBasis: "33.33%", flexShrink: 0 }}>
+                    {location.name}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails
+                  style={{ display: "grid", gridTemplateColumns: "1fr" }}
+                >
+                  <div>
+                    <p>{location.description}</p>
+                  </div>
+                </AccordionDetails>
+                <AccordionActions>
+                  <Link
+                    to={`/user/${owner}/campaigns/${selectedCampaign.campaign.slug}/locations/${location.slug}`}
+                  >
+                    <Button size="small" color="primary">
+                      <ArrowForwardIcon />
+                    </Button>
+                  </Link>
+                </AccordionActions>
+              </Accordion>
+            ))
+            : null}
+        </> : null}
     </Container>
   );
 };
