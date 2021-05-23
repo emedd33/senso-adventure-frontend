@@ -36,7 +36,7 @@ export const getSelectedCampaignMonsters = (state: RootReducerProp) => {
       if (state.selected.selectedCampaign.campaign.monsters) {
         return Object.entries(
           state.selected.selectedCampaign.campaign.monsters
-        );
+        ).sort((a: [string, IMonster], b: [string, IMonster]) => a[1].name.localeCompare(b[1].name));;
       }
     }
   } else {
@@ -46,7 +46,7 @@ export const getSelectedCampaignMonsters = (state: RootReducerProp) => {
           state.selected.selectedCampaign.campaign.monsters
         ).filter(
           ([id, monster]: [string, IMonster]) => monster.isPublished === "TRUE"
-        );
+        ).sort((a: [string, IMonster], b: [string, IMonster]) => a[1].name.localeCompare(b[1].name));
       }
     }
   }
@@ -56,7 +56,8 @@ export const getSelectedCampaignPlayers = (state: RootReducerProp) => {
   if (isDungeonMasterSelector(state)) {
     if (state.selected.selectedCampaign) {
       if (state.selected.selectedCampaign.campaign.players) {
-        return Object.entries(state.selected.selectedCampaign.campaign.players);
+        return Object.entries(state.selected.selectedCampaign.campaign.players).sort((a: [string, IPlayer], b: [string, IPlayer]) => a[1].name.localeCompare(b[1].name))
+
       }
     }
   } else {
@@ -100,7 +101,7 @@ export const getSelectedCampaignLocations = (state: RootReducerProp) => {
       if (state.selected.selectedCampaign.campaign.locations) {
         return Object.entries(
           state.selected.selectedCampaign.campaign.locations
-        );
+        ).sort((a: [string, ILocation], b: [string, ILocation]) => a[1].name.localeCompare(b[1].name));
       }
     }
   } else {
@@ -111,7 +112,7 @@ export const getSelectedCampaignLocations = (state: RootReducerProp) => {
         ).filter(
           ([id, location]: [string, ILocation]) =>
             location.isPublished === "TRUE"
-        );
+        ).sort((a: [string, ILocation], b: [string, ILocation]) => a[1].name.localeCompare(b[1].name));;
       }
     }
   }

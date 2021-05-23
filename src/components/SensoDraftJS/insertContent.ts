@@ -50,8 +50,12 @@ const insertAtomicBlock = (type: string, editorState: EditorState) => {
     let newKey = newEditorState
         .getCurrentContent()
         .getBlockAfter(currentKey)
-        .getKey();
-    let newSelection = SelectionState.createEmpty(newKey);
+    // .getKey();
+    if (!newKey) {
+        return
+    }
+
+    let newSelection = SelectionState.createEmpty(newKey.getKey());
 
     // Moves coursor one offset into Atomic block
     const nextOffSet = newEditorState.getSelection().getFocusOffset() + 1;
@@ -86,8 +90,12 @@ const insertImageBlock = (url: string, selection: SelectionState, editorState: E
     let newKey = newEditorState
         .getCurrentContent()
         .getBlockAfter(currentKey)
-        .getKey();
-    let newSelection = SelectionState.createEmpty(newKey);
+    // .getKey();
+    if (!newKey) {
+        return
+    }
+
+    let newSelection = SelectionState.createEmpty(newKey.getKey());
 
     // Moves coursor one offset into Atomic block
     const nextOffSet = newEditorState.getSelection().getFocusOffset() + 1;

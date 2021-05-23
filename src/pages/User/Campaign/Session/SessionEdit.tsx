@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { OLD_WHITE } from "../../../../assets/constants/Constants";
 import IsLoading from "../../../../components/IsLoading/IsLoading";
-import "react-markdown-editor-lite/lib/index.css";
 import styled from "styled-components";
 
 import {

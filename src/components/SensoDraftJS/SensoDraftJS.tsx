@@ -75,7 +75,7 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
     const [isLoading, setIsLoading] = useState(true)
     const translate = useTranslation();
     const dispatch = useDispatch();
-    const [editorState, setEditorState] = React.useState(() =>
+    const [editorState, setEditorState] = React.useState<any>(() =>
         EditorState.createEmpty()
     );
     const [savedEditorState, setSavedEditorState] = useState<any>(editorState);
@@ -429,13 +429,13 @@ const SensoDraftJS: React.FC<SensoDraftJSProps> = ({
         onMonsterOpenChange,
         onMonsterSearchChange,
     ]);
-    if (isLoading){
-        return <div style={{display:"flex", justifyContent:"center"}}>
+    if (isLoading) {
+        return <div style={{ display: "flex", justifyContent: "center" }}>
 
-        <CircularProgress/>
+            <CircularProgress />
         </div>
     }
-    if (!isLoading && readOnly && !editorState.getCurrentContent().hasText()){
+    if (!isLoading && readOnly && !editorState.getCurrentContent().hasText()) {
         return null
     }
     return (

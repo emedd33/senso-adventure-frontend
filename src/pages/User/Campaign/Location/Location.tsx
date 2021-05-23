@@ -91,6 +91,7 @@ const Location: React.FC<LocationProps> = () => {
                     <i>{renderArrayOfString(", ", selectedLocation.location.nickNames)}</i>
                 </div>
                 : null}
+
             {selectedLocation.location.religion ?
                 <div>
                     <b>{translate.t(`Religion/Belief system`)}: </b>

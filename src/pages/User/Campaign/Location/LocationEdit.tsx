@@ -4,7 +4,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { OLD_WHITE } from "../../../../assets/constants/Constants";
 import IsLoading from "../../../../components/IsLoading/IsLoading";
-import "react-markdown-editor-lite/lib/index.css";
+
 import {
     SensoAccordianInput,
     SensoMultilineTextInput,
@@ -23,12 +23,18 @@ import {
 import { getIsLoading } from "../../../../store/admin/adminSelectors";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 import { useTranslation } from "react-i18next";
+import { useImageFile } from "../../../../store/hooks/useImageFile";
+import ImageUpload from "../../../../components/ImageUpload/ImageUpload";
 
 const CampaignLocationEdit: React.FC = () => {
     const translate = useTranslation()
     const selectedLocation = useSelector(
         (state: RootReducerProp) => state.selected.selectedLocation
     );
+    const [
+        locationImage,
+        setLocationImage,
+    ] = useImageFile("LocationImage");
     const selectedCampaign = useSelector(getSelectedCampaign);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const isLoading = useSelector(getIsLoading);
@@ -39,6 +45,7 @@ const CampaignLocationEdit: React.FC = () => {
     const selectedLocationDatabasePath = useSelector(
         getSelectedLocationDatabasePath
     );
+    console.log(locationImage)
 
     if (isLoading || !selectedLocation || !selectedCampaign) {
         return <IsLoading />;
@@ -72,6 +79,11 @@ const CampaignLocationEdit: React.FC = () => {
                 firebasePath={`${selectedLocationDatabasePath}/nickNames`}
                 initArray={selectedLocation.location.nickNames}
                 label={"Also known as"}
+            />
+            <ImageUpload
+                imageFile={locationImage.file}
+                setImageFile={setLocationImage}
+                maxFiles={1}
             />
             <div style={{ width: "100%", margin: "1rem" }}>
                 <Divider />
@@ -135,13 +147,15 @@ const CampaignLocationEdit: React.FC = () => {
                 isDungeonMaster={isDungeonMaster}
                 storagePath={`${selectedLocationStoragePath}`}
             />
+            <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
 
-            <SensoDelete
-                storagePath={`${selectedLocationStoragePath}`}
-                databasePath={`${selectedLocationDatabasePath}`}
-                instanceType="Location"
-                linkPath={`/${selectedCampaign.campaign.slug}/locations`}
-            />
+                <SensoDelete
+                    storagePath={`${selectedLocationStoragePath}`}
+                    databasePath={`${selectedLocationDatabasePath}`}
+                    instanceType="Location"
+                    linkPath={`/${selectedCampaign.campaign.slug}/locations`}
+                />
+            </div>
         </div>
     );
 };
