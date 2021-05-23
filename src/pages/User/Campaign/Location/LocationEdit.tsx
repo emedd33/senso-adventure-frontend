@@ -25,6 +25,7 @@ import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 import { useTranslation } from "react-i18next";
 import { useImageFile } from "../../../../store/hooks/useImageFile";
 import ImageUpload from "../../../../components/ImageUpload/ImageUpload";
+import useOwner from "../../../../store/hooks/useOwner";
 
 const CampaignLocationEdit: React.FC = () => {
     const translate = useTranslation()
@@ -36,6 +37,7 @@ const CampaignLocationEdit: React.FC = () => {
         setLocationImage,
     ] = useImageFile("LocationImage");
     const selectedCampaign = useSelector(getSelectedCampaign);
+    const owner = useOwner()
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const isLoading = useSelector(getIsLoading);
     const CampaignMonsters = useSelector(getSelectedCampaignMonsters);
@@ -45,7 +47,7 @@ const CampaignLocationEdit: React.FC = () => {
     const selectedLocationDatabasePath = useSelector(
         getSelectedLocationDatabasePath
     );
-    console.log(locationImage)
+
 
     if (isLoading || !selectedLocation || !selectedCampaign) {
         return <IsLoading />;
@@ -83,6 +85,7 @@ const CampaignLocationEdit: React.FC = () => {
             <ImageUpload
                 imageFile={locationImage.file}
                 setImageFile={setLocationImage}
+                imageUploadPath={`users/${owner}/campaigns/${selectedCampaign?.campaign.slug}/locations/${selectedLocation?.location.slug}/LocationImage`}
                 maxFiles={1}
             />
             <div style={{ width: "100%", margin: "1rem" }}>

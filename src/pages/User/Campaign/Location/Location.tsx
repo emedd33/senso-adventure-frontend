@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     // useDispatch,
     useSelector,
@@ -34,6 +34,7 @@ import useOwner from "../../../../store/hooks/useOwner";
 import { SensoDescription } from "../../../../components/SensoContainers";
 import SensoDraftJS from "../../../../components/SensoDraftJS/SensoDraftJS";
 import { useTranslation } from "react-i18next";
+import { storage } from "../../../../services/Firebase/firebase";
 
 export interface LocationProps { }
 
@@ -41,11 +42,20 @@ const Location: React.FC<LocationProps> = () => {
     const translate = useTranslation();
     const history = useHistory();
     const location = useLocation()
+    const [imageUrl, setImageUrl] = useState("");
+
     const selectedCampaign = useSelector(getSelectedCampaign);
     const selectedLocation = useSelector(getSelectedLocation);
     const isDungeonMaster = useSelector(isDungeonMasterSelector);
     const locationPath = useSelector(getSelectedLocationStoragePath);
     const owner = useOwner();
+    console.log(imageUrl)
+    useEffect(() => {
+        storage
+            .ref(`${locationPath}/LocationImage`)
+            .getDownloadURL()
+            .then((url: string) => setImageUrl(url));
+    }, [locationPath]);
 
     if (!selectedLocation) {
         return <IsLoading />;
@@ -91,7 +101,7 @@ const Location: React.FC<LocationProps> = () => {
                     <i>{renderArrayOfString(", ", selectedLocation.location.nickNames)}</i>
                 </div>
                 : null}
-
+            {imageUrl ? <img src={imageUrl} alt="locationImage" width="90%" style={{ gridColumn: "1/3" }} /> : null}
             {selectedLocation.location.religion ?
                 <div>
                     <b>{translate.t(`Religion/Belief system`)}: </b>
