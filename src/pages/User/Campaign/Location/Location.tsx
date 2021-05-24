@@ -101,7 +101,7 @@ const Location: React.FC<LocationProps> = () => {
                     <i>{renderArrayOfString(", ", selectedLocation.location.nickNames)}</i>
                 </div>
                 : null}
-            {imageUrl ? <img src={imageUrl} alt="locationImage" width="90%" style={{ gridColumn: "1/3" }} /> : null}
+            {imageUrl ? <div style={{ width: "100%", justifyContent: "center", display: "flex", gridColumn: "1/3" }}><img src={imageUrl} alt="locationImage" style={{ maxWidth: "90%", maxHeight: "80vh" }} /></div> : null}
             {selectedLocation.location.religion ?
                 <div>
                     <b>{translate.t(`Religion/Belief system`)}: </b>
